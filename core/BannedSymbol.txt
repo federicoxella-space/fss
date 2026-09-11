@@ -1,0 +1,55 @@
+; BannedSymbols.txt - applies to Sim.Core only.
+; Format: <DocumentationCommentId>;<message shown at the error site>
+; Diagnostic RS0030. TreatWarningsAsErrors makes every line here a build failure.
+;
+; A deliberate exception is a #pragma warning disable RS0030 with a comment
+; naming the requirement that permits it. Visible, reviewable, rare.
+
+; --- floating point: no simulation state may hold it (NFR-02, DEC-001) ---
+T:System.Single;No floating point in the core. Use fixed point over int or long.
+T:System.Double;No floating point in the core. Use fixed point over int or long.
+T:System.Decimal;No decimal in the core. Use integers in smallest units.
+T:System.MathF;Transcendental and float math is not reproducible across builds.
+M:System.Math.Sin(System.Double);Not specified bit-for-bit. Use a lookup table.
+M:System.Math.Cos(System.Double);Not specified bit-for-bit. Use a lookup table.
+M:System.Math.Tan(System.Double);Not specified bit-for-bit. Use a lookup table.
+M:System.Math.Exp(System.Double);Not specified bit-for-bit. Use a lookup table.
+M:System.Math.Log(System.Double);Not specified bit-for-bit. Use a lookup table.
+M:System.Math.Pow(System.Double,System.Double);Not specified bit-for-bit. Use integer powers.
+M:System.Math.Sqrt(System.Double);Use an integer square root.
+
+; --- randomness: stateless indexed hash only (NFR-03, DEC-002) ---
+T:System.Random;Use Hash(worldSeed, entityId, tick, channel, index).
+T:System.Security.Cryptography.RandomNumberGenerator;Not reproducible.
+M:System.Guid.NewGuid;Not reproducible. Use EntityId.
+
+; --- time: the tick counter is the only clock (FR-T-01, DEC-005) ---
+T:System.DateTime;The simulator has no wall clock. Use the tick counter.
+T:System.DateTimeOffset;The simulator has no wall clock. Use the tick counter.
+T:System.Diagnostics.Stopwatch;Measurement belongs in the harness, not the core.
+P:System.Environment.TickCount;The simulator has no wall clock.
+
+; --- ordering: no hash-ordered iteration in simulation logic (NFR-04) ---
+T:System.Collections.Generic.Dictionary`2;Iteration order is not guaranteed. Index by integer id.
+T:System.Collections.Generic.HashSet`1;Iteration order is not guaranteed. Use a sorted array or a bitset.
+N:System.Linq;Allocates, and hides iteration order. Write the loop.
+
+; --- concurrency: none inside the tick (NFR-06, DEC-034) ---
+T:System.Threading.Tasks.Task;No async in the tick.
+T:System.Threading.Tasks.Parallel;Unordered parallelism breaks reproducibility.
+T:System.Threading.Thread;Threading belongs to the host, not the core.
+
+; --- serialisation: no reflection, ahead-of-time safe (NFR-08, section 20) ---
+N:System.Reflection;No reflection in the core. It breaks ahead-of-time compilation.
+T:System.Text.Json.JsonSerializer;Reflection-based. Write the serialiser by hand.
+T:System.Xml.Serialization.XmlSerializer;Reflection-based.
+T:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter;Reflection-based and unsafe.
+
+; --- host independence (FR-W-07, DEC-034) ---
+T:System.Console;The core produces events, not output. Emit a chronicle entry.
+T:System.IO.File;File access belongs to the harness and the host.
+T:System.IO.Directory;File access belongs to the harness and the host.
+T:System.Environment;The core reads no environment.
+
+; --- culture-dependent parsing, if data loading lives in the core ---
+M:System.String.GetHashCode;String hashing is randomised per process.

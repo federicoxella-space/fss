@@ -1,0 +1,8 @@
+{
+  "name": "com.fedegame.sim.core",
+  "version": "0.1.0",
+  "displayName": "Sim Core",
+  "description": "Headless socio-economic simulator. Knows nothing about any host.",
+  "unity": "6000.0",
+  "author": { "name": "" }
+}

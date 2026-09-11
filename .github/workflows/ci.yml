@@ -1,0 +1,34 @@
+name: core
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      # AC-19: the core builds with no editor and no game client.
+      # This job is release-blocking. It is the only thing that catches a
+      # host dependency added from inside an editor.
+      - name: Build core alone
+        run: dotnet build core/Sim.Core.csproj -c Release
+
+      - name: Tests, shipping configuration
+        run: dotnet test core/Tests/Sim.Core.Tests.csproj -c Release
+        env:
+          SIM_WEALTH_BANDS: 1
+
+      # AC-28: the same suite must pass with a multi-valued second key axis.
+      - name: Tests, three wealth bands
+        run: dotnet test core/Tests/Sim.Core.Tests.csproj -c Release
+        env:
+          SIM_WEALTH_BANDS: 3
+
+      - name: Harness smoke run
+        run: |
+          dotnet build harness/Sim.Harness.csproj -c Release
+          dotnet run --project harness/Sim.Harness.csproj -c Release -- --ticks 100000 --hash

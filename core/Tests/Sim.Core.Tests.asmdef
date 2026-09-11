@@ -1,0 +1,8 @@
+{
+  "name": "Sim.Core.Tests",
+  "rootNamespace": "Sim.Tests",
+  "references": [ "Sim.Core" ],
+  "optionalUnityReferences": [ "TestAssemblies" ],
+  "autoReferenced": false,
+  "noEngineReferences": false
+}
