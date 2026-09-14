@@ -24,6 +24,12 @@
     <AdditionalFiles Include="BannedSymbols.txt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Sim.Core.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
   <!-- SIM-REQ section 20: no dependency outside the base class library.
        Adding a PackageReference here is a decision, not a convenience. -->
 

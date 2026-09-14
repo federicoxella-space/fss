@@ -730,6 +730,8 @@ Each carries a hard bound that fails the test and a soft band that raises a warn
 
 **AC-57 — Guilds do not hoard.** The share of currency held by guild halls stays within a declared band across 60 simulated years.
 
+**AC-58 — No floating point in the core.** An inspection of the compiled core assembly finds no float, double, or decimal in any field, property, parameter, return type, or local slot.
+
 
 ---
 
