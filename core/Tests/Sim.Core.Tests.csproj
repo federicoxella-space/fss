@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="**/*.cs" />
+    <!-- Exclude is not optional: EnableDefaultCompileItems=false drops the SDK globs
+         and their exclusions with them, so a bare ** would compile obj/ as well. -->
+    <Compile Include="**/*.cs" Exclude="$(DefaultItemExcludes);$(DefaultExcludesInProjectFolder)" />
   </ItemGroup>
 
   <ItemGroup>
