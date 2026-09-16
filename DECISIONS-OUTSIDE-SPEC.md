@@ -410,3 +410,32 @@ It is also the first instance of the finding the reviewers were told to look for
 one point earlier — a check marked weak that is properly verifiable — and it
 turned up on this author's own work, unprompted by any reviewer, because the
 brief had been written the day before.
+
+### Point 3 — re-reading the plan before the outcome line
+
+**The re-read diagnoses; the anchored edit protects.** Both appends are made with
+an exact-match edit against text just read, not a rewrite of the file. An edit
+that cannot find its anchor fails loudly; a rewrite from memory wins silently
+against whatever a human wrote in the meantime. So the protection does not depend
+on the re-read being remembered — which matters, because a step that exists only
+in a document is a step that gets skipped under pressure.
+
+**Five cases, and three of them stop the work.** A changed criterion stops it
+because the work was done against a contract that no longer exists, and the
+honest report is that the work is finished and unrecorded — a state that needs a
+human, not a best guess. An outcome line already present stops it because
+someone else closed the point and nothing else can safely be assumed. Edits to
+*other* points do not stop it: their text is not this point's contract, and
+treating every plan edit as fatal would make the plan unmaintainable while work
+is in progress.
+
+**`git add -A` is now forbidden at step 7,** which is a rule written against the
+habit of the author writing it: the commits closing points 1, 2 and the plan
+installation all used it. It absorbs an unrelated edit sitting in the tree into
+the point's commit, where git then attributes it to the point and to whoever
+signed the message. This point's own commit stages by name, so the rule takes
+effect on the commit that introduces it.
+
+Nothing here was found by a reviewer. The whole point came from a human noticing
+that a document read at step 1 and written at step 6 has a gap in the middle
+wide enough to lose an edit in.

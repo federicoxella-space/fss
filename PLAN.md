@@ -70,6 +70,16 @@ point 2 — five entries. Review: not run, `Core: no`, exemption verified.
 - **Check: weak** — satisfied by reading.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-17. Step 6 of `/plan-next` re-reads `PLAN.md` from disk and
+tabulates five divergences, three of which stop the work without appending —
+a changed criterion, an outcome line already present, a vanished point. Beyond
+the point's statement: both appends are anchored on just-read text with an
+exact-match edit, so the protection survives the re-read being skipped; and
+step 7 forbids `git add -A`, a rule written against this author's habit in the
+three preceding commits. This commit stages by name. Decisions: register,
+section "The twelve gaps in the plan mechanism", point 3 — four entries.
+Review: not run, `Core: no`, exemption verified against the diff.
+
 ## 4. A weak check is declared in the plan, with why and what replaces it
 
 - **Does:** a check satisfiable by reading rather than running is marked

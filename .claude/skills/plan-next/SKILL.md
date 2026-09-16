@@ -125,7 +125,20 @@ not see the briefed one's output.
 
 ### 6. Write the record
 
-In this order, before the commit:
+**First re-read `PLAN.md` from disk**, and compare the point against what step 1
+read. The work took time, and a human may have edited the plan during it; an
+append onto a remembered version discards that edit without either of you
+seeing it happen.
+
+| What changed | What to do |
+|---|---|
+| Nothing | Append. |
+| The point's own text — its statement, citations, check, `Core:` | **Stop, do not append.** The work was done against a criterion that no longer exists. Report that the work is finished and unrecorded, and let the human choose: re-verify against the new text, or discard. |
+| The point already carries an `*Esito:*` line | **Stop.** Someone else closed it. Nothing here is safe to assume. |
+| The point is gone, or the plan was replaced | **Stop.** |
+| Other points, or a point added after this one | Append, and say so in the report. Their text is not this point's contract. |
+
+Then, in this order:
 
 1. The entry in `DECISIONS-OUTSIDE-SPEC.md`, under this development's section,
    naming the plan point. It holds the choices the specification does not make,
@@ -135,6 +148,12 @@ In this order, before the commit:
    check produced, the register reference, and the outcome of the review —
    including "not run, `Core: no`".
 
+**Anchor both appends on text you have just read**, with an exact-match edit
+rather than a rewrite of the file. An edit that cannot find its anchor fails and
+says so; a rewrite from memory silently wins against whatever the human wrote.
+The re-read above diagnoses the divergence, but this is what makes missing it
+survivable.
+
 Everything above the outcome line stays untouched. A criterion that turned out
 to be wrong is reported and recorded, never rewritten to match what was built.
 
@@ -142,6 +161,12 @@ to be wrong is reported and recorded, never rewritten to match what was built.
 
 Code, register and plan in one commit, so no part of the record can be left
 behind uncommitted.
+
+**Stage the paths the point touched, by name. Never `git add -A`.** The tree may
+hold an edit that is not yours — the one step 6 looks for — and `-A` absorbs it
+into this point's commit, where it is attributed to the point and to whoever
+wrote the message. If a file you must stage also carries someone else's change,
+stop and ask rather than deciding for them what their edit belongs to.
 
 - The subject names the requirement or decision it implements, as `AGENTS.md`
   requires. If no identifier applies, say so in the message rather than
