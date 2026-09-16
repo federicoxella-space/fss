@@ -1,114 +1,164 @@
-# Plan — the plan mechanism and its three skills
+# Plan — the twelve gaps in the plan mechanism
 
 **Kind:** process
-**Exit condition:** `PLAN.md`, the three skills and the rule in `AGENTS.md` exist
-and agree with `.claude/design/2026-09-17-plan-e-skill.md`; `/plan-explain` and
-`/plan-status` answer correctly about this plan itself.
+**Exit condition:** every item of the review of 2026-09-17 is answered in
+`.claude/design/2026-09-17-plan-e-skill.md`, the three skills, `AGENTS.md` and
+`SPEC-QUESTIONS.md`; the previous development's plan is archived; `/plan-status`
+runs as a read-only agent and reports this plan correctly.
 
-**Phase:** none. This is process work, and `docs/` says nothing about it —
-`SIM-REQ` §18 plans the simulator, not how the simulator gets built. Every point
-below therefore declares `docs/` silent, which is one decision recorded once in
-`DECISIONS-OUTSIDE-SPEC.md` rather than five times here.
-
-**Branch:** `plan-e-skill`
+**Phase:** none, process work.
+**Branch:** `plan-e-skill`, continuing after the plan of the same name closed.
 
 ---
 
-## 1. The rule in `AGENTS.md`
+This plan uses two conventions it also introduces: `Check: weak`, declared at
+writing time, and `Core:` requiring a written reason to be `no`. Using them from
+the start is the only way to find out whether they are worth having. Most points
+here carry a weak check, and that is the point of declaring it: a plan made of
+documentation cannot verify itself by running anything, and pretending otherwise
+was the habit this convention exists to break.
 
-- **Does:** adds a section holding the four standing rules — plan written first,
-  criteria never rewritten to match delivery, a point is one commit with a
-  runnable check, a point touching `core/Runtime/` passes two reviewers. The
-  procedure stays in the skills; only the rule goes here.
-- **Serves:** nothing in `docs/`. Permission to edit `AGENTS.md` was given
-  explicitly for this change.
-- **Closed by:** the section exists, states four rules, and duplicates no step of
-  the procedure that the skills own.
-- **Core:** no
+## 1. The reviewers receive the frozen criterion, and citations get opened
 
-*Esito:* 2026-09-17. Section "Plan the development before starting it", four
-rules, procedure delegated to the three skills by name. Decisions: register,
-section 2026-09-17, point 1 — two entries, one of them the fact that an agent
-edited the standing instructions under a one-off permission. Review: not run,
-`Core: no`.
+- **Does:** adds the point's check to what both reviewers receive, so that
+  someone finally verifies whether the code satisfies the criterion it was
+  written against. And makes step 1 of `/plan-next` open the cited requirement
+  in `docs/` and confirm it says what the point claims, or stop.
+- **Closed by:** `reviewers.md` lists the criterion among what both receive;
+  step 1 of `/plan-next` requires opening the citation.
+- **Check: weak** — satisfied by reading. Replaced by the first `Core: yes`
+  point, where a reviewer either uses the criterion or does not.
+- **Core:** no — touches no file under `core/`.
 
-## 2. `/plan-explain`
+## 2. `Core:` defaults to yes, and a downgrade needs a written reason
 
-- **Does:** a read-only skill that names the next open point, what it requires,
-  what it cites, and what will close it.
-- **Serves:** nothing in `docs/`.
-- **Closed by:** invoked against this file it names point 3 — the first point
-  with no `Esito:` at the time it runs — and does not modify anything.
-- **Core:** no
+- **Does:** the plan format declares `Core: yes` by default; writing `no`
+  requires a reason on the same line, in the plan, before the work starts. A
+  point that cannot say why it is exempt is not exempt.
+- **Closed by:** the design and the three skills state the default and the
+  requirement; this plan's own points carry their reasons.
+- **Check: weak** — satisfied by reading. Replaced by the first plan written by
+  someone other than its author.
+- **Core:** no — touches no file under `core/`.
 
-*Esito:* 2026-09-17. `.claude/skills/plan-explain/SKILL.md`. Run against this
-file in its committed state it names point 3, `/plan-status`, quotes its check
-and reports two points closed of four; nothing in the tree changed. Decisions:
-register, section 2026-09-17, point 2 — four entries, including the order in
-which a point whose check reads the plan gets verified. Review: not run,
-`Core: no`.
+## 3. `/plan-next` re-reads `PLAN.md` before appending the outcome
 
-## 3. `/plan-status`
+- **Does:** step 6 re-reads the plan from disk before appending, since the human
+  may have edited it during the work and an append onto a remembered version
+  silently discards that edit.
+- **Closed by:** step 6 requires the re-read and says what to do when the point
+  has changed underneath: stop, do not append.
+- **Check: weak** — satisfied by reading.
+- **Core:** no — touches no file under `core/`.
 
-- **Does:** a read-only skill reporting closed points with their commits,
-  decisions and findings; the current point; what remains; the exit condition.
-- **Serves:** nothing in `docs/`.
-- **Closed by:** invoked against this file it reports points 1 and 2 closed with
-  their commits, point 4 as next, and the exit condition above.
-- **Core:** no
+## 4. A weak check is declared in the plan, with why and what replaces it
 
-*Esito:* 2026-09-17. `.claude/skills/plan-status/SKILL.md`. Run against this
-file in its committed state it reports points 1, 2 and 3 closed with commits
-`dd1fb69`, `4606640` and this one, resolved through the `Plan-point:` trailer;
-point 4 next; point 5 present and open; the exit condition not yet met. It
-reports one point more closed than the criterion anticipated, because the
-criterion was written before this point closed itself. Decisions: register,
-section 2026-09-17, point 3 — five entries, including the answer to the
-`/plan-explain` objection about commit lookup. Review: not run, `Core: no`.
+- **Does:** a check satisfiable by reading rather than running is marked
+  `Check: weak` when the plan is written, with the reason and with what would
+  verify it properly. Declared late, in an outcome line, it is an excuse;
+  declared early it is an argument you can still lose.
+- **Closed by:** the design states the rule and requires both halves — why it is
+  weak and what replaces it; the three skills report the marker.
+- **Check: weak**, and the self-reference is the honest version of the problem.
+- **Core:** no — touches no file under `core/`.
 
-## 4. `/plan-next` and the reviewer briefs
+## 5. A failed point and an abandoned plan are two different outcomes
 
-- **Does:** the skill that runs the life of a point — the eight steps of the
-  design — plus the two briefs it dispatches, one informed and one blind, with
-  their shared rules: read the specification, run the build and tests, verify
-  numerical claims, never edit code, and report nothing when there is nothing.
-- **Serves:** nothing in `docs/`.
-- **Closed by:** a weaker check than the others, stated plainly rather than
-  dressed up: the skill enumerates the eight steps and both briefs carry the four
-  shared rules. A skill cannot run itself, so the real verification is the first
-  development that uses it, and that is outside this plan.
-- **Core:** no
+- **Does:** a point whose check does not pass gets an outcome line saying so,
+  with what failed, and the plan stops rather than continuing past it. A plan
+  whose direction changed is closed by an abandonment declaration in its header,
+  with the reason; its register entries stay valid, because they describe code
+  that existed. Both go to the archive like any closed plan.
+- **Closed by:** the design defines both outcomes and distinguishes them;
+  `/plan-next` says what to do in each; `/plan-status` reports them as distinct
+  from a closed point.
+- **Check: weak** — satisfied by reading. Replaced by the first failure, which
+  is the one case nobody can schedule.
+- **Core:** no — touches no file under `core/`.
 
-*Esito:* 2026-09-17. `.claude/skills/plan-next/SKILL.md` and
-`.claude/skills/plan-next/reviewers.md`. Structural check run rather than read:
-eight steps enumerated as `### 1.` to `### 8.`, both briefs present, the four
-shared rules and the fifth about an empty result. That proves the parts are
-there and nothing about whether the procedure works, as the criterion admitted
-before the work started. Decisions: register, section 2026-09-17, point 4 — six
-entries, including the enforcement of the no-edit rule through the agent type
-rather than the prompt. Review: not run, `Core: no`.
+## 6. The threshold below which no plan is needed
 
-## 5. `Kind` in the header, and `Serves` made conditional
+- **Does:** defines trivial by properties and not by size: no change in
+  behaviour, no decision the specification does not already make, one commit. If
+  a decision appears, the work was never trivial and stops for a plan. Goes in
+  `AGENTS.md`, where the rule it qualifies lives.
+- **Closed by:** `AGENTS.md` states the three properties and the stop condition.
+- **Check: weak** — satisfied by reading. Replaced by the first argument about
+  whether something was trivial.
+- **Core:** no — touches no file under `core/`.
 
-Added on 2026-09-17, after the first run of `/plan-explain` showed every point of
-a process plan reporting a `Serves` field that says nothing. Added with the
-human's approval; the criteria of points 1 to 4 are untouched.
+## 7. `Satisfies:` in simulator plans, verified like any other citation
 
-- **Does:** the design gains a `Kind: process | simulator` line in the plan
-  header. A process plan omits `Serves` from its points, because `docs/` has no
-  authority over how the simulator gets built — it is not silent on the matter,
-  it is unrelated to it. A simulator plan keeps the field and must fill it. The
-  three skills report and require it accordingly, and tolerate its presence in
-  plans written before this rule, this one included.
-- **Closed by:** the design states the rule; each of the three skills handles a
-  plan with no `Serves` fields without complaint and requires them under
-  `Kind: simulator`; this plan's header declares `Kind: process`.
-- **Core:** no
+- **Does:** a `Kind: simulator` plan declares in its header which acceptance
+  criteria the development contributes to, and the identifiers are opened and
+  confirmed like any citation under point 1. A field filled with plausible
+  numbers is worse than an absent one: it answers the coverage question instead
+  of leaving a visible hole.
+- **Closed by:** the design defines the field, makes it mandatory under
+  `Kind: simulator`, and subjects it to the confirmation rule; the three skills
+  report it.
+- **Check: weak** — satisfied by reading. Replaced by the first simulator plan.
+- **Core:** no — touches no file under `core/`.
 
-*Esito:* 2026-09-17. The design carries the rule and the `Kind` line in its
-format block; all three skills name both kinds and say what each does to
-`Serves`; this header declares `Kind: process`. The points above keep their
-`Serves` fields, grandfathered rather than edited — removing them would have
-rewritten frozen criteria to match a rule that postdates them. Decisions:
-register, section 2026-09-17, point 5 — three entries, including why this plan
-reads slightly wrong forever. Review: not run, `Core: no`.
+## 8. `SPEC-QUESTIONS.md`
+
+- **Does:** the channel for the one thing that has nowhere to go today — the
+  discovery that a requirement is contradictory, unachievable, or wrong. `docs/`
+  cannot receive it and the register is for decisions, so it ends in a
+  conversation and leaves the repository. Each entry cites the requirement,
+  states the problem, and **declares whether it blocks**, so that the file cannot
+  become where objections are filed instead of acted on.
+- **Closed by:** the file exists with its rules and an honest empty state;
+  `AGENTS.md` points at it; `/plan-next` says that an objection to `docs/` goes
+  there and, when it blocks, stops the point.
+- **Check: weak** — satisfied by reading. Replaced by the first real entry.
+- **Core:** no — touches no file under `core/`.
+
+## 9. Closed plans are archived, and register entries get stable identifiers
+
+- **Does:** replaces the deletion rule with archival to `.claude/plans/`,
+  triggered when a plan closes rather than when a branch merges — a branch can
+  hold two plans in sequence, as this one does. And gives register entries
+  stable identifiers, without which a promotion cannot be recorded against the
+  entry it came from.
+- **Closed by:** the design states archival and the identifier scheme; the
+  previous plan is in `.claude/plans/`; the register's existing entries carry
+  identifiers.
+- **Core:** no — touches no file under `core/`.
+
+## 10. The promotion ritual
+
+- **Does:** at archival, the architectural entries of the register are listed as
+  promotion candidates, each with the `DEC-` text proposed for it. **A human
+  writes `docs/`.** The proposal is mine and the writing is not, or promotion
+  becomes the back door into the specification that the prohibition exists to
+  close. Promoted entries are marked in the register with the identifier they
+  became.
+- **Closed by:** the design defines the ritual, its output, and who writes what;
+  the candidate list for the development just closed exists.
+- **Check: weak** — satisfied by reading, except for the candidate list, which
+  is real work and either names the right entries or does not.
+- **Core:** no — touches no file under `core/`.
+
+## 11. `/plan-explain` and `/plan-status` run as read-only agents
+
+- **Does:** both dispatch to an agent type without `Edit` and `Write`, so that
+  the promise not to write becomes an inability to write — the principle already
+  applied to the reviewers. The risk it closes is not malice, it is the drift
+  into fixing something while passing through.
+- **Closed by:** both skills require the read-only dispatch and say why;
+  `/plan-status` invoked this way reports this plan correctly and the tree is
+  unchanged afterwards. The relaying of its report stays mine, and both skills
+  say so.
+- **Core:** no — touches no file under `core/`.
+
+## 12. No squash merge, where someone will read it
+
+- **Does:** a squash merge destroys the `Plan-point:` trailers and with them
+  `/plan-status` on the whole history, retroactively. Not a matter of style: the
+  lookup key disappears. Goes in `AGENTS.md` and in the body of every pull
+  request that closes a plan.
+- **Closed by:** `AGENTS.md` states it with that reason; the pull request for
+  this branch carries it.
+- **Check: weak** — satisfied by reading, until someone squashes.
+- **Core:** no — touches no file under `core/`.
