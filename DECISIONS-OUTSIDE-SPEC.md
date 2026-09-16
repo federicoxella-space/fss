@@ -341,3 +341,36 @@ most moving parts is the part with no evidence behind it. The first
 `Core: yes` point, in phase 4, is also the protocol's first real test. If it
 produces noise instead of findings, `reviewers.md` is where to look, not the code
 under review.
+
+---
+
+## 2026-09-17 — The twelve gaps in the plan mechanism
+
+Branch `plan-e-skill`, continuing after the plan of the same name closed. Planned
+in `PLAN.md`; the review that produced the twelve points was human, on the
+mechanism the previous section built.
+
+### Point 1 — the criterion to the reviewers, and citations opened
+
+**The criterion is pasted, not summarised.** Both reviewers receive the point's
+frozen text verbatim from `PLAN.md` — statement, citations, check, and any
+`Check: weak` marker. A summary written by the author of the code under review is
+an opportunity to soften the standard that code is measured against, and it would
+be taken without anyone noticing, least of all the author.
+
+**Two findings that the reviewers are now told to look for**, neither of which
+was in the brief before: a check that passes for a reason the criterion did not
+ask for, and a check marked weak that turns out to be properly verifiable. The
+first is how a green check hides unfinished work. The second is how `Check: weak`
+would decay from an argument into an excuse.
+
+**A failed citation splits into two cases, and neither is the author's to fix.**
+The point citing the wrong identifier is a defect in a frozen plan: report and
+ask. The requirement itself being contradictory or unachievable is a defect in
+`docs/`: say so and stop. The second has no home in the repository yet — it ends
+in a conversation, which is the gap point 8 exists to close.
+
+**The rule got no exercise from the point that introduced it.** This is a
+`Kind: process` plan, so no point here cites anything in `docs/`, and the
+citation check had nothing to open. Consistent with the declared weak check, and
+worth stating rather than leaving a reader to assume the rule was tried.

@@ -23,6 +23,20 @@ Neither type is a purpose-built reviewer. The brief carries the role.
 - `docs/`, which outranks the code, and `AGENTS.md`.
 - The task as the human stated it, so that scope can be judged. Without it a
   reviewer flags work that was explicitly requested.
+- **The point's frozen criterion, quoted verbatim from `PLAN.md`:** its
+  statement, what it cites, and its check, including a `Check: weak` marker if
+  it carries one. Paraphrasing it here would let the author soften the standard
+  the work is measured against, so it is pasted, not summarised.
+
+And with it, the question both are asked first:
+
+> **Does this code satisfy the check the plan declared, as written?**
+
+Not whether the code is good, not whether it is what the author intended — the
+reviewers are the only readers in the chain positioned to answer that one, and
+they are the only ones who used to be given everything except the criterion. A
+check that passes for a reason the criterion did not ask for is a finding. A
+check marked weak that turns out to be verifiable properly is a finding too.
 
 ## The four shared rules
 

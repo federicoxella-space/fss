@@ -30,6 +30,15 @@ was the habit this convention exists to break.
   point, where a reviewer either uses the criterion or does not.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-17. `reviewers.md` lists the frozen criterion among what both
+reviewers receive, quoted verbatim, and asks them first whether the code
+satisfies the declared check. Step 1 of `/plan-next` requires opening every
+cited identifier in `docs/` and splits a failed citation into a plan defect and
+a specification defect, stopping on either. Check weak as declared, and it got
+no exercise here: a process plan cites nothing. Decisions: register, section
+"The twelve gaps in the plan mechanism", point 1 — four entries. Review: not
+run, `Core: no`.
+
 ## 2. `Core:` defaults to yes, and a downgrade needs a written reason
 
 - **Does:** the plan format declares `Core: yes` by default; writing `no`

@@ -35,6 +35,28 @@ criterion can be read two ways, **stop and ask.** A criterion interpreted is a
 criterion invented, and the plan is frozen precisely so that the interpretation
 is not the author's to make.
 
+**Then open every identifier the point cites and read what it actually says.**
+`FR-P-13`, `AC-01`, `DEC-002` — find each one in `docs/` and confirm it says
+what the point claims. Do not work from the plan's summary of it, and do not
+work from memory of a document read earlier.
+
+A citation that is plausible and wrong passes every other check in this
+mechanism: the work gets done, the test goes green, the register records a
+decision against a requirement that says something else, and the plan reads as
+though the specification had been consulted. That is the drift this whole
+apparatus exists to stop, and reading the citation is the only place it can be
+caught.
+
+If the citation does not hold, **stop.** Two cases, and they are not the same
+one:
+
+- The point cites the wrong identifier, or the right one for the wrong reason —
+  a defect in a frozen plan. Report it and ask; the criteria are not yours to
+  correct.
+- The requirement itself is contradictory, unachievable, or wrong — a defect in
+  `docs/`. Say so and stop. It is not yours to fix either, and it is the most
+  valuable thing this process can find.
+
 `Kind` in the plan header decides whether the point carries a `Serves` field.
 Under `Kind: simulator` it is mandatory, and a point without one is a defect in
 the plan: stop and ask, the same as for an ambiguous criterion, rather than
