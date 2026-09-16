@@ -156,3 +156,30 @@ reviewers on the core. How to carry it out lives in the three skills. Splitting
 them this way means a change to the procedure does not touch the standing
 instructions, which are the part a human owns. The cost is that the rule and its
 procedure can drift apart, and nothing but reading catches it.
+
+### Point 2 — `/plan-explain`
+
+**A point is open until it carries an outcome line, and nothing else counts.**
+The skill finds the next point by looking for the first one without `*Esito:*`,
+not by reading git, not by judging whether the work looks done. One test, stated
+once, that all three skills share. The cost is that a point whose work is
+finished but whose outcome line was never written reads as open — which is the
+failure this design prefers, since the alternative is work that counts as done
+without leaving a record.
+
+**The skill is allowed to object to the point, and forbidden to fix it.** A
+criterion that can be read two ways is cheapest to catch before the work starts,
+so `/plan-explain` reads critically and reports what does not hold. It may not
+edit the plan: criteria are frozen, and a skill that could adjust them would
+dissolve the rule it exists to serve. Overturning a criterion stays a human's
+call.
+
+**It does not offer to write a missing plan.** Refusing is the point. Writing the
+plan is where the human decides what the work is; a skill that filled the gap
+would produce plans that agree with the agent that wrote them.
+
+**Verification ran after the outcome line, not before it.** The step order of the
+design puts verification before the record. This point's check reads the plan
+itself, so running it before the outcome line was written would have measured a
+state that never ships. For a point whose check reads the plan, verification runs
+last, on the state the commit will contain.

@@ -40,6 +40,13 @@ edited the standing instructions under a one-off permission. Review: not run,
   with no `Esito:` at the time it runs — and does not modify anything.
 - **Core:** no
 
+*Esito:* 2026-09-17. `.claude/skills/plan-explain/SKILL.md`. Run against this
+file in its committed state it names point 3, `/plan-status`, quotes its check
+and reports two points closed of four; nothing in the tree changed. Decisions:
+register, section 2026-09-17, point 2 — four entries, including the order in
+which a point whose check reads the plan gets verified. Review: not run,
+`Core: no`.
+
 ## 3. `/plan-status`
 
 - **Does:** a read-only skill reporting closed points with their commits,
