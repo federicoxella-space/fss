@@ -11,7 +11,9 @@ work stands must never be able to move it.
 
 ## Procedure
 
-1. Read `PLAN.md` at the repository root.
+1. Read `PLAN.md` at the repository root, header included: the exit condition,
+   the branch, and `Kind` if the plan declares one. `Kind` decides whether the
+   points carry a `Serves` field at all — see step 5.
 
 2. **If it is absent**, say so and stop. Work here starts from a written plan;
    see `AGENTS.md` and `.claude/design/2026-09-17-plan-e-skill.md`. Do not offer
@@ -28,8 +30,16 @@ work stands must never be able to move it.
 
 5. **Otherwise report, for the point found:**
    - its number and title, and what it does;
-   - what it serves — the requirement or decision identifiers it cites, or the
-     fact that `docs/` is silent, which is itself a decision for the register;
+   - **under `Kind: simulator`**, what it serves: the requirement or decision
+     identifiers it cites, or the plain statement that `docs/` does not cover
+     this, which is itself a decision for the register. A simulator point with
+     no `Serves` field is a defect in the plan — report it and refer it to a
+     human; the criteria are frozen and this skill does not fill them in.
+   - **under `Kind: process`**, nothing about `docs/`. The specification is not
+     silent on how the simulator gets built, it is unrelated to it, and a line
+     per point saying so reads as information while carrying none. A process
+     plan that still carries `Serves` fields, or a plan with no `Kind` line at
+     all, was written before this rule: read it as it is and do not tidy it.
    - what will close it: the runnable check, quoted from the plan;
    - whether it declares `Core: yes`, and therefore whether the two reviewers
      run when it closes;

@@ -292,3 +292,28 @@ delete `PLAN.md`, or add a point to the plan. The deletion belongs to the last
 commit before the merge, while the plan is still useful to whoever reviews the
 branch; adding a point needs a human's approval, which is not a step in a
 procedure.
+
+### Point 5 — `Kind` in the header, `Serves` made conditional
+
+**A missing `Serves` under `Kind: simulator` stops the work rather than being
+filled in.** The field is mandatory there, so its absence is a defect in a frozen
+contract, and the three skills treat it the way they treat an ambiguous
+criterion: report it, refer it to a human. A skill that supplied the missing
+requirement would be inventing the thing the field exists to prevent.
+
+**This plan keeps its `Serves` fields.** It declares `Kind: process`, under which
+the field is omitted, and it carries one on every point because it was written
+before the rule existed. Removing them would have edited frozen criteria to match
+a rule that postdates them — the exact move this design prohibits, performed in
+the name of tidiness. All three skills are instead told to tolerate the field in
+a process plan and to tolerate a plan with no `Kind` line at all.
+
+So the first plan written under this format is also the first plan
+grandfathered by it, and it will read slightly wrong forever. That is the
+cheaper of the two mistakes.
+
+**`docs/` is unrelated, not silent.** The distinction is the whole content of the
+change. A field reporting "nothing in `docs/`" on a point that installs a skill
+suggests the specification was consulted and had no opinion; in fact the
+specification has no jurisdiction. The second reading invites someone, later, to
+go and add one.

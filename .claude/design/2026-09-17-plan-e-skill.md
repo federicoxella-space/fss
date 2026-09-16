@@ -41,19 +41,41 @@ decisions register.
 ```markdown
 # Plan — <name of the development>
 
+**Kind:** simulator | process
 **Exit condition:** <what makes the whole development finished, cited from docs/>
 **Phase:** 3 (SIM-REQ §18)   **Branch:** <branch name>
 
 ## 1. <title of the point>
 - **Does:** one line.
-- **Serves:** `FR-P-13`, `AC-01` — or "nothing in docs/ covers this", which is a
-  decision and goes in the register.
+- **Serves:** `FR-P-13`, `AC-01`   ← simulator plans only, and mandatory there
 - **Closed by:** the runnable check. `AC01_SmallStocksAreNotImmortal` green.
 - **Core:** yes | no
 
 ## 2. <title of the point>
 ...
 ```
+
+### `Kind`, and what it does to `Serves`
+
+`Serves` exists to stop a point from inventing a requirement, which is work
+`docs/` can only do where it has authority.
+
+- **`Kind: simulator`** — the points change the simulated world. `Serves` is
+  mandatory on every point: the identifiers it cites, or the plain statement
+  that `docs/` does not cover this, which is a decision for the register. A
+  point with no `Serves` is a defect in the plan, and since criteria are frozen,
+  it is reported and referred to a human rather than filled in.
+- **`Kind: process`** — the points change how the work gets done: tooling,
+  workflow, these skills. `Serves` is omitted. `docs/` is not silent on how the
+  simulator gets built; it is unrelated to it, and a field repeating "nothing in
+  `docs/`" once per point reads as information while carrying none.
+
+The three skills tolerate the field's presence in a process plan and the absence
+of a `Kind` line altogether: both mean a plan written before this rule, and a
+plan is a frozen contract that a skill does not tidy.
+
+The rule was added after the first run of `/plan-explain` on a process plan
+showed four points each reporting that `docs/` had nothing to say.
 
 Everything above the `Esito:` line of a point is **frozen when written**. If a
 criterion turns out to be wrong, say so and record why; do not rewrite it to

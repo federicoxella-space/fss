@@ -61,7 +61,13 @@ Its subject is what has already happened. For what comes next in detail, that is
 
 9. Stop. Do not start or close anything.
 
-## Reading a plan written before a rule changed
+## `Kind`, and reading a plan written before a rule changed
+
+`Kind: simulator` means the points change the simulated world and each must
+carry a `Serves` field; a point without one is a gap, and the summary says so
+rather than passing over it. `Kind: process` means the points change how the
+work gets done, and no point carries the field — its absence is not a gap and is
+not reported as one.
 
 Plans predating a format change are read as they are, not corrected. A plan with
 no `Kind` line is a plan from before that field existed; a process plan whose

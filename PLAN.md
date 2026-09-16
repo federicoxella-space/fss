@@ -1,5 +1,6 @@
 # Plan — the plan mechanism and its three skills
 
+**Kind:** process
 **Exit condition:** `PLAN.md`, the three skills and the rule in `AGENTS.md` exist
 and agree with `.claude/design/2026-09-17-plan-e-skill.md`; `/plan-explain` and
 `/plan-status` answer correctly about this plan itself.
@@ -103,3 +104,11 @@ human's approval; the criteria of points 1 to 4 are untouched.
   plan with no `Serves` fields without complaint and requires them under
   `Kind: simulator`; this plan's header declares `Kind: process`.
 - **Core:** no
+
+*Esito:* 2026-09-17. The design carries the rule and the `Kind` line in its
+format block; all three skills name both kinds and say what each does to
+`Serves`; this header declares `Kind: process`. The points above keep their
+`Serves` fields, grandfathered rather than edited — removing them would have
+rewritten frozen criteria to match a rule that postdates them. Decisions:
+register, section 2026-09-17, point 5 — three entries, including why this plan
+reads slightly wrong forever. Review: not run, `Core: no`.

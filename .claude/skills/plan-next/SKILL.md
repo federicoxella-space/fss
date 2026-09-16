@@ -35,8 +35,15 @@ criterion can be read two ways, **stop and ask.** A criterion interpreted is a
 criterion invented, and the plan is frozen precisely so that the interpretation
 is not the author's to make.
 
-A plan with no `Serves` fields, or with no `Kind` line, is a plan whose format
-predates those fields or a process plan that omits them. Read it as it is.
+`Kind` in the plan header decides whether the point carries a `Serves` field.
+Under `Kind: simulator` it is mandatory, and a point without one is a defect in
+the plan: stop and ask, the same as for an ambiguous criterion, rather than
+deciding for yourself which requirement the point serves. Under `Kind: process`
+the field is absent by design and its absence means nothing.
+
+A process plan that still carries `Serves` fields, or a plan with no `Kind` line
+at all, was written before this rule. Read it as it is; a frozen contract is not
+tidied.
 
 ### 2. Implement
 
