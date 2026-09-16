@@ -209,3 +209,45 @@ them.
 The first finding of the review protocol therefore came from a read-only skill on
 a plan, not from a reviewer on a diff. Worth noting for the same reason the
 protocol exists: the cheapest place to find a defect is upstream of the work.
+
+### Point 3 — `/plan-status`
+
+**Commits are resolved by the `Plan-point:` trailer, not by heuristics.** The
+first run of `/plan-explain` objected that this point's criterion asks for
+commits the plan does not contain, and called the association its weakest part.
+Half right: the outcome line cannot carry a hash, since it is written before the
+commit that contains it, but the closing commit carries a `Plan-point: <n>`
+trailer, so `git log --grep` is an exact lookup. The mechanism was named in the
+design and in no file the skill reads, which is why it looked absent. Fixed by
+naming the command in the skill itself rather than by changing the plan.
+
+**An outcome line with no commit behind it is reported, not repaired.** It is the
+one state this design cannot tell apart from finished work, so the skill says so
+and stops instead of picking a likely commit. A summary that guesses is worse
+than one that admits a gap, because a guess reads as a fact.
+
+**Rejected findings stay in the summary.** The register already keeps them; the
+skill is required to surface them too. A rejection that disappears from the
+report is a rejection nobody can audit, which is most of the value of writing it
+down.
+
+**Every point closed is not the exit condition met.** The skill checks the exit
+condition against the repository instead of inferring it from the point count.
+The two came apart in this very plan: after point 4 every original point was
+closed while the exit condition still required a format that did not exist.
+
+**Plans written before a rule changed are read as they are.** No tidying, no
+back-filling a missing `Kind` line. The plan is a frozen contract and a skill
+that corrected it would be editing what it exists to report on.
+
+**`Plan-point: <n>` means the commit closes point n, and nothing else may carry
+it.** Running this point's own check found the trailer on the commit that *added*
+point 5, so the lookup returned a commit for an open point. The commit message
+was amended — the branch had never been pushed — rather than teaching the skill
+to tell closing commits from others by parsing the text after the trailer. A
+trailer whose meaning depends on its prose is not a lookup key. The amended
+commit is `f969e88`, replacing the `cef3974` reported in conversation.
+
+The defect was found by executing the check rather than by reading it, on a point
+whose check needed no build and no test. Recorded as evidence for a rule that
+already exists and is easy to skip on a documentation point: run the check.

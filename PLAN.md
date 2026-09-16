@@ -56,6 +56,15 @@ which a point whose check reads the plan gets verified. Review: not run,
   their commits, point 4 as next, and the exit condition above.
 - **Core:** no
 
+*Esito:* 2026-09-17. `.claude/skills/plan-status/SKILL.md`. Run against this
+file in its committed state it reports points 1, 2 and 3 closed with commits
+`dd1fb69`, `4606640` and this one, resolved through the `Plan-point:` trailer;
+point 4 next; point 5 present and open; the exit condition not yet met. It
+reports one point more closed than the criterion anticipated, because the
+criterion was written before this point closed itself. Decisions: register,
+section 2026-09-17, point 3 — five entries, including the answer to the
+`/plan-explain` objection about commit lookup. Review: not run, `Core: no`.
+
 ## 4. `/plan-next` and the reviewer briefs
 
 - **Does:** the skill that runs the life of a point — the eight steps of the
