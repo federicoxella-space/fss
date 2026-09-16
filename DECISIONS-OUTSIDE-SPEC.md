@@ -374,3 +374,39 @@ in a conversation, which is the gap point 8 exists to close.
 `Kind: process` plan, so no point here cites anything in `docs/`, and the
 citation check had nothing to open. Consistent with the declared weak check, and
 worth stating rather than leaving a reader to assume the rule was tried.
+
+### Point 2 — `Core:` defaults to yes
+
+**A missing reason is resolved as `yes`, and the plan is not stopped for it.**
+Point 1 established that a defect in a frozen plan stops the work; this is the
+exception, and it is deliberate. The absence of a justification has an obvious
+safe answer — run the reviewers — and stopping a plan to demand the paperwork for
+a decision already settled by default would cost more than it protects. The
+defect is reported, the point is reviewed, the work continues.
+
+**The reason has to be checkable against the diff.** "Small change", "only
+documentation", "low risk" are judgements by the author about the author's work,
+which is the thing the reviewers exist to replace; accepting one as grounds for
+skipping review would let the author dismiss the reviewers by describing the work
+favourably. "Touches no file under `core/`" is a statement a diff can falsify.
+
+**And the declaration is verified, not trusted.** Step 3 runs
+`git diff --name-only HEAD -- core/`; a point claiming `Core: no` whose diff
+touches the core has a false reason, so the reviewers run anyway and the
+contradiction is recorded. Without this the downgrade is self-certified and
+unaudited, since the reviewers who might have caught it are exactly what the
+downgrade skips. Same treatment as the read-only agent type in `reviewers.md`:
+the tools check what a promise cannot.
+
+**This point's check was declared weak and was not.** All three of its clauses
+turned out mechanically verifiable — two greps and the diff check above — so
+`Check: weak` was applied out of habit rather than analysis, on a plan where
+almost every point carries the marker. Recorded because over-applying it is as
+corrosive as skipping it: a marker on everything lowers what anyone expects to be
+proved. The criterion stays as written; a frozen criterion that turns out
+pessimistic is reported here, not corrected there.
+
+It is also the first instance of the finding the reviewers were told to look for
+one point earlier — a check marked weak that is properly verifiable — and it
+turned up on this author's own work, unprompted by any reviewer, because the
+brief had been written the day before.

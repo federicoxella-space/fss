@@ -48,8 +48,16 @@ Its subject is what has already happened. For what comes next in detail, that is
    rejection nobody can audit.
 
 6. **Report what remains:** the open points by number and title, which one is
-   next, and whether any of them declares `Core: yes` and will therefore need
-   the two reviewers.
+   next, and which of them will need the two reviewers. `Core:` defaults to yes,
+   so an open point needs them unless it declared `Core: no` with a reason —
+   report the reason, and flag an exemption resting on a judgement about size or
+   risk rather than on something a diff can contradict.
+
+   For a **closed** point that was exempt, report the reason it gave and whether
+   the diff bore it out, since `/plan-next` records the contradiction when it
+   does not. An exemption that was wrong and reviewed anyway is part of the
+   record; an exemption that was wrong and passed unreviewed is what this line
+   exists to surface.
 
 7. **Report the exit condition verbatim, and say whether it is met.** Every point
    closed is not the same as the exit condition being met; check it, do not

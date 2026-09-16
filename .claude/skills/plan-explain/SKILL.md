@@ -41,8 +41,13 @@ work stands must never be able to move it.
      plan that still carries `Serves` fields, or a plan with no `Kind` line at
      all, was written before this rule: read it as it is and do not tidy it.
    - what will close it: the runnable check, quoted from the plan;
-   - whether it declares `Core: yes`, and therefore whether the two reviewers
-     run when it closes;
+   - its `Core:` declaration, and therefore whether the two reviewers run when
+     it closes. `Core:` defaults to yes, so report an exemption with the reason
+     the plan gave for it, and say whether that reason is checkable against a
+     diff or is a judgement about size or risk — a judgement is not a reason,
+     and this is the last moment to say so cheaply. A point that declares `no`
+     with no reason at all is a defect in the plan: report it, and say the point
+     will be reviewed as `yes`;
    - where it sits: how many points are closed, how many remain, and the plan's
      exit condition.
 

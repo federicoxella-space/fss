@@ -49,7 +49,7 @@ decisions register.
 - **Does:** one line.
 - **Serves:** `FR-P-13`, `AC-01`   ← simulator plans only, and mandatory there
 - **Closed by:** the runnable check. `AC01_SmallStocksAreNotImmortal` green.
-- **Core:** yes | no
+- **Core:** yes — or `no — <reason checkable against the diff>`
 
 ## 2. <title of the point>
 ...
@@ -82,9 +82,36 @@ criterion turns out to be wrong, say so and record why; do not rewrite it to
 match what was built. That failure — a contract quietly adjusted to fit the
 delivery — is the one this whole design exists to prevent.
 
-`Core: yes` is declared up front because it decides whether the reviewers run.
-Declaring it at the start removes the chance to decide, once the work is done
-and the reviewers look expensive, that the point never really touched the core.
+### `Core:` defaults to yes
+
+`Core:` decides whether the reviewers run, and it is declared before the work so
+that nobody decides it afterwards, when the reviewers look expensive and the
+point can be remembered as never really touching the core.
+
+**The default is `yes`.** Writing `no` costs a reason, on the same line, in the
+plan, before the work starts:
+
+```markdown
+- **Core:** no — touches no file under `core/`
+```
+
+The reason has to be **checkable against the diff**. "Small change", "only
+documentation as far as I can tell", "low risk" are judgements, and a judgement
+by the author about the author's work is what the reviewers exist to replace.
+"Touches no file under `core/`", "no change to any field in `WorldState`" are
+statements someone can hold against the diff and find false.
+
+**A missing reason is resolved as `yes`,** and reported as a defect in the plan.
+The absence of a justification is settled in the direction that costs review
+time, never in the direction that skips it. The plan is not stopped for it: a
+blocked plan is a worse answer than a reviewed point.
+
+**And the declaration is checked, not trusted.** A point claiming `Core: no`
+whose diff touches `core/` has a false reason, so the reviewers run anyway and
+the contradiction is recorded. A downgrade nobody verifies is a downgrade
+available whenever review is inconvenient — the same self-certification problem
+the read-only agent type solved for the reviewers, and it gets the same
+treatment: the tools check it.
 
 ## The life of a point
 

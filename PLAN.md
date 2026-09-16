@@ -50,6 +50,16 @@ run, `Core: no`.
   someone other than its author.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-17. The design and all three skills state the default and the
+requirement; all twelve points of this plan carry a reason. The check was
+declared weak and was not: every clause was verifiable mechanically, including
+`git diff --name-only HEAD -- core/`, which ran and confirmed this point's own
+exemption holds. The marker stays as written — a frozen criterion that turns out
+pessimistic is recorded, not corrected. Two rules beyond the point's statement:
+the reason must be falsifiable by a diff, and a false `no` runs the reviewers
+anyway. Decisions: register, section "The twelve gaps in the plan mechanism",
+point 2 — five entries. Review: not run, `Core: no`, exemption verified.
+
 ## 3. `/plan-next` re-reads `PLAN.md` before appending the outcome
 
 - **Does:** step 6 re-reads the plan from disk before appending, since the human

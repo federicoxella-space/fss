@@ -92,7 +92,23 @@ A point whose check reads `PLAN.md` itself is verified after step 6, on the
 state the commit will contain; verifying earlier measures a state that never
 ships.
 
-### 4. Review, if the point declares `Core: yes`
+**Then check the `Core:` declaration against the diff:**
+
+```
+git diff --name-only HEAD -- core/
+```
+
+If the point declared `Core: no` and this prints anything, the reason it gave was
+false. The reviewers run, and the contradiction is recorded in the register. A
+downgrade nobody verifies is a downgrade available whenever review is
+inconvenient.
+
+### 4. Review, unless the point earned an exemption
+
+`Core:` defaults to **yes**. The reviewers run unless the point declared
+`Core: no` with a reason, and step 3 found that reason to hold. A point with no
+reason is treated as `yes` and its missing reason reported; a point whose reason
+the diff contradicts is treated as `yes` and the contradiction recorded.
 
 `Core:` was declared when the plan was written, and is not reconsidered now that
 the reviewers look expensive. Read `reviewers.md` in this skill's folder and
