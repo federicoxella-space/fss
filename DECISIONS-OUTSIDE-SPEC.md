@@ -125,3 +125,34 @@ test.
 The remark on `Hash64.Of` still phrases channel separation as the sensible
 answer rather than as the rule it now is. `HashChannel` states the rule; further
 edits to `Hash64` were outside the review.
+
+---
+
+## 2026-09-17 — The plan mechanism and its three skills
+
+Branch `plan-e-skill`, planned in `PLAN.md`, designed in
+`.claude/design/2026-09-17-plan-e-skill.md`. Entries name the plan point they
+belong to.
+
+### Whole plan — `docs/` is silent, and stays silent
+
+Every point of this plan declares `docs/` silent, so the declaration is made once
+here instead of five times in the plan. `SIM-REQ` §18 plans the simulator; it
+does not plan how the simulator gets built, and it should not start. Process work
+that wrote itself into the specification would be indistinguishable, a year from
+now, from the design the specification exists to hold.
+
+### Point 1 — the rule in `AGENTS.md`
+
+**An agent edited the standing instructions.** The rule given on 2026-09-16 is
+that permanent instructions are changed by a human. Permission for this one was
+given explicitly and for this change only; it does not generalise. Recorded
+because a reader finding an agent commit on `AGENTS.md` should be able to see
+that it was authorised rather than assumed.
+
+**Four rules, and the procedure kept out.** `AGENTS.md` holds what must always be
+true — plan first, criteria frozen, a point is a commit with a check, two
+reviewers on the core. How to carry it out lives in the three skills. Splitting
+them this way means a change to the procedure does not touch the standing
+instructions, which are the part a human owns. The cost is that the rule and its
+procedure can drift apart, and nothing but reading catches it.

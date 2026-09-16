@@ -25,6 +25,25 @@ Not to record what you built, not to fix a discrepancy, not to tidy. If the
 code cannot satisfy a requirement, stop and say so. Changing the specification
 to match the implementation destroys the only independent account of the design.
 
+## Plan the development before starting it
+
+Work starts from a written `PLAN.md` at the repository root, describing the
+development in progress and nothing else. Four rules govern it; the procedure
+belongs to `/plan-next`, `/plan-explain` and `/plan-status`, and the reasoning to
+`.claude/design/2026-09-17-plan-e-skill.md`.
+
+- **The plan is written before the work.** Its points cite `docs/`, or say
+  plainly that `docs/` does not cover them. A plan that invents requirements is a
+  specification edited to match its implementation, one level down.
+- **Criteria are frozen when written.** A criterion that turns out to be wrong is
+  reported and recorded, never rewritten to match what was built.
+- **A point is one commit with a runnable check.** The commit carries the record
+  with it: the register entry and the plan's own outcome line are written first
+  and committed together with the code.
+- **A point touching `core/Runtime/` passes two reviewers**, one briefed with the
+  author's doubts and one blind to them. Their findings reach
+  `DECISIONS-OUTSIDE-SPEC.md` even when rejected, with the reason.
+
 ## Close every task with the decisions it required
 
 Before reporting a task finished, write the choices it forced that the

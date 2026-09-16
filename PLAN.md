@@ -25,6 +25,12 @@ below therefore declares `docs/` silent, which is one decision recorded once in
   the procedure that the skills own.
 - **Core:** no
 
+*Esito:* 2026-09-17. Section "Plan the development before starting it", four
+rules, procedure delegated to the three skills by name. Decisions: register,
+section 2026-09-17, point 1 — two entries, one of them the fact that an agent
+edited the standing instructions under a one-off permission. Review: not run,
+`Core: no`.
+
 ## 2. `/plan-explain`
 
 - **Does:** a read-only skill that names the next open point, what it requires,
