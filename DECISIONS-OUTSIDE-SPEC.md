@@ -39,25 +39,11 @@ Not in the specification, which never states that generation 0 is reserved; it
 follows from `EntityId.None` being index 0, generation 0. Overturned if live
 handles ever start at generation 0.
 
-**Known limit:** two different *kinds* of non-entity subject drawing in the same
-channel share one key space. Giving them separate channels is the answer
-recorded in the source; nothing enforces it.
-
-### 3. `Range` rejects by re-mixing the value, not by taking another index
-
-DEC-002 records as a cost that "algorithms consuming a variable number of draws,
-such as rejection sampling, need rewriting to a fixed draw count". An unbiased
-reduction needs rejection somewhere. Read narrowly, that sentence forbids
-`Range` entirely.
-
-Decided: the cost DEC-002 names is a *variable number of draws*, because that is
-what desynchronises subsystems and breaks constant-time replay. `Range` consumes
-exactly one draw at one `index` and re-mixes the value internally, staying a
-pure function of the five coordinates. Loop probability is below 2^-32 per call.
-
-This is the entry most worth a human's second look. If the intent of DEC-002 was
-to forbid unbounded loops rather than variable draw counts, `Range` has to go
-back to a biased multiply-shift and the bias accepted in writing.
+**Constraint, not a limit:** two different *kinds* of non-entity subject drawing
+in the same channel would share one key space, where row 7 of one is row 7 of
+the other. So each kind gets its own channel. Recorded in the `HashChannel`
+comment alongside the rest of the channel contract; nothing in the build
+enforces it.
 
 ### 4. `Range` takes a count, not an interval
 
@@ -80,13 +66,6 @@ arithmetic would wrap, with no sign cases to hand-write.
 Overturned by the A-11 assert pass of Phase 3, which may want this always on, or
 want it at state level instead of per call.
 
-### 6. CI does not exercise the guard
-
-The workflow builds and tests in Release only, so the guard and its test
-(`A11_ApplyRefusesAProductThatLeaves64Bits`, under `#if DEBUG`) never run there.
-Left as is: adding a Debug job was outside the task. Recorded so that the gap is
-not mistaken for coverage.
-
 ### 7. Process choices
 
 - One commit rather than two. Splitting DEC-002 from A-11 would have to split
@@ -94,3 +73,55 @@ not mistaken for coverage.
   Debug. The message names both identifiers.
 - Committed to a branch rather than to `main`, against the repository's own
   history of committing to `main` directly.
+
+---
+
+## 2026-09-16 — Review of `hash64-soggetto-e-range`
+
+Three changes required by review of the section above. Entries 3 and 6 there are
+gone: the first rested on a premise the review showed to be false, the second
+described a gap that no longer exists. Entries 1, 2, 4, 5 and 7 keep their
+numbers, so the series above now skips 3 and 6.
+
+### 1. `Hash64.Range` is a plain modulo
+
+The reduction is `(int)(draw % (ulong)count)`. Rejection and re-mixing are gone,
+and with them the reading of DEC-002 that entry 3 argued for: nothing here
+consumes a variable number of draws any more.
+
+Two findings from review, kept because the code no longer shows them: the
+relative excess of a modulo reduction over a 64-bit draw is at most
+`count / 2^64`, some 1e12 draws of world time against the 2^64 needed to see it;
+and re-mixing could not have removed it anyway, since `Mix` is a bijection and
+moves the discarded set onto another set of the same size rather than spreading
+it. The magnitude is documented at `Range`, where the next reader will ask.
+
+### 2. One channel per kind of non-entity subject
+
+Written into the `HashChannel` comment, next to the rest of the channel
+contract, since that is what a caller reads when choosing one. Entity keys
+separate themselves by generation; non-entity keys have nothing to separate them
+but the channel. Unenforced by the build, like the rest of that contract.
+
+### 3. CI runs the debug build
+
+A `dotnet test -c Debug` step, so the A-11 guard and
+`A11_ApplyRefusesAProductThatLeaves64Bits` run somewhere other than a
+developer's machine. Added as a step in the existing job rather than a matrix
+over configurations: a matrix would also fan out the wealth-band steps, which
+are release-configuration checks and have their own reason to run twice.
+
+### 4. The histogram tolerance was left alone
+
+`NFR03_RangeCoversTheIntervalEvenly` keeps its 5% band. Review allowed widening
+it if it had been sized around exact uniformity; it was not. 5% is about 5.4
+standard deviations of sampling noise at seventy thousand draws, while the
+modulo's own deviation is of order 2^-61. Widening would have loosened a bound
+that has nothing to do with the claim that changed. The reasoning is now in the
+test.
+
+### 5. Left as found
+
+The remark on `Hash64.Of` still phrases channel separation as the sensible
+answer rather than as the rule it now is. `HashChannel` states the rule; further
+edits to `Hash64` were outside the review.

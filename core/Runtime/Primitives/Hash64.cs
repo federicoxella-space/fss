@@ -87,23 +87,24 @@ namespace Sim
         public static ulong Subject(int row) => (uint)row;
 
         /// <summary>
-        /// Reduces a draw to <c>0 .. count - 1</c> with every value equally likely.
+        /// Reduces a draw to <c>0 .. count - 1</c>, so that no caller writes the modulo
+        /// itself and each one asks about the bias once, here.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// <c>draw % count</c> is not uniform. 2^64 is not a multiple of <paramref name="count"/>,
-        /// so the lowest <c>2^64 mod count</c> results come up once more often than the rest.
-        /// The lean is small for a small interval and impossible to see in a histogram, but it
-        /// is the same lean in the same direction at every call site and for the whole life of
-        /// a world, which is how a bias becomes a visible tilt in the world it generates.
+        /// The reduction is a plain modulo, and the next reader is going to ask about the
+        /// bias, so: 2^64 is not a multiple of <paramref name="count"/>, and the lowest
+        /// <c>2^64 mod count</c> results therefore come up once more often than the rest.
+        /// The relative excess is at most <c>count / 2^64</c> — 5e-17 for an interval of a
+        /// thousand. Seeing it would take on the order of 2^64 draws; sixty years of world
+        /// time across two thousand settlements produce on the order of 1e12. This is not a
+        /// small bias, it is one that cannot be observed in principle.
         /// </para>
         /// <para>
-        /// So the tail that does not divide evenly is discarded and the value re-mixed rather
-        /// than folded back in. This is not the rejection sampling DEC-002 rules out: the cost
-        /// there is an algorithm consuming a variable number of draws, which moves every draw
-        /// after it. This consumes exactly one, at one <c>index</c>, and stays a pure function
-        /// of the coordinates that produced <paramref name="draw"/>. The loop re-mixes with
-        /// probability below 2^-32 for any interval the simulation asks for.
+        /// Rejecting the tail and re-mixing would not buy exactness anyway. <see cref="Mix"/>
+        /// is a bijection, so it relocates the discarded set onto another set of the same
+        /// size rather than spreading it evenly, leaving a deviation of the same order; and
+        /// iterating a bijection is a permutation, so the loop has no proof of termination.
         /// </para>
         /// <para>Callers wanting <c>min .. max</c> write <c>min + Range(draw, max - min + 1)</c>.</para>
         /// </remarks>
@@ -111,20 +112,7 @@ namespace Sim
         {
             System.Diagnostics.Debug.Assert(count > 0, "Range needs a non-empty interval.");
 
-            ulong n = (ulong)count;
-            // 2^64 mod n, computed without a 65-bit intermediate.
-            ulong tail = unchecked((ulong.MaxValue % n) + 1) % n;
-            if (tail != 0)
-            {
-                // The largest multiple of n that fits, as a ulong: 2^64 - tail.
-                ulong limit = unchecked(0UL - tail);
-                while (draw >= limit)
-                {
-                    draw = Mix(draw);
-                }
-            }
-
-            return (int)(draw % n);
+            return (int)(draw % (ulong)count);
         }
 
         private static ulong Mix(ulong z)
