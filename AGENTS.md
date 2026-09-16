@@ -25,6 +25,18 @@ Not to record what you built, not to fix a discrepancy, not to tidy. If the
 code cannot satisfy a requirement, stop and say so. Changing the specification
 to match the implementation destroys the only independent account of the design.
 
+## Close every task with the decisions it required
+
+Before reporting a task finished, write the choices it forced that the
+specification does not make into `DECISIONS-OUTSIDE-SPEC.md`, under a heading
+naming the task. Say what was decided, what `docs/` does or does not say about
+it, and what would overturn it. A task that genuinely decided nothing says so in
+one line.
+
+This is where a decision goes when `docs/` is silent, since `docs/` is not yours
+to edit. A choice left in the diff alone stops being a decision and becomes an
+assumption in someone else's code, found years later by whoever it breaks.
+
 ## The build enforces most of the rules
 
 `BannedSymbols.txt` blocks floating point, `System.Random`, wall clocks,
