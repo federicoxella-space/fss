@@ -317,3 +317,27 @@ change. A field reporting "nothing in `docs/`" on a point that installs a skill
 suggests the specification was consulted and had no opinion; in fact the
 specification has no jurisdiction. The second reading invites someone, later, to
 go and add one.
+
+### Closing the plan — what the exit condition could and could not verify
+
+Three of its four clauses were checked directly: the plan, the three skills and
+the rule in `AGENTS.md` exist and agree with the design.
+
+The fourth — that `/plan-explain` and `/plan-status` answer correctly about this
+plan — was checked by invoking both, and the answers were right. But **a session
+holds the copy of a skill it loaded, not the file on disk.** Both skills had been
+edited by point 5 after this session picked them up, so what ran was the earlier
+text; the committed files are the current ones and a new session loads those. The
+clause is therefore met for the version that ran and asserted, not proved, for
+the version that ships. Proving it takes a fresh session, which is a human's
+action and not one this plan can contain.
+
+Recorded rather than worked around, because the same trap is waiting for anyone
+who edits a skill and tests it in the session that is already running it.
+
+**The review protocol never ran.** No point in this plan declared `Core: yes`, so
+the two reviewers were never dispatched and the part of this development with the
+most moving parts is the part with no evidence behind it. The first
+`Core: yes` point, in phase 4, is also the protocol's first real test. If it
+produces noise instead of findings, `reviewers.md` is where to look, not the code
+under review.
