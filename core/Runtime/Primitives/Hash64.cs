@@ -32,23 +32,99 @@ namespace Sim
         private const ulong MixA = 0xBF58476D1CE4E5B9UL;
         private const ulong MixB = 0x94D049BB133111EBUL;
 
+        /// <summary>The subject of a draw that belongs to the world rather than to anything in it.</summary>
+        public const ulong NoSubject = 0;
+
         /// <summary>
         /// The draw at <c>(worldSeed, entity, tick, channel, index)</c>. Uniform over the
         /// full 64-bit range; identical for identical coordinates, on any build.
         /// </summary>
         public static ulong Of(ulong worldSeed, EntityId entity, long tick, HashChannel channel, int index)
+            => Of(worldSeed, ((ulong)(uint)entity.Generation << 32) | (uint)entity.Index, tick, channel, index);
+
+        /// <summary>
+        /// The same draw for a subject that is not an entity: a link, an event, a sample.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Not everything that draws occupies a row with a generation. SIM-STATE enumerates
+        /// sampled transients from <c>Hash(worldSeed, link, index)</c>, and a link is a row
+        /// in the edge arrays; world generation and events draw against no row at all. The
+        /// entity overload is this one with the handle packed into the subject, so the two
+        /// share one coordinate space instead of dividing the hash in two.
+        /// </para>
+        /// <para>
+        /// Build the key with <see cref="Subject"/>, or use <see cref="NoSubject"/>. Two
+        /// different kinds of non-entity subject drawing in the same channel share one key
+        /// space and would have to divide it by agreement; giving them separate channels is
+        /// the answer that does not depend on anyone remembering.
+        /// </para>
+        /// </remarks>
+        public static ulong Of(ulong worldSeed, ulong subject, long tick, HashChannel channel, int index)
         {
             unchecked
             {
                 // The coordinates fold in one at a time, each through a full avalanche, so
                 // that no two different coordinate tuples cancel out into the same state.
                 ulong h = Mix(worldSeed + GoldenGap);
-                h = Mix(h ^ (((ulong)(uint)entity.Generation << 32) | (uint)entity.Index));
+                h = Mix(h ^ subject);
                 h = Mix(h ^ (ulong)tick);
                 h = Mix(h ^ (uint)(int)channel);
                 h = Mix(h ^ (uint)index);
                 return h;
             }
+        }
+
+        /// <summary>
+        /// Subject key for a row that is not an entity.
+        /// </summary>
+        /// <remarks>
+        /// The high half stays zero. That is the generation no live <see cref="EntityId"/>
+        /// carries, so a row key and a live entity key cannot name the same draw, and a
+        /// negative row cannot sign-extend into one either. <c>Subject(0)</c> is
+        /// <see cref="NoSubject"/>, which is <see cref="EntityId.None"/> packed.
+        /// </remarks>
+        public static ulong Subject(int row) => (uint)row;
+
+        /// <summary>
+        /// Reduces a draw to <c>0 .. count - 1</c> with every value equally likely.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// <c>draw % count</c> is not uniform. 2^64 is not a multiple of <paramref name="count"/>,
+        /// so the lowest <c>2^64 mod count</c> results come up once more often than the rest.
+        /// The lean is small for a small interval and impossible to see in a histogram, but it
+        /// is the same lean in the same direction at every call site and for the whole life of
+        /// a world, which is how a bias becomes a visible tilt in the world it generates.
+        /// </para>
+        /// <para>
+        /// So the tail that does not divide evenly is discarded and the value re-mixed rather
+        /// than folded back in. This is not the rejection sampling DEC-002 rules out: the cost
+        /// there is an algorithm consuming a variable number of draws, which moves every draw
+        /// after it. This consumes exactly one, at one <c>index</c>, and stays a pure function
+        /// of the coordinates that produced <paramref name="draw"/>. The loop re-mixes with
+        /// probability below 2^-32 for any interval the simulation asks for.
+        /// </para>
+        /// <para>Callers wanting <c>min .. max</c> write <c>min + Range(draw, max - min + 1)</c>.</para>
+        /// </remarks>
+        public static int Range(ulong draw, int count)
+        {
+            System.Diagnostics.Debug.Assert(count > 0, "Range needs a non-empty interval.");
+
+            ulong n = (ulong)count;
+            // 2^64 mod n, computed without a 65-bit intermediate.
+            ulong tail = unchecked((ulong.MaxValue % n) + 1) % n;
+            if (tail != 0)
+            {
+                // The largest multiple of n that fits, as a ulong: 2^64 - tail.
+                ulong limit = unchecked(0UL - tail);
+                while (draw >= limit)
+                {
+                    draw = Mix(draw);
+                }
+            }
+
+            return (int)(draw % n);
         }
 
         private static ulong Mix(ulong z)

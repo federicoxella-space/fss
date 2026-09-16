@@ -46,10 +46,31 @@ namespace Sim
         /// </summary>
         public static long Apply(long value, long numerator, long denominator, ref long carry)
         {
+            AssertTotalFitsIn64(value, numerator, carry);
             long total = value * numerator + carry;
             long whole = Fixed.DivFloor(total, denominator);
             carry = total - whole * denominator;
             return whole;
+        }
+
+        /// <summary>
+        /// A-11, in a debug build only: the caller's promise that <c>value * numerator + carry</c>
+        /// stays inside 64 bits.
+        /// </summary>
+        /// <remarks>
+        /// A wrap here is silent and corrupts a stock rather than failing, and the release build
+        /// cannot afford to check every rate applied in every settlement update. <c>checked</c>
+        /// is the whole check: it throws exactly where the unchecked arithmetic below would wrap,
+        /// with no sign cases to get wrong. <see cref="System.Diagnostics.ConditionalAttribute"/>
+        /// removes the call, arguments included, outside a debug build.
+        ///
+        /// The <see cref="int"/> overload needs none of this: it widens first, and
+        /// <c>int * int + int</c> always fits a <see cref="long"/>.
+        /// </remarks>
+        [System.Diagnostics.Conditional("DEBUG")]
+        private static void AssertTotalFitsIn64(long value, long numerator, long carry)
+        {
+            _ = checked(value * numerator + carry);
         }
 
         /// <summary>Applies a fixed-point rate on the <see cref="Fixed.One"/> scale.</summary>
