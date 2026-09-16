@@ -68,3 +68,20 @@ which a point whose check reads the plan gets verified. Review: not run,
   shared rules. A skill cannot run itself, so the real verification is the first
   development that uses it, and that is outside this plan.
 - **Core:** no
+
+## 5. `Kind` in the header, and `Serves` made conditional
+
+Added on 2026-09-17, after the first run of `/plan-explain` showed every point of
+a process plan reporting a `Serves` field that says nothing. Added with the
+human's approval; the criteria of points 1 to 4 are untouched.
+
+- **Does:** the design gains a `Kind: process | simulator` line in the plan
+  header. A process plan omits `Serves` from its points, because `docs/` has no
+  authority over how the simulator gets built — it is not silent on the matter,
+  it is unrelated to it. A simulator plan keeps the field and must fill it. The
+  three skills report and require it accordingly, and tolerate its presence in
+  plans written before this rule, this one included.
+- **Closed by:** the design states the rule; each of the three skills handles a
+  plan with no `Serves` fields without complaint and requires them under
+  `Kind: simulator`; this plan's header declares `Kind: process`.
+- **Core:** no

@@ -183,3 +183,29 @@ design puts verification before the record. This point's check reads the plan
 itself, so running it before the outcome line was written would have measured a
 state that never ships. For a point whose check reads the plan, verification runs
 last, on the state the commit will contain.
+
+### Point 5, added mid-plan — a plan may gain points, with approval
+
+The first run of `/plan-explain` in a fresh session showed the defect it was
+built to show, one level up from where it was looking: every point of this plan
+reports a `Serves` field that says nothing, because `docs/` is not silent about
+how the simulator gets built, it is unrelated to it. The field earns its place on
+a plan that touches the simulator and produces a line of noise on one that does
+not.
+
+**Decided:** a plan may gain a point while it runs, with the human's approval,
+and the criteria of the points already written stay frozen. Renumbering was
+rejected: point numbers are cited by outcome lines, register entries and commit
+trailers, so inserting the new point where it logically belongs would break every
+reference already written to name it.
+
+**Decided:** the new point runs last, in plan order, even though points 3 and 4
+would ideally be written against the format it introduces. Executing it early
+would have contradicted the rule that the next point is the first one without an
+outcome line — the rule all three skills share. Points 3 and 4 are instead
+written without hardcoding the field, so point 5 amends rather than replaces
+them.
+
+The first finding of the review protocol therefore came from a read-only skill on
+a plan, not from a reviewer on a diff. Worth noting for the same reason the
+protocol exists: the cheapest place to find a defect is upstream of the work.
