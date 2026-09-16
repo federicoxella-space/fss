@@ -251,3 +251,44 @@ commit is `f969e88`, replacing the `cef3974` reported in conversation.
 The defect was found by executing the check rather than by reading it, on a point
 whose check needed no build and no test. Recorded as evidence for a rule that
 already exists and is easy to skip on a documentation point: run the check.
+
+### Point 4 — `/plan-next` and the reviewer briefs
+
+**"Do not edit the code" is enforced by the reviewer's tools, not by its
+compliance.** Both reviewers are dispatched as a read-only agent type — `Plan`,
+or `Explore` — which has no `Edit` and no `Write`. An instruction not to edit is
+a request; a missing tool is a guarantee. Rejected: a general-purpose agent with
+a strongly worded brief.
+
+Neither type is a purpose-built reviewer: `Explore` is described as a fan-out
+search that reads excerpts, `Plan` as an architect for implementation plans. The
+brief carries the role, and the agent type is chosen for what it cannot do. If a
+read-only reviewer type ever exists, it replaces both.
+
+**The blind reviewer never sees the briefed one's output**, and a second pass
+gets a fresh blind reviewer rather than the same one shown what the other said.
+Blindness is not a state a reviewer can return to once it has read the author's
+reasoning.
+
+**For the blind reviewer, code that needs an explanation to be judged is itself a
+finding.** This is a deliberate stance, not an oversight in the brief: the
+absence of an explanation the author would have supplied is information about the
+code.
+
+**Two files, not one.** `reviewers.md` is read at step 4 and only for a point
+declaring `Core: yes`, so the briefs stay out of the way of every point that does
+not need them. The cost is a second file that can fall out of step with the skill
+that dispatches it.
+
+**The check is a read-through, and the plan said so before the work started.** A
+structural check was run — the eight steps enumerated, both briefs present, the
+four shared rules and the fifth — which proves the parts are there and proves
+nothing about whether the procedure works. A skill cannot run itself. The real
+verification is the first development that uses it, and that is outside this
+plan.
+
+**What `/plan-next` deliberately cannot do:** merge, push, open a pull request,
+delete `PLAN.md`, or add a point to the plan. The deletion belongs to the last
+commit before the merge, while the plan is still useful to whoever reviews the
+branch; adding a point needs a human's approval, which is not a step in a
+procedure.

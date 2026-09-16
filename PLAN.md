@@ -78,6 +78,15 @@ section 2026-09-17, point 3 — five entries, including the answer to the
   development that uses it, and that is outside this plan.
 - **Core:** no
 
+*Esito:* 2026-09-17. `.claude/skills/plan-next/SKILL.md` and
+`.claude/skills/plan-next/reviewers.md`. Structural check run rather than read:
+eight steps enumerated as `### 1.` to `### 8.`, both briefs present, the four
+shared rules and the fifth about an empty result. That proves the parts are
+there and nothing about whether the procedure works, as the criterion admitted
+before the work started. Decisions: register, section 2026-09-17, point 4 — six
+entries, including the enforcement of the no-edit rule through the agent type
+rather than the prompt. Review: not run, `Core: no`.
+
 ## 5. `Kind` in the header, and `Serves` made conditional
 
 Added on 2026-09-17, after the first run of `/plan-explain` showed every point of
