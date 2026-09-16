@@ -28,6 +28,14 @@ jobs:
         env:
           SIM_WEALTH_BANDS: 3
 
+      # A-11. The accumulator's overflow guard is [Conditional("DEBUG")] and its test is
+      # under #if DEBUG, so the release steps above compile both out. Without this step
+      # the guard is a comment.
+      - name: Tests, debug build
+        run: dotnet test core/Tests/Sim.Core.Tests.csproj -c Debug
+        env:
+          SIM_WEALTH_BANDS: 1
+
       - name: Harness smoke run
         run: |
           dotnet build harness/Sim.Harness.csproj -c Release

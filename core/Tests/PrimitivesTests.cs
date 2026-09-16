@@ -115,6 +115,88 @@ namespace Sim.Tests
                     Is.Not.EqualTo(Hash64.Of(Seed + 1, e, i, HashChannel.Production, 0)));
             }
         }
+
+        /// <summary>
+        /// NFR-03 for the things that draw without occupying a row with a generation:
+        /// links, events, samples. The subject has to separate them the way the entity
+        /// coordinate separates rows, and must not land on a live entity's draw.
+        /// </summary>
+        [Test]
+        public void NFR03_SubjectSeparatesDrawsWithoutAnEntity()
+        {
+            var seen = new System.Collections.Generic.List<ulong>();
+            for (int row = -8; row < 64; row++)
+            {
+                for (int index = 0; index < 4; index++)
+                {
+                    seen.Add(Hash64.Of(Seed, Hash64.Subject(row), 5, HashChannel.Transients, index));
+                }
+            }
+
+            seen.Sort();
+            for (int i = 1; i < seen.Count; i++)
+            {
+                Assert.That(seen[i], Is.Not.EqualTo(seen[i - 1]), "two distinct subjects returned the same draw");
+            }
+
+            // Row keys keep the generation half at zero, which no live handle carries.
+            for (int row = 0; row < 64; row++)
+            {
+                for (int generation = 1; generation <= 4; generation++)
+                {
+                    Assert.That(
+                        Hash64.Of(Seed, Hash64.Subject(row), 5, HashChannel.Transients, 0),
+                        Is.Not.EqualTo(Hash64.Of(Seed, new EntityId(row, generation), 5, HashChannel.Transients, 0)),
+                        "a link drew the same value as a live entity");
+                }
+            }
+
+            // No subject is the absent handle, and the entity overload is the subject one.
+            Assert.That(
+                Hash64.Of(Seed, Hash64.NoSubject, 3, HashChannel.Events, 0),
+                Is.EqualTo(Hash64.Of(Seed, EntityId.None, 3, HashChannel.Events, 0)));
+            Assert.That(Hash64.Subject(0), Is.EqualTo(Hash64.NoSubject));
+        }
+
+        /// <summary>
+        /// The reduction lands inside the interval and spreads across it.
+        /// </summary>
+        /// <remarks>
+        /// The band is 5% of each bucket, about 5.4 standard deviations of the sampling
+        /// noise at this sample size. It is not tightened around exact uniformity and was
+        /// never sized for it: the modulo's own deviation is of order 2^-61 here, some
+        /// forty orders of magnitude under what a histogram of seventy thousand draws can
+        /// resolve. What this catches is a reduction that masks, folds, or drops the top of
+        /// the interval — the failures that move whole buckets, not parts per quintillion.
+        /// </remarks>
+        [Test]
+        public void NFR03_RangeCoversTheIntervalEvenly()
+        {
+            const int count = 7;
+            const int draws = 70000;
+            var buckets = new int[count];
+
+            for (int i = 0; i < draws; i++)
+            {
+                int value = Hash64.Range(Hash64.Of(Seed, EntityId.None, 0, HashChannel.WorldGen, i), count);
+                Assert.That(value, Is.InRange(0, count - 1));
+                buckets[value]++;
+            }
+
+            const int expected = draws / count;
+            for (int i = 0; i < count; i++)
+            {
+                Assert.That(buckets[i], Is.InRange(expected - expected / 20, expected + expected / 20), "bucket " + i.ToString());
+            }
+
+            // The degenerate interval, which is where an off-by-one in the tail would land.
+            for (int i = 0; i < 64; i++)
+            {
+                Assert.That(Hash64.Range(Hash64.Of(Seed, EntityId.None, i, HashChannel.WorldGen, 0), 1), Is.EqualTo(0));
+            }
+            Assert.That(Hash64.Range(0, int.MaxValue), Is.EqualTo(0));
+        }
+
     }
 
     /// <summary>
@@ -205,6 +287,24 @@ namespace Sim.Tests
 
             Assert.That(small * 100000, Is.EqualTo(large));
         }
+
+#if DEBUG
+        /// <summary>
+        /// A-11, debug build only. The guard is compiled out of a release build, which is
+        /// what CI runs, so this test only means anything locally. Without it the guard
+        /// would be a comment.
+        /// </summary>
+        [Test]
+        public void A11_ApplyRefusesAProductThatLeaves64Bits()
+        {
+            long carry = 0;
+            Assert.Throws<System.OverflowException>(
+                () => RemainderAccumulator.Apply(long.MaxValue / 3, 4, Fixed.One, ref carry));
+
+            // The largest product that still fits goes through untouched.
+            Assert.DoesNotThrow(() => RemainderAccumulator.Apply(long.MaxValue / 4, 4, Fixed.One, ref carry));
+        }
+#endif
     }
 
     /// <summary>

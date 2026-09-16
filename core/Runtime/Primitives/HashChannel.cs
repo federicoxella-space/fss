@@ -11,6 +11,12 @@ namespace Sim
     /// renumbered, reordered, or reused for a different subsystem.
     ///
     /// Numbering starts at 1 so that a defaulted field is not a valid channel.
+    ///
+    /// Every kind of non-entity subject that draws gets its own channel. Entity keys
+    /// separate themselves, because <c>EntityId</c> carries a generation no other key
+    /// uses; two kinds of non-entity subject — links and events, say — do not, and in a
+    /// shared channel row 7 of one is row 7 of the other, drawing the same value. The
+    /// channel is what keeps their key spaces apart. See <see cref="Hash64.Subject"/>.
     /// </remarks>
     public enum HashChannel
     {
