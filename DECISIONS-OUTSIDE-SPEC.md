@@ -661,3 +661,56 @@ prose instead of deposited. Filed as `SQ-002`.
 Worth keeping as a property of the pass rather than of this entry: reading the
 register for promotable architecture is also the only moment anyone reads every
 decision back against the specification it was taken under.
+
+### D-029 · Point 11 — the read-only skills run as read-only agents
+
+**The dispatch works and the guarantee is real.** `/plan-status` was run as a
+`Plan` agent, which has no `Edit` and no `Write`. It reported the plan correctly
+and the working tree was byte-identical afterwards — `git status --short` and
+`git diff` hashed before and after.
+
+**What the guarantee does not cover is the relay**, and both skills now say so.
+The agent's report returns to a session that can write, and nothing stops that
+session from softening it in the retelling. The instruction is to quote findings
+rather than restate them, which is a weaker protection than the tool set and is
+the honest limit of this approach.
+
+**It matters more for `/plan-explain` than it looks.** That skill forms
+objections to the plan, and an agent holding an objection and a text editor is
+one step from resolving the objection by editing the text. The criteria are
+frozen by this, not only by the instruction that says so.
+
+### D-030 · Point 11 — three defects the read-only agent found
+
+The dispatch was meant to prove a mechanism and immediately did the job the
+mechanism exists for. All three are this author's, none was caught by reading.
+
+**The `Plan-point:` trailer was used loosely three times, by the author of the
+rule forbidding it.** `59a4d8b`, `046751f` and `9166c8a` carry it with prose as
+its value — "questo commit non chiude un punto" — on commits that install a
+plan, close a plan and add a point. The rule says the trailer means the commit
+closes point n and nothing else may carry it.
+
+Not rewritten. The values are prose, so the numeric lookup never matches them
+and the practical damage is nil; rewriting three messages mid-history would
+invalidate SHAs already reported to the human for the second time in this
+branch. Instead the rule tightens: the trailer's value is a bare integer, and a
+commit that closes no point does not write the word at all.
+
+**The lookup matched by substring.** `--grep="Plan-point: 1"` also matches 10
+through 19. Fixed here, in the skill being committed: `-E` with `^` and `$`.
+Leaving a known-broken command in a file under edit was not defensible.
+
+**The lookup is not qualified by plan, and that one is not fixed.** This branch
+has held two plans, each with points 1 to 5, so the anchored search still
+returns two commits for each of those numbers. The agent disambiguated by
+commit order, which works and is not a guarantee. It needs its own point: the
+fix is either a plan-qualified trailer or a search scoped to the commit that
+installed the current plan, and choosing between them is design work, not a
+correction to smuggle into a point about read-only dispatch.
+
+**Two outcome lines are silent about their `Check: weak` marker**, points 3 and
+10, where the other eight report how the marker fared. Not retrofitted. An
+outcome line records what was reported at the time; editing one to add what
+should have been said is falsifying the record in the direction that flatters
+the author.

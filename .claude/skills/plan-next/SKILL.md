@@ -196,9 +196,12 @@ stop and ask rather than deciding for them what their edit belongs to.
   requires. If no identifier applies, say so in the message rather than
   inventing one.
 - A trailer line `Plan-point: <n>`. **It means this commit closes point n.**
-  Nothing else may carry it — not a commit that amends the plan, adds a point,
-  or prepares one. That is what keeps `/plan-status` a lookup instead of a
-  guess.
+  The value is a bare integer and nothing else; a commit that closes no point —
+  one that installs a plan, adds a point, closes a plan — **does not write the
+  word at all**, not even to say it closes nothing. That is what keeps
+  `/plan-status` a lookup instead of a guess, and it has already been broken
+  three times by the author of the rule, each time by writing prose where the
+  integer goes.
 
 ### When the point fails
 

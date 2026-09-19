@@ -9,6 +9,22 @@ Say what the next point of the plan asks for, and stop. This skill changes
 nothing — not the plan, not the code, not a typo in passing. Asking where the
 work stands must never be able to move it.
 
+## How this skill runs
+
+**Dispatch the procedure below to a read-only agent** — `Plan`, or `Explore` if
+that is unavailable. Neither has `Edit` or `Write`. The sentence above about not
+changing a typo in passing is a promise; an agent without the tools cannot break
+it. Never a general-purpose agent.
+
+It matters more here than it looks: this skill reads the plan and forms
+objections to it, and an agent holding an objection and a text editor is one
+step from resolving the objection by editing the text. The criteria are frozen,
+and this is what freezes them.
+
+**The relay is not covered.** The agent reports to this session, which repeats
+it. Quote its objections rather than restating them — an objection softened in
+the retelling is an objection that did not happen.
+
 ## Procedure
 
 1. Read `PLAN.md` at the repository root, header included: the exit condition,

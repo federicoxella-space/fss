@@ -11,6 +11,23 @@ Asking how far along the work is must never be able to move it.
 Its subject is what has already happened. For what comes next in detail, that is
 `/plan-explain`.
 
+## How this skill runs
+
+**Dispatch the procedure below to a read-only agent** — `Plan`, or `Explore` if
+that is unavailable. Both lack `Edit` and `Write`, which is the whole point: a
+skill that promises not to write is a promise, and an agent that cannot write is
+a guarantee. Never a general-purpose agent.
+
+The risk this closes is not malice. It is the drift into fixing a typo while
+passing through, on the one command someone runs precisely when they do not
+know what state the tree is in.
+
+**What it does not cover: the relay.** The agent's report comes back to this
+session, which repeats it to the human. Nothing stops that repetition from being
+wrong. So quote the agent's findings rather than paraphrasing them, and when the
+report says something is missing or contradictory, pass it on in the agent's
+words.
+
 ## Procedure
 
 1. Read `PLAN.md` at the repository root. **If it is absent**, say so: either no
@@ -43,8 +60,10 @@ Its subject is what has already happened. For what comes next in detail, that is
 4. **For each closed point, resolve its commit exactly:**
 
    ```
-   git log --grep="Plan-point: <n>" --format="%h %s"
+   git log -E --grep="^Plan-point: <n>$" --format="%h %s"
    ```
+
+   Anchored, and `-E`: without them `Plan-point: 1` also matches points 10 to 19.
 
    `Plan-point: <n>` means **this commit closes point n**, and nothing else may
    carry it — a commit that amends the plan, adds a point, or prepares one does

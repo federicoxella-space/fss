@@ -258,6 +258,19 @@ exemption verified against the diff.
   say so.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-19. Both skills carry a "How this skill runs" section
+requiring dispatch to `Plan` or `Explore` and stating that the relay is not
+covered. `/plan-status` was run as a `Plan` agent: it reported the plan
+correctly and the tree was byte-identical afterwards, `git status --short` and
+`git diff` hashed on both sides. The only point of this plan with a check that
+proves something by running rather than by reading, and it earned it: the agent
+found three defects, all this author's — the `Plan-point:` trailer used with
+prose as its value on three commits, the lookup matching by substring, and the
+lookup not being qualified by plan. The second is fixed here; the first
+tightens the rule without rewriting history; the third needs its own point.
+Decisions: register, `D-029` and `D-030` — seven entries. Review: not run,
+`Core: no`, exemption verified against the diff.
+
 ## 12. No squash merge, where someone will read it
 
 - **Does:** a squash merge destroys the `Plan-point:` trailers and with them
