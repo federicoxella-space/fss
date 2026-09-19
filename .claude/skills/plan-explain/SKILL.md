@@ -64,8 +64,11 @@ work stands must never be able to move it.
      and this is the last moment to say so cheaply. A point that declares `no`
      with no reason at all is a defect in the plan: report it, and say the point
      will be reviewed as `yes`;
-   - where it sits: how many points are closed, how many remain, and the plan's
-     exit condition.
+   - where it sits: how many points are closed, how many remain, the plan's
+     exit condition, and under `Kind: simulator` its `Satisfies:` list — the
+     acceptance criteria the whole development is aimed at. Report its absence
+     from a simulator plan as a defect; it is mandatory there and cannot be
+     reconstructed once the branch is merged.
 
 6. **Read the point critically, and say so if it does not hold.** A criterion
    that can be read two ways, a check that cannot actually be run, a point that

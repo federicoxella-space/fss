@@ -18,8 +18,11 @@ Its subject is what has already happened. For what comes next in detail, that is
    before the merge, which is what closing a branch does. `git log` holds the
    history either way. Stop.
 
-2. Read the header: the exit condition, the phase, the branch, and `Kind` if the
-   plan declares one. An `**Abandoned:**` declaration is reported first, with
+2. Read the header: the exit condition, the phase, the branch, `Kind` if the
+   plan declares one, and under `Kind: simulator` the `Satisfies:` list. Report
+   that list with the summary: it is the development's claim about which
+   acceptance criteria it moves, and a summary of closed points that omits it
+   says what was done without saying what it was for. An `**Abandoned:**` declaration is reported first, with
    its date and reason — everything below it is the record of a development
    that stopped, and reading the summary without knowing that would mislead on
    every line.

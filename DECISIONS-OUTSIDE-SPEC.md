@@ -535,3 +535,26 @@ prove the words are present; nothing here can prove the threshold is drawn in th
 right place. That only comes from the first argument about whether something was
 trivial, which is what the criterion said. The marker stays as written: point 13,
 which supplies the right word, is not closed yet.
+
+### Point 7 — `Satisfies` in simulator plans
+
+**`Satisfies` and `Serves` are not one field at two scales.** `Serves` is per
+point and stops a point from inventing a requirement. `Satisfies` is per plan and
+stops an acceptance criterion from having nothing behind it. They could have been
+collapsed into one; keeping them apart is what lets the second answer *which
+acceptance criteria have a test*, which is the coverage question and the one
+nothing in this repository can answer today.
+
+**Checked once, at the first point, not at every one.** The header belongs to the
+plan, not to the point, and re-confirming the same identifiers twelve times would
+turn a real check into a ritual — the surest way to have it performed without
+being done.
+
+**A partial contribution is still declared, with what remains.** Declaring
+nothing because the plan only moves a criterion partway is how a criterion ends
+up with three developments behind it and no record of any of them.
+
+**Nothing here was exercised.** This is a process plan with no `Satisfies:` line
+and no `AC-` to open, so every rule written in this point is untried. The first
+simulator plan is where it either works or does not, and that is also the first
+time the coverage question can be asked at all.

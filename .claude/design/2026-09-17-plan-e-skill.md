@@ -42,6 +42,7 @@ decisions register.
 # Plan — <name of the development>
 
 **Kind:** simulator | process
+**Satisfies:** AC-01, AC-04   ← simulator plans only, and mandatory there
 **Exit condition:** <what makes the whole development finished, cited from docs/>
 **Phase:** 3 (SIM-REQ §18)   **Branch:** <branch name>
 
@@ -81,6 +82,34 @@ Everything above the `Esito:` line of a point is **frozen when written**. If a
 criterion turns out to be wrong, say so and record why; do not rewrite it to
 match what was built. That failure — a contract quietly adjusted to fit the
 delivery — is the one this whole design exists to prevent.
+
+### `Satisfies`, and how it differs from `Serves`
+
+A `Kind: simulator` plan declares in its header which acceptance criteria the
+whole development contributes to. The field is mandatory there and absent from a
+process plan, like `Serves` and for the same reason.
+
+The two are not the same field at different scales:
+
+| | Scope | Question it answers | What it prevents |
+|---|---|---|---|
+| `Serves` | one point | which requirement is this point for | a point inventing a requirement |
+| `Satisfies` | the whole plan | which acceptance criteria this development moves | an acceptance criterion with nothing behind it |
+
+`Satisfies` is what eventually answers *which acceptance criteria have a test*,
+which is the real coverage question and the one nothing in this repository can
+answer today. It costs a line now and cannot be reconstructed later: nobody
+reading a merged branch in a year can tell which criteria it was aimed at.
+
+**The identifiers are opened and confirmed, like any citation.** Same rule as
+step 1 of `/plan-next`: find each `AC-` in `docs/SIM-REQ.md` and read what it
+says. A field filled with plausible numbers is worse than no field, because it
+answers the coverage question instead of leaving a hole where the answer should
+be — and a hole is visible.
+
+A criterion the plan will only partly move is still declared, with what remains.
+Declaring nothing because the contribution is partial is how a criterion ends up
+with several developments behind it and no record of any.
 
 ### `Check: weak`
 

@@ -165,6 +165,16 @@ the diff.
 - **Check: weak** — satisfied by reading. Replaced by the first simulator plan.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-19. The design defines the field in the header block, makes it
+mandatory under `Kind: simulator`, subjects its identifiers to the confirmation
+rule of point 1, and tabulates how it differs from `Serves`; all three skills
+report it. Beyond the point's statement: it is confirmed once at the first
+point rather than at every one, and a partial contribution is declared with
+what remains. Untried — a process plan has no `Satisfies:` line and no `AC-` to
+open. Marker says weak; shallow. Decisions: register, section "The twelve gaps
+in the plan mechanism", point 7 — four entries. Review: not run, `Core: no`,
+exemption verified against the diff.
+
 ## 8. `SPEC-QUESTIONS.md`
 
 - **Does:** the channel for the one thing that has nowhere to go today — the

@@ -64,6 +64,12 @@ one:
   `docs/`. Say so and stop. It is not yours to fix either, and it is the most
   valuable thing this process can find.
 
+**On the first point of a `Kind: simulator` plan, confirm the header's
+`Satisfies:` too.** Open each `AC-` in `docs/SIM-REQ.md` and read it. The field
+is mandatory in a simulator plan; missing, or citing a criterion that says
+something else, it is a defect in the plan — report it and ask. It is checked
+once, at the first point, not at every one.
+
 `Kind` in the plan header decides whether the point carries a `Serves` field.
 Under `Kind: simulator` it is mandatory, and a point without one is a defect in
 the plan: stop and ask, the same as for an ambiguous criterion, rather than
