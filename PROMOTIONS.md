@@ -130,6 +130,19 @@ reintroducing rejection to "fix" the bias.
 > **Cost.** The reduction is not exactly uniform, and says so where it is
 > written. Anyone who reopens this has to re-derive the two paragraphs above.
 
+### Later in the same pass — nothing from `D-028` to `D-032`
+
+Those entries were written after this pass began, closing points 10 to 13 of the
+same process plan. Run against them, the pass finds **no candidates**: they are
+about how work is organised — a promotion ritual, a read-only dispatch, a commit
+trailer, a marker on a criterion — and none of them constrains the simulator.
+
+`D-030` is the one worth naming as a near miss. It records three defects in the
+mechanism's own commit trailer and lookup. Real defects, and still nothing for
+`SIM-DEC`: the specification describes the simulated world, not the apparatus
+that builds it, and an entry there about commit trailers would be the first
+crack in that.
+
 ### Not a candidate — `D-004`, filed as a question instead
 
 A-11 in `SIM-STATE` lists "no accumulator has overflowed" among the invariants
