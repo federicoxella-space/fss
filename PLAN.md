@@ -235,6 +235,17 @@ Review: not run, `Core: no`, exemption verified against the diff.
   is real work and either names the right entries or does not.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-19. The design defines the pass, its one test, its output and
+who writes what; `PROMOTIONS.md` holds the first pass with four candidates —
+`D-001`, `D-002`, `D-007`, `D-006` — each drafted in `SIM-DEC`'s own shape, and
+records that the just-archived development contributes nothing, which is
+`D-011` working rather than an oversight. The pass also surfaced that A-11 is
+specified as asserted every tick while the guard is debug-only; the first draft
+explained in prose why that belonged in `SPEC-QUESTIONS.md` without filing it,
+which is the exact failure that file exists to prevent. Filed as `SQ-002`.
+Decisions: register, `D-028` — six entries. Review: not run, `Core: no`,
+exemption verified against the diff.
+
 ## 11. `/plan-explain` and `/plan-status` run as read-only agents
 
 - **Does:** both dispatch to an agent type without `Edit` and `Write`, so that

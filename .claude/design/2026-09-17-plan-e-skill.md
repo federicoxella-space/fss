@@ -44,6 +44,35 @@ register entries side by side.
 
 An abandoned plan is archived the same way, declaration and open points included.
 
+### The promotion pass
+
+Runs when a plan is archived, over the register entries written since the last
+pass. One question per entry: **does this constrain code beyond the change that
+produced it?** Yes makes it a candidate; process choices, one-off trade-offs and
+notes about how the work was organised do not.
+
+The output goes in `PROMOTIONS.md`: the `D-NNN` it came from, one line of why,
+and the `SIM-DEC` entry drafted in that document's own shape — decision,
+`**Rationale.**`, `**Cost.**`.
+
+**A human writes `docs/`.** The proposal is the agent's and the writing is not,
+or promotion becomes the back door into the specification that the prohibition
+exists to close. Nothing in `PROMOTIONS.md` is in the specification; an entry
+there has no authority at all until someone puts it in `SIM-DEC`.
+
+Once written, the register entry is marked with the identifier it became and the
+candidate is struck. A rejected candidate is struck too, with the human's
+reason — an unanswered proposal re-proposed at every archival is how a rejected
+idea gets in by attrition.
+
+Numbering belongs to the human: a number claimed in a proposal would collide
+with whatever else is in flight.
+
+Without this pass the register grows and never empties, and the architecture in
+it ages out of sight while `docs/` says nothing about it. That is the same
+failure as editing the specification to match the implementation, arriving
+slowly rather than at once.
+
 ### Stable identifiers in the register
 
 Every `###` entry in `DECISIONS-OUTSIDE-SPEC.md` carries an identifier,

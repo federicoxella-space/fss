@@ -623,3 +623,41 @@ promotion citing a bundled entry quotes which part of it it took instead.
 **Applied by script, not by hand.** Twenty-six headings renumbered by one `awk`
 pass, so the assignment is deterministic and reviewable as a single
 transformation rather than twenty-six chances to mistype.
+
+### D-028 · Point 10 — the promotion pass
+
+**A third root file, `PROMOTIONS.md`, rather than a section of the register.**
+The register records what was decided; this proposes to change `docs/`. Folding
+the proposal into the record would leave the register asserting things about the
+specification that are not true of it yet. It is the mirror of
+`SPEC-QUESTIONS.md`: that file says the specification is wrong, this one says it
+is missing something, and both are struck through when a human acts.
+
+**One test for a candidate: does it constrain code beyond the change that
+produced it?** Not importance, not how hard it was to decide — those select for
+what the author found interesting. A future implementer either needs it or does
+not.
+
+**The first pass covers the whole register**, because no pass has ever run, and
+the development just archived contributes nothing to it. That emptiness is the
+rule from `D-011` working: a pass that found promotable architecture in its own
+tooling would be the first sign the rule had stopped being observed.
+
+**Rejected candidates are struck with the human's reason, not left standing.**
+Otherwise the same proposal returns at every archival and eventually gets
+written in by attrition, which is a slow way of letting the agent edit `docs/`.
+
+**Numbering left to the human.** `SIM-DEC` runs to DEC-080 and a number claimed
+in a proposal would collide with whatever else is in flight; the drafts say
+`DEC-0NN`.
+
+**The pass filed a spec question, and nearly did not.** Classifying `D-004`
+surfaced that A-11 is specified as asserted every tick while the guard is
+debug-only. The first draft of `PROMOTIONS.md` explained at length why that
+belonged in `SPEC-QUESTIONS.md` without filing it there — which is precisely the
+failure the human named when asking for that file: an objection resolved in
+prose instead of deposited. Filed as `SQ-002`.
+
+Worth keeping as a property of the pass rather than of this entry: reading the
+register for promotable architecture is also the only moment anyone reads every
+decision back against the specification it was taken under.

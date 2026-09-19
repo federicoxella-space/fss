@@ -59,3 +59,31 @@ five-coordinate form with a fixed tick, or a deliberately different keying. The
 implementation cannot choose: picking one silently would make the sampled
 transients of a world depend on a decision nobody recorded, and `Hash64` is the
 one place where an unrecorded choice cannot be found again from the output.
+
+### SQ-002 — A-11 is asserted every tick, and the implementation checks it only in debug
+
+**Raised:** 2026-09-19, by the first promotion pass while classifying `D-004`.
+**Cites:** `docs/SIM-STATE.md:155` ff., invariant A-11 — "no accumulator has
+overflowed", under the heading "Invariants, asserted every tick".
+**Blocks:** no. The guard is more than existed before it, and phase 3 has no
+accumulator running in a release build.
+**Status:** open.
+
+The overflow guard on the `long` overload of `RemainderAccumulator.Apply` is
+`[Conditional("DEBUG")]`, so a release build does not check it. A-11 says every
+tick, without qualification.
+
+The implementation's reason is cost: the release build cannot afford a check on
+every rate applied in every settlement update, and there are thousands per tick.
+But cost is the implementation's argument, and A-11 is the specification's
+requirement — the implementation does not get to narrow a requirement by finding
+it expensive.
+
+Two ways to close it, and they lead to different code. Either A-11 holds in
+release, and the guard is wrong — in which case what is affordable is a
+state-level assertion once per tick rather than one per call, which is a
+different implementation from the one written. Or A-11 means something narrower
+than its heading says, and the requirement should say which.
+
+This is due in the A-11 assert pass of phase 3, which will have to answer it for
+every invariant in the list, not only this one.
