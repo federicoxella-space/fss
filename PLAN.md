@@ -51,6 +51,18 @@ declared it, rather than by editing the point that waited on it.
   against a sample.
 - **Core:** yes
 
+*Esito:* 2026-09-20. Chiuso. `FRT02_EveryDateFallsOnTheSameWeekday` e
+`FRT05a_DateArithmeticIsIntegerDivision` verdi — il secondo su tutti i 1456 tick
+di quattro anni consecutivi, con i valori attesi scritti sulle costanti
+letterali di FR-T-05a e non su quelle di `Calendar`. Suite intera verde in
+Release (19) e in Debug (20), build del core senza avvisi. Registro: `D-056`
+a `D-060`. Revisione: due revisori, `Core: yes`, entrambi concludono che il
+punto regge; applicate la cancellazione di due costanti non lette e la
+correzione di un commento impreciso, respinta una nota con la ragione in
+`D-060`. **Rilievo sul criterio, non sanato per riscrittura:** il "Closed by"
+non copre la New Year's Day che il "Does" richiede — terzo test aggiunto,
+criterio lasciato com'è, `D-059`.
+
 ## 2. `WorldState` and the five world fields
 
 - **Does:** one `WorldState`, parallel arrays, holding at first only the World

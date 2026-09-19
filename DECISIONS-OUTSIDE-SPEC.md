@@ -1279,3 +1279,124 @@ Recorded as item 5 of `REVIEW-REQUEST.md`, open, to be taken up when the phase 3
 plan closes. **What would overturn it:** the first point of phase 3 hitting a
 wrong criterion, in which case the gap stops being theoretical and the phase 3
 plan is the one that has to stop and say so.
+
+## 2026-09-20 — Phase 3, the headless kernel
+
+The plan's points, each under the number it closes.
+
+### D-056 · Point 1 · `Calendar`, a static class of six divisions, zero-based
+
+`docs/` fixes the arithmetic and nothing about its shape: no type name, no
+namespace, no signature. What was chosen — `Sim.Calendar`, a static class in
+`core/Runtime/Time/`, holding four constants and seven methods and no state.
+
+Three sub-choices worth naming, because each had a defensible other side.
+
+**Season, week and month are zero-based.** FR-T-05a is normative and writes
+`season = dayOfYear / 91  // 0..3`; FR-T-05's prose says "Season 1 begins the
+year and is spring". The two agree on the boundaries — one-based days 1, 92,
+183, 274 are zero-based 0, 91, 182, 273 — so this is a presentation convention,
+not a contradiction, and **no `SPEC-QUESTIONS.md` entry was filed.** Both
+reviewers were asked and both agreed. The core returns what the formula returns;
+adding one belongs to whatever shows a date to a player.
+
+**`Year` returns `long`, the other five return `int`.** `SIM-STATE` types `tick`
+as int64 and fixes nothing downstream. `Year` is the only one of the six
+unbounded in `tick`; the other five are provably inside 0..363. The asymmetry in
+the signatures is the asymmetry in the arithmetic.
+
+**`NewYearsDayFollows(tick)` is the whole of FR-T-03.** A 364-tick year with no
+365th case *is* a festival that consumes no tick, and DEC-006a asks for exactly
+that — "no special case in the scheduler". The predicate adds no behaviour; it
+names the boundary for a caller that wants to show the festival.
+
+**What would overturn it:** a host or a later phase needing a date type rather
+than six independent queries — a `struct Date` would then be the shape, and the
+methods become its constructor.
+
+### D-057 · Point 1 · A tick is non-negative, checked in debug only
+
+`Calendar` asserts `tick >= 0` under `Conditional("DEBUG")` and defines nothing
+below zero. `docs/` does not say ticks are non-negative, and one line reads the
+other way: **FR-G-03** generates prior history "for P-18 years **before tick
+0**". **DEC-040** settles it — the run "takes the result as tick 0" — so
+prehistory is relabelled, not numbered backwards. Both reviewers found the same
+line and reached the same resolution independently.
+
+Floor division was rejected. `Fixed.DivFloor` would make the six methods total
+over the whole of int64, at the price of no longer reading as FR-T-05a writes
+them, in order to define a state the simulation cannot occupy. The cost of being
+wrong is visible and bounded: in Release the guard is compiled out, and
+`tick = -1` returns year 0, dayOfYear -1, dayOfMonth -1.
+
+The reasoning is in the file's remark as well as here, because the blind
+reviewer's objection was precisely that the code asserted a fact and gave no
+reason for it.
+
+**What would overturn it:** phase 14 implementing FR-G-03 the way FR-G-03 words
+it. That is a decision about world generation, not about the calendar, and it
+would fail loudly in a debug build rather than quietly — which is the point of
+the guard.
+
+### D-058 · Point 1 · Weekday is not in the core; the test defines it
+
+The point's "Does" is exhaustive — "the tick-to-date arithmetic and nothing
+else" — and does not list a weekday, yet the criterion's first test is
+`FRT02_EveryDateFallsOnTheSameWeekday`. `Calendar` exposes no weekday, and the
+test takes `tick % 7`.
+
+This is not the test inventing a formula to agree with. A week is seven
+consecutive ticks and nothing interrupts the stream, so `tick % 7` is the
+definition of a weekday, external to the calendar, and it is the one DEC-006a's
+own rationale reasons with. The tautological alternative, `dayOfYear % 7`, holds
+for any year length and would test nothing. Since `364 % 7 == 0`, a host that
+later wants a weekday gets the same answer from either.
+
+**What would overturn it:** a subsystem needing the weekday inside the core,
+which point 4's `id % 7 == d % 7` bucket is not — that derives from the id.
+
+### D-059 · Point 1 · The criterion under-covers the point, and was not rewritten
+
+Finding, from the blind reviewer, confirmed: the point's "Does" requires "the
+New Year's Day that sits between two ticks without consuming one", and the two
+tests named in "Closed by" touch none of it. Under the criterion as frozen,
+`NewYearsDayFollows` ships uncovered.
+
+A third test was written, `FRT03_NewYearsDayConsumesNoTick`, checking that the
+predicate and the year turnover agree on every tick of the span and that exactly
+three boundaries fall in four years. **The criterion was not amended.** "Closed
+by" says what must be green to close the point, not what may exist; adding a
+test neither weakens the standard nor rewrites it. It is recorded here because a
+criterion gap filled silently is how a criterion stops being what closes a
+point.
+
+**What would overturn it:** a reading of "Closed by" as exhaustive, which would
+make the third test an out-of-scope addition rather than a gap report. Nothing
+in `AGENTS.md` or the three skills supports that reading, but it is the
+alternative.
+
+### D-060 · Point 1 · The reviewers' findings, including the one rejected
+
+Both reviewers ran `Core: yes`, built Release and ran both suites, and both said
+the point is sound. Their overlap was near total, which is worth recording as a
+fact about the mechanism: the blind reviewer found nothing the briefed one
+missed except the sharper reading of FR-G-03's wording, and neither found a
+defect in the arithmetic.
+
+Applied: two constants deleted (`WeeksPerYear = 52`, `SeasonsPerYear = 4`, read
+by nothing and pinned by nothing — both reviewers checked independently that
+changing them left all twenty tests green); the remark's "year 0 for the two
+years either side of the origin" tightened to the exact span, 727 ticks from
+-363 to 363, after the two reviewers disagreed about whether the phrase was
+loose or correct; and the four entries above, which are findings that wanted
+recording rather than code.
+
+**Rejected:** the briefed reviewer's note that `FRT02` dimensions its array from
+`Calendar.MonthsPerYear` and `Calendar.DaysPerMonth` while `FRT05a` deliberately
+uses literals, so the policy is not applied consistently. True as stated, and it
+buys nothing: `FRT05a` pins both constants against the literals of FR-T-05a on
+every one of 1456 ticks, so a wrong value fails there before `FRT02` is reached.
+The reviewer raised it as an observation and did not press it. **What would
+overturn it:** `FRT05a` ceasing to pin those two constants, at which point
+`FRT02`'s array bounds become the only thing holding them and should stop
+deriving from the values they are meant to check.
