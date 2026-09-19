@@ -2,6 +2,7 @@
 
 **Document:** SIM-ECON
 **Status:** Draft
+**Revision:** 2026-09-19
 **Companion:** SIM-REQ, SIM-DEC, SIM-STATE
 
 ---

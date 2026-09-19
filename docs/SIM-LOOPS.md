@@ -2,6 +2,7 @@
 
 **Document:** SIM-LOOPS
 **Status:** Draft
+**Revision:** 2026-09-19
 **Gate:** No flow without a source and a sink. Every reinforcing loop has a named balancing loop.
 
 ---

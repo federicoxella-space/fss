@@ -2,6 +2,7 @@
 
 **Document:** SIM-STATE
 **Status:** Draft
+**Revision:** 2026-09-19
 **Gate:** The assert list is executable.
 
 ---
@@ -120,7 +121,7 @@ Capped at roughly 300 hot. Dormant agents hold a difference record only.
 | contents | int[] plus int[4] | goods and coin |
 | weight | int | |
 
-Sampled transients are not stored. They are enumerated from `Hash(worldSeed, link, index)` on demand.
+Sampled transients are not stored. They are enumerated on demand from the draw of NFR-03, with the link as subject.
 
 ---
 
@@ -166,7 +167,8 @@ Goods, recipes, mestieri, crops, climate curves, event class definitions. Versio
 | A-08 | Every knowledge table and route candidate list is within its cap |
 | A-09 | Every agent relation list is within its degree cap |
 | A-10 | Hot agent count is at or below the cap |
-| A-11 | Every fixed-point quantity is inside its declared range; no accumulator has overflowed |
+| A-11 | Every fixed-point quantity held in state is inside its declared range |
+| A-11b | No accumulator has overflowed. Checked in debug builds, where the cost of checking every intermediate is affordable |
 | A-12 | Danger on every link is inside its range |
 | A-13 | Each cadence bucket fires exactly once per its period |
 | A-14 | No cohort holds negative count, currency, or goods |

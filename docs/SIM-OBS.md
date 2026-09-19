@@ -2,6 +2,7 @@
 
 **Document:** SIM-OBS
 **Status:** Draft for correction
+**Revision:** 2026-09-19
 **Companion:** SIM-REQ, SIM-DEC
 
 ---

@@ -2,6 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
+**Revision:** 2026-09-19
 **Companion:** SIM-REQ
 
 ---
@@ -522,7 +523,7 @@ A settlement's caravanner population supplies capacity to its outbound links. Wi
 
 ### DEC-055 — Sampled transients are trajectories derived from flow
 
-`Hash(seed, link, index)` yields a caravan's departure tick, contents, and speed. Observation is free and writes nothing. Interaction writes back to the aggregate as a difference.
+`Hash(worldSeed, subject, tick, channel, index)` with the link as subject yields a caravan's departure tick, contents, and speed. Observation is free and writes nothing. Interaction writes back to the aggregate as a difference.
 
 **Rationale.** Deriving trajectories rather than per-tick presence is what lets a player walk beside a caravan for days and find it again on the way back, which per-tick sampling cannot do. Writing back on interaction is what keeps a robbery economically real; without it the player learns that caravans are scenery.
 
@@ -735,3 +736,39 @@ Recipes may require dungeon-only materials. Validation at load proves nothing in
 **Rationale.** Required materials give dungeon extraction a standing industrial demand, which is a steadier income for adventurers than contracts funded by other people's misfortune. Restricting the dependency to higher tiers means losing access costs the world its fine goods and its lost arts, never its bread.
 
 **Cost.** The recipe graph gains a validation rule that a designer can trip by adding one ingredient, and the failure has to stop the world from loading rather than surface later.
+
+---
+
+## Drawing
+
+### DEC-081 — The draw's subject coordinate is a 64-bit key, not an entity handle
+
+`Hash(worldSeed, subject, tick, channel, index)`, where `subject` is a 64-bit key. An `EntityId` is one such key, packed as generation in the high half and row index in the low half. A row that is not an entity, a trade link or an event, uses a key whose high half is zero.
+
+**Rationale.** Not everything that draws occupies a row with a generation: FR-X-02 enumerates sampled transients per link, and a link has no generation. One coordinate space rather than two means the properties of DEC-002 are proved once. The high half separates the cases at no cost, since no live handle carries generation 0, so a row key and a live entity key cannot name the same draw.
+
+**Cost.** A caller holding something other than an `EntityId` builds its key through the provided helper rather than casting, or a negative row index sign-extends into the entity space.
+
+### DEC-082 — Generation 0 is reserved and never live
+
+A live `EntityId` carries a generation of at least 1. Index 0 with generation 0 is the absent handle, and no row is issued with generation 0.
+
+**Rationale.** A defaulted field then reads as absent rather than as a valid handle to row 0, and the generation half of a packed key is free to act as a namespace separator for DEC-081. Both properties are relied on elsewhere and neither survives issuing generation 0.
+
+**Cost.** Row reuse increments past 0 on wraparound, which a naive counter does not.
+
+### DEC-083 — Each kind of non-entity subject draws in its own channel
+
+Where two kinds of subject that are not entities draw, links and events for instance, they take separate channel values.
+
+**Rationale.** Entity keys separate themselves, because the generation makes two distinct entities distinct keys. Row keys do not, so in a shared channel row 7 of one kind and row 7 of another name the same draw and move together for the life of the world. The channel is the only thing keeping their key spaces apart.
+
+**Cost.** Channels are a numbered contract that cannot be renumbered, so this spends them faster than one per subsystem would.
+
+### DEC-084 — Reducing a draw to an interval uses a plain modulo
+
+`draw % count`. No rejection, no re-mixing.
+
+**Rationale.** The relative excess of the low results is at most `count / 2^64`, of order 1e-17 for an interval of a thousand, and observing it would take on the order of 2^64 draws against the 1e12 a sixty-year world produces. Rejection would not remove it: the mixing function is a bijection, so re-mixing relocates the discarded set onto another set of the same size instead of spreading it, and iterating a bijection has no proof of termination.
+
+**Cost.** The reduction is not exactly uniform, and says so where it is written. Anyone reopening this has to re-derive the two paragraphs above.

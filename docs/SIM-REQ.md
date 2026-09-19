@@ -2,6 +2,7 @@
 
 **Document:** SIM-REQ
 **Status:** Draft 1
+**Revision:** 2026-09-19
 **Scope:** Headless simulation core, runnable outside the game
 
 ---
@@ -397,7 +398,7 @@ capped by available stock at origin and by haulage capacity on the link, with `k
 
 **FR-X-01** — A transient entity is a caravan, convoy, traveller, patrol, or similar object that exists on a route rather than in a settlement.
 
-**FR-X-02** — Sampled transients are derived from the aggregate flow that produces them. `Hash(seed, link, index)` yields departure tick, contents, and speed. They hold no state.
+**FR-X-02** — Sampled transients are derived from the aggregate flow that produces them. `Hash(worldSeed, subject, tick, channel, index)` under NFR-03 yields departure tick, contents, and speed, with the link as subject and the kind of transient as channel. The tick coordinate is the one at which the trajectory is generated, not the one being observed, which is what lets FR-X-03 hold. They carry no state.
 
 **FR-X-03** — The derivation produces trajectories, not per-tick presence. An observer sees the same entity across consecutive ticks and can travel alongside it for its whole journey.
 
