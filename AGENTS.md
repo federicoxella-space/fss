@@ -122,6 +122,13 @@ Every commit that changes behaviour names the requirement or decision it
 implements: `FR-C-04`, `DEC-002`. If no identifier applies, the work is either
 out of scope or needs a decision first. Say so instead of inventing one.
 
+**Merge without squashing.** A commit that closes a plan point carries a
+`Plan-point: <n>` trailer, and `/plan-status` resolves every closed point to its
+commit by looking that trailer up. Squashing a branch collapses those trailers
+into one message and destroys the lookup — not for the branch being merged, but
+for the whole history, retroactively and silently. This is not a preference
+about tidy history: it is the key the record is indexed by.
+
 ## Scope
 
 Work is organised in phases with exit gates, listed in `docs/SIM-REQ.md`.

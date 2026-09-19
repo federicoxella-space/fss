@@ -714,3 +714,34 @@ correction to smuggle into a point about read-only dispatch.
 outcome line records what was reported at the time; editing one to add what
 should have been said is falsifying the record in the direction that flatters
 the author.
+
+### D-031 · Point 12 — no squash, and a clause that could not be met
+
+**A pull request template, not just this branch's body.** The criterion asked
+for the note in the pull request for this branch; a template puts it in every
+one, and makes the criterion's own clause true automatically whenever a request
+is opened. `.github/pull_request_template.md`.
+
+**The argument is not about tidy history.** A squash collapses the
+`Plan-point:` trailers into one message, and `/plan-status` resolves every
+closed point of every past plan through those trailers. One squash breaks the
+lookup for the whole repository, retroactively and silently — the record stops
+being indexed and nothing announces it.
+
+**The second clause is not met, and this is not dressed up as a pass.** There is
+no pull request for `plan-e-skill`: the remote holds the branch at `046751f`,
+pushed by the human, thirteen commits behind, and opening a request is an
+outward-facing action nobody asked for in this round. So the point is closed
+with one clause satisfied and one pending a human.
+
+The mechanism has no state for that. A point either closes or is `FALLITO`, and
+this is neither: the work is done, the check is half-verifiable, and what
+remains is not the author's to do. Declaring `FALLITO` would have stopped the
+plan against an explicit instruction to continue; declaring a clean pass would
+have put a claim in the record that the repository does not support. Recorded as
+the third outcome the design is missing, which is worth more than either lie.
+
+**And the branch turns out to be published**, which strengthens `D-030`'s
+refusal to rewrite three commit messages: `046751f` is one of them and it is on
+the remote, so the rewrite would have been a force push over work the human has
+already fetched.

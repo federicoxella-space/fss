@@ -282,6 +282,18 @@ Decisions: register, `D-029` and `D-030` — seven entries. Review: not run,
 - **Check: weak** — satisfied by reading, until someone squashes.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-19. Clause one met: `AGENTS.md` states it under "Commits",
+with the reason — the trailer is the key the record is indexed by, and one
+squash breaks the lookup for the whole history, not just the branch squashed.
+Beyond the statement, `.github/pull_request_template.md` carries it so that
+every request does, not only this one. **Clause two is not met:** there is no
+pull request for `plan-e-skill`, the remote holds the branch thirteen commits
+back at `046751f`, and opening one is a human's action. Closed rather than
+`FALLITO` — the work is done and what remains is not the author's to do — and
+the absence of a state for that is recorded as a gap in the design, not
+smoothed over. Decisions: register, `D-031` — four entries. Review: not run,
+`Core: no`, exemption verified against the diff.
+
 ## 13. `Check: shallow`, distinguished from `Check: weak`
 
 Added on 2026-09-19, after the marker was misapplied on points 2 and 4 of this
