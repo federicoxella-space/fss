@@ -130,3 +130,36 @@ where the subject form is actually written.
 Small, and worth filing precisely because it is small: `SQ-001` was the same
 shape, went unrecorded for three days, and turned out to be hiding a semantic
 question about which tick a trajectory is keyed on.
+
+**Resolution chosen 2026-09-19: the definitions move.** `SIM-REQ` states what is
+required, so a decision that changes the shape of the primitive leaves the
+requirement stating it stale; and `DEC-081` already treats `DEC-002` as the
+general statement it proves once. Rejected: re-pointing FR-X-02's citation at
+DEC-081, which would leave two definitions of the draw disagreeing and make the
+reader pick.
+
+**Pending a human edit**, because `docs/` is not ours. The text below is exact
+and mechanical — two lines, one in each document.
+
+`docs/SIM-REQ.md:500`, NFR-03, from:
+
+> **NFR-03 — Randomness.** Random values come from a stateless indexed hash over `(world_seed, entity_id, tick, channel, index)`. No sequential RNG stream in the core.
+
+to:
+
+> **NFR-03 — Randomness.** Random values come from a stateless indexed hash over `(world_seed, subject, tick, channel, index)`, the subject being a 64-bit key of which an entity handle is one case, under DEC-081. No sequential RNG stream in the core.
+
+`docs/SIM-DEC.md:31`, DEC-002, from:
+
+> Random values are computed as `Hash(world_seed, entity_id, tick, channel, index)`. No sequential RNG stream exists in the core.
+
+to:
+
+> Random values are computed as `Hash(world_seed, subject, tick, channel, index)`, the subject being a 64-bit key of which an entity handle is one case, under DEC-081. No sequential RNG stream exists in the core.
+
+Its **Rationale** paragraph says "Any entity's random draw at any past tick can
+be recomputed directly". That reads narrow now and is true of any subject; the
+clause about deferred agents that follows it stands either way.
+
+Nothing else in `docs/` needs to move: FR-X-02, DEC-055 and `SIM-STATE:123`
+already carry the subject form, and DEC-081 to DEC-084 were written against it.

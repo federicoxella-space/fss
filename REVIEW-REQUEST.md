@@ -47,79 +47,85 @@ trace, and only the author knows it.
 
 ---
 
-# Current request — 2026-09-19
+# Current request — 2026-09-19, evening
 
-**Moment:** all three at once, which is itself a finding. The mechanism was
-built during a single absence, so the first request covers a branch that has
-already run three plans, closed a phase gate's worth of tooling, and opened two
-questions against the specification. Had the file existed on 2026-09-17, this
-would have been four shorter requests.
+Replaces the request of the same day, which was answered within hours: both its
+specification questions are closed, its four promotion candidates are in
+`SIM-DEC`, the branch it described is merged and its commits are pushed. Kept in
+git; nothing in it is true of the repository any more.
 
-**Branch:** `plan-e-skill`, at the tip. The remote holds it at `046751f`, the
-closing commit of the *first* plan: **everything after that is unpushed**, which
-is two whole plans, and there is no pull request.
+**Moment:** three. The specification answered, and answering it opened one more
+question. Written also as the handoff to whatever session comes next, since this
+one built the mechanism and holds context no file does.
 
-**What changed, in one line:** a plan mechanism — `PLAN.md`, three skills, a
-decisions register, a specification-question channel and a promotion pass —
-built, reviewed against thirteen gaps you named, and corrected.
+**Branch:** `main` at `64bcc7f`, pushed, CI green. No branches outstanding: the
+three that existed are merged and deleted, locally and on the remote.
+
+**What changed, in one line:** the specification moved — `DEC-081` to `DEC-084`
+written, A-11 split into A-11 and A-11b, FR-X-02 given the subject form and the
+tick clarification — and the repository was reconciled to it.
 
 ## Decisions taken outside the specification
 
-`D-011` through `D-032` in `DECISIONS-OUTSIDE-SPEC.md`. Twenty-two entries, all
-process. The ones that would change how you work, rather than how the tooling
-works:
+`D-035` to `D-037` in `DECISIONS-OUTSIDE-SPEC.md`, all from the reconciliation:
 
-- `D-020` — `Core:` now defaults to **yes**, and skipping review costs a reason
-  a diff can falsify. A judgement about size is not a reason.
-- `D-024` — trivial work is exempt from planning, defined by three properties
-  and not by how small it feels.
-- `D-031` — no squash merge, ever, on this repository. The `Plan-point:`
-  trailer is the key the record is indexed by.
+- `D-035` — both questions closed, neither the way it was posed. `SQ-001`'s
+  answer carried a semantics the question had not thought to ask: the tick
+  coordinate is the one at which a trajectory is **generated**, not the one
+  being observed, without which FR-X-03 does not hold.
+- `D-036` — promoted entries are marked and kept, not removed. The pass empties
+  the queue, never the record.
+- `D-037` — why `SQ-003` was filed rather than read charitably.
+
+Four earlier entries are now marked with what they became: `D-001` → `DEC-081`,
+`D-002` → `DEC-082`, `D-007` → `DEC-083`, `D-006` → `DEC-084`. `D-004` is marked
+superseded: it closed through the other channel, when A-11 split.
 
 ## Open questions about the specification
 
-Both in `SPEC-QUESTIONS.md`, **neither blocking**:
+One, `SQ-003`, **not blocking**, and **already decided by you**.
 
-- `SQ-001` — DEC-002 and `SIM-STATE:25` specify a five-coordinate draw;
-  FR-X-02 and `SIM-STATE:123` specify a three-coordinate one, and FR-X-02 is a
-  requirement. Which is normative decides how sampled transients are keyed, and
-  the implementation cannot choose without fixing every generated world to an
-  unrecorded decision.
-- `SQ-002` — A-11 is listed among the invariants asserted **every tick**; the
-  overflow guard is `[Conditional("DEBUG")]` and a release build does not check
-  it. Either the guard is wrong, or A-11 means something narrower than its
-  heading.
+`NFR-03` and `DEC-002` still read `entity_id` while FR-X-02 now writes the
+subject form and cites `NFR-03` as its authority. Resolution A chosen: the two
+definitions move. The exact replacement text for both lines is written into the
+entry in `SPEC-QUESTIONS.md`, ready to paste.
 
-And four promotion candidates in `PROMOTIONS.md`, `C-1` to `C-4`, drafted as
-`SIM-DEC` entries for you to write or reject. They are the architecture from the
-`Hash64` work that currently lives only in the register.
+**It is waiting on you** because `docs/` is not ours to edit. Two lines. Once
+they are in, tell whoever is working and the entry gets marked closed.
 
 ## What was not verified
 
+Unchanged from the last request except where noted, because nothing since has
+tested any of it.
+
 - **The review protocol has never run.** No point in three plans declared
-  `Core: yes`, so the two reviewers — the part of this with the most moving
-  parts — has no evidence behind it. Its first real test is the first core point
-  of phase 4.
-- **Almost every check was satisfied by reading.** Of twenty-one closed points
-  across the last two plans, one had a fully mechanical check. Three markers
-  claimed `weak` and turned out merely shallow, which is what produced the
+  `Core: yes`. The two reviewers, the read-only agent type, the briefed-and-blind
+  split — the part of this with the most moving parts still has no evidence
+  behind it. Its first real test is the first point of phase 3's remaining work,
+  which is all `core/Runtime/` and therefore all `Core: yes`.
+- **Almost every check was satisfied by reading.** Of twenty-three closed points
+  across three plans, two had a fully mechanical check. Three markers claimed
+  `weak` and turned out merely shallow, which produced the `Check: shallow`
   distinction now in the design.
-- **Point 12's second clause is unmet.** It required the no-squash note in this
-  branch's pull request; there is no pull request.
-- **The skills were only ever run by their author**, in the session that wrote
-  them, and a session holds the copy of a skill it loaded rather than the file
-  on disk. They are asserted for the versions that ship, not proved.
+- **The skills have been run by their author, in one session.** `/plan-status`
+  was dispatched once as a read-only agent and found three real defects, which
+  is evidence the dispatch works; but a session holds the copy of a skill it
+  loaded, not the file on disk, and these were edited repeatedly after loading.
+  **A fresh session is the only thing that proves the versions that ship.**
 - **One defect is known and unfixed:** the `Plan-point:` lookup is not qualified
   by plan, so on a branch carrying several plans it returns one commit per plan
   for the same point number. Disambiguating by commit order works and is not a
-  guarantee. It needs its own point, and that point needs your approval.
+  guarantee. It needs its own plan point, and that point needs your approval.
+- **`.claude/plans/` holds three archived plans that nobody but their author has
+  read.** They are the record of what was intended; whether they are legible to
+  someone who was not there is untested.
 
 ## What I need from you
 
-1. Whether to push and open the pull request. I have not: seventeen commits and
-   an outward-facing action nobody asked for.
-2. `SQ-001` and `SQ-002`, in your own time — neither blocks, and both decide
-   code that is not written yet.
-3. Approval for the plan point that fixes the lookup.
-4. Whether the four promotion candidates go into `SIM-DEC`, and with which
-   numbers.
+1. The two lines of `SQ-003`, whenever convenient — or say the word and I apply
+   them.
+2. Approval for the plan point that qualifies the lookup.
+3. The next real decision: the plan for the rest of phase 3. `Time/`, `State/`,
+   `Data/`, `Chronicle/`, `Commands/` are empty, and the gate is 100k empty
+   ticks with `AC-02` and `AC-03` green. That conversation is moment one, and it
+   is where a request is owed next.

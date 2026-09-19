@@ -926,3 +926,37 @@ never noticed.
 
 It is the residue of `SQ-001`, which was the same shape, went unrecorded for
 three days, and turned out to be hiding the tick question.
+
+### D-038 · `SQ-003` decided, and the edit left to a human
+
+**Resolution A: the definitions move.** `NFR-03` and `DEC-002` take the subject
+form rather than FR-X-02 re-pointing its citation at `DEC-081`. `SIM-REQ` states
+what is required, so a decision that changes the shape of the primitive leaves
+the requirement stating it stale; and re-pointing would leave two definitions of
+the draw disagreeing, with the reader made to pick.
+
+**The edit was not made.** The human answered "go with A", and A was presented as
+their work because it touches `docs/`. That is the one folder whose rule names a
+human explicitly, and every change to it so far — the four decisions, the A-11
+split — was written by one. An instruction that can be read as *this is the
+answer* or as *apply it* is not authorisation for the edit this repository
+protects most.
+
+**So the exact text sits in `SQ-003` instead**, both lines, before and after,
+ready to paste. The decision survives the session, the question stays open until
+`docs/` actually changes, and whoever applies it does not have to reconstruct
+anything. Blocking on the ambiguity would have cost more than the one line it
+takes to resolve it.
+
+### D-039 · The stale request was replaced, not amended
+
+The request of the morning was false by the evening: the branch it described is
+merged, its commits pushed, both its questions closed. It was replaced whole
+rather than corrected in place, which is what the design says — one request at a
+time, the old ones in git.
+
+Worth noting as a property of the artefact: **a review request decays faster
+than anything else here.** The register and the plans describe what happened and
+stay true; a request describes what is *outstanding*, and every answer makes
+part of it false. Reading a stale one is worse than reading nothing, because it
+looks current.
