@@ -61,8 +61,14 @@ one:
   a defect in a frozen plan. Report it and ask; the criteria are not yours to
   correct.
 - The requirement itself is contradictory, unachievable, or wrong — a defect in
-  `docs/`. Say so and stop. It is not yours to fix either, and it is the most
-  valuable thing this process can find.
+  `docs/`. **Write it in `SPEC-QUESTIONS.md`**, with the citation and whether it
+  blocks. It is not yours to fix and not yours to resolve; it is the most
+  valuable thing this process can find, and it is lost the moment it is only
+  said out loud.
+
+A blocking entry **fails the point** and stops the plan. A non-blocking one is
+recorded and the work continues. This holds wherever the objection surfaces —
+step 1, the implementation, a reviewer's finding — not only here.
 
 **On the first point of a `Kind: simulator` plan, confirm the header's
 `Satisfies:` too.** Open each `AC-` in `docs/SIM-REQ.md` and read it. The field

@@ -558,3 +558,35 @@ up with three developments behind it and no record of any of them.
 and no `AC-` to open, so every rule written in this point is untried. The first
 simulator plan is where it either works or does not, and that is also the first
 time the coverage question can be asked at all.
+
+### Point 8 — `SPEC-QUESTIONS.md`
+
+**It opens with a real question, not an empty state.** `SQ-001` records a genuine
+inconsistency found while building `Hash64.Subject` three days ago: DEC-002 and
+`SIM-STATE:25` specify a five-coordinate draw, while FR-X-02 and `SIM-STATE:123`
+specify a three-coordinate one, and FR-X-02 being a requirement makes the short
+form normative rather than loose prose. A channel that ships empty teaches
+everyone that it is decorative.
+
+That the objection sat unrecorded for three days, in a session that was
+otherwise writing down everything, is the argument for the file in one line.
+
+**An objection is never resolved by its finder.** This is the rule the file
+turns on. The author who found the contradiction is the author who wants to keep
+working, and is therefore the worst possible judge of whether it can be worked
+around. A stale open entry is a truer state of affairs than one closed by the
+person it inconvenienced.
+
+**Every entry declares whether it blocks, and blocking has teeth.** A blocking
+entry fails the point and stops the plan, by the rule from point 5. Without the
+consequence the declaration is a label, and the file becomes where objections are
+filed *instead of* acted on — the exact failure the human named when asking for
+it.
+
+**`SQ-001` is deliberately not resolved here**, though a plausible reading exists
+and is written into the entry: the tick may be omitted because FR-X-02 makes the
+departure tick an *output* of the draw. Choosing that reading would fix the
+sampled transients of every generated world to a decision nobody recorded, in the
+one component where an unrecorded choice cannot be recovered from the output.
+Recording the reading and leaving the question open is the whole point of the
+file existing.

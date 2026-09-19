@@ -189,6 +189,17 @@ exemption verified against the diff.
 - **Check: weak** — satisfied by reading. Replaced by the first real entry.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-19. `SPEC-QUESTIONS.md` exists with its rules; `AGENTS.md`
+points at it from the section that used to say "stop and say so";
+`/plan-next` sends objections there and fails the point on a blocking one. The
+criterion said the weak check would be replaced by the first real entry, and it
+was, in the same commit: `SQ-001` records a genuine inconsistency between
+DEC-002 and FR-X-02 over the arity of the sampled-transient draw, found three
+days ago and unrecorded until this file existed. Left open on purpose, with the
+plausible reading written down but not chosen. Decisions: register, section
+"The twelve gaps in the plan mechanism", point 8 — four entries. Review: not
+run, `Core: no`, exemption verified against the diff.
+
 ## 9. Closed plans are archived, and register entries get stable identifiers
 
 - **Does:** replaces the deletion rule with archival to `.claude/plans/`,

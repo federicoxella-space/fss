@@ -25,6 +25,12 @@ Not to record what you built, not to fix a discrepancy, not to tidy. If the
 code cannot satisfy a requirement, stop and say so. Changing the specification
 to match the implementation destroys the only independent account of the design.
 
+**Say so in `SPEC-QUESTIONS.md`**, not only in conversation. Every objection to
+the specification goes there — a requirement that contradicts another, one that
+cannot be built, one that is simply wrong — and none of them is resolved by
+whoever found it. A conversation is outside the repository and gone by the next
+session, and this is the only channel that runs back towards `docs/`.
+
 ## Plan the development before starting it
 
 Work starts from a written `PLAN.md` at the repository root, describing the
