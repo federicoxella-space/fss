@@ -2,7 +2,7 @@
 
 **Document:** SIM-REQ
 **Status:** Draft 1
-**Revision:** 2026-09-19
+**Revision:** 2026-09-20
 **Scope:** Headless simulation core, runnable outside the game
 
 ---
@@ -501,7 +501,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 **NFR-04 — Iteration order.** No simulation logic iterates a hash-ordered collection. Order comes from integer ids.
 
-**NFR-05 — Performance.** ≤ 10 ms per simulated day at p99, at target scale, after 60 simulated years, on one background thread *(estimate — validate in Phase 3)*. This implies roughly one simulated year per 3.6 seconds of wall clock.
+**NFR-05 — Performance.** ≤ 10 ms per simulated day at p99, at target scale, after 60 simulated years, on one background thread *(estimate — validate in Phase 4, when a settlement update exists to measure)*. This implies roughly one simulated year per 3.6 seconds of wall clock.
 
 **NFR-06 — Threading.** The core runs off the render thread. No `async`, no unordered parallelism inside the tick.
 
@@ -760,11 +760,11 @@ All remaining items depend on measurement and close in the phase named.
 | Item | Closes in | Procedure |
 |---|---|---|
 | P-11, trade damping `k` | Phase 6 | Sweep `k` against transport cost; accept on AC-09 and AC-04 |
-| P-17, settlement ceiling | Phase 3 | Measure per-settlement update cost, divide the budget by it |
+| P-17, settlement ceiling | Phase 4 | Measure the full twelve-phase settlement update, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach |
 | P-18, prior history length | Phase 6 | Measure cost per simulated year, set against the acceptable wait |
 | AC-04 bounds | Phase 6 | Long runs across seeds, bounds set from observed envelopes |
 | AC-09 X and Y per good | Phase 6 | Shock injection per good, values recorded against the intent table |
-| P-01 validity | Phase 3 | Confirm the 5 µs and 10 µs per-entity estimates the budget rests on |
+| P-01 validity | Phase 4 | Confirm the per-entity cost against a real settlement update. The measured subset is in P-63 and P-64; what is unconfirmed is the factor of two carried for the seven unmeasured phases |
 
 ---
 
@@ -774,10 +774,10 @@ The core knows nothing about its consumers. This section records what the consum
 
 | Constraint | Value | Status |
 |---|---|---|
-| Target framework | `netstandard2.1` | Proposed |
-| Maximum C# language level | 9 | Proposed |
-| Ahead-of-time compilation must be supported | Yes | Proposed |
-| Allowed base class library surface | `netstandard2.1` only, no third-party packages | Proposed |
+| Target framework | `netstandard2.1` | Decided |
+| Maximum C# language level | 9 | Decided |
+| Ahead-of-time compilation must be supported | Yes | Decided |
+| Allowed base class library surface | `netstandard2.1` only, no third-party packages | Decided |
 | Integration form | Source import into the consumer project | Decided |
 
 Rules that follow from this section regardless of the values chosen:
@@ -792,4 +792,4 @@ Rules that follow from this section regardless of the values chosen:
 
 Why these values: `netstandard2.1` is consumable both by the current runtime generation and by the .NET 10 generation that follows it, so the choice does not depend on which one the project ships against. C# 9 is the level available when the core is compiled by the consumer rather than shipped as a prebuilt assembly, and nothing above it is needed for integer arithmetic over parallel arrays.
 
-Confirm before Phase 3. A wrong guess costs a rewrite of the serialiser.
+Confirmed 2026-09-20. `netstandard2.1` is consumable both by the current runtime generation and by the .NET 10 generation that follows it, so the choice does not depend on which one the project ships against, and C# 9 is what the consumer compiles source at.

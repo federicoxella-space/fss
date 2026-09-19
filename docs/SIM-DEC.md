@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-09-19
+**Revision:** 2026-09-20
 **Companion:** SIM-REQ
 
 ---

@@ -2,7 +2,7 @@
 
 **Document:** SIM-STATE
 **Status:** Draft
-**Revision:** 2026-09-19
+**Revision:** 2026-09-20
 **Gate:** The assert list is executable.
 
 ---
