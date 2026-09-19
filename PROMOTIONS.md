@@ -36,7 +36,24 @@ here would collide with whatever else is in flight.
 
 ---
 
-## Pass of 2026-09-19
+## Pass of 2026-09-19 — closed
+
+**All four candidates were written into `SIM-DEC` on 2026-09-19, as `DEC-081` to
+`DEC-084`, under a new `Drawing` section.** The human kept the drafted text close
+to intact. The register entries they came from are marked with what they became,
+and the candidates below are struck: they are kept as the record of what was
+proposed, not as an outstanding ask.
+
+| Candidate | From | Became |
+|---|---|---|
+| C-1 | `D-001` | `DEC-081` |
+| C-2 | `D-002` | `DEC-082` |
+| C-3 | `D-007` | `DEC-083` |
+| C-4 | `D-006` | `DEC-084` |
+
+`D-004`, listed below as belonging in the other file, closed the other way:
+`SQ-002` split A-11 rather than adding a decision. The guard was right and the
+invariant's text was wrong.
 
 First pass ever run. It therefore covers the whole register rather than one
 development, and the development just archived — the plan mechanism, `D-011`
@@ -48,7 +65,9 @@ stopped being observed.
 Four candidates, all from the `hash64-soggetto-e-range` development, plus one
 entry that may belong in the other file instead.
 
-### C-1 — from `D-001`: the draw subject is a 64-bit key, not an entity
+### ~~C-1~~ — promoted as `DEC-081`
+
+<!-- from `D-001`: the draw subject is a 64-bit key, not an entity
 
 **Why:** DEC-002 fixes the draw's coordinates, and `entity_id` is now one case
 of a wider coordinate. Every future subsystem that draws for a link, an event or
@@ -71,8 +90,11 @@ a sample depends on this, and nothing in `docs/` says it.
 > **Cost.** A caller holding something other than an `EntityId` has to build its
 > key through the provided helper rather than casting, or a negative row index
 > sign-extends into the entity space.
+-->
 
-### C-2 — from `D-002`: generation 0 is reserved
+### ~~C-2~~ — promoted as `DEC-082`
+
+<!-- from `D-002`: generation 0 is reserved
 
 **Why:** an invariant on `EntityId` that the whole subject scheme rests on, and
 `SIM-STATE` describes the handle without stating it.
@@ -89,8 +111,11 @@ a sample depends on this, and nothing in `docs/` says it.
 >
 > **Cost.** Row reuse has to increment past 0 on wraparound, which a naive
 > counter does not.
+-->
 
-### C-3 — from `D-007`: one channel per kind of non-entity subject
+### ~~C-3~~ — promoted as `DEC-083`
+
+<!-- from `D-007`: one channel per kind of non-entity subject
 
 **Why:** a rule binding every subsystem added from here on, currently recorded
 only in a source comment.
@@ -108,8 +133,11 @@ only in a source comment.
 >
 > **Cost.** Channels are a numbered contract that cannot be renumbered, so this
 > spends them faster than one per subsystem would.
+-->
 
-### C-4 — from `D-006`: the range reduction is a plain modulo, and its bias is accepted
+### ~~C-4~~ — promoted as `DEC-084`
+
+<!-- from `D-006`: the range reduction is a plain modulo, and its bias is accepted
 
 **Why:** DEC-002 names rejection sampling as a cost to be rewritten away; this
 records what was done instead, and forecloses a future contributor
@@ -129,8 +157,18 @@ reintroducing rejection to "fix" the bias.
 >
 > **Cost.** The reduction is not exactly uniform, and says so where it is
 > written. Anyone who reopens this has to re-derive the two paragraphs above.
+-->
 
-### Later in the same pass — nothing from `D-028` to `D-032`
+## Pass of 2026-09-19, second run — nothing
+
+Run over `D-033` and `D-034`, written since the first pass, on archiving the
+review-request plan. Both are about how the mechanism asks a human to look. No
+candidates, for the reason that will hold for every process plan: the
+specification describes the simulated world, not the apparatus that builds it.
+
+---
+
+### Later in the first pass — nothing from `D-028` to `D-032`
 
 Those entries were written after this pass began, closing points 10 to 13 of the
 same process plan. Run against them, the pass finds **no candidates**: they are

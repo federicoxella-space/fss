@@ -38,7 +38,16 @@ can correct it.
 **Cites:** `docs/SIM-DEC.md:31` (DEC-002), `docs/SIM-STATE.md:25`,
 `docs/SIM-REQ.md:400` (FR-X-02), `docs/SIM-STATE.md:123`.
 **Blocks:** no. Transients are phase 4 work; phase 3 carries no domain logic.
-**Status:** open.
+**Status:** **closed 2026-09-19.** FR-X-02, DEC-055 and `SIM-STATE:123` now give
+the five-coordinate form with the link as subject and the kind of transient as
+channel.
+
+The answer carried a clarification the question had not thought to ask, and it
+is the more important half: **the tick coordinate is the one at which the
+trajectory is generated, not the one being observed.** Without that, FR-X-03
+does not hold — a draw keyed on the observing tick would re-roll every tick and
+the caravans would flicker instead of being followable. The question had found
+an inconsistency in arity and missed that the arity was hiding a semantics.
 
 Two arities are specified for the same function.
 
@@ -67,7 +76,16 @@ one place where an unrecorded choice cannot be found again from the output.
 overflowed", under the heading "Invariants, asserted every tick".
 **Blocks:** no. The guard is more than existed before it, and phase 3 has no
 accumulator running in a release build.
-**Status:** open.
+**Status:** **closed 2026-09-19.** The invariant split rather than the code
+changing. A-11 is now "every fixed-point quantity held in state is inside its
+declared range", checked always; **A-11b** is "no accumulator has overflowed",
+checked in debug builds, with the affordability reason written beside it in
+`SIM-STATE`.
+
+The guard was right and the text of the invariant was wrong — the outcome this
+channel exists to make possible, and the one a decision register cannot reach on
+its own, because a register can only record that the code departed from the
+specification.
 
 The overflow guard on the `long` overload of `RemainderAccumulator.Apply` is
 `[Conditional("DEBUG")]`, so a release build does not check it. A-11 says every
@@ -87,3 +105,28 @@ than its heading says, and the requirement should say which.
 
 This is due in the A-11 assert pass of phase 3, which will have to answer it for
 every invariant in the list, not only this one.
+
+### SQ-003 — `NFR-03` and `DEC-002` still carry the entity form that the documents citing them no longer use
+
+**Raised:** 2026-09-19, reading `docs/` at revision 2026-09-19 to confirm what
+`SQ-001` became.
+**Cites:** `docs/SIM-REQ.md:500` (NFR-03), `docs/SIM-DEC.md:31` (DEC-002),
+against `docs/SIM-REQ.md:401` (FR-X-02), `docs/SIM-DEC.md:744` (DEC-081).
+**Blocks:** no. DEC-081 states the general form plainly and the implementation
+already follows it.
+**Status:** open.
+
+FR-X-02 now reads "`Hash(worldSeed, subject, tick, channel, index)` **under
+NFR-03**". NFR-03 reads `(world_seed, entity_id, tick, channel, index)`. The
+requirement cites as its authority a text that does not state the form it
+attributes to it, and DEC-002 has the same wording one level down.
+
+This is the residue of `SQ-001`: the documents that *use* the draw were updated
+and the two that *define* it were not. Possibly deliberate — DEC-081 can be read
+as generalising DEC-002 rather than replacing it, with the entity form kept as
+the canonical case. If so, FR-X-02's citation should point at DEC-081, which is
+where the subject form is actually written.
+
+Small, and worth filing precisely because it is small: `SQ-001` was the same
+shape, went unrecorded for three days, and turned out to be hiding a semantic
+question about which tick a trajectory is keyed on.

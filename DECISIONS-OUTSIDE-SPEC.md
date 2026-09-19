@@ -19,6 +19,9 @@ Commit `3f97af8`, branch `hash64-soggetto-e-range`. Three fixes in
 
 ### D-001 · 1. The draw subject is a 64-bit key, not an entity
 
+**Promoted 2026-09-19 as `DEC-081`.** The text went in close to the draft; the
+specification now states the subject coordinate and this entry is history.
+
 `Hash64.Of` takes `ulong subject`; the `EntityId` overload is the same function
 with the handle packed into it.
 
@@ -29,6 +32,9 @@ document says how the two key spaces coexist. Rejected: a second hash function
 for non-entity draws, which would need every property proved twice.
 
 ### D-002 · 2. A non-entity row key keeps its high half at zero
+
+**Promoted 2026-09-19 as `DEC-082`.** The reservation of generation 0 is now a
+decision of record rather than something inferred from `EntityId.None`.
 
 `Subject(int row)` returns `(uint)row`, so the generation half stays zero — the
 value no live `EntityId` carries. This makes a row key and a live entity key
@@ -52,6 +58,13 @@ write `min + Range(draw, max - min + 1)`. No specification input. Rejected:
 overloads for inclusive and exclusive bounds, as unrequested surface.
 
 ### D-004 · 5. A-11 is checked in debug builds only, and by `checked` rather than an assert
+
+**Superseded 2026-09-19, not promoted.** `SQ-002` closed by splitting the
+invariant: A-11 is now the range of fixed-point quantities held in state, A-11b
+the overflow of accumulators, checked in debug builds with the reason written
+beside it. This entry recorded the implementation departing from a requirement;
+the requirement moved instead. The guard was right and the invariant's text was
+wrong, which is the outcome a decision register cannot reach on its own.
 
 SIM-STATE lists A-11 among the invariants "asserted every tick" and includes "no
 accumulator has overflowed". The overflow guard added to the `long` overload of
@@ -85,6 +98,8 @@ numbers, so the series above now skips 3 and 6.
 
 ### D-006 · 1. `Hash64.Range` is a plain modulo
 
+**Promoted 2026-09-19 as `DEC-084`.**
+
 The reduction is `(int)(draw % (ulong)count)`. Rejection and re-mixing are gone,
 and with them the reading of DEC-002 that entry 3 argued for: nothing here
 consumes a variable number of draws any more.
@@ -97,6 +112,10 @@ moves the discarded set onto another set of the same size rather than spreading
 it. The magnitude is documented at `Range`, where the next reader will ask.
 
 ### D-007 · 2. One channel per kind of non-entity subject
+
+**Promoted 2026-09-19 as `DEC-083`.** It was a rule living in a source comment
+and unenforced by the build; it is now a numbered decision, still unenforced by
+the build.
 
 Written into the `HashChannel` comment, next to the rest of the channel
 contract, since that is what a caller reads when choosing one. Entity keys
@@ -840,3 +859,70 @@ request is read later than it is written, so a fact that decays is stated in a
 form that does not — everything after `046751f` is unpushed. Noted because
 editing a closed point's artefact is worth declaring, even when the artefact is
 not a frozen criterion.
+
+---
+
+## 2026-09-19 — Between plans: the specification answered
+
+No plan. The human closed `SQ-001` and `SQ-002`, wrote `DEC-081` to `DEC-084`
+into `SIM-DEC`, and set the rule that a specification update lands between two
+plans rather than during one. What follows is the bookkeeping that closes the
+loop, and what the answers cost.
+
+### D-035 · The return channel worked, and returned more than it was asked
+
+**Both questions closed, and neither closed the way it was posed.**
+
+`SQ-001` asked which arity was normative. The answer gave the five-coordinate
+form *and* a clarification the question had not thought to ask: the tick
+coordinate is the one at which a trajectory is **generated**, not the one being
+observed. Without it FR-X-03 does not hold — a draw keyed on the observing tick
+re-rolls every tick and the caravans flicker instead of being followable. The
+question found an inconsistency in arity and missed that the arity was hiding a
+semantics.
+
+`SQ-002` closed by moving the requirement, not the code: A-11 split into the
+range invariant, checked always, and **A-11b** for accumulator overflow, checked
+in debug builds with the affordability reason written beside it. The guard was
+right and the invariant's text was wrong.
+
+That second outcome is the one worth keeping. **A decision register cannot
+reach it.** The register's vocabulary is "the implementation departed from the
+specification, here is why" — it can record a deviation and it can never
+conclude that the specification was wrong, because nothing in it is allowed to.
+`D-004` sat in the register for three days saying the code deviated from A-11.
+It took a channel that runs the other way to find out the code did not.
+
+### D-036 · Bookkeeping, and what marking costs
+
+**Four register entries marked with what they became**, `D-001` → `DEC-081`,
+`D-002` → `DEC-082`, `D-007` → `DEC-083`, `D-006` → `DEC-084`, and the
+candidates struck in `PROMOTIONS.md` but kept as the record of what was
+proposed. `D-004` is marked superseded rather than promoted: it closed through
+the other channel.
+
+**Marked, not deleted.** The promoted entries stay in the register with a
+pointer. Removing them would leave the reasoning that produced a decision only
+in the commit that removed it, and the whole apparatus exists so that reasoning
+outlives the diff. The cost is a register that grows even where it has been
+promoted — the pass empties the *queue*, never the record.
+
+**The second promotion pass, over `D-033` and `D-034`, found nothing**, which is
+the expected result for a process plan and is written down anyway. A pass that
+reports nothing is evidence the pass ran; a pass that leaves no trace is
+indistinguishable from one that was skipped.
+
+### D-037 · `SQ-003`, filed rather than answered
+
+`NFR-03` and `DEC-002` still read `entity_id`, while FR-X-02 now writes the
+subject form and cites "under NFR-03" as its authority. The documents that *use*
+the draw were updated; the two that *define* it were not.
+
+Filed rather than resolved, though the intent is obvious from `DEC-081` and the
+implementation already follows it. Resolving an obvious one by reading it
+charitably is how the channel stops being used: the next reader has no way to
+tell which small inconsistencies were adjudicated in silence and which were
+never noticed.
+
+It is the residue of `SQ-001`, which was the same shape, went unrecorded for
+three days, and turned out to be hiding the tick question.
