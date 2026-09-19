@@ -23,7 +23,7 @@ Anything that influences a future tick lives here. Anything not listed here must
 | ruleVersion | int | drives materialisation on patch, DEC-033 |
 | currencyTotal | int64 | in smallest units, the invariant target |
 
-No RNG state. Randomness is `Hash(worldSeed, entityId, tick, channel, index)`.
+No RNG state. Randomness is `Hash(worldSeed, subject, tick, channel, index)`, under NFR-03 and DEC-081.
 
 ---
 

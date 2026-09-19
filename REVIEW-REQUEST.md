@@ -58,7 +58,8 @@ git; nothing in it is true of the repository any more.
 question. Written also as the handoff to whatever session comes next, since this
 one built the mechanism and holds context no file does.
 
-**Branch:** `main` at `64bcc7f`, pushed, CI green. No branches outstanding: the
+**Branch:** `main`, pushed, CI green. Amended 2026-09-20 when `SQ-003` closed;
+the rest of the request still stands. No branches outstanding: the
 three that existed are merged and deleted, locally and on the remote.
 
 **What changed, in one line:** the specification moved — `DEC-081` to `DEC-084`
@@ -83,15 +84,18 @@ superseded: it closed through the other channel, when A-11 split.
 
 ## Open questions about the specification
 
-One, `SQ-003`, **not blocking**, and **already decided by you**.
+**None.** `SQ-003` closed on 2026-09-20: resolution A was applied to `docs/` on
+your instruction, so NFR-03, DEC-002 and the World note in `SIM-STATE` carry the
+subject form and nothing in the specification states the entity-only form any
+more.
 
-`NFR-03` and `DEC-002` still read `entity_id` while FR-X-02 now writes the
-subject form and cites `NFR-03` as its authority. Resolution A chosen: the two
-definitions move. The exact replacement text for both lines is written into the
-entry in `SPEC-QUESTIONS.md`, ready to paste.
-
-**It is waiting on you** because `docs/` is not ours to edit. Two lines. Once
-they are in, tell whoever is working and the entry gets marked closed.
+One thing came out of applying it, recorded as `D-040`: the entry had claimed
+"nothing else in `docs/` needs to move", and that was wrong — `SIM-STATE:26`
+carried the entity form too. The same substitution was applied there, one line
+beyond what had been deposited, because the inconsistency would have been
+created by the edit itself. The Rationale of DEC-002 was deliberately left
+alone. **Worth your eye**, since it is the first `docs/` edit made by an agent
+in this repository.
 
 ## What was not verified
 
@@ -122,8 +126,9 @@ tested any of it.
 
 ## What I need from you
 
-1. The two lines of `SQ-003`, whenever convenient — or say the word and I apply
-   them.
+1. A look at the three lines changed in `docs/`, which is the first time an
+   agent has edited that folder here. One of them was not in the text you
+   approved; the reason is above and in `D-040`.
 2. Approval for the plan point that qualifies the lookup.
 3. The next real decision: the plan for the rest of phase 3. `Time/`, `State/`,
    `Data/`, `Chronicle/`, `Commands/` are empty, and the gate is 100k empty

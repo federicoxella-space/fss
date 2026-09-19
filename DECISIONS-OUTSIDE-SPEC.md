@@ -948,6 +948,11 @@ ready to paste. The decision survives the session, the question stays open until
 anything. Blocking on the ambiguity would have cost more than the one line it
 takes to resolve it.
 
+**Applied 2026-09-20**, on an instruction that left no room — "applica tu per
+favore". Recorded here rather than by rewriting the paragraph above: the entry
+says the edit was not made, which was true when written, and the mechanism's
+whole discipline is that a record states what was true at its moment.
+
 ### D-039 · The stale request was replaced, not amended
 
 The request of the morning was false by the evening: the branch it described is
@@ -960,3 +965,40 @@ than anything else here.** The register and the plans describe what happened and
 stay true; a request describes what is *outstanding*, and every answer makes
 part of it false. Reading a stale one is worse than reading nothing, because it
 looks current.
+
+### D-040 · Applying `SQ-003` overran the text that had been deposited
+
+The entry said "nothing else in `docs/` needs to move". It was wrong: the World
+note at `SIM-STATE:26` carried the entity form too, and the two agreed lines
+would have left it as the only place in the specification still saying it.
+
+**The same substitution was applied there**, one line beyond the authorisation,
+because the inconsistency would have been created by the edit itself. The
+alternative was leaving the specification disagreeing with itself and reporting
+that the deposited text had been incomplete — which is the honest half of what
+was done, minus the fix.
+
+The limit that held: **the Rationale of DEC-002 was left alone.** "Any entity's
+random draw at any past tick can be recomputed directly" is narrower than the
+decision above it and still true, and narrowing is not falsehood. Rewriting a
+rationale that was not part of the agreed change is where an authorised edit
+turns into an unauthorised one.
+
+What this says about the deposit, and it is the useful part: **a drafted change
+to `docs/` is not verified until it is applied.** "Nothing else needs to move"
+was a claim about the whole specification, written from the two lines in front
+of me, and a grep would have falsified it in a second. The same discipline the
+plan mechanism applies to a check — run it, do not read it — was not applied to
+a claim about `docs/`, because that claim was prose rather than a criterion.
+
+### D-041 · The request was amended, not replaced
+
+The request of the evening asked for `SQ-003`, which is now answered. It was
+amended in place rather than replaced whole, against the precedent set hours
+earlier by `D-039`.
+
+The two are different cases, and the distinction is worth keeping: a request is
+**replaced** when the situation it describes has moved, and **amended** when one
+of its items is answered and the rest still stands. Both rules serve the same
+end, which is that the file is never false; replacing wholesale for a single
+closed item would churn the artefact for no gain.

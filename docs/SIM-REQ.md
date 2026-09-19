@@ -497,7 +497,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 **NFR-02 — Numeric representation.** All simulation state is integer or fixed-point. No floating point, no transcendental functions in the core. Floats exist only in the presentation layer.
 
-**NFR-03 — Randomness.** Random values come from a stateless indexed hash over `(world_seed, entity_id, tick, channel, index)`. No sequential RNG stream in the core.
+**NFR-03 — Randomness.** Random values come from a stateless indexed hash over `(world_seed, subject, tick, channel, index)`, the subject being a 64-bit key of which an entity handle is one case, under DEC-081. No sequential RNG stream in the core.
 
 **NFR-04 — Iteration order.** No simulation logic iterates a hash-ordered collection. Order comes from integer ids.
 

@@ -114,7 +114,9 @@ every invariant in the list, not only this one.
 against `docs/SIM-REQ.md:401` (FR-X-02), `docs/SIM-DEC.md:744` (DEC-081).
 **Blocks:** no. DEC-081 states the general form plainly and the implementation
 already follows it.
-**Status:** open.
+**Status:** **closed 2026-09-20.** Resolution A applied to `docs/` on explicit
+instruction: NFR-03, DEC-002 and the World note in `SIM-STATE` now carry the
+subject form. Nothing in `docs/` states the entity-only form any more.
 
 FR-X-02 now reads "`Hash(worldSeed, subject, tick, channel, index)` **under
 NFR-03**". NFR-03 reads `(world_seed, entity_id, tick, channel, index)`. The
@@ -163,3 +165,19 @@ clause about deferred agents that follows it stands either way.
 
 Nothing else in `docs/` needs to move: FR-X-02, DEC-055 and `SIM-STATE:123`
 already carry the subject form, and DEC-081 to DEC-084 were written against it.
+
+**That last sentence was wrong**, found while applying the change. The World
+note at `SIM-STATE:26` — "No RNG state. Randomness is `Hash(worldSeed, entityId,
+tick, channel, index)`" — carried the entity form too, and after the two agreed
+lines it would have been the only place in `docs/` still saying it. The
+inconsistency would have been created by the edit itself, so the same
+substitution was applied there and declared, rather than leaving the
+specification disagreeing with itself or hiding that the deposited text was
+incomplete. Applied as:
+
+> No RNG state. Randomness is `Hash(worldSeed, subject, tick, channel, index)`, under NFR-03 and DEC-081.
+
+The **Rationale** of DEC-002 was left alone, deliberately. "Any entity's random
+draw at any past tick can be recomputed directly" is narrower than the decision
+above it and still true; narrowing is not falsehood, and rewriting a rationale
+that was not part of the agreed change would be the edit creeping.

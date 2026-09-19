@@ -29,7 +29,7 @@ Currency in smallest units, goods in whole units, normalised quantities on a 0â€
 
 ### DEC-002 â€” Randomness comes from a stateless indexed hash
 
-Random values are computed as `Hash(world_seed, entity_id, tick, channel, index)`. No sequential RNG stream exists in the core.
+Random values are computed as `Hash(world_seed, subject, tick, channel, index)`, the subject being a 64-bit key of which an entity handle is one case, under DEC-081. No sequential RNG stream exists in the core.
 
 **Rationale.** Three properties fall out at once. Adding a subsystem does not desynchronise the others, because each holds its own channel. Any entity's random draw at any past tick can be recomputed directly, which is what makes deferred agents resumable in constant time. Nothing about the RNG needs serialising.
 
