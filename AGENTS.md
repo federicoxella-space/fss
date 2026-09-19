@@ -19,17 +19,23 @@ Read the relevant document. Do not infer the design from the code.
 | What lives in state, and what is asserted every tick | `docs/SIM-STATE.md` |
 | What a settlement update does, in order | `docs/SIM-ECON.md` |
 
-## Do not edit `docs/`
+## `docs/` is not yours to edit
 
-Not to record what you built, not to fix a discrepancy, not to tidy. If the
-code cannot satisfy a requirement, stop and say so. Changing the specification
-to match the implementation destroys the only independent account of the design.
+Not to record what was built, not to reconcile a discrepancy, not to tidy. If
+the code cannot satisfy a requirement, stop and say so. A specification edited
+to match an implementation is no longer an independent account of the design.
 
-**Say so in `SPEC-QUESTIONS.md`**, not only in conversation. Every objection to
-the specification goes there — a requirement that contradicts another, one that
-cannot be built, one that is simply wrong — and none of them is resolved by
-whoever found it. A conversation is outside the repository and gone by the next
-session, and this is the only channel that runs back towards `docs/`.
+One exception: a human may ask you to apply a change to
+`docs/`. When that happens:
+
+- The text or patch comes from the human. You transcribe it, you do not
+  compose it, and you do not extend it to the places it "should" also touch.
+- Something that ought to change and is not in what you were given is a
+  finding, not a licence. Say so, and leave it.
+- Prefer `git apply` over editing by hand, so that the diff cannot exceed the
+  text you were given.
+- Record the permission in `DECISIONS-OUTSIDE-SPEC.md`: who granted it, what
+  it covered, and whether the applied diff matched the deposit exactly.
 
 ## Plan the development before starting it
 
