@@ -770,3 +770,46 @@ to discover it was shallow rather than weak.
 carried `weak` and nearly all were shallow. The criteria were frozen when the
 plan was written; correcting them now would be the move the whole mechanism
 exists to prevent, performed on the point that describes the mistake.
+
+---
+
+## 2026-09-19 — The review request
+
+Branch `plan-e-skill`, third plan, planned in `PLAN.md`. Asked for by the human
+while away, after a review of the mechanism built in the two plans above.
+
+### D-033 · Point 1 — `REVIEW-REQUEST.md` and the three moments
+
+**Everything else in this mechanism is a record, and a record waits.** That is
+the right shape for a record and the wrong one for a question. The file exists
+because a mechanism made only of records produces its human opinion whenever one
+is volunteered, which on a long branch is after the work that needed it was
+already built on.
+
+**Three moments and no others.** A request at every point is a notification, and
+a notification that arrives constantly is filtered out — at which point the
+mechanism has a channel to the human that the human has learned to ignore, which
+is worse than not having one.
+
+**One request at a time, replaced by the next.** Accumulating them would make
+the file a second register, and the register already exists. Git holds the old
+ones.
+
+**The sixth part is the reason for the file.** Which moment, which commit, what
+changed, the decisions, the questions — all five are discoverable by a reader
+willing to look. *What was not verified* is not: an unrun reviewer, a check
+satisfied by reading, a clause left pending leave no trace in a repository, and
+only the author knows they are there. A request without that part is a summary,
+and summaries are what the register is for.
+
+**The reminder never writes the request on the human's behalf**, and writing one
+does not authorise continuing past a blocking question. Both would turn an
+interruption into a formality that clears itself.
+
+**The first request covers all three moments at once**, which is a finding about
+the absence rather than about the request: the mechanism was built inside a
+single absence, so one file now carries three plans, two archives, two
+specification questions and four promotion candidates. Had it existed on
+2026-09-17 there would have been four shorter requests, each arriving when it
+was cheap to act on. It is written into the request itself, because a first
+example that hides its own shape teaches the wrong one.

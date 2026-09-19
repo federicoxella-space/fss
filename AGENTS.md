@@ -72,6 +72,28 @@ rule above turn on the same property. And several trivial commits that together
 change behaviour are not several trivial changes: the exemption applies to the
 work, not to the slices it is cut into.
 
+## Ask for a review at three moments, and only three
+
+This mechanism records everything and asks for nothing, so a human opinion
+arrives whenever one is offered — which on a long branch is after the work that
+needed it was already built on. Write a request into `REVIEW-REQUEST.md`:
+
+- **before a plan starts**, where a wrong criterion costs one conversation
+  rather than every point built on it;
+- **at a phase gate** from `docs/SIM-REQ.md` §18, the only moment anything looks
+  at the whole rather than at one point;
+- **when the work meets the specification** — a `SPEC-QUESTIONS.md` entry, or
+  promotion candidates for `SIM-DEC`.
+
+Six parts, the last of which is the reason the file exists: which moment, which
+branch or commit, what changed in one line, the decisions taken outside the
+specification in this block, the open questions about the specification, and
+**what was not verified**. Everything but the last is discoverable by a reader
+willing to look; what was not done leaves no trace and only the author knows it.
+
+A request does not authorise continuing past a blocking question, and is never
+written on the human's behalf: the reminder is that one is owed.
+
 ## Close every task with the decisions it required
 
 Before reporting a task finished, write the choices it forced that the

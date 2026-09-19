@@ -334,6 +334,41 @@ its own plan when the work got hard is not a procedure.
   like any other: an abandoned development can still have produced a decision
   that belongs in `SIM-DEC`.
 
+## Asking a human to look
+
+Everything else here is a record: it waits to be read. That is the right shape
+for a record and the wrong shape for a question, and a mechanism made entirely
+of records produces its human opinion whenever one is volunteered — which on a
+long branch is after the work that needed it is already built on.
+
+`REVIEW-REQUEST.md` interrupts. It holds one request at a time and is replaced
+by the next; git holds the rest.
+
+**Three moments, and no others**, because a request at every point is a
+notification, and a notification that arrives constantly is filtered out:
+
+1. **Before a plan starts.** The cheapest place in the whole process. A wrong
+   criterion found here costs one conversation; found at the end it costs every
+   point built on it, and the plan is a few hundred words against a branch.
+2. **At a phase gate** from `SIM-REQ` §18. The only moment anything looks at the
+   whole: `/plan-next` sees one point, `/plan-status` sees one plan, and nothing
+   sees a phase.
+3. **When the work meets the specification** — a `SPEC-QUESTIONS.md` entry, or
+   promotion candidates. Those two files are the return channel, and a return
+   channel nobody is told to read is a drawer.
+
+**Six parts, and the sixth is why the file exists:** which moment, which branch
+or commit, what changed in one line, the decisions taken outside the
+specification in this block, the open questions about it, and **what was not
+verified**. The first five are discoverable from the repository by someone
+willing to look. What was *not* done leaves no trace at all — the unrun
+reviewer, the check satisfied by reading, the clause left pending — and only the
+author knows it.
+
+**The reminder says a request is owed; it never writes one on the human's
+behalf**, and writing one does not authorise continuing past a blocking
+question.
+
 ## The review protocol
 
 Two agents, in parallel, when and only when the point declares `Core: yes` —

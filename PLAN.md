@@ -35,6 +35,17 @@ the review that named them is quoted in point 1.
   cannot be checked from inside.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-19. `REVIEW-REQUEST.md` exists with the three moments, the six
+parts, and a first request that is real: it reports seventeen unpushed commits,
+two open specification questions, four promotion candidates, and five things
+that were not verified — including that the review protocol has never run at
+all. `AGENTS.md` and the design say when one is due. The marker held: six greps
+proved the parts are present and none of them says the request is worth
+reading. Decisions: register, `D-033` — six entries, including why the first
+request covers all three moments at once and why that is written into the
+request rather than smoothed out of it. Review: not run, `Core: no`, exemption
+verified against the diff.
+
 ## 2. The three skills say when a request is owed
 
 - **Does:** wires the moments into the procedure, so that the reminder does not
