@@ -17,6 +17,11 @@ Read `PLAN.md` at the repository root.
 - **Absent:** refuse. Work here starts from a written plan, and writing it is the
   conversation where a human decides what the work is. Do not offer to write
   one.
+- **Abandoned** — the header carries an `**Abandoned:**` declaration: refuse.
+  The plan stopped on purpose and only a human restarts it.
+- **A point closed as failed** — an outcome line saying `FALLITO`, with points
+  still open after it: refuse. The plan stopped at that failure and has not been
+  restarted. Report which point failed and what it says.
 - **Every point closed:** do not invent more. Say the plan is finished, check
   the exit condition, and say that the branch is ready to close and `PLAN.md` to
   be deleted in the last commit before the merge, once the pull request is
@@ -181,6 +186,27 @@ stop and ask rather than deciding for them what their edit belongs to.
   Nothing else may carry it — not a commit that amends the plan, adds a point,
   or prepares one. That is what keeps `/plan-status` a lookup instead of a
   guess.
+
+### When the point fails
+
+The check does not pass, the work turns out impossible, or a citation sent the
+point back. Close it as **failed** rather than leaving it open:
+
+- Outcome line: `*Esito:* <date>. FALLITO — <what was attempted, what the check
+  did>.` Register entry as for any point; a road already walked is worth more
+  written down than a road not taken.
+- Commit with `Plan-point: <n>`. A point closed as failed is closed.
+- **The commit must leave the repository green.** Keep whatever of the attempt
+  survives the build and the suite so the next person can see it; describe the
+  rest in the register and discard it. A red commit makes every later bisect
+  lie.
+- **Then stop the plan**, not just the point. Report and wait. Later points may
+  rest on this one, and a failure is information the human needs before more
+  work is spent against it.
+
+**Never declare the plan abandoned.** That is a human's word — a procedure that
+could abandon its own plan when the work got hard is not a procedure. Report the
+failure and let them choose.
 
 ### 8. Stop
 

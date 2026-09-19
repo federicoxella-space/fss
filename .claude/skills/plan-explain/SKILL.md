@@ -25,8 +25,18 @@ work stands must never be able to move it.
    whose work looks done but carries no outcome line is open.
 
 4. **If every point has one**, say the plan is finished: the branch is ready to
-   close, and `PLAN.md` is deleted in the last commit before the merge, after
-   the pull request is approved. Then stop.
+   close, and `PLAN.md` is archived once the pull request is approved. Then
+   stop.
+
+   **If the plan header carries an `**Abandoned:**` declaration**, say so with
+   its reason and stop. Do not present the next open point: it was not reached,
+   it was given up, and offering it would invite the work to resume by
+   accident.
+
+   **If a closed point's outcome line says `FALLITO` and points remain open**,
+   say the plan stopped at that failure, quote what failed, and stop. The point
+   after a failure is not the next point — the plan is not running. Whether to
+   retry, change the point, or abandon the plan is a human's decision.
 
 5. **Otherwise report, for the point found:**
    - its number and title, and what it does;

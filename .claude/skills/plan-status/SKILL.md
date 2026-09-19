@@ -19,11 +19,22 @@ Its subject is what has already happened. For what comes next in detail, that is
    history either way. Stop.
 
 2. Read the header: the exit condition, the phase, the branch, and `Kind` if the
-   plan declares one.
+   plan declares one. An `**Abandoned:**` declaration is reported first, with
+   its date and reason — everything below it is the record of a development
+   that stopped, and reading the summary without knowing that would mislead on
+   every line.
 
 3. **Split the points.** A point is closed when it carries an `*Esito:*` line,
    and open otherwise. Nothing else counts — not how finished the work looks,
    not what the commits suggest.
+
+   A closed point whose outcome line says `FALLITO` is **closed as failed**, and
+   is reported apart from the others. Folding it in with the successes would let
+   a plan read as complete while one of its points says the thing could not be
+   done.
+
+   If a point failed and points remain open, the plan is **stopped**, not in
+   progress: say so, and say that restarting it is a human's decision.
 
 4. **For each closed point, resolve its commit exactly:**
 

@@ -172,6 +172,49 @@ cannot cite that commit's hash. It carries the date, the result of the check,
 the reference into the register, and the outcome of the review; the commit is
 found from the `Plan-point:` trailer.
 
+## When a point fails, and when a plan is abandoned
+
+Two different outcomes. Confusing them loses the distinction between *this did
+not work* and *we stopped wanting it*, which is most of what a record is for.
+
+### A point fails
+
+Its check does not pass, or the work turns out to be impossible, or a citation
+does not hold and the human sends it back. The point is **closed as failed**,
+not left open:
+
+- The outcome line says so, with what was attempted and what the check did.
+  `*Esito:* <date>. FALLITO — <what failed>.`
+- The register entry is written as for any point. A failed attempt is often more
+  informative than a successful one, and it is the only record of a road already
+  walked.
+- The commit carries `Plan-point: <n>` as usual. The trailer means the commit
+  closes the point, and a point closed as failed is closed.
+- **The commit must leave the repository green.** Whatever of the attempt can be
+  kept without breaking the build or the suite is kept, so the next person can
+  see it; the rest is described in the register and discarded. A red commit on
+  the branch would make every later `git bisect` lie.
+- **The plan stops.** The next point does not start. Later points may rest on
+  this one, and even where they do not, a failure is information the human needs
+  before more work is spent.
+
+### A plan is abandoned
+
+The direction changed, the work was overtaken, the problem dissolved. This is
+**declared by a human**, never by `/plan-next` — a procedure that could abandon
+its own plan when the work got hard is not a procedure.
+
+- The plan header gains the declaration and the reason:
+  `**Abandoned:** <date> — <why>`.
+- Open points stay open. They record what was intended and not done, which is
+  information; closing them to tidy the file would erase it.
+- **The register entries stay valid.** They describe code that existed and
+  decisions that were really taken, and neither becomes untrue because the plan
+  stopped. An entry is wrong only if it was wrong when written.
+- The plan is archived like any closed plan, and the promotion pass runs over it
+  like any other: an abandoned development can still have produced a decision
+  that belongs in `SIM-DEC`.
+
 ## The review protocol
 
 Two agents, in parallel, when and only when the point declares `Core: yes` —

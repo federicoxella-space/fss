@@ -468,4 +468,38 @@ Almost every documentation point in this plan is shallow, not weak, and calling
 it weak misdescribes the problem in the direction that sounds more rigorous. The
 distinction is not written into the design: it is beyond what point 4 states,
 and a frozen point is not widened by its author mid-flight. Recorded here, and
-raised with the human as a candidate for its own point.
+raised with the human as a candidate for its own point — which it became, as
+point 13.
+
+### Point 5 — a failed point and an abandoned plan
+
+**A failed point is closed, not left open.** It carries an outcome line saying
+`FALLITO`, a register entry, and a commit with the usual trailer. Leaving it open
+would make it indistinguishable from a point not yet attempted, and a road
+already walked is worth more written down than a road not taken.
+
+**The failure commit must leave the repository green.** Whatever of the attempt
+survives the build and the suite is kept so the next person can see it; the rest
+is prose in the register. A red commit on the branch makes every later `git
+bisect` lie, and bisect is the tool someone will reach for precisely when
+something has gone wrong.
+
+**A failure stops the plan, not just the point.** Later points may rest on the
+failed one, and even where they do not, the human needs to know before more work
+is spent in the same direction. `/plan-explain` is told not to present the point
+after a failure as "next": the plan is not running, and offering the next point
+would invite it to resume by accident.
+
+**Abandonment is a human's word.** `/plan-next` can fail a point and can never
+abandon a plan. A procedure able to abandon its own plan when the work got hard
+is not a procedure — it is a preference with a document attached.
+
+**Open points in an abandoned plan stay open.** They record what was intended
+and not done. Closing them to tidy the archived file would erase the only
+evidence of the shape the work was going to take.
+
+**Register entries survive abandonment.** They describe code that existed and
+decisions really taken; neither becomes untrue because the plan stopped. An entry
+is wrong only if it was wrong when written — which is also why an abandoned
+development still goes through the promotion pass: it can have produced a
+decision that belongs in `SIM-DEC`.

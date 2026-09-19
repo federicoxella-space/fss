@@ -116,6 +116,19 @@ verified against the diff.
   is the one case nobody can schedule.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-19. The design defines both outcomes under separate headings;
+`/plan-next` says what to do on a failure, refuses to run on an abandoned or
+failure-stopped plan, and is forbidden to declare abandonment itself;
+`/plan-explain` refuses to present the point after a failure as next;
+`/plan-status` reports a failed point apart from the closed ones and an
+abandonment before anything else. The marker said weak; the check ran as five
+greps, so it was shallow in the sense point 13 introduces — the third
+misapplication, and the last one written before the distinction existed. Two
+rules beyond the point's statement: the failure commit must leave the tree
+green, and abandonment is a human's word. Decisions: register, section "The
+twelve gaps in the plan mechanism", point 5 — six entries. Review: not run,
+`Core: no`, exemption verified against the diff.
+
 ## 6. The threshold below which no plan is needed
 
 - **Does:** defines trivial by properties and not by size: no change in
