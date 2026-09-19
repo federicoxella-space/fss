@@ -76,9 +76,9 @@ words.
    too.
 
 5. **For each closed point, report** its number and title, the commit, the
-   register section its outcome line points to, whether it carried a
-   `Check: weak` marker and whether the outcome reported the check turning out
-   executable after all, and the review outcome recorded there — including "not run, `Core: no`", and including findings that were
+   register section its outcome line points to, which check marker it carried —
+   `Check: weak`, `Check: shallow`, or none — and whether the outcome reported
+   the marker turning out wrong, and the review outcome recorded there — including "not run, `Core: no`", and including findings that were
    raised and rejected. A rejected finding that vanishes from the summary is a
    rejection nobody can audit.
 
@@ -99,9 +99,13 @@ words.
    infer it from the count.
 
    Then say **how much of the development was proved by reading**: how many
-   closed points carried `Check: weak` against how many did not. A plan where
-   most of it did is not thereby wrong, but whoever reads the summary is
-   entitled to know it before treating "all points closed" as evidence.
+   closed points carried a marker, `weak` or `shallow`, against how many
+   carried none. Report the two separately. A plan that is mostly shallow is
+   not thereby wrong — it may be documentation, where little else is possible —
+   but whoever reads the summary is entitled to know it before treating "all
+   points closed" as evidence. A plan that is mostly `weak` is a different
+   claim: that nothing in it could be executed, which is rarely true and worth
+   doubting out loud.
 
 8. **Say if the plan is finished.** Then it is ready to be archived to
    `.claude/plans/`, and the promotion pass is due over its register entries.

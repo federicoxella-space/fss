@@ -317,6 +317,17 @@ markers.
   plan's markers by someone who did not write them.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-19. The design tabulates the two markers against their
+different remedies, requires the deeper criterion to be attempted first, and
+rules out "cannot be tested" as a second half in favour of a named use; all
+three skills distinguish them — `/plan-explain` objects when the wrong one is
+used, `/plan-next` runs a shallow check anyway, `/plan-status` counts the two
+separately. The marker on this point was `shallow` and held: four greps proved
+the text is present and none of them says the distinction is well drawn. The
+first point in either plan whose marker was right. Decisions: register,
+`D-032` — five entries. Review: not run, `Core: no`, exemption verified
+against the diff.
+
 The markers already written in this plan stay wrong. They were frozen when the
 plan was written, the register records the misclassification, and correcting
 them would be the move this whole mechanism exists to prevent, performed for the

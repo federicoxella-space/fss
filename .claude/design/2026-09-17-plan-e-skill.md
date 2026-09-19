@@ -197,6 +197,41 @@ been applied out of habit.
 executable, run it, report it in the outcome line and the register, and leave the
 criterion alone. The reviewers are told to look for exactly this.
 
+### `Check: shallow`, which is the one you usually mean
+
+Two different defects were being labelled `weak`, and separating them is not
+terminology — the remedies differ, and one of them is available today.
+
+| Marker | The check | The remedy | Who supplies it |
+|---|---|---|---|
+| `Check: weak` | cannot be executed at all | a tool that does not exist yet | someone, later |
+| `Check: shallow` | executes and proves little | a better criterion | the author, now |
+
+A grep proving that a paragraph exists is not a weak check. It runs, it passes,
+and it says nothing about whether the paragraph is any good. That is shallow, and
+calling it weak misdescribes the problem in the direction that sounds more
+rigorous: it blames the absence of a tool for a criterion the author chose.
+
+```markdown
+- **Check: shallow** — <what it does prove> A better criterion would be <what>.
+```
+
+**Try to write the deeper criterion before reaching for the marker.** That is the
+whole difference between the two: `weak` is a wait, `shallow` is an admission,
+and an admission made without attempting the alternative is a wait dressed up as
+one.
+
+Where no better criterion exists — because what matters only shows up in use —
+say that, and name the use that would show it. "Replaced by the first
+development that runs under this rule" is a real answer. "Cannot be tested" is
+not.
+
+Evidence for needing the distinction, from the plan that introduced it: ten of
+its thirteen points carried `weak`, and on inspection nearly all of them were
+shallow. The markers already written were left wrong, because the criteria were
+frozen when the plan was written and correcting them is the move this mechanism
+exists to prevent.
+
 ### `Core:` defaults to yes
 
 `Core:` decides whether the reviewers run, and it is declared before the work so

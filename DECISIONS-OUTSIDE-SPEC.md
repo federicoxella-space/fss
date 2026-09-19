@@ -745,3 +745,28 @@ the third outcome the design is missing, which is worth more than either lie.
 refusal to rewrite three commit messages: `046751f` is one of them and it is on
 the remote, so the rewrite would have been a force push over work the human has
 already fetched.
+
+### D-032 · Point 13 — `Check: shallow`
+
+**The remedies are the reason the distinction exists**, not the vocabulary.
+`weak` is a wait for a tool that does not exist; `shallow` is an admission that
+the author chose a criterion proving less than it should, and the better
+criterion is available today. Labelling the second as the first blames the
+absence of a tool for a decision.
+
+**Try the deeper criterion before reaching for the marker.** An admission made
+without attempting the alternative is a wait wearing an admission's clothes.
+
+**"Cannot be tested" is not an acceptable second half; a named use is.**
+"Replaced by the first development that runs under this rule" says when to come
+back and what will be true then. The rule has to survive the common case, which
+is documentation, where nothing mechanical will ever prove the text is any good.
+
+**A shallow check is still run.** It catches the gross failures — a paragraph
+that is not there, a file that was not written — and running it is the only way
+to discover it was shallow rather than weak.
+
+**The wrong markers in this plan were left wrong.** Ten of thirteen points
+carried `weak` and nearly all were shallow. The criteria were frozen when the
+plan was written; correcting them now would be the move the whole mechanism
+exists to prevent, performed on the point that describes the mistake.

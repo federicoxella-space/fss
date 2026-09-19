@@ -67,12 +67,15 @@ the retelling is an objection that did not happen.
      plan that still carries `Serves` fields, or a plan with no `Kind` line at
      all, was written before this rule: read it as it is and do not tidy it.
    - what will close it: the runnable check, quoted from the plan. If it carries
-     a `Check: weak` marker, report the reason and what the plan says would
-     prove it properly, and object if either half is missing — a marker with no
-     replacement authorises weakness instead of limiting it. Object too if a
-     mechanical check looks available: this is the last moment where changing
-     the point costs nothing, and the marker has already been applied out of
-     habit once in this repository;
+     a `Check: weak` or `Check: shallow` marker, report which, the reason, and
+     what the plan says would prove it properly; object if either half is
+     missing, since a marker with no replacement authorises the weakness instead
+     of limiting it. **Object if the marker is the wrong one of the two:**
+     `weak` means nothing can be executed, and if a grep or a file test would
+     run, the point is shallow and its remedy is a better criterion the author
+     could write now, not a tool that does not exist. This is the last moment
+     where changing the point costs nothing, and the marker has already been
+     misapplied three times in this repository;
    - its `Core:` declaration, and therefore whether the two reviewers run when
      it closes. `Core:` defaults to yes, so report an exemption with the reason
      the plan gave for it, and say whether that reason is checkable against a

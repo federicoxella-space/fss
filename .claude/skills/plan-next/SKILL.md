@@ -109,8 +109,15 @@ missed.
 **A `Check: weak` marker is a claim, and it is tested here.** Before accepting
 that reading is all there is, look for something mechanical: a grep, a file that
 exists or does not, a command that exits non-zero, a diff that is empty. If one
-exists, run it — the check was stronger than the plan claimed, which is a
-finding for the outcome line and the register. The criterion stays as written.
+exists, run it — the check was not weak but `shallow`, which is a finding for
+the outcome line and the register. The criterion stays as written.
+
+The two are different claims and the outcome line reports which one held:
+
+- **`Check: weak`** — nothing can be executed. Rare, and usually wrong.
+- **`Check: shallow`** — it executes and proves little. Run it anyway: a shallow
+  check still catches the gross failures, and running it is what tells you it
+  was shallow rather than weak.
 
 A point whose check reads `PLAN.md` itself is verified after step 6, on the
 state the commit will contain; verifying earlier measures a state that never
