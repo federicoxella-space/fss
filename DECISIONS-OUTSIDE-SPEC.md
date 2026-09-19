@@ -1208,3 +1208,74 @@ describes where the nine points will be built, once there is a reason to cut it.
 **What would overturn it:** a preference that `PLAN.md` never appear on `main`,
 which is defensible — `/plan-status` reads whatever `PLAN.md` it finds — and
 would mean installing the plan on the branch and leaving only the request here.
+
+---
+
+## 2026-09-20 — The reviewer's answers, recorded
+
+Every item of the request answered, `docs/` edited by the human in `0114ad2`,
+and one gap left behind that the request had not asked about.
+
+### D-052 · `SQ-004` closed by marking what it got wrong, not by tidying it
+
+The entry proposed three readings of how `P-17` and `P-01` could close. Reading
+2 — build a synthetic settlement update and measure it — **had already been
+done**: `P-63` and `P-64` sit in §16 with the note "Measured, 5 of 12 phases",
+and they are the output of exactly that benchmark. The entry did not mention
+them because it was written from §19, §18 and NFR-05 without opening §16.
+
+The entry was **not** rewritten to remove the dead option. It was marked with
+the resolution and with why it was posed short, under `D-036`'s rule that
+promoted entries are marked and kept. A specification question tidied after the
+answer teaches nothing; this one carries a lesson the citation rule does not:
+cite the line, and read the section that holds the numbers.
+
+**What would overturn it:** nothing about this case. The general rule it
+suggests — that an objection names the parameter table it checked — is worth
+having and is not adopted here, because it belongs to `SPEC-QUESTIONS.md`'s own
+rules and those are not edited in passing.
+
+### D-053 · The met precondition is recorded in the plan, the points are not touched
+
+§20 was confirmed and `SQ-004` closed, both before any point started, so point 7
+is unblocked. The plan says so in the precondition section that declared the
+block, dated, with a line stating that nothing above it was rewritten.
+
+The alternative was editing point 7 to drop its blocked clause. Rejected:
+criteria are frozen when written, and while a met precondition is not a
+criterion, the edit would be indistinguishable in the diff from one that was.
+**The block was deliberately written outside the point for this reason**, and
+taking the other path would have wasted the precaution.
+
+### D-054 · The request is marked answered, not replaced
+
+`D-039` replaces a request when the situation moved, `D-041` amends it when one
+item was answered. Here **every** item was answered and no new moment arrived:
+the next is moment two, the phase 3 gate. A replacement would have had to invent
+a moment to be written at, which the file forbids in as many words — "at those
+moments, not near them".
+
+So the request stays, marked answered in its heading, with each item struck and
+its answer beside it, and one open item added. **What would overturn it:** a
+preference that `REVIEW-REQUEST.md` hold only live requests, with answered ones
+going to git — defensible, and it would mean the file is empty between moments,
+which is information too.
+
+### D-055 · The failure path is recorded as owed and deliberately not built
+
+The reviewer's gap 8: nothing says what happens when a criterion turns out to be
+wrong **in flight**. The neighbouring cases exist — a failed check closes the
+point `FALLITO` and stops the plan, and the rule that a wrong criterion is
+reported rather than rewritten is in three skills — but the path between them is
+not written: who is told, where the wrong criterion is recorded, whether the
+plan stops.
+
+It is not built now, for a reason that is mechanical rather than a judgement
+about priority: **it is process work, process work needs a plan, and a second
+`PLAN.md` would be two plans live at once.** `D-042` says that is the first
+thing that breaks the point lookup, and the lookup was fixed eight commits ago.
+
+Recorded as item 5 of `REVIEW-REQUEST.md`, open, to be taken up when the phase 3
+plan closes. **What would overturn it:** the first point of phase 3 hitting a
+wrong criterion, in which case the gap stops being theoretical and the phase 3
+plan is the one that has to stop and say so.

@@ -47,7 +47,12 @@ trace, and only the author knows it.
 
 ---
 
-# Current request — 2026-09-20
+# Current request — 2026-09-20 — **answered, one item open**
+
+A reviewer answered every item below on 2026-09-20 and left one thing that was
+not asked for, now item 5. The request stays here rather than being replaced:
+there is no new moment. The next one is **moment two**, the phase 3 gate, and
+`/plan-status` will say so when the plan closes.
 
 Replaces the request of 2026-09-19, twice amended. Everything it asked for is
 closed but one item, carried forward below; it described moment three, and the
@@ -143,13 +148,19 @@ plan waits on it.
 
 ## What I need from you
 
-1. **Carried forward, unanswered:** a look at the three lines `7decada` changed
-   in `docs/`, the first `docs/` edit an agent has made here. One of them was not
-   in the text you approved — `D-040`.
-2. **The criteria for the rest of phase 3, before they are written into a plan.**
-   `Time/`, `State/`, `Data/`, `Chronicle/` and `Commands/` hold nothing but
-   `.gitkeep`; `Primitives/` holds six files and the test project two. The gate
-   is 100k empty ticks with `AC-02` and `AC-03` green.
+1. ~~**Carried forward, unanswered:** a look at the three lines `7decada`
+   changed in `docs/`.~~ **Approved 2026-09-20**, all three. The reviewer's
+   account is that the inconsistency was theirs — `DEC-081` was promoted without
+   its ascendants following — and that the agent found and fixed it correctly.
+   **The principle in `D-040` stands and was restated:** the fix is not that the
+   agent hold back the extra line, it is that the deposited text be complete.
+   The rule is unchanged — **the agent deposits, a human applies.**
+2. ~~**The criteria for the rest of phase 3.**~~ **Read 2026-09-20**, with two
+   findings, both recorded in the register and neither changing a criterion:
+   point 7 is the one likely to be two points wearing one number, and if it
+   swells in flight it is **split, not widened**; and the first run of the
+   reviewer protocol wants watching, **particularly that the blind reviewer does
+   not see the briefed one's output.**
 3. ~~**Whether moment one is served by a request like this one, or wants a draft
    plan attached.**~~ **Answered in practice** on 2026-09-20: you asked for the
    plan. Recorded as the precedent, not as a rule — the next moment one may want
@@ -162,3 +173,26 @@ plan waits on it.
    this request — the guess is already made, it has simply never been confirmed.
    **This one blocks point 7**, the serialiser, and nothing else in the plan;
    points 1 to 6 and 8 to 9 can run while it is open.
+
+   **Confirmed 2026-09-20**, applied to `docs/` by `0114ad2`: `netstandard2.1`,
+   C# 9, ahead-of-time supported, base class library surface limited to
+   `netstandard2.1` with no third-party packages. All four rows read `Decided`
+   and §20's closing line now reads `Confirmed 2026-09-20`. Point 7 is unblocked
+   with its criterion untouched.
+5. **Open, and not raised by this request — the failure path for a criterion.**
+   The reviewer's words: the field asked for is there and works, but nothing
+   says what happens when a criterion turns out to be wrong *in flight*. The
+   mechanism covers the neighbouring case — `/plan-next` closes a point whose
+   check fails as `FALLITO` and stops the plan, from point 5 of the twelve-gaps
+   plan — and it covers the rule — "a criterion that turns out to be wrong is
+   reported and recorded, never rewritten". **What it does not have is the path
+   between them:** who is told, where the wrong criterion is written down, and
+   whether the plan stops or the point closes failed against a criterion nobody
+   now believes.
+
+   It was gap 8 of the reviewer's own list and is still open. It cannot be
+   closed inside this plan: the points are frozen, and a second `PLAN.md` for
+   process work would be two plans live at once, which `D-042` says is the first
+   thing that breaks the point lookup. **So it waits for the phase 3 plan to
+   close, and this is the note that it is owed** — nine points all `Core: yes`
+   is the run where it will be wanted.

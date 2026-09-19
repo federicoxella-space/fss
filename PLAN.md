@@ -27,6 +27,17 @@ Two items of §19 also say they close in this phase — `P-17`, the settlement
 ceiling, and `P-01` validity — and both want measurements that empty ticks
 cannot produce. Filed as `SQ-004`, not decided here.
 
+*Resolved 2026-09-20, both of them, before any point started.* §20 is confirmed
+and its four rows read `Decided`; **point 7 is unblocked** and its criterion is
+unchanged, which is the whole reason the block was written as a precondition
+rather than into the point. `SQ-004` closed on reading 1 — `P-17` and `P-01`
+move to Phase 4 — and `NFR-05` moved with them. Both applied to `docs/` by
+`0114ad2`.
+
+*Nothing above this line was rewritten.* The points are frozen as written, and a
+precondition that has since been met is recorded here, in the section that
+declared it, rather than by editing the point that waited on it.
+
 ## 1. The integer calendar
 
 - **Does:** `Time/` gets the tick-to-date arithmetic and nothing else: year,

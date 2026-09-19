@@ -221,3 +221,24 @@ Three readings, none of them ours to pick:
 Filed rather than picked because the answer sets what phase 3's exit actually
 proves. The plan records the one measurement empty ticks *can* give — ms per
 empty tick — and does not call it either of these.
+
+**Resolution chosen 2026-09-20: reading 1, and the entry was posed short.**
+`P-63` and `P-64` were already in §16 — cost per settlement update at 9 and at
+27 cohorts, 3.3 µs and 15.8 µs, "Measured, 5 of 12 phases" — and the entry above
+does not mention them, because it was written from §19, §18 and NFR-05 without
+reading §16. Reading 2, a synthetic update, is the benchmark those two figures
+came from: already built, already thrown away, and proposing it was proposing to
+pay twice for an answer the specification had.
+
+**Applied to `docs/` by `0114ad2`**, the human's edit: `P-17` and `P-01` move to
+Phase 4, each row now saying why phase 3 cannot take the measurement and what
+the partial figures already cover; NFR-05's "*validate in Phase 3*" becomes
+"*validate in Phase 4, when a settlement update exists to measure*". Phase 3's
+gate is untouched, and ms per empty tick stays what the plan says it is:
+neither of the two.
+
+**Marked, not removed**, under `D-036`. What this entry cost, and it is the
+half worth keeping: an objection raised against four sections of a document
+whose parameter table was never opened. The citation rule at the top of this
+file says the document, the identifier and the line; it does not say *read the
+neighbouring sections first*, and this entry is the argument that it should.
