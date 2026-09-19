@@ -47,90 +47,118 @@ trace, and only the author knows it.
 
 ---
 
-# Current request — 2026-09-19, evening
+# Current request — 2026-09-20
 
-Replaces the request of the same day, which was answered within hours: both its
-specification questions are closed, its four promotion candidates are in
-`SIM-DEC`, the branch it described is merged and its commits are pushed. Kept in
-git; nothing in it is true of the repository any more.
+Replaces the request of 2026-09-19, twice amended. Everything it asked for is
+closed but one item, carried forward below; it described moment three, and the
+situation has moved to moment one. Kept in git.
 
-**Moment:** three. The specification answered, and answering it opened one more
-question. Written also as the handoff to whatever session comes next, since this
-one built the mechanism and holds context no file does.
+**Moment:** one — with a caveat this request has to state, because it is the
+first time that moment has come up. **No plan exists to read.** `PLAN.md` is
+absent, the lookup plan closed and was archived at `4ed3a94`, and the next plan
+is the rest of phase 3. The argument for interrupting here is that a plan is
+short against a branch, and that argument assumes a plan on the page. There is
+none, so what is offered instead is the criteria before they are written down.
+If you would rather see a draft plan first, this request was written one step
+early — see item 3 below.
 
-**Branch:** `main`, pushed, CI green. Amended twice on 2026-09-20, as `SQ-003`
-closed and the lookup defect was fixed; the rest of the request still stands. No branches outstanding: the
-three that existed are merged and deleted, locally and on the remote.
+**Amended the same day:** you asked for the plan, which answers item 3 in
+practice. `PLAN.md` now holds nine points for the rest of phase 3, and the
+criteria this request offered for review are on the page rather than in
+prose. The rest of the request stands, and one item was added to it — the §20
+confirmation below, which the plan cannot take for itself.
 
-**What changed, in one line:** the specification moved — `DEC-081` to `DEC-084`
-written, A-11 split into A-11 and A-11b, FR-X-02 given the subject form and the
-tick clarification — and the repository was reconciled to it.
+**Branch:** `main`. The code is unchanged since `4ed3a94`, which is pushed and
+CI green; this request, `PLAN.md` and `SQ-004` sit in the commit above it, which
+is not pushed. No branches outstanding — `fase-3-kernel`, which the plan names,
+is not cut until the blocking item below is answered.
+
+**What changed, in one line:** nothing was built — the lookup plan closed and was
+archived, and the repository has been idle since, which is why this is moment
+one and not moment three.
 
 ## Decisions taken outside the specification
 
-`D-035` to `D-037` in `DECISIONS-OUTSIDE-SPEC.md`, all from the reconciliation:
+`D-038` to `D-043`. Of these `D-040` and `D-043` were named in the amendments to
+the last request; `D-038`, `D-039`, `D-041` and `D-042` have never been in front
+of you.
 
-- `D-035` — both questions closed, neither the way it was posed. `SQ-001`'s
-  answer carried a semantics the question had not thought to ask: the tick
-  coordinate is the one at which a trajectory is **generated**, not the one
-  being observed, without which FR-X-03 does not hold.
-- `D-036` — promoted entries are marked and kept, not removed. The pass empties
-  the queue, never the record.
-- `D-037` — why `SQ-003` was filed rather than read charitably.
-
-Four earlier entries are now marked with what they became: `D-001` → `DEC-081`,
-`D-002` → `DEC-082`, `D-007` → `DEC-083`, `D-006` → `DEC-084`. `D-004` is marked
-superseded: it closed through the other channel, when A-11 split.
+- `D-038` — `SQ-003` decided, and the `docs/` edit left to a human.
+- `D-039` and `D-041` — when a request is replaced and when it is amended. The
+  pair is the rule this request has just applied to itself.
+- `D-040` — applying `SQ-003` overran the deposited text by one line.
+- `D-042` — the point lookup is bounded by the plan's commit range rather than by
+  a new trailer. It rests on plans being sequential, which nothing enforces.
+- `D-043` — a check that printed a verdict without having run. Prose inside a
+  register entry passes through no check at all.
 
 ## Open questions about the specification
 
-**None.** `SQ-003` closed on 2026-09-20: resolution A was applied to `docs/` on
-your instruction, so NFR-03, DEC-002 and the World note in `SIM-STATE` carry the
-subject form and nothing in the specification states the entity-only form any
-more.
+**`SQ-004`, non-blocking.** Raised the same day, writing the plan: §19 says
+`P-17` and `P-01` close in phase 3, and both want the cost of a settlement
+update, which a phase with no domain logic and a gate of empty ticks cannot
+measure. Three readings are set out in the entry; none is picked. Nothing in the
+plan waits on it.
 
-One thing came out of applying it, recorded as `D-040`: the entry had claimed
-"nothing else in `docs/` needs to move", and that was wrong — `SIM-STATE:26`
-carried the entity form too. The same substitution was applied there, one line
-beyond what had been deposited, because the inconsistency would have been
-created by the edit itself. The Rationale of DEC-002 was deliberately left
-alone. **Worth your eye**, since it is the first `docs/` edit made by an agent
-in this repository.
+`SQ-003` closed on 2026-09-20 and was applied to `docs/` by `7decada`.
 
 ## What was not verified
 
-Unchanged from the last request except where noted, because nothing since has
-tested any of it.
-
-- **The review protocol has never run.** No point in three plans declared
-  `Core: yes`. The two reviewers, the read-only agent type, the briefed-and-blind
-  split — the part of this with the most moving parts still has no evidence
-  behind it. Its first real test is the first point of phase 3's remaining work,
-  which is all `core/Runtime/` and therefore all `Core: yes`.
-- **Almost every check was satisfied by reading.** Of twenty-three closed points
-  across three plans, two had a fully mechanical check. Three markers claimed
-  `weak` and turned out merely shallow, which produced the `Check: shallow`
-  distinction now in the design.
-- **The skills have been run by their author, in one session.** `/plan-status`
-  was dispatched once as a read-only agent and found three real defects, which
-  is evidence the dispatch works; but a session holds the copy of a skill it
-  loaded, not the file on disk, and these were edited repeatedly after loading.
-  **A fresh session is the only thing that proves the versions that ship.**
-- ~~One defect is known and unfixed: the `Plan-point:` lookup.~~ **Fixed
-  2026-09-20**, in a one-point plan you approved. The lookup is bounded by the
-  plan's commit range and was verified across all three archived plans: 21
-  closed points, one commit each. The check's first version passed vacuously,
-  which is recorded as `D-043` and is the more useful half of that point.
-- **`.claude/plans/` holds three archived plans that nobody but their author has
-  read.** They are the record of what was intended; whether they are legible to
-  someone who was not there is untested.
+- **The review protocol has never run.** Unchanged, and now imminent: no point in
+  four plans declared `Core: yes`, and every point of the next plan is in
+  `core/Runtime/` and therefore `Core: yes`. Two reviewers, briefed and blind, a
+  read-only agent type — the part of this with the most moving parts, still with
+  nothing behind it.
+- **Three sources give three different counts of the same thing.** The last
+  request said twenty-three closed points across three plans; the lookup point's
+  outcome says twenty-one; counting `*Esito:*` lines today gives twenty in the
+  three plans archived then, and twenty-one including the lookup's own. The
+  likely reading is that the lookup counted its own point, which was archived in
+  the same commit — but that is a guess, and it is exactly the kind of claim
+  `D-043` says enters a register unchecked. Nothing depends on the number. It is
+  reported, not picked.
+- **Of the twenty-one closed points, thirteen carried a marker** — ten `weak`,
+  three `shallow` — and eight carried none. The eight are not eight mechanical
+  checks: five predate the convention, which the first plan was written before;
+  two are in the twelve-gaps plan; one is the lookup point, the only point that
+  declared no marker with the convention available and a check that runs.
+- **`/plan-status` has now been run by a fresh session** — this one, loading the
+  file from disk and dispatching the read-only agent. That is the first evidence
+  for the version that ships rather than the version its author held in memory.
+  `/plan-next` and `/plan-explain` still have none.
+- **Four archived plans that nobody but their author has read.** Whether they are
+  legible to someone who was not there is untested, and the phase-3 plan is the
+  first that a different session will have to execute.
+- ~~**The phase-3 criteria do not exist yet.**~~ **Attempted 2026-09-20.** The
+  gate does decompose into points that cite `docs/` — nine of them — and the
+  attempt turned up two things reading had not: the §20 confirmation, which is
+  now item 4 below, and `SQ-004`. What remains unverified is the decomposition
+  itself: every point's `Serves` was read out of `docs/` by the same session
+  that wrote the point, so a citation that does not support what the point
+  claims would not have been noticed here. Step 1 of `/plan-next` opens each one
+  independently, and that is the first check on it.
+- **No point of this plan has been costed.** Nine points is a guess at the size
+  of the rest of phase 3, not a measurement, and the serialiser is the one most
+  likely to be two points wearing one number.
 
 ## What I need from you
 
-1. A look at the three lines changed in `docs/`, which is the first time an
-   agent has edited that folder here. One of them was not in the text you
-   approved; the reason is above and in `D-040`.
-2. The next real decision: the plan for the rest of phase 3. `Time/`, `State/`,
-   `Data/`, `Chronicle/`, `Commands/` are empty, and the gate is 100k empty
-   ticks with `AC-02` and `AC-03` green. That conversation is moment one, and it
-   is where a request is owed next.
+1. **Carried forward, unanswered:** a look at the three lines `7decada` changed
+   in `docs/`, the first `docs/` edit an agent has made here. One of them was not
+   in the text you approved — `D-040`.
+2. **The criteria for the rest of phase 3, before they are written into a plan.**
+   `Time/`, `State/`, `Data/`, `Chronicle/` and `Commands/` hold nothing but
+   `.gitkeep`; `Primitives/` holds six files and the test project two. The gate
+   is 100k empty ticks with `AC-02` and `AC-03` green.
+3. ~~**Whether moment one is served by a request like this one, or wants a draft
+   plan attached.**~~ **Answered in practice** on 2026-09-20: you asked for the
+   plan. Recorded as the precedent, not as a rule — the next moment one may want
+   the other shape, and if so it should say why.
+4. **The confirmation `SIM-REQ` §20 asks for, and asks for by name.** Its last
+   line is "Confirm before Phase 3. A wrong guess costs a rewrite of the
+   serialiser," and five of its rows still read `Proposed`: target framework,
+   maximum language level, ahead-of-time support, allowed base class library
+   surface. The code has been built on `netstandard2.1` and C# 9 since before
+   this request — the guess is already made, it has simply never been confirmed.
+   **This one blocks point 7**, the serialiser, and nothing else in the plan;
+   points 1 to 6 and 8 to 9 can run while it is open.

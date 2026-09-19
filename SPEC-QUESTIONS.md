@@ -181,3 +181,43 @@ The **Rationale** of DEC-002 was left alone, deliberately. "Any entity's random
 draw at any past tick can be recomputed directly" is narrower than the decision
 above it and still true; narrowing is not falsehood, and rewriting a rationale
 that was not part of the agreed change would be the edit creeping.
+
+---
+
+### SQ-004 — two phase-3 open items need a measurement phase 3 cannot take
+
+**Raised:** 2026-09-20, writing the plan for the rest of phase 3.
+**Cites:** `docs/SIM-REQ.md:756` §19, rows `P-17` and `P-01`;
+`docs/SIM-REQ.md:748` §18, the phase 3 row; `AGENTS.md`, "Phase 3 contains no
+domain logic".
+**Blocks:** no. The plan's nine points stand either way; only the two items do
+not close.
+
+§19 says both close in phase 3, and gives the procedure:
+
+> | P-17, settlement ceiling | Phase 3 | Measure per-settlement update cost, divide the budget by it |
+> | P-01 validity | Phase 3 | Confirm the 5 µs and 10 µs per-entity estimates the budget rests on |
+
+Both measure the cost of updating a settlement. Phase 3's own gate is **100k
+empty ticks**, and a settlement update in phase 3 would be domain logic, which
+the phase excludes and `AGENTS.md` says not to reach forward for. An empty tick
+measures the scheduler and nothing under it, so neither number can be taken
+where §19 puts it.
+
+NFR-05 carries the same estimate with the same instruction — "*(estimate —
+validate in Phase 3)*" — and has the same problem.
+
+Three readings, none of them ours to pick:
+
+1. **The items move to phase 4**, where the first subsystem gives a real update
+   to time. The phase 3 gate stays as it is.
+2. **Phase 3 builds a synthetic update** of declared cost — a stand-in that
+   touches the arrays the way a real one will — and the measurement is of the
+   harness, not of the economy. Cheap, and its number means only what the
+   stand-in resembles.
+3. **The estimates are confirmed on paper** from the array widths in
+   `SIM-STATE`, which is arithmetic rather than measurement, and says so.
+
+Filed rather than picked because the answer sets what phase 3's exit actually
+proves. The plan records the one measurement empty ticks *can* give — ms per
+empty tick — and does not call it either of these.

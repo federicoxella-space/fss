@@ -1055,3 +1055,156 @@ to the check itself.
 
 The register's own claims are the next place this bites, and `D-040` said so two
 commits ago: prose inside an entry passes through no check at all.
+
+---
+
+## 2026-09-20 — The moment-one request, written without a plan
+
+No plan. `REVIEW-REQUEST.md` rewritten on the human's instruction, after
+`/plan-status` reported a request owed before the next plan starts.
+
+### D-044 · Replaced, not amended — and the rule that decided it
+
+`D-039` and `D-041` between them say when each applies: **replaced** when the
+situation the request describes has moved, **amended** when one of its items is
+answered and the rest still stands. Here the situation moved — the request
+described moment three, and the moment is now one — so it was replaced whole.
+
+One item of the old request survived the replacement and was carried forward
+verbatim in substance: the look at the three `docs/` lines of `7decada`. It was
+never answered, and an unanswered item does not close because the request around
+it did. Replacing a request is not a way of retiring what it asked for.
+
+### D-045 · Moment one was served without a plan to read, and says so
+
+The file's own argument for moment one is that "the plan is short — a few
+hundred words against a branch", which presupposes a plan on the page. There is
+none: `PLAN.md` is absent and the phase-3 plan has not been drafted. Two
+readings were available.
+
+- Draft the plan first, then request a review of it. This matches the argument
+  but inverts the moment: a wrong criterion would then be found in a document
+  already written, which is cheaper than a branch but dearer than a
+  conversation.
+- Request the review of the **criteria** before they are written down. Cheapest,
+  and matches `AGENTS.md` — "before a plan starts, where a wrong criterion costs
+  one conversation rather than every point built on it".
+
+**The second was taken, and the ambiguity was put in the request itself** as its
+third ask, rather than resolved quietly here. The mechanism will meet moment one
+again; which of the two shapes it wants is a question about the mechanism, and
+that belongs to the human who owns it. What would overturn this: an answer
+saying moment one wants a draft attached, in which case this request was written
+one step early and the next one waits for a plan.
+
+### D-046 · Three counts of the closed points, reported rather than reconciled
+
+The last request said twenty-three closed points, the lookup point's outcome
+says twenty-one, and counting `*Esito:*` lines today gives twenty across the
+three plans archived at that moment. The plausible reading — the lookup counted
+its own point, archived in the same commit — was **not** written down as the
+answer, because it is a guess, and `D-043` is two entries above about exactly
+that: a claim that enters the record because it sounds right.
+
+Nothing depends on the number, which is why this is the right place to hold the
+line. A discrepancy nobody needs is the cheapest one to leave standing, and
+reconciling it by assertion would teach the register that assertion is how
+discrepancies get closed.
+
+---
+
+## 2026-09-20 — The plan for the rest of phase 3
+
+Written on instruction, the same day the moment-one request went up. No code.
+
+### D-047 · Where phase 3 stops, decided three times
+
+`SIM-REQ` §18 names phase 3's content in five words — "scheduler, RNG,
+serialisation, chronicle, CLI runner" — and each of the last three reaches into
+something the phase excludes. Three lines were drawn, all of them in the plan
+rather than here, so that the reviewer sees the exclusion beside the point that
+makes it.
+
+- **Chronicle: structure and append, no propagation.** FR-I-01 and FR-I-04 are
+  buildable with no domain; FR-I-02, FR-I-03 and FR-I-05 need traffic, retelling
+  and neighbours, which are phase 4. The point carries `Check: shallow` for
+  exactly this reason — nothing emits an entry yet, so the shape is testable and
+  the content is not.
+- **NFR-12: the runner runs ticks and dumps hashes; sweeps and CSV metric series
+  wait.** The requirement lists four capabilities in one sentence and phase 6 is
+  where the metrics exist. Building a CSV writer for columns nothing produces is
+  scaffolding.
+- **`WorldState` holds the World row and nothing else.** Settlements and cohorts
+  are rows of `SIM-STATE` that phase 3 would have to invent behaviour for.
+
+**What would overturn this:** a reading of §18 under which "chronicle" means the
+propagation model, in which case the phase gate is unreachable without phase 4
+and that is a `SPEC-QUESTIONS` entry, not a plan revision.
+
+### D-048 · Point 7 declared blocked rather than deferred or built anyway
+
+§20 ends "Confirm before Phase 3. A wrong guess costs a rewrite of the
+serialiser," and five of its rows read `Proposed`. Three options.
+
+Build the serialiser on the current guess and hope — which is what has been
+happening silently since the first commit, the code being on `netstandard2.1`
+and C# 9 already. Move the point out of this plan, which hides a phase-3
+deliverable behind a plan boundary. Or declare it blocked in the plan and put
+the confirmation in the request.
+
+**The third.** The sentence in §20 is unusually specific about who pays and how
+much, and a plan that quietly built past it would be deciding a question the
+specification explicitly reserved. The point also states its own failure mode:
+if the confirmation contradicts the guess, the point is **reported failed and
+rewritten, not amended** — criteria are frozen, and a serialiser rewrite is what
+§20 says the wrong guess costs.
+
+Everything else in the plan was checked against the block: points 1–6 and 8–9
+touch no serialised format, so the block costs no ordering.
+
+### D-049 · Tests are named for invariants and requirements, not only for AC numbers
+
+`AGENTS.md` says tests carry the number of what they verify and gives acceptance
+criteria as the list. Four points of this plan verify things with no AC number:
+`A-13` is an invariant of `SIM-STATE`, `FR-T-05a`, `NFR-10` and `FR-A-01` are
+requirements. Their tests are named `A13_`, `FRT05a_`, `NFR10_`, `FRA01_`.
+
+The rule's actual content is that **a test names what it verifies and verifies
+something named**, which the identifier prefix satisfies whichever document the
+identifier lives in. The alternative — reserving the convention for AC numbers —
+would leave the majority of phase 3 with names that say nothing, since the phase
+has two acceptance criteria and nine points.
+
+**What would overturn it:** a preference that only `AC-` tests carry prefixes,
+which would want the other names chosen deliberately rather than left to
+whoever writes them.
+
+### D-050 · Two points exempt from the reviewers, on a diff-checkable line
+
+Points 8 and 9 declare `Core: no`. Point 8 touches `harness/` only, point 9 adds
+a test file and a workflow step; both state the command that falsifies the claim
+— `git diff --name-only HEAD -- core/` and the same over `core/Runtime/`. That
+is the form `D-002` of the twelve-gaps plan asked for: an exemption a diff can
+contradict, not a judgement about size or risk.
+
+Worth noting against the standing entry in `REVIEW-REQUEST.md`: seven of the
+nine points are `Core: yes`, so **the review protocol finally runs here**, on
+point 1, having had no exercise in four plans. If it is broken, point 1 is where
+that is found, which is the cheapest point in the plan for it to happen on.
+
+### D-051 · The plan is installed on `main`, and `fase-3-kernel` is not cut
+
+`66a908d` installed the previous plan on the development branch, and this one
+goes on `main` instead. The reason is what the commit contains: a plan, a
+specification question and a request that asks a human to answer before the work
+starts. A request nobody can see does not interrupt, and a branch would make
+answering it cost a merge first.
+
+It follows `D-042`, which put the lookup point on `main` for the same shape of
+reason — no code, and a human about to open a clean session. Here there is not
+even a point closed: the plan's own `Branch: fase-3-kernel` stays true and
+describes where the nine points will be built, once there is a reason to cut it.
+
+**What would overturn it:** a preference that `PLAN.md` never appear on `main`,
+which is defensible — `/plan-status` reads whatever `PLAN.md` it finds — and
+would mean installing the plan on the branch and leaving only the request here.
