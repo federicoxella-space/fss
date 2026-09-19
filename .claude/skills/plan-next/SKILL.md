@@ -25,9 +25,8 @@ Read `PLAN.md` at the repository root.
   still open after it: refuse. The plan stopped at that failure and has not been
   restarted. Report which point failed and what it says.
 - **Every point closed:** do not invent more. Say the plan is finished, check
-  the exit condition, and say that the branch is ready to close and `PLAN.md` to
-  be deleted in the last commit before the merge, once the pull request is
-  approved.
+  the exit condition, and say that the plan is ready to be archived to
+  `.claude/plans/` and the promotion pass run over its register entries.
 - **Otherwise:** the point to run is the first `## <n>.` section with no
   `*Esito:*` line. Points run in plan order, including a point added later than
   the ones after it — running them out of order contradicts the rule all three

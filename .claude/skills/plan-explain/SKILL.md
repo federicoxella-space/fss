@@ -25,8 +25,8 @@ work stands must never be able to move it.
    whose work looks done but carries no outcome line is open.
 
 4. **If every point has one**, say the plan is finished: the branch is ready to
-   close, and `PLAN.md` is archived once the pull request is approved. Then
-   stop.
+   close, `PLAN.md` is archived to `.claude/plans/`, and the promotion pass is
+   due over its register entries. Then stop.
 
    **If the plan header carries an `**Abandoned:**` declaration**, say so with
    its reason and stop. Do not present the next open point: it was not reached,

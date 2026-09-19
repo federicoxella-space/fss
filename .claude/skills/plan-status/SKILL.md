@@ -14,18 +14,19 @@ Its subject is what has already happened. For what comes next in detail, that is
 ## Procedure
 
 1. Read `PLAN.md` at the repository root. **If it is absent**, say so: either no
-   development is in progress, or the last one closed and its plan was deleted
-   before the merge, which is what closing a branch does. `git log` holds the
-   history either way. Stop.
+   development is in progress, or the last one closed and its plan was archived
+   to `.claude/plans/`, which is what closing a plan does. Look there and in
+   `git log` for the history. Stop.
 
 2. Read the header: the exit condition, the phase, the branch, `Kind` if the
    plan declares one, and under `Kind: simulator` the `Satisfies:` list. Report
    that list with the summary: it is the development's claim about which
    acceptance criteria it moves, and a summary of closed points that omits it
-   says what was done without saying what it was for. An `**Abandoned:**` declaration is reported first, with
-   its date and reason — everything below it is the record of a development
-   that stopped, and reading the summary without knowing that would mislead on
-   every line.
+   says what was done without saying what it was for.
+
+   An `**Abandoned:**` declaration is reported **first**, with its date and
+   reason. Everything below it is the record of a development that stopped, and
+   a summary read without knowing that misleads on every line.
 
 3. **Split the points.** A point is closed when it carries an `*Esito:*` line,
    and open otherwise. Nothing else counts — not how finished the work looks,
@@ -83,9 +84,8 @@ Its subject is what has already happened. For what comes next in detail, that is
    most of it did is not thereby wrong, but whoever reads the summary is
    entitled to know it before treating "all points closed" as evidence.
 
-8. **Say if the plan is finished.** Then the branch is ready to close, and
-   `PLAN.md` is deleted in the last commit before the merge, once the pull
-   request is approved.
+8. **Say if the plan is finished.** Then it is ready to be archived to
+   `.claude/plans/`, and the promotion pass is due over its register entries.
 
 9. Stop. Do not start or close anything.
 

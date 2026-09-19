@@ -212,6 +212,15 @@ run, `Core: no`, exemption verified against the diff.
   identifiers.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-19. The design states archival, its trigger and its two
+reasons, plus the identifier scheme; `.claude/plans/` holds the previous plan;
+all 26 register entries carry `D-001` to `D-026`, assigned by one `awk` pass.
+The three skills no longer speak of deletion. This point's check was fully
+mechanical — three counts and a listing — and carried no weak marker, the first
+in this plan. Decisions: register, `D-027` — six entries, including that the
+register's entries are not uniform in what they hold and were left that way.
+Review: not run, `Core: no`, exemption verified against the diff.
+
 ## 10. The promotion ritual
 
 - **Does:** at archival, the architectural entries of the register are listed as

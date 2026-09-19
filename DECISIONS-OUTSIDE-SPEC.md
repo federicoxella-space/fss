@@ -17,7 +17,7 @@ found to contradict it is a defect in the entry, not in the document.
 Commit `3f97af8`, branch `hash64-soggetto-e-range`. Three fixes in
 `core/Runtime/Primitives/`, closing the primitives of Phase 3.
 
-### 1. The draw subject is a 64-bit key, not an entity
+### D-001 · 1. The draw subject is a 64-bit key, not an entity
 
 `Hash64.Of` takes `ulong subject`; the `EntityId` overload is the same function
 with the handle packed into it.
@@ -28,7 +28,7 @@ index)`, and a link is a row in the edge arrays with no generation. Neither
 document says how the two key spaces coexist. Rejected: a second hash function
 for non-entity draws, which would need every property proved twice.
 
-### 2. A non-entity row key keeps its high half at zero
+### D-002 · 2. A non-entity row key keeps its high half at zero
 
 `Subject(int row)` returns `(uint)row`, so the generation half stays zero — the
 value no live `EntityId` carries. This makes a row key and a live entity key
@@ -45,13 +45,13 @@ the other. So each kind gets its own channel. Recorded in the `HashChannel`
 comment alongside the rest of the channel contract; nothing in the build
 enforces it.
 
-### 4. `Range` takes a count, not an interval
+### D-003 · 4. `Range` takes a count, not an interval
 
 `Range(draw, count)` returns `0 .. count - 1`; callers wanting `min .. max`
 write `min + Range(draw, max - min + 1)`. No specification input. Rejected:
 overloads for inclusive and exclusive bounds, as unrequested surface.
 
-### 5. A-11 is checked in debug builds only, and by `checked` rather than an assert
+### D-004 · 5. A-11 is checked in debug builds only, and by `checked` rather than an assert
 
 SIM-STATE lists A-11 among the invariants "asserted every tick" and includes "no
 accumulator has overflowed". The overflow guard added to the `long` overload of
@@ -66,7 +66,7 @@ arithmetic would wrap, with no sign cases to hand-write.
 Overturned by the A-11 assert pass of Phase 3, which may want this always on, or
 want it at state level instead of per call.
 
-### 7. Process choices
+### D-005 · 7. Process choices
 
 - One commit rather than two. Splitting DEC-002 from A-11 would have to split
   `PrimitivesTests.cs`, leaving an intermediate commit whose A-11 test fails in
@@ -83,7 +83,7 @@ gone: the first rested on a premise the review showed to be false, the second
 described a gap that no longer exists. Entries 1, 2, 4, 5 and 7 keep their
 numbers, so the series above now skips 3 and 6.
 
-### 1. `Hash64.Range` is a plain modulo
+### D-006 · 1. `Hash64.Range` is a plain modulo
 
 The reduction is `(int)(draw % (ulong)count)`. Rejection and re-mixing are gone,
 and with them the reading of DEC-002 that entry 3 argued for: nothing here
@@ -96,14 +96,14 @@ and re-mixing could not have removed it anyway, since `Mix` is a bijection and
 moves the discarded set onto another set of the same size rather than spreading
 it. The magnitude is documented at `Range`, where the next reader will ask.
 
-### 2. One channel per kind of non-entity subject
+### D-007 · 2. One channel per kind of non-entity subject
 
 Written into the `HashChannel` comment, next to the rest of the channel
 contract, since that is what a caller reads when choosing one. Entity keys
 separate themselves by generation; non-entity keys have nothing to separate them
 but the channel. Unenforced by the build, like the rest of that contract.
 
-### 3. CI runs the debug build
+### D-008 · 3. CI runs the debug build
 
 A `dotnet test -c Debug` step, so the A-11 guard and
 `A11_ApplyRefusesAProductThatLeaves64Bits` run somewhere other than a
@@ -111,7 +111,7 @@ developer's machine. Added as a step in the existing job rather than a matrix
 over configurations: a matrix would also fan out the wealth-band steps, which
 are release-configuration checks and have their own reason to run twice.
 
-### 4. The histogram tolerance was left alone
+### D-009 · 4. The histogram tolerance was left alone
 
 `NFR03_RangeCoversTheIntervalEvenly` keeps its 5% band. Review allowed widening
 it if it had been sized around exact uniformity; it was not. 5% is about 5.4
@@ -120,7 +120,7 @@ modulo's own deviation is of order 2^-61. Widening would have loosened a bound
 that has nothing to do with the claim that changed. The reasoning is now in the
 test.
 
-### 5. Left as found
+### D-010 · 5. Left as found
 
 The remark on `Hash64.Of` still phrases channel separation as the sensible
 answer rather than as the rule it now is. `HashChannel` states the rule; further
@@ -134,7 +134,7 @@ Branch `plan-e-skill`, planned in `PLAN.md`, designed in
 `.claude/design/2026-09-17-plan-e-skill.md`. Entries name the plan point they
 belong to.
 
-### Whole plan — `docs/` is silent, and stays silent
+### D-011 · Whole plan — `docs/` is silent, and stays silent
 
 Every point of this plan declares `docs/` silent, so the declaration is made once
 here instead of five times in the plan. `SIM-REQ` §18 plans the simulator; it
@@ -142,7 +142,7 @@ does not plan how the simulator gets built, and it should not start. Process wor
 that wrote itself into the specification would be indistinguishable, a year from
 now, from the design the specification exists to hold.
 
-### Point 1 — the rule in `AGENTS.md`
+### D-012 · Point 1 — the rule in `AGENTS.md`
 
 **An agent edited the standing instructions.** The rule given on 2026-09-16 is
 that permanent instructions are changed by a human. Permission for this one was
@@ -157,7 +157,7 @@ them this way means a change to the procedure does not touch the standing
 instructions, which are the part a human owns. The cost is that the rule and its
 procedure can drift apart, and nothing but reading catches it.
 
-### Point 2 — `/plan-explain`
+### D-013 · Point 2 — `/plan-explain`
 
 **A point is open until it carries an outcome line, and nothing else counts.**
 The skill finds the next point by looking for the first one without `*Esito:*`,
@@ -184,7 +184,7 @@ itself, so running it before the outcome line was written would have measured a
 state that never ships. For a point whose check reads the plan, verification runs
 last, on the state the commit will contain.
 
-### Point 5, added mid-plan — a plan may gain points, with approval
+### D-014 · Point 5, added mid-plan — a plan may gain points, with approval
 
 The first run of `/plan-explain` in a fresh session showed the defect it was
 built to show, one level up from where it was looking: every point of this plan
@@ -210,7 +210,7 @@ The first finding of the review protocol therefore came from a read-only skill o
 a plan, not from a reviewer on a diff. Worth noting for the same reason the
 protocol exists: the cheapest place to find a defect is upstream of the work.
 
-### Point 3 — `/plan-status`
+### D-015 · Point 3 — `/plan-status`
 
 **Commits are resolved by the `Plan-point:` trailer, not by heuristics.** The
 first run of `/plan-explain` objected that this point's criterion asks for
@@ -252,7 +252,7 @@ The defect was found by executing the check rather than by reading it, on a poin
 whose check needed no build and no test. Recorded as evidence for a rule that
 already exists and is easy to skip on a documentation point: run the check.
 
-### Point 4 — `/plan-next` and the reviewer briefs
+### D-016 · Point 4 — `/plan-next` and the reviewer briefs
 
 **"Do not edit the code" is enforced by the reviewer's tools, not by its
 compliance.** Both reviewers are dispatched as a read-only agent type — `Plan`,
@@ -293,7 +293,7 @@ commit before the merge, while the plan is still useful to whoever reviews the
 branch; adding a point needs a human's approval, which is not a step in a
 procedure.
 
-### Point 5 — `Kind` in the header, `Serves` made conditional
+### D-017 · Point 5 — `Kind` in the header, `Serves` made conditional
 
 **A missing `Serves` under `Kind: simulator` stops the work rather than being
 filled in.** The field is mandatory there, so its absence is a defect in a frozen
@@ -318,7 +318,7 @@ suggests the specification was consulted and had no opinion; in fact the
 specification has no jurisdiction. The second reading invites someone, later, to
 go and add one.
 
-### Closing the plan — what the exit condition could and could not verify
+### D-018 · Closing the plan — what the exit condition could and could not verify
 
 Three of its four clauses were checked directly: the plan, the three skills and
 the rule in `AGENTS.md` exist and agree with the design.
@@ -350,7 +350,7 @@ Branch `plan-e-skill`, continuing after the plan of the same name closed. Planne
 in `PLAN.md`; the review that produced the twelve points was human, on the
 mechanism the previous section built.
 
-### Point 1 — the criterion to the reviewers, and citations opened
+### D-019 · Point 1 — the criterion to the reviewers, and citations opened
 
 **The criterion is pasted, not summarised.** Both reviewers receive the point's
 frozen text verbatim from `PLAN.md` — statement, citations, check, and any
@@ -375,7 +375,7 @@ in a conversation, which is the gap point 8 exists to close.
 citation check had nothing to open. Consistent with the declared weak check, and
 worth stating rather than leaving a reader to assume the rule was tried.
 
-### Point 2 — `Core:` defaults to yes
+### D-020 · Point 2 — `Core:` defaults to yes
 
 **A missing reason is resolved as `yes`, and the plan is not stopped for it.**
 Point 1 established that a defect in a frozen plan stops the work; this is the
@@ -411,7 +411,7 @@ one point earlier — a check marked weak that is properly verifiable — and it
 turned up on this author's own work, unprompted by any reviewer, because the
 brief had been written the day before.
 
-### Point 3 — re-reading the plan before the outcome line
+### D-021 · Point 3 — re-reading the plan before the outcome line
 
 **The re-read diagnoses; the anchored edit protects.** Both appends are made with
 an exact-match edit against text just read, not a rewrite of the file. An edit
@@ -440,7 +440,7 @@ Nothing here was found by a reviewer. The whole point came from a human noticing
 that a document read at step 1 and written at step 6 has a gap in the middle
 wide enough to lose an edit in.
 
-### Point 4 — `Check: weak`, declared early and with both halves
+### D-022 · Point 4 — `Check: weak`, declared early and with both halves
 
 **Both halves are required, and the second is the one that does the work.**
 "This cannot be proved today" and "this cannot be proved" are different
@@ -471,7 +471,7 @@ and a frozen point is not widened by its author mid-flight. Recorded here, and
 raised with the human as a candidate for its own point — which it became, as
 point 13.
 
-### Point 5 — a failed point and an abandoned plan
+### D-023 · Point 5 — a failed point and an abandoned plan
 
 **A failed point is closed, not left open.** It carries an outcome line saying
 `FALLITO`, a register entry, and a commit with the usual trailer. Leaving it open
@@ -504,7 +504,7 @@ is wrong only if it was wrong when written — which is also why an abandoned
 development still goes through the promotion pass: it can have produced a
 decision that belongs in `SIM-DEC`.
 
-### Point 6 — the threshold below which no plan is needed
+### D-024 · Point 6 — the threshold below which no plan is needed
 
 **The permission to edit `AGENTS.md` was read from the approved plan.** The
 standing rule is that permanent instructions are changed by a human and an agent
@@ -536,7 +536,7 @@ right place. That only comes from the first argument about whether something was
 trivial, which is what the criterion said. The marker stays as written: point 13,
 which supplies the right word, is not closed yet.
 
-### Point 7 — `Satisfies` in simulator plans
+### D-025 · Point 7 — `Satisfies` in simulator plans
 
 **`Satisfies` and `Serves` are not one field at two scales.** `Serves` is per
 point and stops a point from inventing a requirement. `Satisfies` is per plan and
@@ -559,7 +559,7 @@ and no `AC-` to open, so every rule written in this point is untried. The first
 simulator plan is where it either works or does not, and that is also the first
 time the coverage question can be asked at all.
 
-### Point 8 — `SPEC-QUESTIONS.md`
+### D-026 · Point 8 — `SPEC-QUESTIONS.md`
 
 **It opens with a real question, not an empty state.** `SQ-001` records a genuine
 inconsistency found while building `Hash64.Subject` three days ago: DEC-002 and
@@ -590,3 +590,36 @@ sampled transients of every generated world to a decision nobody recorded, in th
 one component where an unrecorded choice cannot be recovered from the output.
 Recording the reading and leaving the question open is the whole point of the
 file existing.
+
+### D-027 · Point 9 — archival, and identifiers in this register
+
+**The archive trigger is the plan closing, not the branch merging.** A branch can
+hold two plans in sequence — this one does — and tying the archive to the merge
+would leave a finished plan at the root pretending to be current while its
+successor is written. The original rule said deletion before the merge; it was
+written when a branch and a plan looked like the same thing.
+
+**Archived rather than deleted.** The closed plan is the only record of what was
+*intended*, beside a git history that shows only what happened; and archival is
+the moment the promotion pass has both the plan and its register entries in
+front of it.
+
+**The gesture preceded the rule, as promised in the commit that installed this
+plan.** The previous plan was archived before point 9 wrote the rule authorising
+it, because the branch was continuing and the plan was finished. Recorded rather
+than presented as having happened in the right order.
+
+**Identifiers are per entry, `D-001` upward, never reused and never
+renumbered** — the same discipline as `HashChannel`, for the same reason: an
+identifier that moves is worse than none, because every reference to it silently
+starts pointing elsewhere.
+
+**The register is not uniform about what an entry holds**, and that was left
+alone. The earliest sections give one decision per entry; the later ones bundle
+several under a plan point. Splitting them retroactively to make the numbering
+tidy would mean rewriting the register's history in service of a scheme, so a
+promotion citing a bundled entry quotes which part of it it took instead.
+
+**Applied by script, not by hand.** Twenty-six headings renumbered by one `awk`
+pass, so the assignment is deterministic and reviewable as a single
+transformation rather than twenty-six chances to mistype.

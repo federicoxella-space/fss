@@ -29,12 +29,38 @@ as a specification edited to match its implementation, one level down.
 ## Scope of one plan
 
 One `PLAN.md` at a time, at the repository root, describing the development
-currently in progress and nothing else. It is written before the work starts and
-**deleted when the branch closes into `main`** — in the last commit on the
-branch, after the pull request is approved and immediately before the merge, so
-that whoever reviews the branch can still read the plan while reviewing it.
-`main` never carries a plan. The history of closed plans lives in git and in the
-decisions register.
+currently in progress and nothing else.
+
+It is written before the work starts and **archived to `.claude/plans/` when the
+plan closes** — not when the branch merges. A branch can hold two plans in
+sequence, and tying the archive to the merge would leave a finished plan sitting
+at the root pretending to be current while the next one is written. `main` never
+carries a live `PLAN.md`; it carries every closed one.
+
+Archived rather than deleted, for two reasons. The closed plan is the only record
+of what was *intended*, next to a git history that only shows what happened; and
+archival is the moment the promotion pass runs, which needs the plan and its
+register entries side by side.
+
+An abandoned plan is archived the same way, declaration and open points included.
+
+### Stable identifiers in the register
+
+Every `###` entry in `DECISIONS-OUTSIDE-SPEC.md` carries an identifier,
+`D-001` upward, assigned in order of appearance and **never reused, never
+renumbered** — the same discipline as `HashChannel`, and for the same reason: an
+identifier that moves is worse than none, because references to it silently start
+pointing somewhere else.
+
+Without identifiers a promotion cannot be recorded against the entry it came
+from, and the register cannot say which of its contents have already reached
+`SIM-DEC`.
+
+The granularity is the entry, and the register is not uniform about what an entry
+holds: the earliest sections give one decision per entry, the later ones bundle
+several under a plan point. A promotion citing a bundled entry has to quote which
+part of it was taken. Splitting them retroactively was rejected — it would mean
+rewriting the register's history to make a numbering scheme tidy.
 
 ## Format
 
