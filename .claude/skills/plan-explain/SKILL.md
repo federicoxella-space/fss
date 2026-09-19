@@ -40,7 +40,13 @@ work stands must never be able to move it.
      per point saying so reads as information while carrying none. A process
      plan that still carries `Serves` fields, or a plan with no `Kind` line at
      all, was written before this rule: read it as it is and do not tidy it.
-   - what will close it: the runnable check, quoted from the plan;
+   - what will close it: the runnable check, quoted from the plan. If it carries
+     a `Check: weak` marker, report the reason and what the plan says would
+     prove it properly, and object if either half is missing — a marker with no
+     replacement authorises weakness instead of limiting it. Object too if a
+     mechanical check looks available: this is the last moment where changing
+     the point costs nothing, and the marker has already been applied out of
+     habit once in this repository;
    - its `Core:` declaration, and therefore whether the two reviewers run when
      it closes. `Core:` defaults to yes, so report an exemption with the reason
      the plan gave for it, and say whether that reason is checkable against a

@@ -91,6 +91,17 @@ Review: not run, `Core: no`, exemption verified against the diff.
 - **Check: weak**, and the self-reference is the honest version of the problem.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-19. The design states the rule, requires both halves and makes
+looking for a mechanical check a step; all three skills report the marker.
+The check was declared weak and ran as three greps — the second point in a row
+where the marker was wrong, which makes it a pattern rather than a slip. The
+register records what the marker was actually mislabelling: these criteria run
+but prove little, which is *shallow*, not *weak*. That distinction is beyond
+what this point states and is not written into the design; it is raised with the
+human instead. Decisions: register, section "The twelve gaps in the plan
+mechanism", point 4 — four entries. Review: not run, `Core: no`, exemption
+verified against the diff.
+
 ## 5. A failed point and an abandoned plan are two different outcomes
 
 - **Does:** a point whose check does not pass gets an outcome line saying so,

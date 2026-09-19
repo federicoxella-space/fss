@@ -88,6 +88,12 @@ a skill, a workflow — the temptation is to reread the work and call it verifie
 That is where this repository has already found a defect that reading had
 missed.
 
+**A `Check: weak` marker is a claim, and it is tested here.** Before accepting
+that reading is all there is, look for something mechanical: a grep, a file that
+exists or does not, a command that exits non-zero, a diff that is empty. If one
+exists, run it — the check was stronger than the plan claimed, which is a
+finding for the outcome line and the register. The criterion stays as written.
+
 A point whose check reads `PLAN.md` itself is verified after step 6, on the
 state the commit will contain; verifying earlier measures a state that never
 ships.

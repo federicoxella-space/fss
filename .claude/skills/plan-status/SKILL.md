@@ -42,8 +42,9 @@ Its subject is what has already happened. For what comes next in detail, that is
    too.
 
 5. **For each closed point, report** its number and title, the commit, the
-   register section its outcome line points to, and the review outcome recorded
-   there — including "not run, `Core: no`", and including findings that were
+   register section its outcome line points to, whether it carried a
+   `Check: weak` marker and whether the outcome reported the check turning out
+   executable after all, and the review outcome recorded there — including "not run, `Core: no`", and including findings that were
    raised and rejected. A rejected finding that vanishes from the summary is a
    rejection nobody can audit.
 
@@ -62,6 +63,11 @@ Its subject is what has already happened. For what comes next in detail, that is
 7. **Report the exit condition verbatim, and say whether it is met.** Every point
    closed is not the same as the exit condition being met; check it, do not
    infer it from the count.
+
+   Then say **how much of the development was proved by reading**: how many
+   closed points carried `Check: weak` against how many did not. A plan where
+   most of it did is not thereby wrong, but whoever reads the summary is
+   entitled to know it before treating "all points closed" as evidence.
 
 8. **Say if the plan is finished.** Then the branch is ready to close, and
    `PLAN.md` is deleted in the last commit before the merge, once the pull

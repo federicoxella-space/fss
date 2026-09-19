@@ -82,6 +82,37 @@ criterion turns out to be wrong, say so and record why; do not rewrite it to
 match what was built. That failure — a contract quietly adjusted to fit the
 delivery — is the one this whole design exists to prevent.
 
+### `Check: weak`
+
+A check satisfiable by reading rather than by running is marked when the plan is
+written:
+
+```markdown
+- **Check: weak** — <why reading is all there is> Replaced by <what would prove it>.
+```
+
+Both halves are required. Declared late, in an outcome line, a weak check is an
+excuse offered after the work; declared early it is an argument that can still be
+lost, when changing the point costs nothing. And **without the second half the
+marker authorises weakness instead of limiting it** — "this cannot be proved
+today" is a different statement from "this cannot be proved", and only one of
+them says when to come back.
+
+**Look for a mechanical check before reaching for the marker.** Greps, a
+`git diff --name-only`, a file that exists or does not, a command that exits
+non-zero — a surprising number of documentation points have one. Over-applying
+`Check: weak` is as corrosive as skipping it: a marker on every point lowers what
+anyone expects to be proved, and a plan where everything is weak is a plan that
+proves nothing while appearing candid about it.
+
+This is not hypothetical. Point 2 of the plan in `.claude/plans/` carried the
+marker and every clause of it turned out mechanically verifiable; the marker had
+been applied out of habit.
+
+**A marker that turns out wrong is a finding, not an edit.** If the check proves
+executable, run it, report it in the outcome line and the register, and leave the
+criterion alone. The reviewers are told to look for exactly this.
+
 ### `Core:` defaults to yes
 
 `Core:` decides whether the reviewers run, and it is declared before the work so

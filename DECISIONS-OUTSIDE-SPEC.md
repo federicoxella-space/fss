@@ -439,3 +439,33 @@ effect on the commit that introduces it.
 Nothing here was found by a reviewer. The whole point came from a human noticing
 that a document read at step 1 and written at step 6 has a gap in the middle
 wide enough to lose an edit in.
+
+### Point 4 — `Check: weak`, declared early and with both halves
+
+**Both halves are required, and the second is the one that does the work.**
+"This cannot be proved today" and "this cannot be proved" are different
+statements, and only the first says when to come back. A marker carrying only the
+reason authorises weakness; carrying the replacement, it schedules its own end.
+
+**Looking for a mechanical check is now a step, not a disposition.** Step 3 of
+`/plan-next` treats the marker as a claim and tests it before accepting it.
+
+**And the marker was over-applied twice in a row, which makes it a pattern.**
+Point 2 carried it and every clause proved mechanical. This point carried it too,
+with the note that the self-reference was "the honest version of the problem",
+and its check ran as three greps. Ten of this plan's twelve points carry the
+marker; on present evidence most of them should not.
+
+**What was actually wrong, and it is not what the marker says.** These criteria
+*can* be run — a grep proves the text exists. What they cannot do is prove the
+text is any good. So two different defects were being labelled with one marker:
+
+- **weak** — the check cannot be executed at all;
+- **shallow** — the check executes and proves little, because what matters is
+  not mechanically observable.
+
+Almost every documentation point in this plan is shallow, not weak, and calling
+it weak misdescribes the problem in the direction that sounds more rigorous. The
+distinction is not written into the design: it is beyond what point 4 states,
+and a frozen point is not widened by its author mid-flight. Recorded here, and
+raised with the human as a candidate for its own point.
