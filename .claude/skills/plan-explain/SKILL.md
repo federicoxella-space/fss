@@ -89,14 +89,20 @@ the retelling is an objection that did not happen.
      from a simulator plan as a defect; it is mandatory there and cannot be
      reconstructed once the branch is merged.
 
-6. **Read the point critically, and say so if it does not hold.** A criterion
+6. **If the point found is the first of its plan, say a review request is
+   owed** — moment one of `REVIEW-REQUEST.md`. This skill is often what someone
+   runs before deciding to start, which makes it the last cheap place to say
+   that the plan has not been shown to anyone. Say it is owed; writing it is
+   not this skill's business, and neither is writing it for the human.
+
+7. **Read the point critically, and say so if it does not hold.** A criterion
    that can be read two ways, a check that cannot actually be run, a point that
    has been overtaken by what the earlier points turned out to do — these are
    worth more before the work starts than after. Report the objection; do not
    edit the plan to fix it. The criteria are frozen, and changing them is a
    human's call.
 
-7. Stop. Do not start the point. `/plan-next` does that, on its own invocation.
+8. Stop. Do not start the point. `/plan-next` does that, on its own invocation.
 
 ## What this skill does not do
 

@@ -69,6 +69,10 @@ A blocking entry **fails the point** and stops the plan. A non-blocking one is
 recorded and the work continues. This holds wherever the objection surfaces —
 step 1, the implementation, a reviewer's finding — not only here.
 
+Either way, **a review request is owed**: moment three. The work has met the
+specification, and that is one of the three things worth interrupting a human
+for. The same applies when the promotion pass produces candidates.
+
 **On the first point of a `Kind: simulator` plan, confirm the header's
 `Satisfies:` too.** Open each `AC-` in `docs/SIM-REQ.md` and read it. The field
 is mandatory in a simulator plan; missing, or citing a criterion that says
@@ -84,6 +88,12 @@ the field is absent by design and its absence means nothing.
 A process plan that still carries `Serves` fields, or a plan with no `Kind` line
 at all, was written before this rule. Read it as it is; a frozen contract is not
 tidied.
+
+**On the first point of a plan, say a review request is owed.** Moment one of
+`REVIEW-REQUEST.md`: the plan is short and a wrong criterion costs one
+conversation here against every point built on it later. Say it is owed; do not
+write it for them, and do not treat having said so as permission to continue if
+the human has not answered a blocking question.
 
 ### 2. Implement
 

@@ -110,7 +110,17 @@ words.
 8. **Say if the plan is finished.** Then it is ready to be archived to
    `.claude/plans/`, and the promotion pass is due over its register entries.
 
-9. Stop. Do not start or close anything.
+9. **Say when the last review request was written**, from the heading of
+   `REVIEW-REQUEST.md`, and how many plans have closed since. This is the only
+   skill that can notice: `/plan-next` sees a point and `/plan-explain` sees the
+   next one.
+
+   **At a phase gate** — the plan's `Phase:` closing against `docs/SIM-REQ.md`
+   §18 — say a request is owed. Moment two, and the only moment anything in this
+   mechanism looks at the whole rather than at one point. Say it is owed; do not
+   write it.
+
+10. Stop. Do not start or close anything.
 
 ## `Kind`, and reading a plan written before a rule changed
 

@@ -55,9 +55,9 @@ already run three plans, closed a phase gate's worth of tooling, and opened two
 questions against the specification. Had the file existed on 2026-09-17, this
 would have been four shorter requests.
 
-**Branch:** `plan-e-skill`, at the tip. The remote holds it at `046751f`,
-**seventeen commits behind**: nothing after the first plan's closing commit has
-been pushed, and there is no pull request.
+**Branch:** `plan-e-skill`, at the tip. The remote holds it at `046751f`, the
+closing commit of the *first* plan: **everything after that is unpushed**, which
+is two whole plans, and there is no pull request.
 
 **What changed, in one line:** a plan mechanism — `PLAN.md`, three skills, a
 decisions register, a specification-question channel and a promotion pass —

@@ -61,3 +61,13 @@ verified against the diff.
   start to finish under these rules, counting the moments that produced a
   request against the moments that should have.
 - **Core:** no — touches no file under `core/`.
+
+*Esito:* 2026-09-19. `/plan-explain` announces moment one, `/plan-next`
+announces moments one and three, `/plan-status` announces moment two and
+reports when the last request was written; all three say the request is owed
+and none writes one. The marker held: the grep proves each names its moments
+and nothing proves the reminder lands at the right time. Running the check
+caught two of its own clauses failing on a case-sensitive pattern, which is the
+argument for running a shallow check rather than reading it. Decisions:
+register, `D-034` — four entries. Review: not run, `Core: no`, exemption
+verified against the diff.

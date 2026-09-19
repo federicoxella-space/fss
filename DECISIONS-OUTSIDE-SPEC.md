@@ -813,3 +813,30 @@ specification questions and four promotion candidates. Had it existed on
 2026-09-17 there would have been four shorter requests, each arriving when it
 was cheap to act on. It is written into the request itself, because a first
 example that hides its own shape teaches the wrong one.
+
+### D-034 · Point 2 — the reminders, and which skill owes which moment
+
+**One moment each, except the first, which two skills carry.** `/plan-explain`
+and `/plan-next` both announce moment one on the first point of a plan, because
+either can be the command someone runs first and a reminder that depends on
+which one they chose is not a reminder. `/plan-next` also carries moment three,
+since it is the only skill present when a `SPEC-QUESTIONS.md` entry is filed.
+`/plan-status` carries moment two alone: it is the only one that sees a whole
+plan, and a phase gate is not visible from inside a point.
+
+**The reminder is a statement, never an action.** Each skill says a request is
+owed and none of them writes one. A reminder that discharges itself is a
+formality, and the whole file exists because a record that waits to be read was
+not enough.
+
+**And saying it is owed does not authorise continuing.** Stated in `/plan-next`
+because that is the skill that could act on the permission it would be granting
+itself: a blocking specification question stops the point whether or not a
+request was written about it.
+
+**The count in the first request was made relative.** It said seventeen commits
+behind, which was true when written and false by the time the plan closed. A
+request is read later than it is written, so a fact that decays is stated in a
+form that does not — everything after `046751f` is unpushed. Noted because
+editing a closed point's artefact is worth declaring, even when the artefact is
+not a frozen criterion.
