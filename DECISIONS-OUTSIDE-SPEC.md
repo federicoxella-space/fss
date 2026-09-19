@@ -1002,3 +1002,56 @@ The two are different cases, and the distinction is worth keeping: a request is
 of its items is answered and the rest still stands. Both rules serve the same
 end, which is that the file is never false; replacing wholesale for a single
 closed item would churn the artefact for no gain.
+
+---
+
+## 2026-09-20 — The point lookup, qualified by plan
+
+Branch `main`, planned in `PLAN.md`, one point. Approved by the human, who
+deferred the phase-3 plan to a clean session.
+
+### D-042 · The range, not a new trailer
+
+**The lookup is bounded, the commit format is unchanged.** The alternative was a
+second trailer naming the plan — `Plan: 2026-09-19-dodici-lacune` — which would
+have been explicit and would have worked only for commits written after it. The
+range works on the history that already exists, which is the whole history there
+is.
+
+**The lower bound is the half that matters.** Bounding only above still resolves
+point 3 of the review-request plan, which never had one, to a commit of the plan
+before it: walking back from an archive commit runs straight into the previous
+plan. The false positive is silent and looks like a fact. With both bounds, a
+number a plan never carried resolves to nothing, which is the truth.
+
+**It rests on plans being sequential** — one `PLAN.md` at a time, archived before
+the next is installed. Nothing enforces that but the procedure, and the skill
+says so: if two plans were ever live at once, this lookup is the first thing that
+would go wrong.
+
+**Committed to `main` without a branch**, against the habit of the last three
+plans. One point, no code, and the human is about to open a clean session against
+`main`; a branch would have left them a merge before they could start. Recorded
+rather than done quietly.
+
+### D-043 · A check that passed without running
+
+The first version of this point's check was a Python script. It printed
+`ESITO: tutti i punti risolvono a un commit solo` and had verified nothing: a
+parsing mistake left its list of plans empty, so the loop never ran and the
+success flag stayed at its initial value. The verdict was vacuous and read as
+proof.
+
+It was caught only because the per-plan lines that should have preceded the
+verdict were missing — that is, by noticing an absence, which is the least
+reliable way anything gets caught.
+
+**So: a check prints its work, not only its verdict.** Twenty-one lines saying
+which point resolved to how many commits are what make the last line mean
+something. A check that reports only success cannot be distinguished from a
+check that did not run, and this mechanism already has a rule for the same
+failure one level up — run the check, do not read it. This is that rule applied
+to the check itself.
+
+The register's own claims are the next place this bites, and `D-040` said so two
+commits ago: prose inside an entry passes through no check at all.

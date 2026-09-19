@@ -57,13 +57,29 @@ words.
    If a point failed and points remain open, the plan is **stopped**, not in
    progress: say so, and say that restarting it is a human's decision.
 
-4. **For each closed point, resolve its commit exactly:**
+4. **For each closed point, resolve its commit within the plan's own range.**
+
+   Point numbers restart with every plan, so the trailer alone is ambiguous
+   across a history holding more than one. Bound the search to the range of the
+   plan being reported.
+
+   Archive commits, oldest first — one per plan, in the order the plans closed:
 
    ```
-   git log -E --grep="^Plan-point: <n>$" --format="%h %s"
+   git log --reverse --diff-filter=A --format="%h %s" -- .claude/plans/
    ```
 
-   Anchored, and `-E`: without them `Plan-point: 1` also matches points 10 to 19.
+   A plan's range runs from the archive commit of the plan before it,
+   **exclusive**, to its own archive commit, **inclusive**. The plan still live
+   at `PLAN.md` has no archive commit: its range ends at `HEAD`. The first plan
+   ever written has no lower bound.
+
+   ```
+   git log -E --grep="^Plan-point: <n>$" --format="%h %s" <prev>..<this>
+   ```
+
+   Anchored, and `-E`: without them `Plan-point: 1` also matches points 10 to
+   19. Without the range it also matches point 1 of every other plan.
 
    `Plan-point: <n>` means **this commit closes point n**, and nothing else may
    carry it — a commit that amends the plan, adds a point, or prepares one does
@@ -71,9 +87,14 @@ words.
    returns. If it returns nothing for a point that carries an outcome line, say
    so plainly rather than searching for a likely candidate: an outcome line with
    no commit behind it is the one state this design cannot distinguish from
-   finished work, and it needs a human. If it returns more than one, report them
-   all and say the trailer has been used loosely somewhere, which needs a human
-   too.
+   finished work, and it needs a human. If it returns more than one **inside the
+   range**, the trailer has been used loosely; report them all, and that too
+   needs a human.
+
+   The range rests on plans being sequential — one `PLAN.md` at a time, each
+   archived before the next is installed. That is enforced by nothing but the
+   procedure, so if two plans were ever live at once this lookup is the first
+   thing that would go wrong.
 
 5. **For each closed point, report** its number and title, the commit, the
    register section its outcome line points to, which check marker it carried —
