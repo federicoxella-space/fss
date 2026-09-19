@@ -202,3 +202,31 @@ verified against the diff.
   this branch carries it.
 - **Check: weak** — satisfied by reading, until someone squashes.
 - **Core:** no — touches no file under `core/`.
+
+## 13. `Check: shallow`, distinguished from `Check: weak`
+
+Added on 2026-09-19, after the marker was misapplied on points 2 and 4 of this
+plan and the misapplication turned out to be systematic. Added with the human's
+approval; the criteria of points 1 to 12 are untouched, including their wrong
+markers.
+
+- **Does:** separates two defects that one marker was hiding. **Weak:** the
+  check cannot be executed at all. **Shallow:** it executes and proves little,
+  because what matters is not mechanically observable — a grep proves the text
+  exists, never that the text is any good. The remedies differ, which is the
+  reason the distinction earns its place: a weak check waits for a tool that
+  does not exist, a shallow one waits for a better criterion, which its author
+  could write today. So `Check: shallow` must say what a better criterion would
+  look like, or why none is available, and writing a deeper criterion is to be
+  attempted before the marker is reached for.
+- **Closed by:** the design defines both markers, their different remedies and
+  the attempt-first rule; the three skills report them as distinct.
+- **Check: shallow** — greps prove the text is present, not that the
+  distinction is well drawn. A better criterion would be an audit of the next
+  plan's markers by someone who did not write them.
+- **Core:** no — touches no file under `core/`.
+
+The markers already written in this plan stay wrong. They were frozen when the
+plan was written, the register records the misclassification, and correcting
+them would be the move this whole mechanism exists to prevent, performed for the
+best of reasons.
