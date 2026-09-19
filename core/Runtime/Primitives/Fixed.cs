@@ -22,8 +22,8 @@ namespace Sim
     /// <para>
     /// The <see cref="int"/> overloads widen to <see cref="long"/> before multiplying, so
     /// no intermediate overflows. The <see cref="long"/> overloads cannot widen further:
-    /// the caller keeps <c>value * numerator</c> inside 64 bits. Invariant A-11 asserts
-    /// that at state level.
+    /// the caller keeps <c>value * numerator</c> inside 64 bits. Invariant A-11b asserts
+    /// that in debug builds.
     /// </para>
     /// </remarks>
     public static class Fixed

@@ -54,7 +54,7 @@ namespace Sim
         }
 
         /// <summary>
-        /// A-11, in a debug build only: the caller's promise that <c>value * numerator + carry</c>
+        /// A-11b, in a debug build only: the caller's promise that <c>value * numerator + carry</c>
         /// stays inside 64 bits.
         /// </summary>
         /// <remarks>

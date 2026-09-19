@@ -290,12 +290,12 @@ namespace Sim.Tests
 
 #if DEBUG
         /// <summary>
-        /// A-11, debug build only. The guard is compiled out of a release build, which is
+        /// A-11b, debug build only. The guard is compiled out of a release build, which is
         /// what CI runs, so this test only means anything locally. Without it the guard
         /// would be a comment.
         /// </summary>
         [Test]
-        public void A11_ApplyRefusesAProductThatLeaves64Bits()
+        public void A11b_ApplyRefusesAProductThatLeaves64Bits()
         {
             long carry = 0;
             Assert.Throws<System.OverflowException>(
