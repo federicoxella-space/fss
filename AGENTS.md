@@ -44,6 +44,28 @@ belongs to `/plan-next`, `/plan-explain` and `/plan-status`, and the reasoning t
   author's doubts and one blind to them. Their findings reach
   `DECISIONS-OUTSIDE-SPEC.md` even when rejected, with the reason.
 
+### Work that needs no plan
+
+Trivial work is exempt. Trivial is defined by properties, not by how small the
+change feels, and all three must hold:
+
+- **No change in behaviour.** A typo, a comment, a reworded message, a
+  formatting fix. Nothing a test could notice.
+- **No decision the specification does not already make.** If you are choosing
+  between two defensible answers, you are deciding.
+- **One commit.**
+
+**If a decision appears while you work, the change was never trivial.** Stop,
+and write the plan. This is the one rule here that has to hold even when it is
+inconvenient: a rule bypassed once is a rule that can be bypassed, and the
+exemption is the obvious place to bypass it from.
+
+Two consequences worth stating. A trivial change leaves no register entry,
+because by definition there was no decision to record — the exemption and the
+rule above turn on the same property. And several trivial commits that together
+change behaviour are not several trivial changes: the exemption applies to the
+work, not to the slices it is cut into.
+
 ## Close every task with the decisions it required
 
 Before reporting a task finished, write the choices it forced that the

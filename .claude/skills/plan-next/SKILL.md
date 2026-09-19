@@ -16,7 +16,9 @@ Read `PLAN.md` at the repository root.
 
 - **Absent:** refuse. Work here starts from a written plan, and writing it is the
   conversation where a human decides what the work is. Do not offer to write
-  one.
+  one. If what was asked for is trivial under the exemption in `AGENTS.md` — no
+  change in behaviour, no decision, one commit — it needed no plan and no
+  invocation of this skill; say so and do the work directly.
 - **Abandoned** — the header carries an `**Abandoned:**` declaration: refuse.
   The plan stopped on purpose and only a human restarts it.
 - **A point closed as failed** — an outcome line saying `FALLITO`, with points

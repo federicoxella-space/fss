@@ -140,6 +140,18 @@ twelve gaps in the plan mechanism", point 5 — six entries. Review: not run,
   whether something was trivial.
 - **Core:** no — touches no file under `core/`.
 
+*Esito:* 2026-09-19. `AGENTS.md` carries the three properties and the stop
+condition under "Work that needs no plan"; `/plan-next` points at the exemption
+when asked to run with no plan. Two rules beyond the point's statement: several
+trivial commits that together change behaviour are not several trivial changes,
+and a trivial change leaves no register entry because the property that exempts
+it is the property that empties the register. The permission to edit `AGENTS.md`
+was read from this approved plan, which names the file — recorded, not assumed.
+Marker says weak; it is shallow, and stays as written because point 13 is not
+closed. Decisions: register, section "The twelve gaps in the plan mechanism",
+point 6 — five entries. Review: not run, `Core: no`, exemption verified against
+the diff.
+
 ## 7. `Satisfies:` in simulator plans, verified like any other citation
 
 - **Does:** a `Kind: simulator` plan declares in its header which acceptance

@@ -503,3 +503,35 @@ decisions really taken; neither becomes untrue because the plan stopped. An entr
 is wrong only if it was wrong when written — which is also why an abandoned
 development still goes through the promotion pass: it can have produced a
 decision that belongs in `SIM-DEC`.
+
+### Point 6 — the threshold below which no plan is needed
+
+**The permission to edit `AGENTS.md` was read from the approved plan.** The
+standing rule is that permanent instructions are changed by a human and an agent
+needs specific permission. Point 6 names `AGENTS.md` in its statement and the
+human approved the plan containing it, so the approval is taken as the
+permission. Recorded rather than assumed silently, because the alternative
+reading — that each edit needs its own explicit sentence — is defensible and this
+one is not mine to settle.
+
+**All three properties, conjunctively, and none of them is about size.** "Small"
+and "quick" are the words that make an exemption usable for whatever the author
+wants to skip. No change in behaviour, no decision, one commit: each is
+falsifiable by someone reading the diff afterwards, which is what an exemption
+needs to survive its author's optimism.
+
+**Salami-slicing is named and closed.** Several trivial commits that together
+change behaviour are not several trivial changes. Without this the exemption is a
+general-purpose bypass: nothing stops a plan-sized change from being cut into
+pieces each of which, alone, changes nothing observable.
+
+**The exemption and the register rule agree by construction.** Trivial work
+leaves no register entry, because the property that makes it exempt — no decision
+— is the same property that makes the register empty. Two rules that could have
+contradicted each other turn on one hinge instead.
+
+**The check was declared weak and is shallow.** Two greps against `AGENTS.md`
+prove the words are present; nothing here can prove the threshold is drawn in the
+right place. That only comes from the first argument about whether something was
+trivial, which is what the criterion said. The marker stays as written: point 13,
+which supplies the right word, is not closed yet.
