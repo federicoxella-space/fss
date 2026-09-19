@@ -159,6 +159,20 @@ reintroducing rejection to "fix" the bias.
 > written. Anyone who reopens this has to re-derive the two paragraphs above.
 -->
 
+## Pass of 2026-09-20 — nothing
+
+Run over `D-038` to `D-043` on archiving the lookup plan. No candidates. Two of
+them are about this mechanism's own commit trailers and one about how a check
+reports itself; the rest record an edit to `docs/` and why it was bounded.
+`SIM-DEC` describes the simulated world, and none of this is in it.
+
+`D-040` is the near miss, for the second pass running: it is a finding about how
+an agent should treat the specification, which sounds architectural and is not.
+It belongs to `AGENTS.md` if anywhere, not to `SIM-DEC`, and it is already
+reflected in the `SPEC-QUESTIONS.md` entry it came from.
+
+---
+
 ## Pass of 2026-09-19, second run — nothing
 
 Run over `D-033` and `D-034`, written since the first pass, on archiving the

@@ -58,8 +58,8 @@ git; nothing in it is true of the repository any more.
 question. Written also as the handoff to whatever session comes next, since this
 one built the mechanism and holds context no file does.
 
-**Branch:** `main`, pushed, CI green. Amended 2026-09-20 when `SQ-003` closed;
-the rest of the request still stands. No branches outstanding: the
+**Branch:** `main`, pushed, CI green. Amended twice on 2026-09-20, as `SQ-003`
+closed and the lookup defect was fixed; the rest of the request still stands. No branches outstanding: the
 three that existed are merged and deleted, locally and on the remote.
 
 **What changed, in one line:** the specification moved — `DEC-081` to `DEC-084`
@@ -116,10 +116,11 @@ tested any of it.
   is evidence the dispatch works; but a session holds the copy of a skill it
   loaded, not the file on disk, and these were edited repeatedly after loading.
   **A fresh session is the only thing that proves the versions that ship.**
-- **One defect is known and unfixed:** the `Plan-point:` lookup is not qualified
-  by plan, so on a branch carrying several plans it returns one commit per plan
-  for the same point number. Disambiguating by commit order works and is not a
-  guarantee. It needs its own plan point, and that point needs your approval.
+- ~~One defect is known and unfixed: the `Plan-point:` lookup.~~ **Fixed
+  2026-09-20**, in a one-point plan you approved. The lookup is bounded by the
+  plan's commit range and was verified across all three archived plans: 21
+  closed points, one commit each. The check's first version passed vacuously,
+  which is recorded as `D-043` and is the more useful half of that point.
 - **`.claude/plans/` holds three archived plans that nobody but their author has
   read.** They are the record of what was intended; whether they are legible to
   someone who was not there is untested.
@@ -129,8 +130,7 @@ tested any of it.
 1. A look at the three lines changed in `docs/`, which is the first time an
    agent has edited that folder here. One of them was not in the text you
    approved; the reason is above and in `D-040`.
-2. Approval for the plan point that qualifies the lookup.
-3. The next real decision: the plan for the rest of phase 3. `Time/`, `State/`,
+2. The next real decision: the plan for the rest of phase 3. `Time/`, `State/`,
    `Data/`, `Chronicle/`, `Commands/` are empty, and the gate is 100k empty
    ticks with `AC-02` and `AC-03` green. That conversation is moment one, and it
    is where a request is owed next.
