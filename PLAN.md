@@ -73,6 +73,22 @@ criterio lasciato com'è, `D-059`.
   fields from the test project and failing on any reference type.
 - **Core:** yes
 
+*Esito:* 2026-09-21. Chiuso. `NFR10_StateHoldsNoObjectReferences` verde in
+Release (23) e in Debug (24), build del core senza avvisi. `WorldState` porta
+le cinque righe di `SIM-STATE` §World e nient'altro; `GenerationParams` è una
+`readonly struct` con il solo `SettlementCount`. Registro: `D-061` a `D-067`.
+Revisione: due revisori, `Core: yes`, entrambi concludono che il punto chiude;
+applicati sei rilievi — due affermazioni false nei commenti sulla fase della
+cronaca, la guardia di ricorsione morta, lo spostamento in `Runtime/State/`, la
+citazione P-02 corretta in FR-W-10, e la superficie di uguaglianza non letta
+cancellata; nessuno respinto, due lasciati aperti all'umano in `D-063` e
+`D-067`. **Due rilievi sul criterio, nessuno dei due sanato per riscrittura:**
+il criterio dice "failing on any reference type" e il walker ammette un livello
+di array, perché il "Does" dello stesso punto chiede array paralleli (`D-064`);
+e il test dichiarato passa anche contro un walker vuoto — verificato svuotandolo
+— per cui a tenerlo in piedi è un quarto test che il criterio non nomina
+(`D-065`). Criterio lasciato com'è in entrambi i casi.
+
 ## 3. The state hash covers every field
 
 - **Does:** the hash over `WorldState` required by `SIM-STATE`'s serialisation

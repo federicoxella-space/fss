@@ -1400,3 +1400,217 @@ The reviewer raised it as an observation and did not press it. **What would
 overturn it:** `FRT05a` ceasing to pin those two constants, at which point
 `FRT02`'s array bounds become the only thing holding them and should stop
 deriving from the values they are meant to check.
+
+### D-061 · Point 2 · `record` in SIM-STATE is a composite value, not the C# keyword
+
+`SIM-STATE` §World types `generationParams` as `record`. A C# `record` is a
+class, and NFR-10 says "No object references inside serialised state", so the
+two would contradict each other under the keyword reading. `GenerationParams`
+is a `readonly struct`.
+
+`docs/` says nothing about C#. Its Type column is a type language of its own —
+`int64`, `uint64`, `fixed`, `bitfield`, `id[]`, `bounded record[]`, `flag plus
+record`, `sparse record`, `enum plus int`, `derived` — and not one entry in it
+is spelled the way C# spells it. Reading `record` as the keyword while reading
+`int64` as prose is the inconsistent reading. The decisive argument is internal
+to the document: `knowledgeTable | bounded record[]` and `guildHall | flag plus
+record` sit inside rows the same file's serialisation notes say hold "no object
+references", so under the keyword reading SIM-STATE contradicts SIM-STATE.
+
+**No `SPEC-QUESTIONS.md` entry was filed.** Nothing in `docs/` is wrong here,
+which is what an `SQ` is for; the word is used consistently and means
+"composite". Had `record` appeared only in this one row, the answer would have
+gone the other way.
+
+**What would overturn it:** a future revision of SIM-STATE that names C# types
+explicitly, or a row that needs a genuinely variable-length composite, which a
+struct cannot be.
+
+### D-062 · Point 2 · `GenerationParams` carries one parameter, and it is P-02
+
+`docs/` nowhere enumerates the generation parameter set. FR-G-02 says only that
+"the generator seed and all generation parameters are stored in the save file",
+and §16's table mixes generator inputs with simulation constants. The struct
+holds `SettlementCount` and nothing else.
+
+The seed is not in it: SIM-STATE gives `worldSeed` as "also the RNG root", so
+FR-G-02's seed is that field.
+
+Two alternatives were rejected. **An empty struct** — a field whose type has
+exactly one value cannot be perturbed, so point 3's hash test would report it
+as covered while proving nothing about it, which is the determinism hole
+SIM-STATE names in the same sentence. **Also P-03 and P-04** — "inhabited
+fraction 15%" and "map extent 1,000 km per side" cannot be stored without
+inventing a unit and a fixed-point scale that `docs/` does not give, and each
+invention is a decision belonging to the generator that does not exist yet.
+P-02 is a bare count with no representation question attached, and it is the
+one generation parameter the state layout has a stake in: it is the length of
+every settlement array phase 4 adds.
+
+That last claim is true because of FR-W-10 ("settlement count is fixed for the
+run") and DEC-067, **not** because of P-02, which fixes a default and not a
+length. The code cited P-02 for it; the briefed reviewer caught the substitution
+and the comment now cites FR-W-10.
+
+This is not reaching into phase 4 in the sense `AGENTS.md` forbids. The rule
+bans implementing a subsystem early; an `int` carried in a save has no
+behaviour and no update, and no phase-4 gate is weakened by its presence.
+
+**What would overturn it:** phase 4's generator needing a second parameter, at
+which point it is added under the migration path NFR-08 requires from the first
+write — which is why the cost of being wrong here is one save version, not a
+rewrite.
+
+### D-063 · Point 2 · The container is a class; only its contents obey NFR-10
+
+NFR-10 reads "Struct-of-arrays, indexed by `EntityId`. No object references
+inside serialised state." `WorldState` is a `sealed class` with public mutable
+fields.
+
+Struct-of-arrays is a layout term — one object holding parallel arrays, rather
+than an array holding objects — and the type discipline lives in the second
+sentence, which says *inside*. A C# `struct` container would buy nothing DEC-003
+asks for: with arrays inside, a struct copy is a shallow copy of the same
+arrays, so its value semantics are an illusion that costs defensive copies on a
+state SIM-REQ sizes at 50 MB. Neither AC-02 nor AC-03 can see the difference:
+the hash covers field values and the serialiser of point 7 writes named fields.
+
+**Open, and passed to the human rather than settled here.** The briefed reviewer
+observed that public mutable fields leave FR-A-01 ("nothing outside the core
+writes world state directly") enforced by convention only, and that `internal`
+fields would enforce it at compile time for free, since the core already
+declares `InternalsVisibleTo("Sim.Core.Tests")` and both reflection walkers pass
+`BindingFlags.NonPublic`. Against it: every core type so far is public, and
+point 8's runner will want some surface. **This belongs to point 5**, which is
+the point that claims FR-A-01 — but it is cheaper decided before a serialiser
+and a runner are written against the public fields than after.
+
+**What would overturn it:** that decision at point 5, or a host that needs to
+pass state by value.
+
+### D-064 · Point 2 · The walker allows one level of array, which the criterion's words do not
+
+The criterion says the test fails "on any reference type". An array is a
+reference type, and the walker lets one through at depth 0.
+
+The point's own "Does" says *parallel arrays*, and SIM-STATE's serialisation
+notes say "Struct of arrays … no object references" in one breath. A walker
+that failed on `int[]` would fail the layout the same sentence mandates. The
+line the code draws is between *one object holding contiguous values* —
+`EntityId[]`, and `int[,]`, which falls through the same branch — and *an object
+holding objects*: `int[][]`, `List<int>`, and any struct holding an array,
+since the recursion into a struct's fields forbids arrays. The first shape
+serialises, copies and hashes in bulk; the second is the object graph DEC-003
+exists to keep out.
+
+**The criterion was not amended.** Its words and the point's "Does" disagree,
+and the code resolved the disagreement toward the "Does". Today the divergence
+carries nothing: `WorldState` has no array field, so the test is green under
+the strict reading too. From the first parallel array of phase 4 it will carry
+everything, and the criterion as frozen would fail the layout it exists to
+protect.
+
+**This decides part of the phase-4 state layout, from a private helper in a test
+file.** SIM-STATE's per-row `treasury int[4]`, `allocationVector fixed[]`,
+`ageDistribution int[]`, `goods int[]` and `flowAccumulator int[]` must each
+arrive flattened — one `int[]` of length `rows * width`, or an `int[,]` —
+because both the jagged and the array-inside-a-struct shapes fail this walker.
+Recording it here because the next person to meet the rule will meet it as a
+red test, with no statement anywhere of why.
+
+**What would overturn it:** a phase-4 row field that genuinely needs variable
+width per row, which a flat array cannot express without an offset table.
+
+### D-065 · Point 2 · The declared check cannot fail today, and the test that pins it is not named by the criterion
+
+`NFR10_StateHoldsNoObjectReferences` passes against a walker whose body is
+`return;`. Verified rather than reasoned: `Check` was replaced by an immediate
+`return`, the fixture run, and exactly one of its four tests went red —
+`NFR10_TheWalkerRejectsWhatItIsThereToReject`, the negative control, which the
+criterion does not name. The declared test stayed green, because no field of
+today's `WorldState` offends under any implementation.
+
+So the criterion certifies that a list built by an unspecified procedure came
+back empty. This is a sharper failure than point 1's `D-059`, where the check
+merely under-covered the point: here the check as written cannot fail for the
+reason it exists.
+
+**The criterion was not amended, and the extra tests were not folded into it.**
+"Closed by" says what must be green, not what may exist — the reading `D-059`
+settled. Three tests were added beside it: the negative control above, which is
+what makes the declared check mean anything;
+`FRW01_WorldStateHoldsTheWorldRowAndNothingElse`, which enforces the "Does"
+clause "holding at first only the World row"; and
+`FRW01_TheWorldRowCarriesTheDeclaredTypes`, which pins four of the five field
+types against SIM-STATE's Type column. The fifth field's type is pinned by the
+declared test itself, which would fail if `GenerationParams` became a class.
+
+**What would overturn it:** nothing about the criterion, which stays as frozen.
+The finding is for whoever writes the next one: a check that names a mechanism
+should name the test that can break the mechanism.
+
+### D-066 · Point 2 · Two tests carry `FR-W-01`, because `SIM-STATE` §World has no number
+
+`AGENTS.md` requires that a test carry the number of what it verifies. The two
+tests above verify the World row's field list and field types, which is
+`SIM-STATE` §World — and §World has no identifier of its own. They were first
+written with an `NFR10_` prefix, which the blind reviewer flagged: NFR-10 is
+state *layout*, and a field list is not layout.
+
+`FR-W-01` is the nearest requirement that says anything about what lives in
+world state, and it is in the point's "Serves", so the two tests carry it. It is
+an approximation: FR-W-01 fixes no field types. Recording the gap rather than
+hiding it behind a number that fits less well.
+
+**What would overturn it:** `docs/` giving §World rows identifiers, at which
+point the tests should carry those.
+
+### D-067 · Point 2 · The reviewers' findings, and the two left open
+
+Both reviewers ran `Core: yes`, built Release and ran both suites, and both
+answered that the point closes. They overlapped on three findings and each
+found things the other did not.
+
+**Applied.** The comment claiming the chronicle "belongs to later phases" —
+false, SIM-REQ §18 lists it inside phase 3 and point 6 builds it, found by the
+blind reviewer and confirmed against §18. The docstring calling a sixth state
+field "a subsystem arriving before its phase" — the same error, and wrong twice
+over, since points 5 and 6 both widen the World row inside this plan. The
+recursion guard in the walker and its comment: the comment said an array can
+carry a struct back to itself, which is true of C# and false of this walker,
+because every descending call passes `arrayAllowed: false` and an array met that
+way is reported without being entered; both reviewers traced it independently
+and both reached "dead code with a false comment", the `D-060` standard, so the
+`HashSet` went and the termination argument is now stated where it is true. The
+two files moved from `core/Runtime/` into `core/Runtime/State/`, the folder the
+scaffolding commit reserved and left empty, which is where `Time/Calendar.cs`
+sets the pattern. The P-02 citation corrected to FR-W-10, per `D-062`. The
+equality surface of `GenerationParams` — `IEquatable`, both `Equals`,
+`GetHashCode`, `==`, `!=` — deleted: read by nothing, pinned by nothing, the
+same deletion `D-060` already made once. Its `GetHashCode` was also worth
+removing on its own, being a name one letter away from the state hash and
+carrying none of its guarantees.
+
+**Open, passed to the human rather than settled.** The `internal`-versus-public
+question of `D-063`, which belongs to point 5. And `RuleVersion` as a
+constructor argument: NFR-09 says "state records which rule version produced
+it", which is a property of the build, not a value a caller elects, so a host
+can today record a version that produced nothing and DEC-033's materialisation
+would run against it. Nothing in phase 3 forces a shape; flagged so that it is
+decided when it is decided rather than inherited.
+
+**Rejected:** nothing outright. The blind reviewer's observation that the
+register and the outcome line were missing was true when it looked and is what
+this entry closes. Its note that `#pragma warning disable CS0649` appears in the
+test fixture stands as recorded rather than acted on: `AGENTS.md` places the
+suppression rule in the section about the core's analyzers, the test project
+sets no `TreatWarningsAsErrors`, and the suppressed warning is "field never
+assigned" on a type whose fields exist to be read by reflection and are never
+assigned by design.
+
+**Carried forward to point 3, which is where it lands.** Its criterion perturbs
+the fields of `WorldState`; with `GenerationParams` a composite, perturbing the
+field proves the struct reaches the hash, not that each member of it does. The
+two coincide while it has one member. When phase 4 adds a second, a member that
+never reaches the hash passes point 3's test unless that test recurses the way
+this one does.
