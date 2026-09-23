@@ -37,7 +37,9 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-*None.*
+- **`R-005`** — the failure path for a criterion found wrong in flight. Needs:
+  accept, amend or reject the two-case recommendation, and say whether it is
+  written now or after the phase 3 plan closes.
 
 ---
 
@@ -213,3 +215,60 @@ rule set — a replay tool, say — which would be a new requirement in `SIM-REQ
 not a constructor argument.
 **Not verified:** nothing in `harness/` constructs a `WorldState` today, so no
 host use of the parameter was found to break; checked by grep, not by build.
+
+### R-005 — The failure path for a criterion found wrong in flight: two cases, one receiver
+
+**Date:** 2026-09-23   **Origin:** review request 2026-09-20, item 5
+**Verdict:** escalated — reserve 1 of `R-001`: the path lives in `AGENTS.md` and
+`.claude/skills/plan-next/SKILL.md`
+**docs/:** unchanged
+
+Item 5 asks what happens between a point failing (`D-023`: closed `FALLITO`,
+plan stops) and the rule that a wrong criterion is reported, never rewritten:
+who is told, where the defect is written, whether the plan stops. `D-055`
+deferred it to the close of the phase 3 plan, unless "the first point of phase 3
+hitting a wrong criterion" made it concrete first.
+
+**That has happened twice.** Point 1's criterion under-covered its "Does"
+(`D-059`); point 2's contradicted its own "Does" and could not fail for the
+reason it exists (`D-064`, `D-065`). Both times the implementer took the same
+path unprompted: the point closed against the criterion as written, a test beside
+it made the criterion mean something, the register named the defect, the
+criterion stayed frozen, and the plan went on. The path exists in practice. What
+is missing is the text, and a receiver — which since `R-001` exists: the decider
+reads the register.
+
+**Recommendation.** Write down the two cases the practice already distinguishes:
+
+1. **The criterion is weaker than the point, or its words diverge from its
+   "Does", and the code is right.** The point closes on the criterion as frozen,
+   with the extra check beside it; the outcome line says *criterion defective*
+   and names the register entry; the plan continues. The decider rules on the
+   entry in its next audit, and any consequence lands under "Owed by the
+   implementer", never in `PLAN.md`. This is what points 1 and 2 did.
+2. **The criterion cannot be met by correct code**, or meeting it would build
+   the wrong thing. The point closes `FALLITO` under `D-023`, with *criterion
+   wrong* as the reason, and the plan stops. The receiver is the decider, which
+   rules; resumption is a new point added with approval under `D-014`, never an
+   amendment of the old one.
+
+The line between the two is whether correct code can pass the check as written.
+The cost of the recommendation is that case 1 lets a plan continue past a
+defect nobody has yet ruled on; the alternative, stopping on every defect, would
+have stopped phase 3 at each of its first two points for findings that changed
+no code.
+
+**Timing.** The text is two paragraphs in `/plan-next` step 8 and one sentence in
+`AGENTS.md`. `D-055`'s objection — process work needs a plan, and two live plans
+break the point lookup — is right for building mechanism, and weaker for
+writing down a path already walked twice. Whether that counts as trivial under
+`AGENTS.md` is itself the governance question, and is the user's.
+
+**Cost.** Until answered, case 2 has no written path; the first criterion that
+correct code cannot pass will be handled by judgement.
+**Owed by the implementer:** nothing until the user answers.
+**Would overturn it:** the user preferring that any defective criterion stop
+the plan, which makes case 1 disappear into case 2.
+**Not verified:** that no point of phase 3 has already met case 2 without
+recording it as such; only the outcome lines of points 1 and 2 and `D-059` to
+`D-067` were read.
