@@ -28,7 +28,8 @@ line to tell the human how many entries are outstanding, so keep its shape.
 Actions a ruling requires of the code or of the plan. The implementer cites the
 `R-NNN` in the commit that does it; the decider marks it done with that commit.
 
-*None.*
+- **`R-003`**, within plan point 5: no public member of the core exposes mutable
+  world state for reading or writing.
 
 ## Escalated to the user
 
@@ -119,3 +120,56 @@ makes the count read zero or everything.
 a hook rather than a sentence in a report.
 **Not verified:** the count ran once, by hand, against today's files, giving 67
 entries from `D-001` to `D-067`. No `/plan-next` run has produced the line yet.
+
+### R-003 — Mutable world state is not part of the core's public surface
+
+**Date:** 2026-09-23   **Origin:** D-063, D-067 (the question passed to the human)
+**Verdict:** resolved; the rest of `D-063` ratified
+**docs/:** unchanged
+
+`D-063` asked whether `WorldState`'s public mutable fields should become
+`internal`, leaving FR-A-01 enforced by the compiler rather than by convention.
+The specification already answers it, in three sentences read together:
+FR-A-01, "Nothing outside the core writes world state directly"; FR-A-02,
+"Nothing outside the core reads mutable world state"; FR-A-03, the game reads "a
+read-only snapshot". `D-063` weighed only the first. The second is the stronger
+one: it forbids the host from *reading* the live state, so a public field is a
+violation available to every caller, not merely a write left unguarded. DEC-030
+states the same boundary as architecture — commands in, events out, snapshot
+for reading — and DEC-031 is why it matters beyond tidiness: once the core runs
+on its own thread, a host reading a live field reads it mid-tick.
+
+In a C# library the only enforcement that does not depend on every future
+caller behaving is that the mutable state has no public member. That is the
+ruling. The shape is the implementer's — `internal` fields, an `internal` type,
+or a public handle with nothing mutable on it — provided no public member lets
+code outside the core read or write the live state. What the host legitimately
+needs goes through the core's own surface: point 5's queue for writes, the state
+hash as a value for point 8's runner, the serialiser's bytes for saves, and in a
+later phase the snapshot of FR-A-03.
+
+The argument against, that every core type so far is public and the runner will
+want some surface, is a statement about cost. The runner wants a surface; it
+does not want the fields.
+
+**The rest of `D-063` is ratified**: the container is a class, and NFR-10's "no
+object references *inside*" governs its contents. The public-fields rationale in
+`WorldState`'s remarks — "systems mutate state and nothing else does" — argues
+for this ruling rather than against it, since systems live in the core.
+
+**Cost.** Point 5 widens by one change to `WorldState` and whatever tests read
+its fields. `FRW01_TheWorldRowCarriesTheDeclaredTypes` looks fields up with
+`GetField(name)` and default binding flags, which see public members only, and
+will fail with a null reference until it passes `BindingFlags.NonPublic`, as the
+walker beside it already does. The harness does not touch `WorldState` today, so
+it costs nothing there. Every later point writes against the narrower surface,
+which is the reason to do it now.
+**Owed by the implementer:** within point 5, which serves FR-A-01: no public
+member of the core exposes mutable world state for reading or writing. Cite
+`R-003` in that commit.
+**Would overturn it:** a host requirement, in `SIM-REQ` or DEC-030's successor,
+to read live state in place of the snapshot — which would be a change to FR-A-02
+first.
+**Not verified:** that the harness of point 8 can be written against the
+narrower surface without a public accessor for something it needs; the runner
+does not exist yet.

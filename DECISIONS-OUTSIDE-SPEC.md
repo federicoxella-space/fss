@@ -1463,6 +1463,8 @@ rewrite.
 
 ### D-063 · Point 2 · The container is a class; only its contents obey NFR-10
 
+**Ruling:** R-003 — ratified; the open question resolved, mutable state leaves the public surface at point 5.
+
 NFR-10 reads "Struct-of-arrays, indexed by `EntityId`. No object references
 inside serialised state." `WorldState` is a `sealed class` with public mutable
 fields.
