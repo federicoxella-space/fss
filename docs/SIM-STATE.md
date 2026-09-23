@@ -193,3 +193,4 @@ A-02 and A-03 together are the currency invariant. A-01 and A-14 are the populat
 1. Confirm the age band count for cohorts, which multiplies cohort width.
 2. Decide whether `flowAccumulator` needs per-good history or a single rolling figure.
 3. Decide the chronicle retention policy. Entries accumulate over 60 years and nothing above discards them.
+4. Decide how the chronicle dates prior history. FR-G-03 runs it "before tick 0" and DEC-040 takes the result as tick 0, so entries written during it carry ticks that are negative once the run is relabelled, or later than the run's first tick if it is not.

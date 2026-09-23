@@ -1316,6 +1316,8 @@ methods become its constructor.
 
 ### D-057 · Point 1 · A tick is non-negative, checked in debug only
 
+**Ruling:** R-007 — ratified; prior-history dating recorded as open in `SIM-STATE`.
+
 `Calendar` asserts `tick >= 0` under `Conditional("DEBUG")` and defines nothing
 below zero. `docs/` does not say ticks are non-negative, and one line reads the
 other way: **FR-G-03** generates prior history "for P-18 years **before tick

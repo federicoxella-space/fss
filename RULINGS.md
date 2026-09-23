@@ -314,3 +314,33 @@ field inside a variable-length field is the candidate.
 **Not verified:** that every bounded field in `SIM-STATE` has a cap in `SIM-REQ`
 §16 that makes the fixed-capacity shape available; `P-32` was seen for route
 candidates, the others were not checked.
+
+### R-007 — A tick in state is non-negative; how prior history is dated stays open
+
+**Date:** 2026-09-23   **Origin:** D-057
+**Verdict:** ratified; the question it uncovered recorded as open
+**docs/:** `SIM-STATE` §Open gains item 4.
+
+`D-057` guards `tick >= 0` in `Calendar`, debug only, reading FR-G-03's "for
+P-18 years before tick 0" through DEC-040's "then takes the result as tick 0":
+prehistory is relabelled, not numbered backwards. For the `tick` field of the
+World row that reading is right, and the entry stands.
+
+It leaves one thing unsaid, which is why this is not in the batch. Prior history
+writes chronicle entries — DEC-040's rationale is that dynasties and ruins "rest
+on events that actually happened" — and each entry carries a tick. If the run is
+relabelled, those ticks are negative, and `Calendar` is asked for the date of
+something its guard says cannot exist. If it is not, the run's first tick is not
+0 and DEC-040 is read loosely. Neither document chooses, and the answer shapes
+how the game shows "forty years ago". It belongs to phase 14, which implements
+FR-G-03; it is recorded where the next reader of `SIM-STATE` will find it rather
+than decided now, since nothing in phases 3 to 13 depends on it.
+
+**Cost.** None now. If the relabelling reading wins, `Calendar` needs floor
+division for negative ticks, which `D-057` rejected for a state the simulation
+could not then occupy.
+**Owed by the implementer:** nothing.
+**Would overturn it:** a phase-14 ruling on the open item.
+**Not verified:** whether any requirement in `SIM-OBS` or `SIM-REQ` §12 already
+implies how old chronicle entries are dated for the player; §12 and `SIM-OBS`
+were not read for it.
