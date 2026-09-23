@@ -16,9 +16,8 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** none — no `D-NNN` has been audited yet. The next audit
-starts at `D-001`. Entries already marked by the human (promoted, closed) are
-ratified in bulk unless something in them no longer holds.
+**Register watermark:** D-067 — audited by `R-008`. The next audit starts at the
+first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
 line to tell the human how many entries are outstanding, so keep its shape.
@@ -39,7 +38,11 @@ Rulings with verdict `escalated` or `pending`, until the user answers.
 
 - **`R-005`** — the failure path for a criterion found wrong in flight. Needs:
   accept, amend or reject the two-case recommendation, and say whether it is
-  written now or after the phase 3 plan closes.
+  written now or after the phase 3 plan closes. `D-031`'s missing third outcome
+  (a point done, one clause pending a human) belongs in the same answer.
+- **`D-024`, via `R-008`** — is approving a plan that names `AGENTS.md`
+  permission to edit it, or does each edit need its own sentence? `AGENTS.md`
+  says how a `docs/` edit is authorised and says nothing about its own.
 
 ---
 
@@ -344,3 +347,46 @@ could not then occupy.
 **Not verified:** whether any requirement in `SIM-OBS` or `SIM-REQ` §12 already
 implies how old chronicle entries are dated for the player; §12 and `SIM-OBS`
 were not read for it.
+
+### R-008 — The register from `D-001` to `D-067` is ratified, save what R-003 to R-007 ruled
+
+**Date:** 2026-09-23   **Origin:** register audit, the first
+**Verdict:** ratified
+**docs/:** unchanged
+
+Every entry was read against the documents it cites. Ratified as written:
+`D-001` to `D-056`, `D-058` to `D-062`, `D-065` to `D-067`. The rest were ruled
+on their own: `D-063` by `R-003`, `D-067`'s two open questions by `R-003` and
+`R-004`, `D-064` by `R-006`, `D-057` by `R-007`.
+
+**By group.**
+
+- **`D-001` to `D-010`, the primitives.** The four the human promoted (`D-001`,
+  `D-002`, `D-006`, `D-007` as DEC-081 to DEC-084) and `D-004`, superseded when
+  `SQ-002` split A-11, stand as marked; A-11b is in `SIM-STATE` and CI runs the
+  Debug build, both checked. The rest are local choices with no reach beyond
+  their code.
+- **`D-011` to `D-055`, process.** How plans, reviews, questions and promotions
+  work. Process is ratified or rejected, never promoted (`D-011`), and nothing
+  here is wrong on the merits. Three carry something forward:
+  `D-024` leaves open whether approving a plan that names `AGENTS.md` is
+  permission to edit it — governance, reserve 1 of `R-001`, escalated below
+  rather than ruled. `D-031` names a third outcome the mechanism lacks, a point
+  done with one clause pending a human; it is the same family as `R-005` and
+  should be answered with it. `D-055` became `R-005`.
+- **`D-056` to `D-067`, phase 3.** Readings of `docs/` that hold: zero-based
+  calendar divisions agree with FR-T-05a's formulas (`D-056`); `record` in
+  `SIM-STATE` means a composite (`D-061`); one generation parameter until the
+  generator needs more, under NFR-08's migration path (`D-062`). `D-059` and
+  `D-065` are criterion defects handled as `R-005`'s case 1 recommends. `D-066`
+  stands as an approximation until `SIM-STATE` §World rows carry identifiers,
+  which is not worth adding for five fields.
+
+**Cost.** None.
+**Owed by the implementer:** nothing.
+**Would overturn it:** any entry found to contradict `docs/` as it stood when the
+entry was written; `R-008` does not make an entry right, it records that one
+reading found nothing wrong.
+**Not verified:** entries were checked against `docs/` and, for the claims named
+above, against the repository; claims about commit hashes, test counts and
+reviewer behaviour in the process entries were taken as written.

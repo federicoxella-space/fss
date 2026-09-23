@@ -19,6 +19,8 @@ Commit `3f97af8`, branch `hash64-soggetto-e-range`. Three fixes in
 
 ### D-001 · 1. The draw subject is a 64-bit key, not an entity
 
+**Ruling:** R-008 — ratified.
+
 **Promoted 2026-09-19 as `DEC-081`.** The text went in close to the draft; the
 specification now states the subject coordinate and this entry is history.
 
@@ -32,6 +34,8 @@ document says how the two key spaces coexist. Rejected: a second hash function
 for non-entity draws, which would need every property proved twice.
 
 ### D-002 · 2. A non-entity row key keeps its high half at zero
+
+**Ruling:** R-008 — ratified.
 
 **Promoted 2026-09-19 as `DEC-082`.** The reservation of generation 0 is now a
 decision of record rather than something inferred from `EntityId.None`.
@@ -53,11 +57,15 @@ enforces it.
 
 ### D-003 · 4. `Range` takes a count, not an interval
 
+**Ruling:** R-008 — ratified.
+
 `Range(draw, count)` returns `0 .. count - 1`; callers wanting `min .. max`
 write `min + Range(draw, max - min + 1)`. No specification input. Rejected:
 overloads for inclusive and exclusive bounds, as unrequested surface.
 
 ### D-004 · 5. A-11 is checked in debug builds only, and by `checked` rather than an assert
+
+**Ruling:** R-008 — ratified.
 
 **Superseded 2026-09-19, not promoted.** `SQ-002` closed by splitting the
 invariant: A-11 is now the range of fixed-point quantities held in state, A-11b
@@ -81,6 +89,8 @@ want it at state level instead of per call.
 
 ### D-005 · 7. Process choices
 
+**Ruling:** R-008 — ratified.
+
 - One commit rather than two. Splitting DEC-002 from A-11 would have to split
   `PrimitivesTests.cs`, leaving an intermediate commit whose A-11 test fails in
   Debug. The message names both identifiers.
@@ -98,6 +108,8 @@ numbers, so the series above now skips 3 and 6.
 
 ### D-006 · 1. `Hash64.Range` is a plain modulo
 
+**Ruling:** R-008 — ratified.
+
 **Promoted 2026-09-19 as `DEC-084`.**
 
 The reduction is `(int)(draw % (ulong)count)`. Rejection and re-mixing are gone,
@@ -113,6 +125,8 @@ it. The magnitude is documented at `Range`, where the next reader will ask.
 
 ### D-007 · 2. One channel per kind of non-entity subject
 
+**Ruling:** R-008 — ratified.
+
 **Promoted 2026-09-19 as `DEC-083`.** It was a rule living in a source comment
 and unenforced by the build; it is now a numbered decision, still unenforced by
 the build.
@@ -124,6 +138,8 @@ but the channel. Unenforced by the build, like the rest of that contract.
 
 ### D-008 · 3. CI runs the debug build
 
+**Ruling:** R-008 — ratified.
+
 A `dotnet test -c Debug` step, so the A-11 guard and
 `A11_ApplyRefusesAProductThatLeaves64Bits` run somewhere other than a
 developer's machine. Added as a step in the existing job rather than a matrix
@@ -131,6 +147,8 @@ over configurations: a matrix would also fan out the wealth-band steps, which
 are release-configuration checks and have their own reason to run twice.
 
 ### D-009 · 4. The histogram tolerance was left alone
+
+**Ruling:** R-008 — ratified.
 
 `NFR03_RangeCoversTheIntervalEvenly` keeps its 5% band. Review allowed widening
 it if it had been sized around exact uniformity; it was not. 5% is about 5.4
@@ -140,6 +158,8 @@ that has nothing to do with the claim that changed. The reasoning is now in the
 test.
 
 ### D-010 · 5. Left as found
+
+**Ruling:** R-008 — ratified.
 
 The remark on `Hash64.Of` still phrases channel separation as the sensible
 answer rather than as the rule it now is. `HashChannel` states the rule; further
@@ -155,6 +175,8 @@ belong to.
 
 ### D-011 · Whole plan — `docs/` is silent, and stays silent
 
+**Ruling:** R-008 — ratified.
+
 Every point of this plan declares `docs/` silent, so the declaration is made once
 here instead of five times in the plan. `SIM-REQ` §18 plans the simulator; it
 does not plan how the simulator gets built, and it should not start. Process work
@@ -162,6 +184,8 @@ that wrote itself into the specification would be indistinguishable, a year from
 now, from the design the specification exists to hold.
 
 ### D-012 · Point 1 — the rule in `AGENTS.md`
+
+**Ruling:** R-008 — ratified.
 
 **An agent edited the standing instructions.** The rule given on 2026-09-16 is
 that permanent instructions are changed by a human. Permission for this one was
@@ -177,6 +201,8 @@ instructions, which are the part a human owns. The cost is that the rule and its
 procedure can drift apart, and nothing but reading catches it.
 
 ### D-013 · Point 2 — `/plan-explain`
+
+**Ruling:** R-008 — ratified.
 
 **A point is open until it carries an outcome line, and nothing else counts.**
 The skill finds the next point by looking for the first one without `*Esito:*`,
@@ -205,6 +231,8 @@ last, on the state the commit will contain.
 
 ### D-014 · Point 5, added mid-plan — a plan may gain points, with approval
 
+**Ruling:** R-008 — ratified.
+
 The first run of `/plan-explain` in a fresh session showed the defect it was
 built to show, one level up from where it was looking: every point of this plan
 reports a `Serves` field that says nothing, because `docs/` is not silent about
@@ -230,6 +258,8 @@ a plan, not from a reviewer on a diff. Worth noting for the same reason the
 protocol exists: the cheapest place to find a defect is upstream of the work.
 
 ### D-015 · Point 3 — `/plan-status`
+
+**Ruling:** R-008 — ratified.
 
 **Commits are resolved by the `Plan-point:` trailer, not by heuristics.** The
 first run of `/plan-explain` objected that this point's criterion asks for
@@ -273,6 +303,8 @@ already exists and is easy to skip on a documentation point: run the check.
 
 ### D-016 · Point 4 — `/plan-next` and the reviewer briefs
 
+**Ruling:** R-008 — ratified.
+
 **"Do not edit the code" is enforced by the reviewer's tools, not by its
 compliance.** Both reviewers are dispatched as a read-only agent type — `Plan`,
 or `Explore` — which has no `Edit` and no `Write`. An instruction not to edit is
@@ -314,6 +346,8 @@ procedure.
 
 ### D-017 · Point 5 — `Kind` in the header, `Serves` made conditional
 
+**Ruling:** R-008 — ratified.
+
 **A missing `Serves` under `Kind: simulator` stops the work rather than being
 filled in.** The field is mandatory there, so its absence is a defect in a frozen
 contract, and the three skills treat it the way they treat an ambiguous
@@ -338,6 +372,8 @@ specification has no jurisdiction. The second reading invites someone, later, to
 go and add one.
 
 ### D-018 · Closing the plan — what the exit condition could and could not verify
+
+**Ruling:** R-008 — ratified.
 
 Three of its four clauses were checked directly: the plan, the three skills and
 the rule in `AGENTS.md` exist and agree with the design.
@@ -371,6 +407,8 @@ mechanism the previous section built.
 
 ### D-019 · Point 1 — the criterion to the reviewers, and citations opened
 
+**Ruling:** R-008 — ratified.
+
 **The criterion is pasted, not summarised.** Both reviewers receive the point's
 frozen text verbatim from `PLAN.md` — statement, citations, check, and any
 `Check: weak` marker. A summary written by the author of the code under review is
@@ -395,6 +433,8 @@ citation check had nothing to open. Consistent with the declared weak check, and
 worth stating rather than leaving a reader to assume the rule was tried.
 
 ### D-020 · Point 2 — `Core:` defaults to yes
+
+**Ruling:** R-008 — ratified.
 
 **A missing reason is resolved as `yes`, and the plan is not stopped for it.**
 Point 1 established that a defect in a frozen plan stops the work; this is the
@@ -432,6 +472,8 @@ brief had been written the day before.
 
 ### D-021 · Point 3 — re-reading the plan before the outcome line
 
+**Ruling:** R-008 — ratified.
+
 **The re-read diagnoses; the anchored edit protects.** Both appends are made with
 an exact-match edit against text just read, not a rewrite of the file. An edit
 that cannot find its anchor fails loudly; a rewrite from memory wins silently
@@ -460,6 +502,8 @@ that a document read at step 1 and written at step 6 has a gap in the middle
 wide enough to lose an edit in.
 
 ### D-022 · Point 4 — `Check: weak`, declared early and with both halves
+
+**Ruling:** R-008 — ratified.
 
 **Both halves are required, and the second is the one that does the work.**
 "This cannot be proved today" and "this cannot be proved" are different
@@ -491,6 +535,8 @@ raised with the human as a candidate for its own point — which it became, as
 point 13.
 
 ### D-023 · Point 5 — a failed point and an abandoned plan
+
+**Ruling:** R-008 — ratified.
 
 **A failed point is closed, not left open.** It carries an outcome line saying
 `FALLITO`, a register entry, and a commit with the usual trailer. Leaving it open
@@ -525,6 +571,8 @@ decision that belongs in `SIM-DEC`.
 
 ### D-024 · Point 6 — the threshold below which no plan is needed
 
+**Ruling:** R-008 — ratified.
+
 **The permission to edit `AGENTS.md` was read from the approved plan.** The
 standing rule is that permanent instructions are changed by a human and an agent
 needs specific permission. Point 6 names `AGENTS.md` in its statement and the
@@ -557,6 +605,8 @@ which supplies the right word, is not closed yet.
 
 ### D-025 · Point 7 — `Satisfies` in simulator plans
 
+**Ruling:** R-008 — ratified.
+
 **`Satisfies` and `Serves` are not one field at two scales.** `Serves` is per
 point and stops a point from inventing a requirement. `Satisfies` is per plan and
 stops an acceptance criterion from having nothing behind it. They could have been
@@ -579,6 +629,8 @@ simulator plan is where it either works or does not, and that is also the first
 time the coverage question can be asked at all.
 
 ### D-026 · Point 8 — `SPEC-QUESTIONS.md`
+
+**Ruling:** R-008 — ratified.
 
 **It opens with a real question, not an empty state.** `SQ-001` records a genuine
 inconsistency found while building `Hash64.Subject` three days ago: DEC-002 and
@@ -612,6 +664,8 @@ file existing.
 
 ### D-027 · Point 9 — archival, and identifiers in this register
 
+**Ruling:** R-008 — ratified.
+
 **The archive trigger is the plan closing, not the branch merging.** A branch can
 hold two plans in sequence — this one does — and tying the archive to the merge
 would leave a finished plan at the root pretending to be current while its
@@ -644,6 +698,8 @@ pass, so the assignment is deterministic and reviewable as a single
 transformation rather than twenty-six chances to mistype.
 
 ### D-028 · Point 10 — the promotion pass
+
+**Ruling:** R-008 — ratified.
 
 **A third root file, `PROMOTIONS.md`, rather than a section of the register.**
 The register records what was decided; this proposes to change `docs/`. Folding
@@ -683,6 +739,8 @@ decision back against the specification it was taken under.
 
 ### D-029 · Point 11 — the read-only skills run as read-only agents
 
+**Ruling:** R-008 — ratified.
+
 **The dispatch works and the guarantee is real.** `/plan-status` was run as a
 `Plan` agent, which has no `Edit` and no `Write`. It reported the plan correctly
 and the working tree was byte-identical afterwards — `git status --short` and
@@ -700,6 +758,8 @@ one step from resolving the objection by editing the text. The criteria are
 frozen by this, not only by the instruction that says so.
 
 ### D-030 · Point 11 — three defects the read-only agent found
+
+**Ruling:** R-008 — ratified.
 
 The dispatch was meant to prove a mechanism and immediately did the job the
 mechanism exists for. All three are this author's, none was caught by reading.
@@ -736,6 +796,8 @@ the author.
 
 ### D-031 · Point 12 — no squash, and a clause that could not be met
 
+**Ruling:** R-008 — ratified.
+
 **A pull request template, not just this branch's body.** The criterion asked
 for the note in the pull request for this branch; a template puts it in every
 one, and makes the criterion's own clause true automatically whenever a request
@@ -766,6 +828,8 @@ the remote, so the rewrite would have been a force push over work the human has
 already fetched.
 
 ### D-032 · Point 13 — `Check: shallow`
+
+**Ruling:** R-008 — ratified.
 
 **The remedies are the reason the distinction exists**, not the vocabulary.
 `weak` is a wait for a tool that does not exist; `shallow` is an admission that
@@ -798,6 +862,8 @@ Branch `plan-e-skill`, third plan, planned in `PLAN.md`. Asked for by the human
 while away, after a review of the mechanism built in the two plans above.
 
 ### D-033 · Point 1 — `REVIEW-REQUEST.md` and the three moments
+
+**Ruling:** R-008 — ratified.
 
 **Everything else in this mechanism is a record, and a record waits.** That is
 the right shape for a record and the wrong one for a question. The file exists
@@ -835,6 +901,8 @@ example that hides its own shape teaches the wrong one.
 
 ### D-034 · Point 2 — the reminders, and which skill owes which moment
 
+**Ruling:** R-008 — ratified.
+
 **One moment each, except the first, which two skills carry.** `/plan-explain`
 and `/plan-next` both announce moment one on the first point of a plan, because
 either can be the command someone runs first and a reminder that depends on
@@ -871,6 +939,8 @@ loop, and what the answers cost.
 
 ### D-035 · The return channel worked, and returned more than it was asked
 
+**Ruling:** R-008 — ratified.
+
 **Both questions closed, and neither closed the way it was posed.**
 
 `SQ-001` asked which arity was normative. The answer gave the five-coordinate
@@ -895,6 +965,8 @@ It took a channel that runs the other way to find out the code did not.
 
 ### D-036 · Bookkeeping, and what marking costs
 
+**Ruling:** R-008 — ratified.
+
 **Four register entries marked with what they became**, `D-001` → `DEC-081`,
 `D-002` → `DEC-082`, `D-007` → `DEC-083`, `D-006` → `DEC-084`, and the
 candidates struck in `PROMOTIONS.md` but kept as the record of what was
@@ -914,6 +986,8 @@ indistinguishable from one that was skipped.
 
 ### D-037 · `SQ-003`, filed rather than answered
 
+**Ruling:** R-008 — ratified.
+
 `NFR-03` and `DEC-002` still read `entity_id`, while FR-X-02 now writes the
 subject form and cites "under NFR-03" as its authority. The documents that *use*
 the draw were updated; the two that *define* it were not.
@@ -928,6 +1002,8 @@ It is the residue of `SQ-001`, which was the same shape, went unrecorded for
 three days, and turned out to be hiding the tick question.
 
 ### D-038 · `SQ-003` decided, and the edit left to a human
+
+**Ruling:** R-008 — ratified.
 
 **Resolution A: the definitions move.** `NFR-03` and `DEC-002` take the subject
 form rather than FR-X-02 re-pointing its citation at `DEC-081`. `SIM-REQ` states
@@ -955,6 +1031,8 @@ whole discipline is that a record states what was true at its moment.
 
 ### D-039 · The stale request was replaced, not amended
 
+**Ruling:** R-008 — ratified.
+
 The request of the morning was false by the evening: the branch it described is
 merged, its commits pushed, both its questions closed. It was replaced whole
 rather than corrected in place, which is what the design says — one request at a
@@ -967,6 +1045,8 @@ part of it false. Reading a stale one is worse than reading nothing, because it
 looks current.
 
 ### D-040 · Applying `SQ-003` overran the text that had been deposited
+
+**Ruling:** R-008 — ratified.
 
 The entry said "nothing else in `docs/` needs to move". It was wrong: the World
 note at `SIM-STATE:26` carried the entity form too, and the two agreed lines
@@ -993,6 +1073,8 @@ a claim about `docs/`, because that claim was prose rather than a criterion.
 
 ### D-041 · The request was amended, not replaced
 
+**Ruling:** R-008 — ratified.
+
 The request of the evening asked for `SQ-003`, which is now answered. It was
 amended in place rather than replaced whole, against the precedent set hours
 earlier by `D-039`.
@@ -1011,6 +1093,8 @@ Branch `main`, planned in `PLAN.md`, one point. Approved by the human, who
 deferred the phase-3 plan to a clean session.
 
 ### D-042 · The range, not a new trailer
+
+**Ruling:** R-008 — ratified.
 
 **The lookup is bounded, the commit format is unchanged.** The alternative was a
 second trailer naming the plan — `Plan: 2026-09-19-dodici-lacune` — which would
@@ -1035,6 +1119,8 @@ plans. One point, no code, and the human is about to open a clean session agains
 rather than done quietly.
 
 ### D-043 · A check that passed without running
+
+**Ruling:** R-008 — ratified.
 
 The first version of this point's check was a Python script. It printed
 `ESITO: tutti i punti risolvono a un commit solo` and had verified nothing: a
@@ -1065,6 +1151,8 @@ No plan. `REVIEW-REQUEST.md` rewritten on the human's instruction, after
 
 ### D-044 · Replaced, not amended — and the rule that decided it
 
+**Ruling:** R-008 — ratified.
+
 `D-039` and `D-041` between them say when each applies: **replaced** when the
 situation the request describes has moved, **amended** when one of its items is
 answered and the rest still stands. Here the situation moved — the request
@@ -1076,6 +1164,8 @@ never answered, and an unanswered item does not close because the request around
 it did. Replacing a request is not a way of retiring what it asked for.
 
 ### D-045 · Moment one was served without a plan to read, and says so
+
+**Ruling:** R-008 — ratified.
 
 The file's own argument for moment one is that "the plan is short — a few
 hundred words against a branch", which presupposes a plan on the page. There is
@@ -1099,6 +1189,8 @@ one step early and the next one waits for a plan.
 
 ### D-046 · Three counts of the closed points, reported rather than reconciled
 
+**Ruling:** R-008 — ratified.
+
 The last request said twenty-three closed points, the lookup point's outcome
 says twenty-one, and counting `*Esito:*` lines today gives twenty across the
 three plans archived at that moment. The plausible reading — the lookup counted
@@ -1118,6 +1210,8 @@ discrepancies get closed.
 Written on instruction, the same day the moment-one request went up. No code.
 
 ### D-047 · Where phase 3 stops, decided three times
+
+**Ruling:** R-008 — ratified.
 
 `SIM-REQ` §18 names phase 3's content in five words — "scheduler, RNG,
 serialisation, chronicle, CLI runner" — and each of the last three reaches into
@@ -1143,6 +1237,8 @@ and that is a `SPEC-QUESTIONS` entry, not a plan revision.
 
 ### D-048 · Point 7 declared blocked rather than deferred or built anyway
 
+**Ruling:** R-008 — ratified.
+
 §20 ends "Confirm before Phase 3. A wrong guess costs a rewrite of the
 serialiser," and five of its rows read `Proposed`. Three options.
 
@@ -1164,6 +1260,8 @@ touch no serialised format, so the block costs no ordering.
 
 ### D-049 · Tests are named for invariants and requirements, not only for AC numbers
 
+**Ruling:** R-008 — ratified.
+
 `AGENTS.md` says tests carry the number of what they verify and gives acceptance
 criteria as the list. Four points of this plan verify things with no AC number:
 `A-13` is an invariant of `SIM-STATE`, `FR-T-05a`, `NFR-10` and `FR-A-01` are
@@ -1181,6 +1279,8 @@ whoever writes them.
 
 ### D-050 · Two points exempt from the reviewers, on a diff-checkable line
 
+**Ruling:** R-008 — ratified.
+
 Points 8 and 9 declare `Core: no`. Point 8 touches `harness/` only, point 9 adds
 a test file and a workflow step; both state the command that falsifies the claim
 — `git diff --name-only HEAD -- core/` and the same over `core/Runtime/`. That
@@ -1193,6 +1293,8 @@ point 1, having had no exercise in four plans. If it is broken, point 1 is where
 that is found, which is the cheapest point in the plan for it to happen on.
 
 ### D-051 · The plan is installed on `main`, and `fase-3-kernel` is not cut
+
+**Ruling:** R-008 — ratified.
 
 `66a908d` installed the previous plan on the development branch, and this one
 goes on `main` instead. The reason is what the commit contains: a plan, a
@@ -1218,6 +1320,8 @@ and one gap left behind that the request had not asked about.
 
 ### D-052 · `SQ-004` closed by marking what it got wrong, not by tidying it
 
+**Ruling:** R-008 — ratified.
+
 The entry proposed three readings of how `P-17` and `P-01` could close. Reading
 2 — build a synthetic settlement update and measure it — **had already been
 done**: `P-63` and `P-64` sit in §16 with the note "Measured, 5 of 12 phases",
@@ -1237,6 +1341,8 @@ rules and those are not edited in passing.
 
 ### D-053 · The met precondition is recorded in the plan, the points are not touched
 
+**Ruling:** R-008 — ratified.
+
 §20 was confirmed and `SQ-004` closed, both before any point started, so point 7
 is unblocked. The plan says so in the precondition section that declared the
 block, dated, with a line stating that nothing above it was rewritten.
@@ -1248,6 +1354,8 @@ criterion, the edit would be indistinguishable in the diff from one that was.
 taking the other path would have wasted the precaution.
 
 ### D-054 · The request is marked answered, not replaced
+
+**Ruling:** R-008 — ratified.
 
 `D-039` replaces a request when the situation moved, `D-041` amends it when one
 item was answered. Here **every** item was answered and no new moment arrived:
@@ -1262,6 +1370,8 @@ going to git — defensible, and it would mean the file is empty between moments
 which is information too.
 
 ### D-055 · The failure path is recorded as owed and deliberately not built
+
+**Ruling:** R-008 — ratified.
 
 The reviewer's gap 8: nothing says what happens when a criterion turns out to be
 wrong **in flight**. The neighbouring cases exist — a failed check closes the
@@ -1285,6 +1395,8 @@ plan is the one that has to stop and say so.
 The plan's points, each under the number it closes.
 
 ### D-056 · Point 1 · `Calendar`, a static class of six divisions, zero-based
+
+**Ruling:** R-008 — ratified.
 
 `docs/` fixes the arithmetic and nothing about its shape: no type name, no
 namespace, no signature. What was chosen — `Sim.Calendar`, a static class in
@@ -1342,6 +1454,8 @@ the guard.
 
 ### D-058 · Point 1 · Weekday is not in the core; the test defines it
 
+**Ruling:** R-008 — ratified.
+
 The point's "Does" is exhaustive — "the tick-to-date arithmetic and nothing
 else" — and does not list a weekday, yet the criterion's first test is
 `FRT02_EveryDateFallsOnTheSameWeekday`. `Calendar` exposes no weekday, and the
@@ -1358,6 +1472,8 @@ later wants a weekday gets the same answer from either.
 which point 4's `id % 7 == d % 7` bucket is not — that derives from the id.
 
 ### D-059 · Point 1 · The criterion under-covers the point, and was not rewritten
+
+**Ruling:** R-008 — ratified.
 
 Finding, from the blind reviewer, confirmed: the point's "Does" requires "the
 New Year's Day that sits between two ticks without consuming one", and the two
@@ -1378,6 +1494,8 @@ in `AGENTS.md` or the three skills supports that reading, but it is the
 alternative.
 
 ### D-060 · Point 1 · The reviewers' findings, including the one rejected
+
+**Ruling:** R-008 — ratified.
 
 Both reviewers ran `Core: yes`, built Release and ran both suites, and both said
 the point is sound. Their overlap was near total, which is worth recording as a
@@ -1405,6 +1523,8 @@ deriving from the values they are meant to check.
 
 ### D-061 · Point 2 · `record` in SIM-STATE is a composite value, not the C# keyword
 
+**Ruling:** R-008 — ratified.
+
 `SIM-STATE` §World types `generationParams` as `record`. A C# `record` is a
 class, and NFR-10 says "No object references inside serialised state", so the
 two would contradict each other under the keyword reading. `GenerationParams`
@@ -1429,6 +1549,8 @@ explicitly, or a row that needs a genuinely variable-length composite, which a
 struct cannot be.
 
 ### D-062 · Point 2 · `GenerationParams` carries one parameter, and it is P-02
+
+**Ruling:** R-008 — ratified.
 
 `docs/` nowhere enumerates the generation parameter set. FR-G-02 says only that
 "the generator seed and all generation parameters are stored in the save file",
@@ -1529,6 +1651,8 @@ width per row, which a flat array cannot express without an offset table.
 
 ### D-065 · Point 2 · The declared check cannot fail today, and the test that pins it is not named by the criterion
 
+**Ruling:** R-008 — ratified.
+
 `NFR10_StateHoldsNoObjectReferences` passes against a walker whose body is
 `return;`. Verified rather than reasoned: `Check` was replaced by an immediate
 `return`, the fixture run, and exactly one of its four tests went red —
@@ -1557,6 +1681,8 @@ should name the test that can break the mechanism.
 
 ### D-066 · Point 2 · Two tests carry `FR-W-01`, because `SIM-STATE` §World has no number
 
+**Ruling:** R-008 — ratified.
+
 `AGENTS.md` requires that a test carry the number of what it verifies. The two
 tests above verify the World row's field list and field types, which is
 `SIM-STATE` §World — and §World has no identifier of its own. They were first
@@ -1573,7 +1699,7 @@ point the tests should carry those.
 
 ### D-067 · Point 2 · The reviewers' findings, and the two left open
 
-**Ruling:** R-003, R-004 — both open questions resolved; the rest of the entry awaits the register audit.
+**Ruling:** R-003, R-004 — both open questions resolved; R-008 — the rest ratified.
 
 Both reviewers ran `Core: yes`, built Release and ran both suites, and both
 answered that the point closes. They overlapped on three findings and each
