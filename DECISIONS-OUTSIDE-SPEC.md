@@ -571,7 +571,7 @@ decision that belongs in `SIM-DEC`.
 
 ### D-024 · Point 6 — the threshold below which no plan is needed
 
-**Ruling:** R-008 — ratified.
+**Ruling:** R-008 — ratified; its open question answered by R-010.
 
 **The permission to edit `AGENTS.md` was read from the approved plan.** The
 standing rule is that permanent instructions are changed by a human and an agent

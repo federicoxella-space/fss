@@ -51,6 +51,16 @@ as `docs/` does. Before writing a plan and before each point, read "Owed by the
 implementer" in `RULINGS.md`, and name the `R-NNN` in the commit that acts on
 one.
 
+## This file changes only with permission, and the permission is recorded
+
+An agent edits `AGENTS.md` only with a human's permission for that change.
+Approving a plan grants it only to a point that says, in its own text, that it
+edits this file and which rule it adds or changes; a point that touches the file
+without saying so has no permission for it. Record the permission in
+`DECISIONS-OUTSIDE-SPEC.md` — who granted it and what it covered — or, in a
+decider session, in the ruling. Every commit carries the human's name whoever
+wrote it, so the record is the only place the difference shows (`R-010`).
+
 ## Plan the development before starting it
 
 Work starts from a written `PLAN.md` at the repository root, describing the

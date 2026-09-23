@@ -39,9 +39,6 @@ Rulings with verdict `escalated` or `pending`, until the user answers.
 - **`D-031`, via `R-008`** — the mechanism has no outcome for a point whose work
   is done while one clause waits on a human. Left out of `R-009`, which applied
   `R-005` as recommended and nothing more.
-- **`D-024`, via `R-008`** — is approving a plan that names `AGENTS.md`
-  permission to edit it, or does each edit need its own sentence? `AGENTS.md`
-  says how a `docs/` edit is authorised and says nothing about its own.
 
 ---
 
@@ -426,3 +423,41 @@ what later points built on — which would argue for stopping on every defect.
 **Not verified:** `/plan-explain` and `/plan-status` were grepped, not read
 whole, for text contradicting the new cases; both treat `FALLITO` as a stop and
 any other outcome line as closed, which is what the cases need.
+
+### R-010 — A plan authorises an edit to `AGENTS.md` only where its point says so
+
+**Date:** 2026-09-23   **Origin:** user, on `D-024`
+**Verdict:** resolved
+**docs/:** unchanged
+
+`D-024` left open whether approving a plan that names `AGENTS.md` is permission
+to edit it. Three answers were put to the user: the plan suffices; each edit
+needs its own sentence; or the plan suffices only for a point that states, in
+its own text, that it edits the file and which rule it adds or changes. The user
+chose the third.
+
+The reasoning, as presented: plans are written by the agent, and in a plan of
+nine points a line touching the standing instructions is easy to approve
+without seeing, which would let an agent rewrite its own rules by announcing it.
+Requiring the point to name the file and the rule makes the approval a
+conscious one without a second round trip. The record matters more than usual
+here: every commit carries the human's name whoever wrote it, so `git log`
+cannot tell an agent's edit to `AGENTS.md` from the human's — at least four
+past edits came from plan points, and only `D-012` and `D-024` say so.
+
+Applied as a new section of `AGENTS.md`, after the decider's, stating the rule
+and where the permission is recorded: `DECISIONS-OUTSIDE-SPEC.md`, or the ruling
+in a decider session. This ruling is itself the record for that edit and for
+`R-009`'s, both authorised by the user in this session. The decider's own limit
+is unchanged: reserve 1 of `R-001` still keeps `AGENTS.md` out of its
+initiative.
+
+**Cost.** A plan point that edits `AGENTS.md` must be written with the rule it
+changes stated up front, which is harder for a rule discovered in flight; that
+case now needs its own permission.
+**Owed by the implementer:** nothing. The rule applies from the next plan.
+**Would overturn it:** an edit that passed under a point which named the rule
+and still surprised the user, which would argue for the stricter answer.
+**Not verified:** which of the past edits to `AGENTS.md` came from plan points
+was inferred from their commit subjects matching plan points, not checked
+against each plan.
