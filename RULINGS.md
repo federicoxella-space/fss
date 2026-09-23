@@ -544,3 +544,30 @@ first commit.
 **Not verified:** references written as a section title rather than a number,
 or pointing into `SIM-REQ` from outside `docs/` other than `BannedSymbols.txt`,
 were not searched.
+
+### R-013 — A numbered section reference in `docs/` carries the section's title
+
+**Date:** 2026-09-23   **Origin:** user, on `R-012`
+**Verdict:** specified
+**docs/:** the four references `R-012` corrected now read `section 20,
+"Downstream constraints"`: `SIM-STATE` §Serialisation notes, `SIM-DEC` DEC-034a
+twice, `SIM-REQ` NFR-11. No rule's content changed.
+
+`R-012` left the references as bare numbers and named the cost: the next
+renumbering breaks them again, silently, as it broke these. The user asked for
+the title to be added: "Aggiungilo". With the title beside the number, a stale
+number is visible to any reader — the title and the heading disagree — and the
+target is still findable by name.
+
+Applied to the four references that exist. The same form is expected of any
+numbered reference added to `docs/` from now on; the decider holds its own edits
+to it, and a bare number found later is a defect of the same kind as `SQ-005`.
+
+**Cost.** A retitled section now breaks its references the way a renumbered one
+did, but visibly, which is the point.
+**Owed by the implementer:** nothing.
+**Would overturn it:** references moving to stable anchors — identifiers for
+sections, as requirements have — which would make both number and title
+redundant.
+**Not verified:** nothing beyond `R-012`'s own gaps; the grep for numbered
+references in `docs/` was rerun and finds these four only.

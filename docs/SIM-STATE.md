@@ -183,7 +183,7 @@ A-02 and A-03 together are the currency invariant. A-01 and A-14 are the populat
 - Struct of arrays, `EntityId` as index plus generation, no object references.
 - The `int[4]`, `int[]`, `fixed[]`, `id[]` and bounded fields of the tables above are per-row quantities, stored flattened under DEC-085, never as an array per row.
 - Version number and migration path from the first write.
-- No reflection: the serialiser is generated or hand-written, per section 20 of SIM-REQ.
+- No reflection: the serialiser is generated or hand-written, per section 20 of SIM-REQ, "Downstream constraints".
 - The state hash covers every field above. A field excluded from the hash is a determinism hole.
 
 ---

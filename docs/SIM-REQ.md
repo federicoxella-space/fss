@@ -513,7 +513,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 **NFR-10 — State layout.** Struct-of-arrays, indexed by `EntityId { int index; int generation; }`. No object references inside serialised state.
 
-**NFR-11 — Platform.** Windows x64. The core compiles against the target runtime profile declared in section 20 and uses no language feature above the declared level.
+**NFR-11 — Platform.** Windows x64. The core compiles against the target runtime profile declared in section 20, "Downstream constraints", and uses no language feature above the declared level.
 
 **NFR-12 — Tooling.** A command-line runner executes N ticks headless, dumps state hashes, writes chronicle and metric series to CSV, and runs parameter sweeps.
 
