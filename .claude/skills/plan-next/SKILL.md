@@ -247,6 +247,23 @@ Report: what was done, what the check produced, what the reviewers found
 including what was rejected, and what the next point is. Then stop. The next
 point does not start by itself, and this skill does not chain.
 
+**End the report with one line for the decider**, counted rather than
+estimated. The watermark in `RULINGS.md` is the last `D-NNN` the decider
+audited, or `none`; the line counts the register entries above it:
+
+```
+w=$(grep -m1 -oE '^\*\*Register watermark:\*\* (none|D-[0-9]+)' RULINGS.md | grep -oE '[0-9]+$'); w=${w:-0}
+grep -oE '^### D-[0-9]+' DECISIONS-OUTSIDE-SPEC.md | grep -oE '[0-9]+$' | awk -v w="$w" '$1+0>w{n++; if(!f)f=$1; l=$1} END{print n+0, f, l}'
+```
+
+```
+Decider: N register entries not yet reviewed (D-xxx to D-yyy) — run /decide
+```
+
+With none outstanding the line still appears, saying zero. It is a reminder to
+the human and nothing more: this session does not run `/decide` and does not
+play the decider (`AGENTS.md`).
+
 ## What this skill does not do
 
 - It does not merge, push, or open a pull request unless asked.

@@ -20,6 +20,9 @@ reversed only by a later one that names it.
 starts at `D-001`. Entries already marked by the human (promoted, closed) are
 ratified in bulk unless something in them no longer holds.
 
+The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
+line to tell the human how many entries are outstanding, so keep its shape.
+
 ## Owed by the implementer
 
 Actions a ruling requires of the code or of the plan. The implementer cites the
@@ -87,3 +90,32 @@ come from.
 ruling found to have edited `docs/` to match the code.
 **Not verified:** the workflow has not run once. The first `/decide` session is
 its test.
+
+### R-002 — `/plan-next` ends its report with the count of entries awaiting the decider
+
+**Date:** 2026-09-23   **Origin:** user
+**Verdict:** resolved
+**docs/:** unchanged
+
+Nothing in the workflow of `R-001` told the human when `/decide` was due: the
+decider's inbox is built only when someone runs it, and the only automatic
+signal was `/plan-status` at a phase gate. The register audit is cheapest a
+point at a time, before the next point builds on what the last one decided, so
+the reminder belongs at the end of every point.
+
+Step 8 of `.claude/skills/plan-next/SKILL.md` now closes the report with one
+line, `Decider: N register entries not yet reviewed (D-xxx to D-yyy) — run
+/decide`, counted from the watermark above against the `### D-NNN` headings of
+`DECISIONS-OUTSIDE-SPEC.md`. The watermark line's shape is now part of that
+contract.
+
+This is governance, reserve 1 of `R-001`: made at the user's request, not on the
+decider's initiative.
+
+**Cost.** The watermark line can no longer be reworded freely; a change of shape
+makes the count read zero or everything.
+**Owed by the implementer:** nothing. The skill carries the step.
+**Would overturn it:** the line being ignored in practice, which would argue for
+a hook rather than a sentence in a report.
+**Not verified:** the count ran once, by hand, against today's files, giving 67
+entries from `D-001` to `D-067`. No `/plan-next` run has produced the line yet.
