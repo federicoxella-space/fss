@@ -36,10 +36,9 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-- **`R-005`** — the failure path for a criterion found wrong in flight. Needs:
-  accept, amend or reject the two-case recommendation, and say whether it is
-  written now or after the phase 3 plan closes. `D-031`'s missing third outcome
-  (a point done, one clause pending a human) belongs in the same answer.
+- **`D-031`, via `R-008`** — the mechanism has no outcome for a point whose work
+  is done while one clause waits on a human. Left out of `R-009`, which applied
+  `R-005` as recommended and nothing more.
 - **`D-024`, via `R-008`** — is approving a plan that names `AGENTS.md`
   permission to edit it, or does each edit need its own sentence? `AGENTS.md`
   says how a `docs/` edit is authorised and says nothing about its own.
@@ -390,3 +389,40 @@ reading found nothing wrong.
 **Not verified:** entries were checked against `docs/` and, for the claims named
 above, against the repository; claims about commit hashes, test counts and
 reviewer behaviour in the process entries were taken as written.
+
+### R-009 — `R-005` accepted: a criterion found wrong in flight takes one of two paths
+
+**Date:** 2026-09-23   **Origin:** user, on `R-005`
+**Verdict:** resolved
+**docs/:** unchanged
+
+The user approved `R-005`'s recommendation as written, and asked for it to be
+applied now rather than when the phase 3 plan closes: "approvo R-005", then
+"Subito". This is governance, reserve 1 of `R-001`, applied at the user's
+request.
+
+Applied in two places. `AGENTS.md`, the "Criteria are frozen" rule, gains the
+two cases in one sentence. `.claude/skills/plan-next/SKILL.md` gains them in
+full: step 6, beside the rule that a wrong criterion is never rewritten, where
+the outcome line is written, and a bullet in "When the point fails" saying how a
+plan stopped on a wrong criterion resumes. `R-005` placed the text in step 8;
+step 6 is where the outcome line is written, and that is where it belongs.
+
+The two cases, as recommended: correct code passes a criterion that proves less
+than the point asks — the point closes *criterio difettoso*, the plan continues,
+the decider rules at its next audit; correct code cannot pass it — the point
+closes `FALLITO`, the plan stops, and work resumes as a new point under `D-014`.
+
+`D-055`'s objection, that process work needs a plan and two live plans break the
+point lookup, does not arise: no plan was installed, and the change is text in
+two instruction files, made by a decider session at the user's request, as
+`R-002` was.
+
+**Cost.** Case 1 lets a plan continue past a defect not yet ruled on, for as
+long as the decider takes to run.
+**Owed by the implementer:** nothing. The skill carries the procedure.
+**Would overturn it:** a case-1 defect that turns out, at audit, to have changed
+what later points built on — which would argue for stopping on every defect.
+**Not verified:** `/plan-explain` and `/plan-status` were grepped, not read
+whole, for text contradicting the new cases; both treat `FALLITO` as a stop and
+any other outcome line as closed, which is what the cases need.

@@ -179,7 +179,8 @@ plan waits on it.
    `netstandard2.1` with no third-party packages. All four rows read `Decided`
    and §20's closing line now reads `Confirmed 2026-09-20`. Point 7 is unblocked
    with its criterion untouched.
-5. **Escalated 2026-09-23 as `R-005`**, with a recommendation; awaits the user.
+5. **Escalated 2026-09-23 as `R-005`; approved and applied the same day by
+   `R-009`.**
    **Open, and not raised by this request — the failure path for a criterion.**
    The reviewer's words: the field asked for is there and works, but nothing
    says what happens when a criterion turns out to be wrong *in flight*. The

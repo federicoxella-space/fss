@@ -197,6 +197,19 @@ survivable.
 
 Everything above the outcome line stays untouched. A criterion that turned out
 to be wrong is reported and recorded, never rewritten to match what was built.
+Two cases, and the line between them is whether correct code can pass the check
+as written (`R-005`):
+
+- **Correct code passes it, but it proves less than the point asks** — it
+  under-covers the "Does", its words diverge from it, or it cannot fail for the
+  reason it exists. Close the point on the criterion as frozen, with the missing
+  check written beside it. The outcome line says *criterio difettoso* and names
+  the register entry; the plan continues. The decider rules on the entry at its
+  next audit, and whatever follows lands under "Owed by the implementer" in
+  `RULINGS.md`, never in `PLAN.md`.
+- **Correct code cannot pass it**, or passing it would build the wrong thing.
+  That is a failure: close the point as below, with *criterio sbagliato* as the
+  reason.
 
 ### 7. Commit
 
@@ -236,6 +249,9 @@ point back. Close it as **failed** rather than leaving it open:
 - **Then stop the plan**, not just the point. Report and wait. Later points may
   rest on this one, and a failure is information the human needs before more
   work is spent against it.
+- **A wrong criterion fails the same way.** The decider rules on its register
+  entry, and the work resumes as a new point added with the human's approval
+  (`D-014`), never as an amendment of the failed one.
 
 **Never declare the plan abandoned.** That is a human's word — a procedure that
 could abandon its own plan when the work got hard is not a procedure. Report the
