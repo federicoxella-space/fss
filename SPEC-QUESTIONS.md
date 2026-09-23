@@ -252,6 +252,7 @@ neighbouring sections first*, and this entry is the argument that it should.
 §19 "Open items"; `docs/SIM-REQ.md:771` §20 "Downstream constraints".
 **Blocks:** no. Point 3 uses no reflection in the core either way, and the rule
 the note states is not in doubt — only where it points.
+**Status:** **closed 2026-09-23 by R-012.**
 
 The note reads:
 

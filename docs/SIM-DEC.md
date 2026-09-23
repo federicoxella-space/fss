@@ -355,11 +355,11 @@ No engine, rendering, input, or asset API. No `async` in the tick, no unordered 
 
 ### DEC-034a — Consumer runtime constraints live in one place
 
-The core is written against a declared runtime profile and language level, recorded in SIM-REQ section 17. No other requirement or decision names a consumer.
+The core is written against a declared runtime profile and language level, recorded in SIM-REQ section 20. No other requirement or decision names a consumer.
 
 **Rationale.** The language level and runtime surface are set by whoever links the core, not by the core itself. Recording them once keeps that constraint enforceable without letting a specific consumer leak into the design.
 
-**Cost.** Section 17 has to be revisited whenever a new consumer with a narrower profile appears, and the core may then have to drop a language feature it already uses.
+**Cost.** Section 20 has to be revisited whenever a new consumer with a narrower profile appears, and the core may then have to drop a language feature it already uses.
 
 ### DEC-035 — A CLI harness exists from Phase 3
 

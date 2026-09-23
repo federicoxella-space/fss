@@ -506,3 +506,41 @@ would argue for C as a rule.
 step 6's re-read table in `/plan-next` without reading as a change to a closed
 point; the table checks a point's own text and an existing outcome line, not
 lines below it.
+
+### R-012 — Consumer constraints are cited as `SIM-REQ` section 20, in all four places
+
+**Date:** 2026-09-23   **Origin:** SQ-005
+**Verdict:** specified
+**docs/:** `SIM-STATE` §Serialisation notes, the no-reflection line: section 19 →
+20. `SIM-DEC` DEC-034a, decision and cost: section 17 → 20, twice. `SIM-REQ`
+NFR-11: section 17 → 20; revision bumped. No rule's content changed.
+
+`SQ-005` is right: §19 of `SIM-REQ` is Open items, six parameters awaiting
+measurement, with nothing on reflection or serialisation. The rule the note
+invokes — no reflection-based serialisation, so an ahead-of-time consumer links
+the core unchanged — is the first of §20's "rules that follow", and
+`core/BannedSymbols.txt` already cites it there.
+
+Grepping `docs/` for every numbered section reference found four, and none
+pointed where it meant. The other three are the same failure one step removed:
+NFR-11 and DEC-034a place the runtime profile and language level in "section
+17", which is Acceptance criteria and names neither; both are §20's first two
+rows. DEC-034a is the decision that such constraints live in *one place*, so a
+wrong address there defeats the decision itself. All four now say section 20.
+
+The entry's worry, that the two readings differ in what the note inherits, is
+answered by the text: §20's rows are `Decided` and belong to the consumer, and
+that is exactly the status the no-reflection rule has. Nothing in §19 could have
+been meant. This touches only references *to* §20, not §20, so reserve 4 of
+`R-001` does not apply.
+
+**Cost.** None to code. The references are still bare numbers, so the next
+renumbering breaks them again; naming the section as well would prevent it and
+was not done, since no entry asked for it.
+**Owed by the implementer:** nothing.
+**Would overturn it:** evidence that §19 or §17 once held the cited content and
+something was meant to move back; `git log -S` finds §20 present since the
+first commit.
+**Not verified:** references written as a section title rather than a number,
+or pointing into `SIM-REQ` from outside `docs/` other than `BannedSymbols.txt`,
+were not searched.
