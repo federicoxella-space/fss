@@ -26,7 +26,9 @@ Read `PLAN.md` at the repository root.
   restarted. Report which point failed and what it says.
 - **Every point closed:** do not invent more. Say the plan is finished, check
   the exit condition, and say that the plan is ready to be archived to
-  `.claude/plans/` and the promotion pass run over its register entries.
+  `.claude/plans/` and the promotion pass run over its register entries. If a
+  point is *Chiuso con riserva* with no *Riserva sciolta* line under it, the
+  plan is not finished: name the reserve and the human action it waits on.
 - **Otherwise:** the point to run is the first `## <n>.` section with no
   `*Esito:*` line. Points run in plan order, including a point added later than
   the ones after it — running them out of order contradicts the rule all three
@@ -210,6 +212,19 @@ as written (`R-005`):
 - **Correct code cannot pass it**, or passing it would build the wrong thing.
   That is a failure: close the point as below, with *criterio sbagliato* as the
   reason.
+
+**A clause that only a human can discharge closes the point with a reserve**
+(`R-011`). The work is done and verified, and what is missing is an action this
+skill may not take — a push, so that CI runs; a pull request; a confirmation
+from outside the repository. The outcome line reads `*Esito:* <date>. Chiuso con
+riserva — <the clause> attende <the human action>.`, and the plan continues.
+Not for anything you could do yourself: a reserve is not a way to defer work.
+
+When the human acts, the check the clause names is run and a line is added
+under the outcome line, never in place of it: `*Riserva sciolta:* <date> — <what
+was done, what the check produced>.` It is committed on its own or with the next
+point, and never carries a `Plan-point:` trailer. A reserve still open keeps the
+exit condition unmet, whatever the point count says.
 
 ### 7. Commit
 

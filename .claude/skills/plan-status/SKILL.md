@@ -57,6 +57,10 @@ words.
    If a point failed and points remain open, the plan is **stopped**, not in
    progress: say so, and say that restarting it is a human's decision.
 
+   A closed point whose outcome line says *Chiuso con riserva* is closed, and
+   reported apart as well, with the clause and the human action it waits on —
+   unless a *Riserva sciolta* line under it says the action was taken (`R-011`).
+
 4. **For each closed point, resolve its commit within the plan's own range.**
 
    Point numbers restart with every plan, so the trailer alone is ambiguous
@@ -117,7 +121,7 @@ words.
 
 7. **Report the exit condition verbatim, and say whether it is met.** Every point
    closed is not the same as the exit condition being met; check it, do not
-   infer it from the count.
+   infer it from the count. A reserve still open means it is not met.
 
    Then say **how much of the development was proved by reading**: how many
    closed points carried a marker, `weak` or `shallow`, against how many

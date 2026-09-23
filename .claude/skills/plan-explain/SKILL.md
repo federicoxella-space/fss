@@ -42,7 +42,9 @@ the retelling is an objection that did not happen.
 
 4. **If every point has one**, say the plan is finished: the branch is ready to
    close, `PLAN.md` is archived to `.claude/plans/`, and the promotion pass is
-   due over its register entries. Then stop.
+   due over its register entries. Then stop. A point *Chiuso con riserva* is
+   closed but the plan is not finished while its reserve is open — no *Riserva
+   sciolta* line under it: name the human action it waits on (`R-011`).
 
    **If the plan header carries an `**Abandoned:**` declaration**, say so with
    its reason and stop. Do not present the next open point: it was not reached,

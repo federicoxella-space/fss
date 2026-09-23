@@ -36,9 +36,7 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-- **`D-031`, via `R-008`** — the mechanism has no outcome for a point whose work
-  is done while one clause waits on a human. Left out of `R-009`, which applied
-  `R-005` as recommended and nothing more.
+*None.*
 
 ---
 
@@ -461,3 +459,50 @@ and still surprised the user, which would argue for the stricter answer.
 **Not verified:** which of the past edits to `AGENTS.md` came from plan points
 was inferred from their commit subjects matching plan points, not checked
 against each plan.
+
+### R-011 — A clause only a human can discharge closes the point with a reserve
+
+**Date:** 2026-09-23   **Origin:** user, on `D-031`
+**Verdict:** resolved
+**docs/:** unchanged
+
+`D-031` recorded point 12 of the twelve-gaps plan closing with one clause done
+and one waiting on a human — a pull request nobody had asked the agent to open —
+and named the gap: a point is either closed, which would have claimed the clause
+met, or `FALLITO`, which would have stopped the plan for something that had not
+failed. Three answers were put to the user: keep two outcomes and leave such a
+point open; add a third outcome; or forbid criteria that depend on a human. The
+user chose the second: "sì, applica B".
+
+The case is not historical. CI runs on push (`on: [push, pull_request]`), the
+agent does not push unasked, and `fase-3-kernel` is fifteen commits ahead of its
+remote. Points 8 and 9 of the phase 3 plan each carry a clause that CI must run,
+so both would meet `D-031` with no rule to follow.
+
+**The rule.** The work done and verified, and missing only an action the agent
+may not take, the point closes *Chiuso con riserva*, naming the clause and the
+action; the plan continues. When the human acts, the clause's check is run and a
+*Riserva sciolta* line is added under the outcome line, never in its place, in a
+commit without a `Plan-point:` trailer. **A reserve still open keeps the plan's
+exit condition unmet** — for the phase 3 plan, the gate — which is what stops a
+reserve from being forgotten. A reserve is not for work the agent could do.
+
+Applied in `AGENTS.md`, one sentence beside `R-005`'s cases; in `/plan-next`,
+step 6 and the "every point closed" check; in `/plan-status`, steps 3 and 7; in
+`/plan-explain`, step 4. This ruling is the record of the user's permission for
+the `AGENTS.md` edit, under `R-010`.
+
+Option C, keeping human-dependent clauses out of criteria and into a plan's
+preconditions as the phase 3 plan did for §20, stays good practice for whoever
+writes the next plan. It is not a rule: it cannot help points already frozen.
+
+**Cost.** A plan can read as all points closed while its exit condition is not
+met; the skills now say why, but a reader of `PLAN.md` alone has to spot the
+marker.
+**Owed by the implementer:** nothing. The skills carry the procedure.
+**Would overturn it:** reserves used for work the agent could have done, which
+would argue for C as a rule.
+**Not verified:** that a `*Riserva sciolta*` line under an outcome line survives
+step 6's re-read table in `/plan-next` without reading as a change to a closed
+point; the table checks a point's own text and an existing outcome line, not
+lines below it.

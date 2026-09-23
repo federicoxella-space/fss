@@ -796,7 +796,7 @@ the author.
 
 ### D-031 · Point 12 — no squash, and a clause that could not be met
 
-**Ruling:** R-008 — ratified.
+**Ruling:** R-008 — ratified; its missing outcome supplied by R-011.
 
 **A pull request template, not just this branch's body.** The criterion asked
 for the note in the pull request for this branch; a template puts it in every

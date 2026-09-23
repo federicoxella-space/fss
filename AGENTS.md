@@ -76,7 +76,9 @@ belongs to `/plan-next`, `/plan-explain` and `/plan-status`, and the reasoning t
   code passes it, the point closes with the missing check beside it and the plan
   goes on; if correct code cannot pass it, the point closes `FALLITO` and the
   plan stops. Either way the register names the defect and the decider rules on
-  it (`R-005`).
+  it (`R-005`). A clause only a human can discharge — a push, a pull request —
+  closes the point *con riserva*: the plan goes on, and its exit condition is
+  not met until the human has acted (`R-011`).
 - **A point is one commit with a runnable check.** The commit carries the record
   with it: the register entry and the plan's own outcome line are written first
   and committed together with the code.
