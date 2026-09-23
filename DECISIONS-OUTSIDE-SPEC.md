@@ -1569,6 +1569,8 @@ point the tests should carry those.
 
 ### D-067 · Point 2 · The reviewers' findings, and the two left open
 
+**Ruling:** R-003, R-004 — both open questions resolved; the rest of the entry awaits the register audit.
+
 Both reviewers ran `Core: yes`, built Release and ran both suites, and both
 answered that the point closes. They overlapped on three findings and each
 found things the other did not.

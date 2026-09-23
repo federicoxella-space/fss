@@ -30,6 +30,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 - **`R-003`**, within plan point 5: no public member of the core exposes mutable
   world state for reading or writing.
+- **`R-004`**, no later than plan point 7: a fresh world takes the core's current
+  rule version; a different value enters state only through loading a save.
 
 ## Escalated to the user
 
@@ -173,3 +175,41 @@ first.
 **Not verified:** that the harness of point 8 can be written against the
 narrower surface without a public accessor for something it needs; the runner
 does not exist yet.
+
+### R-004 — A new world carries the core's own rule version, not one the host chooses
+
+**Date:** 2026-09-23   **Origin:** D-067 (the second question passed to the human)
+**Verdict:** resolved
+**docs/:** unchanged
+
+`WorldState`'s constructor takes `ruleVersion` from its caller. `D-067` flagged
+that a host can then record a version that produced nothing, and DEC-033's
+materialisation would later run against it.
+
+The specification decides this. NFR-09: "State records which rule version
+*produced* it." `SIM-STATE` §Static data: goods, recipes and the other rule
+tables are "Versioned with `ruleVersion`, never mutated at runtime". The rules
+are part of the build, so the version that produces a fresh world is the version
+of the build that creates it; there is nothing for a caller to elect. DEC-033
+then needs exactly two sources of the field and no third: a new world, stamped
+with the core's current version, and a loaded save, carrying the version it was
+written under until materialisation brings it forward. A host-supplied value is
+a third source, and the only one that can lie.
+
+Where the current version lives — a constant in the core — is an implementation
+detail the specification need not name, and it carries no domain: phase 3 may
+hold it.
+
+**Cost.** One constructor parameter goes, and
+`FRW01_TheWorldRowCarriesTheDeclaredTypes`, which constructs a world with
+version 3 and asserts it back, changes with it. Tests that need a state under a
+foreign version reach the field through `InternalsVisibleTo`, as they will for
+everything after `R-003`.
+**Owed by the implementer:** a fresh world takes the core's current rule
+version; a different value enters state only through loading a save. No later
+than plan point 7, whose load path is that one legitimate source. Cite `R-004`.
+**Would overturn it:** a requirement for a host to create a world under an older
+rule set — a replay tool, say — which would be a new requirement in `SIM-REQ`,
+not a constructor argument.
+**Not verified:** nothing in `harness/` constructs a `WorldState` today, so no
+host use of the parameter was found to break; checked by grep, not by build.
