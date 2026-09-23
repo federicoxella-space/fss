@@ -1891,3 +1891,112 @@ value type with zero declared instance fields walks to zero leaves and is
 verified by neither test. Such a type carries no state, so the silence is
 correct; it is the one hole in the walk's "every leaf" guarantee and is written
 down in case a later phase gives it content.
+
+### D-072 · Point 4 · The loop lives in `Systems/`, which keeps one half of a sentence in `AGENTS.md`
+
+**What was decided.** `TickLoop` is `core/Runtime/Systems/TickLoop.cs`. The
+"Structure" section of `AGENTS.md` says `Runtime/Systems/` holds "one file per
+phase of the settlement update … and those files are the only ones that write to
+state". The loop writes `WorldState.Tick` and is not a phase of the settlement
+update, so every placement breaks one half: in `Time/` a file outside `Systems/`
+writes state; in `Systems/` a file that is not a phase sits among them. The half
+kept is the write boundary, because it is the one a reader relies on to find
+every mutation, and the one `WorldState`'s own comment cites.
+
+**What `docs/` says.** Nothing: the sentence is in `AGENTS.md`, not `docs/`.
+Both reviewers reached the same tension; the briefed one notes that point 5's
+command queue and phase 4's generator will meet it again.
+
+**Left to the human, not settled.** Rewording `AGENTS.md` needs a human's
+permission for that change, and this point does not claim it.
+
+**What would overturn it.** A ruling on the sentence, in either direction.
+
+### D-073 · Point 4 · Unstaggered levels fire on the first tick of their period, and levels run finest first
+
+**What was decided.** Basin fires on `tick % 28 == 0`, kingdom on
+`tick % 364 == 0` — the first tick of the month and of the year, so tick 0 fires
+every level, and the annual update falls just after New Year's Day rather than
+just before it. Within a tick the levels run in the order of FR-T-04's table:
+daily, then the settlement bucket, then basin, then kingdom. The counter moves
+after all of them, so each sees the date it fires on.
+
+**What `docs/` says.** FR-T-04 gives periods and nothing about phase; FR-T-06
+staggers settlements only. `SIM-ECON` "What the sequence does not yet cover",
+item 4, leaves kingdom spending "not yet placed relative to the settlement update
+that receives it" — the same question from the other side. First tick was chosen
+because it is FR-T-06's own formula with the id at zero, which invents least.
+The alternative, `tick % P == P - 1`, closes each period before the next opens
+and would put taxation before the festival. Neither is observable in phase 3.
+
+**Deliberately not pinned by a test.** `FRT04_ConsecutiveFiringsOfALevelAreOnePeriodApart`
+checks spacing from a first firing inside the first period, and passes for any
+phase — verified with basin at day 27. Pinning the phase would freeze a choice
+`docs/` has not made.
+
+**What would overturn it.** The decider closing `SIM-ECON` item 4, or phase 4's
+first basin or kingdom system needing the end of the period.
+
+### D-074 · Point 4 · The loop is `internal`, reached through a struct seam, and ids are row indices
+
+**What was decided.**
+
+- `TickLoop` is `internal`. A public entry now would be one more thing `R-003`
+  reworks at point 5. **Hand-off, from the briefed reviewer:** point 8 is
+  `Core: no`, so it cannot add the public entry; it has to arrive at point 5, with
+  `R-003`'s handle and FR-A-01's defined point in the tick.
+- The levels are a struct type parameter `T : ICadenceLevels`. The only core
+  implementation is the empty `NoLevels`; the tests supply counting ones. Both run
+  the same method body, so the tests observe the schedule the core runs. The
+  rejected alternative — pure predicates the test iterates itself — would count
+  the predicate, not the loop.
+- A settlement's id is its row index. FR-W-10 fixes the count and forbids
+  deletion, so a row's generation never moves; phase 4's generator must not issue
+  ids that differ from the index.
+- A negative tick count is a `Debug.Assert`, as `Calendar` does for negative
+  ticks. In Release it runs zero ticks. A public entry is a trust boundary and
+  wants an exception.
+- The daily level fires every tick with nothing behind it. FR-T-08's fast travel
+  is that level over zero hot agents; the loop has no notion of fast travel.
+
+**What `docs/` says.** Nothing about shape or visibility. `SIM-STATE` gives the
+Settlement row an `id` and `EntityId` as index plus generation.
+
+**What would overturn it.** Point 5 shaping the public entry differently; a
+generator that needs sparse ids.
+
+### D-075 · Point 4 · The criterion passes a 365-tick year, and was not rewritten
+
+**The defect.** Found by the briefed reviewer, confirmed by mutation: with the
+kingdom firing every 365 ticks, `A13_EachCadenceBucketFiresOncePerPeriod` stays
+green over 100k ticks. The firing at `365j` falls in year `j + j/364`, which is
+year `j` for every `j` up to 363; the first skipped year starts at tick 132,860.
+That is the one-day-a-year drift DEC-006a was written to rule out. 363, 366, 27
+and 29 are caught.
+
+**Not sanato by rewriting.** Correct code passes the criterion, so this is
+`R-005`'s first case: the point closes, and the missing check is beside it —
+`FRT04_ConsecutiveFiringsOfALevelAreOnePeriodApart`, not named by the criterion,
+red against the 365 mutation. Six other mutations of the loop (bucket start,
+step, basin period, kingdom never, one settlement short, daily skipped) turn the
+named test red on its own, so unlike `D-065` and `D-070` it is not vacuous.
+
+**For the decider, from the blind reviewer.** `SIM-STATE` lists A-13 under
+"Invariants, asserted every tick". Nothing asserts it inside the loop, and no
+point of this plan builds the per-tick invariant check. Point 4's criterion asks
+for the test only, so the point is not short; the gap belongs to no point.
+
+### D-076 · Point 4 · The reviewers' findings
+
+Both reviewers: the check is met as written and passes for the reason the
+criterion asks; nothing blocking. Build and both suites run by each.
+
+**Applied.** The 365-tick blind spot (`D-075`). The comment in `TickLoop.cs`
+cited register entries not yet written — both reviewers; true once this commit
+lands, since `D-073` is it. The non-generic `Advance`, untested, is now called in
+`FRT09_TheCallerDecidesHowManyTicksRun`. The id-equals-index assumption and the
+point-5 hand-off are recorded in `D-074`.
+
+**Left to the human.** The placement against `AGENTS.md` (`D-072`).
+
+**Rejected.** None.

@@ -132,6 +132,20 @@ scritto accanto in `D-070`, il criterio sopra questa riga è intatto.
   for it under the same rule.
 - **Core:** yes
 
+*Esito:* 2026-09-23. Chiuso, **criterio difettoso**.
+`A13_EachCadenceBucketFiresOncePerPeriod` verde su 100k tick, anche da solo;
+suite intera verde in Release (31) e in Debug (32), build del core senza
+avvisi. Il test conta ogni firing nel suo periodo, per settlement e per
+settimana, e non è vacuo: sei mutazioni del loop lo fanno fallire da solo.
+Registro: `D-072` a `D-076`. Revisione: due revisori, `Core: yes`, entrambi
+concludono che il check è soddisfatto come scritto; applicati tutti i rilievi
+verificabili, nessuno respinto, lasciata aperta all'umano la collocazione in
+`Systems/` rispetto ad `AGENTS.md` (`D-072`). **Il criterio è difettoso e non è
+stato riscritto:** un regno che scatta ogni 365 tick passa il test nominato su
+100k tick, perché il primo anno saltato comincia al tick 132.860. Il controllo
+mancante è accanto, `FRT04_ConsecutiveFiringsOfALevelAreOnePeriodApart`, e il
+difetto è scritto in `D-075`.
+
 ## 5. The command queue, applied at one point in the tick
 
 - **Does:** the queue the host pushes into and the defined point of the tick
