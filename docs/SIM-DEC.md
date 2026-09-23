@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-09-20
+**Revision:** 2026-09-23
 **Companion:** SIM-REQ
 
 ---
@@ -50,6 +50,14 @@ Population, currency, and goods each belong to exactly one simulation level. Lev
 **Rationale.** A world represented at several resolutions holds several copies of the same facts. Naming one copy as the authority is what keeps them from drifting apart over decades of world time.
 
 **Cost.** Producing a number sometimes means aggregating from the owning level rather than reading it where it feels natural.
+
+### DEC-085 — State arrays hold values, never arrays
+
+A state field is a value or one contiguous array of values. A per-row quantity of fixed width `w`, such as a treasury of four denominations or one stock per good, is stored as one array of `rows × w`. A per-row quantity of variable length is stored either at a fixed capacity, which is then its width, or in one shared pool addressed by a per-row offset and count. No array holds arrays, and no composite value inside state holds an array.
+
+**Rationale.** An array of arrays is an object graph under another name: each inner array is a reference, which NFR-10 excludes, and each is a separate allocation that DEC-003's bulk serialise, copy and hash cannot cover in one pass. Widths come from static data versioned with `ruleVersion`, so `rows × w` is known whenever the state is.
+
+**Cost.** Every access to a wide field computes an index. A patch that changes a width, a new good for instance, reshapes the arrays that carry it inside the migration of NFR-08. A pooled field needs a compaction rule, and that rule orders by id or it becomes a determinism hole of its own.
 
 ---
 

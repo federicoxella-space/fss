@@ -1492,6 +1492,8 @@ pass state by value.
 
 ### D-064 · Point 2 · The walker allows one level of array, which the criterion's words do not
 
+**Ruling:** R-006 — promoted as DEC-085.
+
 The criterion says the test fails "on any reference type". An array is a
 reference type, and the walker lets one through at depth 0.
 

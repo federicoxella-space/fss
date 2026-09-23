@@ -272,3 +272,45 @@ the plan, which makes case 1 disappear into case 2.
 **Not verified:** that no point of phase 3 has already met case 2 without
 recording it as such; only the outcome lines of points 1 and 2 and `D-059` to
 `D-067` were read.
+
+### R-006 — State arrays hold values, never arrays
+
+**Date:** 2026-09-23   **Origin:** D-064
+**Verdict:** promoted as DEC-085
+**docs/:** `SIM-DEC` gains DEC-085 under "Core representation"; `SIM-STATE`
+§Serialisation notes gains one line pointing the per-row array fields at it.
+Both revisions bumped.
+
+`D-064` recorded that point 2's field walker admits one level of array and
+rejects anything nested, and that this "decides part of the phase-4 state
+layout, from a private helper in a test file". It does, and that is the reason
+to promote it: every `int[4]`, `int[]`, `fixed[]`, `id[]` and bounded field in
+`SIM-STATE` — a dozen rows across six tables — must now arrive in one shape, and
+the only statement of which shape was a red test waiting for whoever met it.
+
+The rule stands on the merits, independently of the walker. NFR-10 excludes
+object references from serialised state, and an array of arrays is exactly that:
+each inner array is a reference and a separate allocation. DEC-003's rationale,
+bulk serialise, copy and hash, is the second argument. Both were written before
+the code.
+
+`D-064`'s own "would overturn it" — a field of genuinely variable width per row —
+is already in `SIM-STATE`: the chronicle's `entities id[]`, the kingdom's
+`holdings id[]`, the transient's `link or route id[]`. The chronicle is point 6 of
+this plan. So DEC-085 does not stop at fixed widths; it names the two shapes a
+variable-length field may take, a fixed capacity or a shared pool with offset and
+count, and chooses neither. Which one each field takes is a decision for the
+point that builds it, recorded in the register as usual.
+
+**Cost.** Index arithmetic on every access to a wide field; a width change
+becomes a reshape inside the NFR-08 migration; a pooled field needs a compaction
+rule ordered by id. Existing code costs nothing: `WorldState` has no array field
+yet, and the walker already enforces the rule.
+**Owed by the implementer:** nothing beyond `docs/`, which now binds point 6's
+`entities` field.
+**Would overturn it:** a field whose shape neither a capacity nor a pool can
+express without a cost the specification would not accept — a variable-length
+field inside a variable-length field is the candidate.
+**Not verified:** that every bounded field in `SIM-STATE` has a cap in `SIM-REQ`
+§16 that makes the fixed-capacity shape available; `P-32` was seen for route
+candidates, the others were not checked.
