@@ -18,6 +18,7 @@ Read the relevant document. Do not infer the design from the code.
 | Which feedback loops exist and what brakes them | `docs/SIM-LOOPS.md` |
 | What lives in state, and what is asserted every tick | `docs/SIM-STATE.md` |
 | What a settlement update does, in order | `docs/SIM-ECON.md` |
+| What has been ruled about the specification, and what you owe | `RULINGS.md` |
 
 ## `docs/` is not yours to edit
 
@@ -36,6 +37,19 @@ One exception: a human may ask you to apply a change to
   text you were given.
 - Record the permission in `DECISIONS-OUTSIDE-SPEC.md`: who granted it, what
   it covered, and whether the applied diff matched the deposit exactly.
+
+### The decider answers what this file sends to a human
+
+`docs/` has one other writer: the **decider**, a separate role run by `/decide`
+and holding the human's authority by delegation (`R-001` in `RULINGS.md`). It
+answers `SPEC-QUESTIONS.md`, `REVIEW-REQUEST.md` and `PROMOTIONS.md`, audits
+`DECISIONS-OUTSIDE-SPEC.md`, and edits `docs/`.
+
+Nothing above changes for you. An implementer session never edits `docs/` and
+never plays the decider; a decider session never writes code. A ruling binds you
+as `docs/` does. Before writing a plan and before each point, read "Owed by the
+implementer" in `RULINGS.md`, and name the `R-NNN` in the commit that acts on
+one.
 
 ## Plan the development before starting it
 

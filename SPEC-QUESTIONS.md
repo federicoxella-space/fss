@@ -16,7 +16,7 @@ can correct it.
   around, not dropped because the work found a way past it. An objection
   answered by the person who found it is an objection that never reached the
   only reader who can act on it.
-- **An objection is never resolved by its finder.** A human answers. The entry
+- **An objection is never resolved by its finder.** A human or the decider answers. The entry
   stays open until then, and a stale open entry is a truer state of affairs than
   a closed one nobody decided.
 - **Every entry declares whether it blocks.** Without that, this file becomes
@@ -28,7 +28,7 @@ can correct it.
   that cannot be checked in a minute will not be checked.
 - **This file does not amend `docs/`.** Nothing here is true of the
   specification. An answer that changes the specification is written into
-  `docs/` by a human, and the entry is then marked with what it became.
+  `docs/` by a human or the decider, and the entry is then marked with what it became.
 
 ## Entries
 

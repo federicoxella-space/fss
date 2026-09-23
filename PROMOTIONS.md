@@ -8,7 +8,7 @@ register into a shadow specification that grows while `docs/` ages — the same
 failure the prohibition on editing `docs/` exists to prevent, arriving slowly
 instead of at once.
 
-This file is the proposal. **A human writes `docs/`.** Nothing here is in the
+This file is the proposal. **A human or the decider writes `docs/`.** Nothing here is in the
 specification until someone puts it there, and an entry that proposes to change
 `SIM-DEC` has no authority whatsoever until they do.
 
@@ -31,7 +31,7 @@ identifier it became, and the candidate is struck from here. A candidate they
 reject is struck too, with their reason: an unanswered proposal re-proposed
 every archival is how a rejected idea gets in by attrition.
 
-Numbering is the human's: `SIM-DEC` runs to DEC-080 today, and a number claimed
+Numbering is the human's or the decider's: `SIM-DEC` runs to DEC-080 today, and a number claimed
 here would collide with whatever else is in flight.
 
 ---
