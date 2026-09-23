@@ -65,7 +65,12 @@ namespace Sim
             unchecked
             {
                 // The coordinates fold in one at a time, each through a full avalanche, so
-                // that no two different coordinate tuples cancel out into the same state.
+                // that changing any one of them, with the others held fixed, always
+                // changes the draw: each step is a bijection of the accumulator and the
+                // casts into it widen. Two coordinates changed together can be made to
+                // cancel — pick the second to absorb what the first did to the
+                // accumulator — which costs nothing here, since a caller names its
+                // coordinates rather than searching for them.
                 ulong h = Mix(worldSeed + GoldenGap);
                 h = Mix(h ^ subject);
                 h = Mix(h ^ (ulong)tick);
@@ -115,7 +120,20 @@ namespace Sim
             return (int)(draw % (ulong)count);
         }
 
-        private static ulong Mix(ulong z)
+        /// <summary>
+        /// The avalanche itself: a bijection of 64 bits onto 64 bits in which every
+        /// input bit affects every output bit.
+        /// </summary>
+        /// <remarks>
+        /// Internal rather than private because <see cref="StateHash"/> folds with it.
+        /// A state digest and a random draw want the same property — one changed bit
+        /// anywhere changes the result everywhere — and a second copy of these
+        /// constants in another file would be a second thing to keep identical across
+        /// builds. Internal rather than public because it is a building block, not a
+        /// draw: a caller wanting randomness wants <see cref="Of(ulong, EntityId, long, HashChannel, int)"/>,
+        /// which is indexed and therefore reproducible out of order.
+        /// </remarks>
+        internal static ulong Mix(ulong z)
         {
             unchecked
             {

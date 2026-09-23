@@ -1748,3 +1748,146 @@ field proves the struct reaches the hash, not that each member of it does. The
 two coincide while it has one member. When phase 4 adds a second, a member that
 never reaches the hash passes point 3's test unless that test recurses the way
 this one does.
+
+### D-068 · Point 3 · `StateHash`, a static fold, and the mixer made `internal`
+
+**What was decided.** The digest is `StateHash.Of(WorldState)`, a static method
+in `Runtime/State/`, folding each field as `h = Hash64.Mix(h ^ x)` from a
+constant origin, in the order `SIM-STATE` §World declares them. It is not a
+method on `WorldState`: that type is a data container, and a `Hash()` on it
+would sit one letter from the state hash while carrying none of its guarantees —
+the same collision of names `D-067` deleted `GenerationParams.GetHashCode` for.
+
+`Hash64.Mix` went from `private` to `internal` so the fold reuses it. The
+alternative was a second copy of `MixA` and `MixB` in another file, which is two
+determinism-critical constants to keep identical across builds where the pinned
+vectors in `PrimitivesTests` guard only one of them. `internal` is narrower than
+`public` and the core's public surface is unchanged; `SIM-REQ` §20 constrains
+framework, language level, reflection and dependencies and says nothing about
+member visibility, and `R-003` constrains mutable world state, which a mixing
+function is not. Note that `Sim.Core.csproj` already carries
+`InternalsVisibleTo("Sim.Core.Tests")`, so `internal` here means the core plus
+the test assembly; no test calls `Mix`.
+
+**What `docs/` says.** `SIM-STATE` §Serialisation notes requires that the hash
+cover every field and calls an excluded field a determinism hole. It does not
+say what the hash is, how it is seeded, or where it lives. `NFR-01` and `AC-02`
+require the digest to be identical across builds and machines, which rules out
+the base class library's hash codes and is why the mixing is written out in
+integer operations.
+
+**What would overturn it.** A ruling that the digest belongs on `WorldState`
+after all; or `R-003` landing at point 5 in a form that makes `WorldState`
+`internal` — see `D-071`.
+
+### D-069 · Point 3 · The fold's guarantee is single-field injectivity, not collision resistance
+
+**What was decided.** The file states what the construction actually gives and
+not more. A state differing in exactly **one** field can never share another's
+digest: every cast into the fold widens and is injective, xor with the
+accumulator is a bijection, and `Mix` is a bijection, so with the other fields
+held fixed the digest is an injective function of each one. The perturbation
+test is therefore exact, not probabilistic.
+
+Two fields are a different matter and the comment now says so. Two states
+differing in two fields collide in two evaluations of `Mix`: choose the second
+field to absorb what the first did to the accumulator. Verified against the real
+function rather than argued — with `SettlementCount=2000`, `RuleVersion=7` and
+`CurrencyTotal=1000003` in both, `Tick=41` with
+`WorldSeed=0x0123456789ABCDEF` and `Tick=42` with
+`WorldSeed=0x729E20E7458C7D96` both digest to `0xCE31A6F9C074C14D`.
+
+This is a property of any `h = Mix(h ^ x)` chain, not a 64-bit birthday
+collision, and it costs nothing under `AC-02`, which compares two runs of the
+same build where a divergence is systematic rather than adversarial. It is the
+reason this is a digest and not a checksum against tampering.
+
+**What `docs/` says.** Nothing about the hash's strength. `AC-02` asks for equal
+sequences from equal inputs, which the construction gives exactly.
+
+**Correction carried into a file this point did not otherwise touch.**
+`Hash64.Of` carried the identical false sentence — "no two different coordinate
+tuples cancel out into the same state" — written before this point and false for
+the same reason. It is corrected in the same commit. Fixing one and leaving the
+other standing would have left a known-false claim in the file the corrected one
+cites. The change is a comment and nothing else; no draw moves.
+
+**What would overturn it.** A later use of the state hash that needs resistance
+to a chosen second field — an integrity check on a save file, say — which this
+construction does not give and would need a keyed or wider digest.
+
+### D-070 · Point 3 · The criterion is again vacuously satisfiable alone, and again was not rewritten
+
+**The defect.** `NFR01_EveryStateFieldEntersTheHash` asserts that no field was
+left unreached. An enumeration returning nothing satisfies that, forever and
+silently — the same shape as `D-065` one point earlier, where the declared check
+passed against an emptied walker. What rules it out here is
+`NFR01_TheWalkReachesEveryLeafOfTheWorldRow`, which spells the five leaves out,
+and `NFR01_EqualStatesHashEqual`, which rules out a fold returning a fresh value
+on every call. Neither is named by the criterion.
+
+**Not sanato by rewriting.** Correct code passes the criterion as frozen, so
+this is `R-005`'s first case: the point closes, the missing checks are written
+beside it here, and the plan continues. The criterion above the outcome line is
+untouched.
+
+**A second-order note the decider may want with it.** The criterion's selling
+point is "a field added later without reaching the hash fails this test without
+anyone remembering to extend it." That holds for the named test. The guard that
+makes it non-vacuous carries a hard-coded five-element leaf list, which *must*
+be edited on every field addition. The property bought is that forgetting is
+loud, not that there is nothing to remember. `D-065` and this entry are the same
+defect twice; whether a plan's "Closed by" clause should be required to name
+every test that keeps the named one honest is a question for the decider, not
+one to settle here.
+
+**Two further checks added, neither named by the criterion.**
+`NFR01_TheDigestIsPinned` writes `0xCE31A6F9C074C14D` out: `AC-02` compares hash
+sequences *across builds and machines*, and without it a reordered fold, a
+widened cast or a changed seed leaves every other test green while every world
+ever saved hashes differently. Point 9's gate does not cover this — it compares
+two runs of the same build. `NFR01_ThePerturbationRejectsWhatItCannotChange`
+pins the tripwire, on the precedent and for the reason of
+`NFR10_TheWalkerRejectsWhatItIsThereToReject`: a permissive fallback added later
+to quiet a phase-4 array would pass every other test in the file.
+
+### D-071 · Point 3 · What point 3 hands to point 5, and one docs defect found on the way
+
+**`R-003` will not compile against `StateHash` as written.** `R-003` is owed
+within plan point 5: no public member of the core exposes mutable world state.
+`public static ulong Of(WorldState)` takes one as a parameter, so when
+`WorldState` goes `internal` this is CS0051 — inconsistent accessibility.
+`R-003`'s cost section predates this file and enumerates only `WorldState` and
+the tests that read its fields. The capability survives — `R-003` blesses the
+state hash as a value for point 8's runner — and only the signature moves.
+Recorded so point 5 does not rediscover it.
+
+**`SQ-005` filed, non-blocking.** `docs/SIM-STATE.md:186` attributes the
+no-reflection rule to "section 19 of SIM-REQ", which is Open items; the rule is
+in §20. Not ours to fix.
+
+**Left open to the human, not settled.** Two reflection walkers now descend
+`WorldState` — `WorldStateTests.Check` and `StateHashTests.Walk` — with two
+hard-coded field lists between them. They answer different questions (what may
+be in state, what reaches the hash) and merging them would couple `NFR-10` to
+`NFR-01`, so they are left apart; whether that is one walker too many is taste,
+and the author of the code does not arbitrate its review.
+
+**Rejected, with the reason.** The suggestion to tie `StateHash.Seed` to
+`Hash64.GoldenGap` — they share bits today — is the bug, not the cleanup: the
+two play unrelated roles, and coupling them means a future change to the RNG's
+additive tweak silently rewrites every saved world's state hash. The comment now
+says they need not stay equal, and `NFR01_TheDigestIsPinned` turns any such
+change into a red test rather than a paragraph someone skimmed. Also rejected:
+teaching the perturbation fixture about array fields now. Arrays arrive with
+phase 4 under `DEC-003`, reaching for them here is the scope rule `AGENTS.md`
+forbids, and the `Assert.Fail` makes the first one loud — traced by both
+reviewers and pinned by a test. Both reviewers noted the consequence and neither
+disputed the default: the fixture goes red on phase 4's first array field
+whether or not the fold is correct, which is fail-loud rather than skip-silent.
+
+**Not a finding, recorded because both reviewers reached it independently.** A
+value type with zero declared instance fields walks to zero leaves and is
+verified by neither test. Such a type carries no state, so the silence is
+correct; it is the one hole in the walk's "every leaf" guarantee and is written
+down in case a later phase gives it content.

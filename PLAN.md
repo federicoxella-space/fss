@@ -102,6 +102,23 @@ e il test dichiarato passa anche contro un walker vuoto — verificato svuotando
 - **Core:** yes — the test project may use reflection to enumerate; the core may
   not, and does not.
 
+*Esito:* 2026-09-23. Chiuso, **criterio difettoso**.
+`NFR01_EveryStateFieldEntersTheHash` verde in Release (28) e in Debug (29),
+build del core senza avvisi; il check dichiarato eseguito anche da solo. Che
+possa fallire è verificato togliendo il fold di `GenerationParams`: rosso, e
+nomina `WorldState.GenerationParams.SettlementCount`. Registro: `D-068` a
+`D-071`; questione di specifica `SQ-005`, non bloccante. Revisione: due
+revisori, `Core: yes`, entrambi concludono che il punto chiude e che il check è
+soddisfatto come scritto. Applicati tutti i rilievi verificabili — due
+affermazioni false nei commenti, il valore del digest fissato, il tripwire di
+`Different` messo alla prova; respinto legare `StateHash.Seed` a
+`Hash64.GoldenGap`, con la ragione in `D-071`, e rinviate a fase 4 le colonne
+array; lasciato aperto all'umano il doppio walker su `WorldState`.
+**Il criterio è difettoso e non è stato riscritto:** il test che nomina passa
+anche contro un'enumerazione vuota — stessa forma di `D-065`, un punto dopo — e
+a tenerlo in piedi sono due test che il criterio non nomina. Il difetto è
+scritto accanto in `D-070`, il criterio sopra questa riga è intatto.
+
 ## 4. The tick loop, its cadences and its buckets
 
 - **Does:** advancing N ticks, the four cadences dividing one another, and the

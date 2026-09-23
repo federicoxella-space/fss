@@ -242,3 +242,28 @@ half worth keeping: an objection raised against four sections of a document
 whose parameter table was never opened. The citation rule at the top of this
 file says the document, the identifier and the line; it does not say *read the
 neighbouring sections first*, and this entry is the argument that it should.
+
+---
+
+### SQ-005 — `SIM-STATE`'s no-reflection note cites section 19, which is Open items
+
+**Raised:** 2026-09-23, plan point 3, by the blind reviewer.
+**Cites:** `docs/SIM-STATE.md:186` §Serialisation notes; `docs/SIM-REQ.md:756`
+§19 "Open items"; `docs/SIM-REQ.md:771` §20 "Downstream constraints".
+**Blocks:** no. Point 3 uses no reflection in the core either way, and the rule
+the note states is not in doubt — only where it points.
+
+The note reads:
+
+> - No reflection: the serialiser is generated or hand-written, per section 19 of SIM-REQ.
+
+§19 of `SIM-REQ` is **Open items** — a table of six parameters awaiting
+measurement, with no mention of reflection or serialisation. The rule lives in
+§20, Downstream constraints, which is also where the ahead-of-time row sits and
+which `core/BannedSymbols.txt` already cites correctly ("no reflection,
+ahead-of-time safe (NFR-08, section 20)").
+
+Most likely a section that renumbered and a cross-reference that did not. Filed
+rather than assumed, because the two readings differ in what else the note
+inherits: §20's rows are marked `Decided` and belong to a downstream consumer,
+§19's are measurements this repository still owes.
