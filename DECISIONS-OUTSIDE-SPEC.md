@@ -1969,6 +1969,8 @@ generator that needs sparse ids.
 
 ### D-075 · Point 4 · The criterion passes a 365-tick year, and was not rewritten
 
+**Ruling:** R-015 — specified: A-13 gains the one-period spacing clause and is verified by test; the rest ratified.
+
 **The defect.** Found by the briefed reviewer, confirmed by mutation: with the
 kingdom firing every 365 ticks, `A13_EachCadenceBucketFiresOncePerPeriod` stays
 green over 100k ticks. The firing at `365j` falls in year `j + j/364`, which is

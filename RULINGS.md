@@ -605,3 +605,48 @@ its generation.
 **Would overturn it:** a change to FR-W-10 that lets settlement rows be reused.
 **Not verified:** nothing; FR-T-06, DEC-008, DEC-081, `SIM-STATE` §Settlement and
 `TickLoop.cs` were read.
+
+### R-015 — A-13 forbids drift as well as double firing, and is verified by test
+
+**Date:** 2026-09-28   **Origin:** D-075
+**Verdict:** specified; the rest of `D-075` ratified
+**docs/:** `SIM-STATE` §Invariants: A-13 gains a second clause, consecutive
+firings exactly one period apart; a paragraph under the table says how A-13 is
+verified. Revision bumped.
+
+`D-075` raises two things. The first is a defect in point 4's criterion, handled
+as `R-005`'s case 1 and ratified as such. But the criterion only restated A-13,
+so the defect is A-13's: "fires exactly once per its period" is satisfied by a
+kingdom firing every 365 ticks for 364 years, which is the one-day-a-year drift
+DEC-006a exists to exclude. Counting firings per period cannot see a firing that
+slides a day at a time inside its period. Requiring consecutive firings to be
+exactly one period apart can, and implies the first clause. This tightens an
+invariant; no acceptance criterion or gate moves, so reserve 2 of `R-001` does
+not apply.
+
+The second is the blind reviewer's: `SIM-STATE` lists A-13 among asserts "every
+tick", and nothing asserts it per tick. The other fourteen asserts are claims
+about state, which a check can read after any tick. A-13 is a claim about the
+schedule, and a firing leaves no trace in state — in phase 3 nothing at all, and
+in phase 4 only the effects of the update, from which "this settlement ran
+exactly once this week" cannot be recovered. A per-tick check would have to keep
+a record of firings outside state, or be the loop checking its own arithmetic.
+Neither buys anything a test does not: the schedule is a function of the tick
+modulo 364, so a test over one year covers every case it can produce. That was
+true of A-13 before any code, which is the test this answer has to pass.
+
+Nothing of phase 3 owes the per-tick check of the other asserts: none has
+anything to read until phase 4's subsystems exist, and AC-01, "invariants hold
+at every tick of every run", is that phase's gate.
+
+**Cost.** A-13 is the one entry of the table not checked at run time; a change to
+the loop that only a long run would expose is caught by the suite, not by the
+run. The name `FRT04_ConsecutiveFiringsOfALevelAreOnePeriodApart` no longer says
+that it now verifies A-13's second clause.
+**Owed by the implementer:** nothing. The spacing test point 4 wrote beside its
+criterion already checks the new clause for every level.
+**Would overturn it:** a schedule that depends on state — a settlement whose
+cadence changes at run time — which would make A-13 a claim about state again.
+**Not verified:** that the spacing test checks the settlement bucket as well as
+basin and kingdom; `D-075` and `D-076` say it covers each level, the test was not
+read.

@@ -2,7 +2,7 @@
 
 **Document:** SIM-STATE
 **Status:** Draft
-**Revision:** 2026-09-23
+**Revision:** 2026-09-28
 **Gate:** The assert list is executable.
 
 ---
@@ -170,11 +170,13 @@ Goods, recipes, mestieri, crops, climate curves, event class definitions. Versio
 | A-11 | Every fixed-point quantity held in state is inside its declared range |
 | A-11b | No accumulator has overflowed. Checked in debug builds, where the cost of checking every intermediate is affordable |
 | A-12 | Danger on every link is inside its range |
-| A-13 | Each cadence bucket fires exactly once per its period |
+| A-13 | Each cadence bucket fires exactly once per its period, and consecutive firings of a bucket are exactly one period apart |
 | A-14 | No cohort holds negative count, currency, or goods |
 | A-15 | Buried stock only decreases |
 
 A-02 and A-03 together are the currency invariant. A-01 and A-14 are the population invariant. A-04 is the goods invariant.
+
+A-13 is the one assert about the schedule rather than about state: a firing leaves nothing in state for a per-tick check to read, and a check inside the loop would be the loop testing itself. It is verified by test over whole periods, at least one year, which covers every case, since the schedule is a function of the tick modulo 364. The second clause is what rules out drift: a level firing every 365 ticks still fires once in each of the first 364 years.
 
 ---
 
