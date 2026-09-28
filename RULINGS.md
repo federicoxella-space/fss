@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-067 — audited by `R-008`. The next audit starts at the
+**Register watermark:** D-076 — audited by `R-018`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -28,7 +28,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 `R-NNN` in the commit that does it; the decider marks it done with that commit.
 
 - **`R-003`**, within plan point 5: no public member of the core exposes mutable
-  world state for reading or writing.
+  world state for reading or writing. `StateHash.Of(WorldState)` and the public
+  entry to `TickLoop` are both in its path (`D-071`, `D-074`).
 - **`R-004`**, no later than plan point 7: a fresh world takes the core's current
   rule version; a different value enters state only through loading a save.
 
@@ -36,7 +37,9 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-*None.*
+- **`R-016`** — reword the `Systems/` sentence of `AGENTS.md` so the write
+  boundary is the rule (`D-072`).
+- **`R-017`** — a plan's criterion names a fault it must catch (`D-070`).
 
 ---
 
@@ -725,3 +728,46 @@ rate with faults named, which would say the defect is elsewhere.
 **Not verified:** that `/plan-next` and the plan design note do not already ask
 for this; neither was reread for it; `/plan-next` was
 grepped and does not.
+
+### R-018 — The register from `D-068` to `D-076` is ratified, save what R-014 to R-017 ruled
+
+**Date:** 2026-09-28   **Origin:** register audit, `D-068` to `D-076`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Ruled on their own: `D-074` by `R-014`, `D-075` by `R-015`, `D-072` by `R-016`,
+and the question in `D-070` by `R-017`. The rest of those entries, and the
+following, are ratified as written.
+
+- **`D-068`**, the digest as a static fold outside `WorldState`, reusing
+  `Hash64.Mix` made `internal`. Checked: `Mix` is `internal`, the core's public
+  surface is unchanged, and `InternalsVisibleTo` names the test assembly. One copy
+  of the mixing constants is right; two would be a determinism hazard guarded by
+  half the tests.
+- **`D-069`**, the fold guarantees single-field injectivity and no more. The
+  two-field collision was reproduced outside the repository: both states digest to
+  `0xCE31A6F9C074C14D`. The correction to `Hash64.Of`'s comment is a comment. A
+  save-file integrity check, if one is ever required, needs its own digest, as the
+  entry says.
+- **`D-070`**, criterion defect under `R-005`'s case 1; the pinned digest and the
+  tripwire test beside it are the right additions, and the pin is what makes
+  AC-02's "across builds" checkable at all.
+- **`D-071`**: the hand-off to point 5 is folded into `R-003`'s owed action
+  above; `SQ-005` was closed by `R-012`. **The two walkers stay apart**, as the
+  entry left them: one answers NFR-10, the other NFR-01, and a single walker would
+  make a change to what may be in state move what reaches the hash. The rejection
+  of tying `StateHash.Seed` to `Hash64.GoldenGap` is right for the reason given.
+- **`D-073`**, levels without a stagger fire on the first tick of their period,
+  finest first, and the phase is deliberately not pinned by a test. It invents
+  least — FR-T-06's formula with the id at zero — and `SIM-ECON`'s open item 4
+  stays the place where phase 4 decides it.
+- **`D-076`**, the reviewers' findings; nothing rejected, nothing left beyond
+  `D-072`.
+
+**Cost.** None.
+**Owed by the implementer:** nothing beyond `R-003`'s note above.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` as it
+stood when written.
+**Not verified:** test counts, reviewer behaviour and mutation results reported
+in the entries were taken as written, except the 365-tick blind spot, which
+follows from the arithmetic in `D-075`, and the spacing test, read for `R-015`.

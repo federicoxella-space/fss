@@ -1751,6 +1751,8 @@ this one does.
 
 ### D-068 · Point 3 · `StateHash`, a static fold, and the mixer made `internal`
 
+**Ruling:** R-018 — ratified.
+
 **What was decided.** The digest is `StateHash.Of(WorldState)`, a static method
 in `Runtime/State/`, folding each field as `h = Hash64.Mix(h ^ x)` from a
 constant origin, in the order `SIM-STATE` §World declares them. It is not a
@@ -1781,6 +1783,8 @@ after all; or `R-003` landing at point 5 in a form that makes `WorldState`
 `internal` — see `D-071`.
 
 ### D-069 · Point 3 · The fold's guarantee is single-field injectivity, not collision resistance
+
+**Ruling:** R-018 — ratified.
 
 **What was decided.** The file states what the construction actually gives and
 not more. A state differing in exactly **one** field can never share another's
@@ -1818,6 +1822,8 @@ construction does not give and would need a keyed or wider digest.
 
 ### D-070 · Point 3 · The criterion is again vacuously satisfiable alone, and again was not rewritten
 
+**Ruling:** R-018 — ratified; the question on criteria escalated as R-017.
+
 **The defect.** `NFR01_EveryStateFieldEntersTheHash` asserts that no field was
 left unreached. An enumeration returning nothing satisfies that, forever and
 silently — the same shape as `D-065` one point earlier, where the declared check
@@ -1852,6 +1858,8 @@ pins the tripwire, on the precedent and for the reason of
 to quiet a phase-4 array would pass every other test in the file.
 
 ### D-071 · Point 3 · What point 3 hands to point 5, and one docs defect found on the way
+
+**Ruling:** R-018 — ratified; the two walkers stay apart.
 
 **`R-003` will not compile against `StateHash` as written.** `R-003` is owed
 within plan point 5: no public member of the core exposes mutable world state.
@@ -1915,6 +1923,8 @@ permission for that change, and this point does not claim it.
 **What would overturn it.** A ruling on the sentence, in either direction.
 
 ### D-073 · Point 4 · Unstaggered levels fire on the first tick of their period, and levels run finest first
+
+**Ruling:** R-018 — ratified.
 
 **What was decided.** Basin fires on `tick % 28 == 0`, kingdom on
 `tick % 364 == 0` — the first tick of the month and of the year, so tick 0 fires
@@ -1993,6 +2003,8 @@ point of this plan builds the per-tick invariant check. Point 4's criterion asks
 for the test only, so the point is not short; the gap belongs to no point.
 
 ### D-076 · Point 4 · The reviewers' findings
+
+**Ruling:** R-018 — ratified.
 
 Both reviewers: the check is met as written and passes for the reason the
 criterion asks; nothing blocking. Build and both suites run by each.
