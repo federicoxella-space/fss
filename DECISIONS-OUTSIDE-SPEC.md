@@ -1894,6 +1894,8 @@ down in case a later phase gives it content.
 
 ### D-072 · Point 4 · The loop lives in `Systems/`, which keeps one half of a sentence in `AGENTS.md`
 
+**Ruling:** R-016 — escalated to the user, with a recommendation.
+
 **What was decided.** `TickLoop` is `core/Runtime/Systems/TickLoop.cs`. The
 "Structure" section of `AGENTS.md` says `Runtime/Systems/` holds "one file per
 phase of the settlement update … and those files are the only ones that write to

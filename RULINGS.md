@@ -687,3 +687,41 @@ stands meanwhile.
 loop out of `Systems/` and leave the write boundary to a second sentence.
 **Not verified:** that no other file in the core writes `WorldState` today; the
 core was listed, not grepped for writes.
+
+### R-017 — A plan's criterion names the fault it must catch
+
+**Date:** 2026-09-28   **Origin:** D-070 (the question passed to the decider)
+**Verdict:** escalated — reserve 1 of `R-001`: how a plan's criteria are
+written lives in `AGENTS.md` and the plan skills
+**docs/:** unchanged
+
+`D-070` asks whether a plan's "Closed by" clause should be required to name
+every test that keeps the named one honest. The count behind the question: four
+of the phase 3 plan's first four criteria were defective — `D-059`, `D-065`,
+`D-070`, `D-075` — and in every case correct code passed, so `R-005`'s case 1
+carried the plan on. Two were vacuous (an empty enumeration satisfied them), one
+under-covered its "Does", one missed a fault (the 365-tick year). The implementer
+found each one only by mutating the code after the fact.
+
+Naming every guard test does not reach the cause: the guard tests did not exist
+when the criterion was frozen, and a criterion that must name them could only be
+written after the work. What the four defects share is that each criterion said
+what should pass and nothing about what should fail.
+
+**Recommendation.** A criterion states, beside the check, at least one fault it
+must catch — *fails when a field never reaches the hash*, *fails when the kingdom
+fires every 365 ticks* — and the point is not closed until that fault has been
+introduced and seen to turn the check red. The implementer already does this
+mutation by hand at every point; writing the fault first moves it before the
+code, where a criterion that cannot fail for the reason it exists is visible on
+reading. It applies to the next plan written, not to criteria already frozen.
+
+**Cost.** Criteria take longer to write, and a fault named in advance can itself
+be the wrong one. A plan point without a natural fault — a `Check: shallow` under
+`D-032` — needs to say so.
+**Owed by the implementer:** nothing until the user answers.
+**Would overturn it:** the next plan's criteria turning out defective at the same
+rate with faults named, which would say the defect is elsewhere.
+**Not verified:** that `/plan-next` and the plan design note do not already ask
+for this; neither was reread for it; `/plan-next` was
+grepped and does not.
