@@ -81,7 +81,9 @@ belongs to `/plan-next`, `/plan-explain` and `/plan-status`, and the reasoning t
   not met until the human has acted (`R-011`).
 - **A point is one commit with a runnable check.** The commit carries the record
   with it: the register entry and the plan's own outcome line are written first
-  and committed together with the code.
+  and committed together with the code. The check names at least one fault it
+  must catch, and the point closes only once that fault, introduced, has turned
+  it red (`R-020`).
 - **A point touching `core/Runtime/` passes two reviewers**, one briefed with the
   author's doubts and one blind to them. Their findings reach
   `DECISIONS-OUTSIDE-SPEC.md` even when rejected, with the reason.

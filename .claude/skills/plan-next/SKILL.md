@@ -113,6 +113,13 @@ dotnet test core/Tests/Sim.Core.Tests.csproj -c Release
 dotnet test core/Tests/Sim.Core.Tests.csproj -c Debug
 ```
 
+**Then make it fail.** Introduce the fault the point's `Fails when:` names, run
+the check, see it red for that reason, and undo the fault. The outcome line says
+it was seen. A check that stays green has not proved the point: that is a
+defective criterion, handled in step 6. A plan written before `R-020` has no
+`Fails when:` line; the rule does not apply to it, and the point is not faulted
+for the absence.
+
 **Run the check, do not read it.** On a point that builds nothing — a document,
 a skill, a workflow — the temptation is to reread the work and call it verified.
 That is where this repository has already found a defect that reading had

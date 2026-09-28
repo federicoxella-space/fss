@@ -37,7 +37,7 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-- **`R-017`** — a plan's criterion names a fault it must catch (`D-070`).
+*None.*
 
 ---
 
@@ -796,3 +796,37 @@ phase order.
 **Would overturn it:** as in `R-016`.
 **Not verified:** nothing; the repository's `CLAUDE.md` files were grepped for
 the old sentence and only `Systems/` carried it.
+
+### R-020 — `R-017` accepted: a plan's check names a fault and is seen to catch it
+
+**Date:** 2026-09-28   **Origin:** user, on `R-017`
+**Verdict:** resolved
+**docs/:** unchanged
+
+The user approved `R-017`'s recommendation and asked for it to be applied:
+"approvo R-016 e R-017, applicali". Governance, reserve 1 of `R-001`, applied at
+the user's request.
+
+**The rule.** A plan point carries a `Fails when:` line naming at least one fault
+its check must catch; the point closes only after that fault has been introduced
+and seen to turn the check red, and the outcome line says so. A point with no
+natural fault says so in the field. The rule applies to plans written from now;
+the phase 3 plan's criteria are frozen and carry no such line, and its remaining
+points are not faulted for it.
+
+Applied in four places: `AGENTS.md`, one sentence under "A point is one commit
+with a runnable check"; the plan design note, the field in the format and a
+section giving the reason; `/plan-next` step 3, where the fault is introduced
+and the check run; `/plan-explain`, where the field is reported and objected to
+when it could not fail. `/plan-status` reads outcome lines and needed nothing.
+
+This ruling is the record of the user's permission for the `AGENTS.md` edit,
+under `R-010`.
+
+**Cost.** As in `R-017`: criteria take longer to write, a named fault can itself
+be the wrong one, and a check that catches its named fault can still miss
+another.
+**Owed by the implementer:** nothing. The rule binds whoever writes the next plan.
+**Would overturn it:** as in `R-017`.
+**Not verified:** that `/plan-status` reports nothing a `Fails when:` line would
+change; it was grepped for `Closed by`, not read whole.
