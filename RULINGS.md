@@ -647,6 +647,43 @@ that it now verifies A-13's second clause.
 criterion already checks the new clause for every level.
 **Would overturn it:** a schedule that depends on state — a settlement whose
 cadence changes at run time — which would make A-13 a claim about state again.
-**Not verified:** that the spacing test checks the settlement bucket as well as
-basin and kingdom; `D-075` and `D-076` say it covers each level, the test was not
-read.
+**Not verified:** nothing; `FRT04_ConsecutiveFiringsOfALevelAreOnePeriodApart`
+was read after this ruling's commit and checks the spacing of daily, basin,
+kingdom and every settlement's bucket.
+
+### R-016 — `Runtime/Systems/` holds every writer of state, not only the phases
+
+**Date:** 2026-09-28   **Origin:** D-072
+**Verdict:** escalated — reserve 1 of `R-001`: the sentence is in `AGENTS.md`,
+and repeated in `core/Runtime/Systems/CLAUDE.md`
+**docs/:** unchanged
+
+"Structure" in `AGENTS.md` says `Runtime/Systems/` holds one file per phase of
+the settlement update, and that those files are the only ones that write to
+state. The tick loop writes `WorldState.Tick` and is not a phase, so it breaks
+one half wherever it goes. `D-072` kept the write boundary and put it in
+`Systems/`. The briefed reviewer is right that it will not be the last: point
+5's command drain writes state, and so will phase 4's generator.
+
+`docs/` does not state the sentence; FR-A-01 and DEC-030 say only that nothing
+outside the core writes state. The folder rule is an instruction to the
+implementer about where to look, and of its two halves the write boundary is
+the one a reader relies on — to find every mutation of state by opening one
+folder. "One file per phase, in `SIM-ECON` order" is a claim about the phases,
+and survives as a claim about *those* files.
+
+**Recommendation.** Reword the sentence in both files so the write boundary is
+the rule and the phases are its largest member: *`Runtime/Systems/` holds every
+file that writes simulation state, and nothing outside it does. One file per
+phase of the settlement update, in the order given by `SIM-ECON`; the few
+writers that are not phases — the tick loop, the command drain, the generator —
+are named for what they do.* `D-072`'s placement then complies as it stands.
+
+**Cost.** None to code. The folder's file listing stops being a readout of
+`SIM-ECON`'s phase order, which the phases' own names still give.
+**Owed by the implementer:** nothing until the user answers; `D-072`'s placement
+stands meanwhile.
+**Would overturn it:** the user preferring the phase rule, which would move the
+loop out of `Systems/` and leave the write boundary to a second sentence.
+**Not verified:** that no other file in the core writes `WorldState` today; the
+core was listed, not grepped for writes.
