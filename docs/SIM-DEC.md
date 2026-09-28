@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-09-23
+**Revision:** 2026-09-28
 **Companion:** SIM-REQ
 
 ---
@@ -113,7 +113,7 @@ War declaration, succession, rebellion, and alliance fire on endogenous threshol
 
 ### DEC-008 — Settlements update in staggered buckets keyed by id
 
-On tick *d*, settlements with `id % 7 == d % 7` update. The bucket comes from the id, never from iteration order.
+On tick *d*, settlements with `id % 7 == d % 7` update, `id` being the row index (FR-T-06). The bucket comes from the id, never from iteration order.
 
 **Rationale.** Per-tick cost stays flat instead of spiking every sixth day, and the assignment stays deterministic regardless of how the collection is traversed.
 

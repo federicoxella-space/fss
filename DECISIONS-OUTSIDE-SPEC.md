@@ -1939,6 +1939,8 @@ first basin or kingdom system needing the end of the period.
 
 ### D-074 · Point 4 · The loop is `internal`, reached through a struct seam, and ids are row indices
 
+**Ruling:** R-014 — specified: FR-T-06's `id` is the row index; the rest ratified.
+
 **What was decided.**
 
 - `TickLoop` is `internal`. A public entry now would be one more thing `R-003`

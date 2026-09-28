@@ -2,7 +2,7 @@
 
 **Document:** SIM-REQ
 **Status:** Draft 1
-**Revision:** 2026-09-23
+**Revision:** 2026-09-28
 **Scope:** Headless simulation core, runnable outside the game
 
 ---
@@ -90,7 +90,7 @@ month      = dayOfYear / 28      // 0..12
 dayOfMonth = dayOfYear % 28
 ```
 
-**FR-T-06** — Settlements update in staggered buckets. On tick *d*, the simulator updates settlements whose id satisfies `id % 7 == d % 7`. The bucket derives from the id, never from iteration order.
+**FR-T-06** — Settlements update in staggered buckets. On tick *d*, the simulator updates settlements whose id satisfies `id % 7 == d % 7`, where `id` is the settlement's row index, not the packed key of DEC-081. The bucket derives from the id, never from iteration order.
 
 **FR-T-07** — Political and military change (war declaration, succession, rebellion, alliance) is triggered by endogenous thresholds under FR-E-04, not by the kingdom cadence.
 

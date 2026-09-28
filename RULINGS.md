@@ -571,3 +571,37 @@ sections, as requirements have — which would make both number and title
 redundant.
 **Not verified:** nothing beyond `R-012`'s own gaps; the grep for numbered
 references in `docs/` was rerun and finds these four only.
+
+### R-014 — The id of the settlement bucket is the row index
+
+**Date:** 2026-09-28   **Origin:** D-074
+**Verdict:** specified; the rest of `D-074` ratified
+**docs/:** `SIM-REQ` FR-T-06 and `SIM-DEC` DEC-008 name `id` as the row index,
+not the packed key of DEC-081. Both revisions bumped.
+
+`D-074` records that the loop takes a settlement's id to be its row index and
+that phase 4's generator must not issue ids that differ from it. The second half
+is true by construction — NFR-10 indexes every row by `EntityId`, whose index
+*is* the row — so the entry's real content is the first half, and there the
+specification has two readings. FR-T-06 and DEC-008 write `id % 7`; `SIM-STATE`
+types a settlement's id as `EntityId`, index plus generation; and DEC-081 packs
+an `EntityId` into one 64-bit key, generation high, index low. Taken modulo 7,
+the packed key and the index differ by `4 × generation`: the same buckets,
+shifted. Nothing today chooses between them, and a phase-4 author holding
+DEC-081's helper could reasonably reach for the key.
+
+The index is right on the merits. FR-W-10 forbids deleting a settlement and
+fixes the count, so no settlement row is ever reused and its generation carries
+no information for the whole run; the index is the stable part of the identity,
+and it is an integer id in the sense `AGENTS.md` requires of any ordering. The
+packed key exists for the draw's coordinate space (DEC-081), not for scheduling.
+Both readings satisfy DEC-008's rationale equally, so the tie is broken by the
+one that depends on less.
+
+**Cost.** None to code: `TickLoop` steps row indices. Should settlements ever be
+deleted, which FR-W-10 forbids, the bucket of a reused row would not move with
+its generation.
+**Owed by the implementer:** nothing.
+**Would overturn it:** a change to FR-W-10 that lets settlement rows be reused.
+**Not verified:** nothing; FR-T-06, DEC-008, DEC-081, `SIM-STATE` §Settlement and
+`TickLoop.cs` were read.
