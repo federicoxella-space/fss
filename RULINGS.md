@@ -37,8 +37,6 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-- **`R-016`** — reword the `Systems/` sentence of `AGENTS.md` so the write
-  boundary is the rule (`D-072`).
 - **`R-017`** — a plan's criterion names a fault it must catch (`D-070`).
 
 ---
@@ -771,3 +769,30 @@ stood when written.
 **Not verified:** test counts, reviewer behaviour and mutation results reported
 in the entries were taken as written, except the 365-tick blind spot, which
 follows from the arithmetic in `D-075`, and the spacing test, read for `R-015`.
+
+### R-019 — `R-016` accepted: `Runtime/Systems/` holds every writer of state
+
+**Date:** 2026-09-28   **Origin:** user, on `R-016`
+**Verdict:** resolved
+**docs/:** unchanged
+
+The user approved `R-016`'s recommendation and asked for it to be applied:
+"approvo R-016 e R-017, applicali". Governance, reserve 1 of `R-001`, applied at
+the user's request.
+
+Applied in the two files `R-016` named, with its wording: "Structure" in
+`AGENTS.md`, and `core/Runtime/Systems/CLAUDE.md`. The write boundary is now the
+rule, and the phases of the settlement update its largest member; `D-072`'s
+placement of the tick loop complies as it stands. The second file is under
+`core/`, which the decider does not otherwise touch; it is an instruction file,
+not code, and the approval named it.
+
+This ruling is the record of the user's permission for the `AGENTS.md` edit,
+under `R-010`.
+
+**Cost.** As in `R-016`: the folder's listing no longer reads as `SIM-ECON`'s
+phase order.
+**Owed by the implementer:** nothing.
+**Would overturn it:** as in `R-016`.
+**Not verified:** nothing; the repository's `CLAUDE.md` files were grepped for
+the old sentence and only `Systems/` carried it.

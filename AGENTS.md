@@ -164,9 +164,11 @@ a decision, and decisions belong to a human.
 ## Structure
 
 State lives in one place as parallel arrays. Folders named after subsystems
-would suggest an isolation that does not exist. `Runtime/Systems/` holds one
-file per phase of the settlement update, in the order given by `SIM-ECON`, and
-those files are the only ones that write to state.
+would suggest an isolation that does not exist. `Runtime/Systems/` holds every
+file that writes simulation state, and nothing outside it does. Most of them are
+the phases of the settlement update, one file each, in the order given by
+`SIM-ECON`; the few writers that are not phases — the tick loop, the command
+drain, the generator — are named for what they do (`R-019`).
 
 ## Tests carry the number of what they verify
 
