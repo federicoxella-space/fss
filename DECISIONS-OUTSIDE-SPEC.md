@@ -2268,6 +2268,8 @@ has no read path yet.
 
 ### D-085 · Point 6 · The reviewers' findings
 
+**Ruling:** R-026 — ratified; cause kind specified by R-024, entity kind left open by R-025.
+
 Both reviewers: the check is met as written, build and both suites green.
 
 **Applied.**

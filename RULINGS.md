@@ -37,6 +37,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-024`**, no later than plan point 7: a chronicle entry records its cause's
   kind — event, player action or exogenous root — beside the cause id, as a
   column hashed and saved like the others; `Append` takes it.
+- **`R-026`**: `core/Runtime/Chronicle/` goes, `.gitkeep` and folder. A trivial
+  change under `AGENTS.md`; any commit may carry it.
 - **`R-004`**, no later than plan point 7: a fresh world takes the core's current
   rule version; a different value enters state only through loading a save.
   *In part in `3d7fb31`:* the public path stamps the current version; the internal
@@ -1046,3 +1048,43 @@ answer the item before it closes.
 **Not verified:** whether `SIM-STATE` means kingdoms and trade links to carry
 `EntityId`s at all; only the agent row types its id, and the settlement's
 `EntityId` rests on NFR-10's "indexed by `EntityId`".
+
+### R-026 — The empty `Chronicle/` folder goes; the rest of `D-085` is ratified
+
+**Date:** 2026-09-30   **Origin:** D-085
+**Verdict:** ratified, save what `R-024` and `R-025` ruled; one action owed
+**docs/:** unchanged
+
+`D-085` left three things to the human. The two phase-4 findings are `R-024` and
+`R-025`. The third is two items of layout and taste.
+
+- **`core/Runtime/Chronicle/.gitkeep`.** The rule exists: "Folders named after
+  subsystems would suggest an isolation that does not exist" (`AGENTS.md`,
+  Structure). The folder dates from the skeleton, before the chronicle had code;
+  now that it has, the writer is `Systems/Chronicle.cs` and the columns are in
+  `State/WorldState.cs`, and an empty folder of the subsystem's name points a
+  reader at the one place the chronicle is not. Nothing is decided here that
+  `AGENTS.md` had not; the implementer removes it. `Data/`, the other empty
+  folder, names a kind of content — static data, `SIM-STATE` §Static data — not a
+  subsystem, and is not ruled.
+- **The two test names kept narrower than what they check** (`D-083`). Kept.
+  Their prefixes still carry the requirement, which is what `AGENTS.md` asks of
+  a name; the register entries citing them are a record and are not rewritten,
+  so a rename would leave `D-065` and `D-070` pointing at nothing. `D-083`'s
+  summary remark is the right mitigation.
+- **"Every cast into the fold widens"**, not applied. The rejection stands: the
+  claim the wording supports holds, and the correction is a comment any later
+  commit may make as a trivial change.
+
+The rest of `D-085` — the findings applied — is ratified. Each was read against
+the entry it points to (`D-081` to `D-084`), not against the code; those entries
+themselves are above the watermark and are audited in their turn.
+
+**Cost.** None beyond one deleted file.
+**Owed by the implementer:** remove `core/Runtime/Chronicle/`. Trivial under
+`AGENTS.md`; cite `R-026`.
+**Would overturn it:** a decision to organise the core by subsystem, which
+`AGENTS.md` rules out.
+**Not verified:** the applied findings were not checked in the code; that the
+seven folders' other `.gitkeep` files are harmless beside real files was
+assumed.
