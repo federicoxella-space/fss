@@ -157,6 +157,22 @@ difetto è scritto in `D-075`.
   submitting them at a different moment of the caller's loop changes nothing.
 - **Core:** yes
 
+*Esito:* 2026-09-29. Chiuso. `FRA01_CommandsApplyAtOnePointInTheTick` verde,
+anche da solo; suite intera verde in Release (37) e in Debug (38), build del core
+senza avvisi. I comandi si applicano all'inizio di ogni tick, prima di ogni
+livello, in ordine di invio; la coda sta accanto a `WorldState`, fuori
+dall'hash. Guasti introdotti uno alla volta e visti rossi sul test nominato:
+drain una volta per chiamata, a fine tick, dopo Daily, senza applicare.
+L'ordine invertito lo passa, e lo coglie `FRA01_CommandsApplyInTheOrderSubmitted`
+(`D-079`). `R-003` onorato: `WorldState` e `StateHash` interni, `Simulation`
+pubblico come ingresso dell'host; `R-004` sul solo percorso pubblico, il resto
+resta al punto 7. Registro: `D-077` a `D-080`; questione di specifica `SQ-006`,
+non bloccante. Revisione: due revisori, `Core: yes`, entrambi concludono che il
+check è soddisfatto come scritto; applicati tutti i rilievi verificabili, tra cui
+l'ingresso pubblico mancante e un test cieco al drain per chiamata; nessuno
+respinto; lasciata aperta all'umano la forma dei comandi, codice o dati
+(`D-077`).
+
 ## 6. The chronicle log, structure and append
 
 - **Does:** the chronicle row of `SIM-STATE` — id, tick, location, entities,

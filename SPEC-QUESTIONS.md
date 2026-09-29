@@ -268,3 +268,28 @@ Most likely a section that renumbered and a cross-reference that did not. Filed
 rather than assumed, because the two readings differ in what else the note
 inherits: §20's rows are marked `Decided` and belong to a downstream consumer,
 §19's are measurements this repository still owes.
+
+### SQ-006 — commands waiting at a tick boundary influence the next tick, and `SIM-STATE` does not list them
+
+**Raised:** 2026-09-29, plan point 5, by both reviewers.
+**Cites:** `docs/SIM-STATE.md:12` §Rule; `docs/SIM-REQ.md:470` FR-A-01;
+`docs/SIM-REQ.md:600` AC-02; `docs/SIM-DEC.md:318` DEC-030;
+`docs/SIM-DEC.md:332` DEC-032.
+**Blocks:** no. Point 5 needs only that commands apply at one point of the tick,
+and the hash sequence it compares is the same either way. Point 7 is the first
+place the answer changes code.
+
+`SIM-STATE` §Rule: "Anything that influences a future tick lives here." A
+command the host has submitted and the tick loop has not yet drained influences
+the next tick, and `SIM-STATE` lists no queue. Two worlds with equal state hashes
+at a boundary diverge if their queues differ.
+
+AC-02 reads the other way: "same seed and commands produce the same state hash
+sequence" names commands beside the seed as an *input*, and DEC-030 makes the
+command log a replay format, which is a record of inputs. Point 5 took that
+reading — the queue sits beside the state, outside the hash (`D-077`).
+
+The readings part at DEC-032, "a save is a full state snapshot": a save taken
+while commands are pending either carries them, and the queue is state; or drops
+them, and a reloaded world diverges from the one saved; or is refused until the
+queue is empty, which the host must then arrange. Nothing in `docs/` chooses.

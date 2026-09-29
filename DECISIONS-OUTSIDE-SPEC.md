@@ -2018,3 +2018,125 @@ point-5 hand-off are recorded in `D-074`.
 **Left to the human.** The placement against `AGENTS.md` (`D-072`).
 
 **Rejected.** None.
+
+### D-077 · Point 5 · Commands drain at the start of every tick, and the queue is input, not state
+
+**What was decided.**
+
+- **The reading of the criterion.** "Submitting them at a different moment of the
+  caller's loop changes nothing" is read as: any moment before a tick starts —
+  between calls of one tick, between calls of many, or from inside the tick
+  before — lands a command on that tick. DEC-030's cost fixes it: "anything the
+  game wants to do immediately waits for the next tick boundary". The rejected
+  reading, commands stamped with a target tick and submitted arbitrarily early,
+  is not excluded by `docs/`, but it holds commands for future ticks and so pulls
+  them into state under `SIM-STATE` §Rule; it costs more and nothing asks for it.
+- **The drain is the first thing a tick does,** before every level, and applies
+  only the commands waiting when it starts; one submitted during the tick waits
+  for the next. `docs/` says only "a defined point". The start lets a command see
+  the tick its levels see (`D-073`), and puts SIM-ECON's Arrivals, where FR-J-17's
+  reported outcomes would land, after it. Draining until empty instead of taking
+  the count is indistinguishable today — `Apply` has no queue to submit to — and
+  no test tells them apart.
+- **Order is submission order,** FIFO. `docs/` says "identical command sequence"
+  (NFR-01) and nothing more.
+- **The queue lives beside `WorldState`, outside the state hash.** AC-02 names
+  seed and commands as inputs; the queue holds input not yet applied. This is in
+  tension with `SIM-STATE` §Rule and is filed as `SQ-006`, non-blocking. **Owed to
+  point 7:** what a save does with commands still waiting — carry, drop or refuse.
+- **A command is an `ICommand` object with `Apply(WorldState)`,** internal, so
+  only the core (and the tests, through `InternalsVisibleTo`) can define one. Phase
+  3 defines no kind; the tests' `Fold` is a stand-in. **Open for the human, from
+  the briefed reviewer:** under `R-019` every future kind's `Apply` is a writer and
+  must live in `Runtime/Systems/`; commands as immutable data dispatched by the
+  drain would keep the writers there and give point 7 a codec per kind rather than
+  per class. Not settled here: nothing violates `R-019` today, and choosing the
+  command representation is choosing the replay format, which is phase 7's.
+- **The queue is single-threaded.** DEC-031's host thread cannot submit to it
+  safely; the core may not hold threading primitives, so the handover is the host
+  integration's.
+
+**What `docs/` says.** FR-A-01: a queue, a defined point in the tick. DEC-030: the
+command log is a replay format. Nothing on the point, the order, the
+representation or whether the queue is state.
+
+**What would overturn it.** An answer to `SQ-006` that makes pending commands
+state; a command kind that must apply mid-tick; DEC-031's handover requiring a
+queue the core owns across threads.
+
+### D-078 · Point 5 · R-003 by an internal state type and a public handle; R-004 on the public path only
+
+**What was decided.**
+
+- `WorldState` and `StateHash` are `internal`. The *type*, not its fields: the
+  compiler then refuses any public member that takes or returns the state, and
+  `FRW01_TheWorldRowCarriesTheDeclaredTypes`, which looks fields up with default
+  binding flags, still sees them. `R-003`'s cost note expected that test to break;
+  it did not, because the fields are still public members of a non-public type.
+- **`Simulation`, public, is the host's entry**: a constructor from seed and
+  generation parameters, `Advance(long)`, and `StateHash` as a value. The state and
+  the queue are private fields. This is `D-074`'s hand-off: point 8 is `Core: no`
+  and could not have added it. The first draft left the core with no public entry
+  at all; both reviewers found it (`D-080`).
+- **No public submit.** `ICommand` takes the internal state, so it cannot be
+  public, and phase 3 has no kind to issue. The drain still runs inside
+  `Simulation.Advance`.
+- **`Advance(-1)` throws** `ArgumentOutOfRangeException` on the public entry,
+  where `D-074` said a trust boundary wants an exception; the internal loop keeps
+  its `Debug.Assert`.
+- **`R-004`, in part.** `Simulation` stamps a new world with
+  `Simulation.CurrentRuleVersion = 1`, so no host chooses a rule version. The
+  internal `WorldState` constructor still takes one, used by the tests; removing it
+  and loading a foreign version through a save remain point 7's, as `R-004` allows.
+  `1` is arbitrary: phase 3 has no rules to version.
+- `FRA01_WorldStateIsNotVisibleOutsideTheCore` checks visibility and is the
+  floor of `R-003`, not the whole guard: once phase 4 adds arrays, a public member
+  returning one would hand out a live alias and pass it. Said in its comment.
+
+**What `docs/` says.** FR-A-01, FR-A-02, FR-A-03; nothing on the shape. `R-003`
+leaves it to the implementer.
+
+**What would overturn it.** Point 8 needing something `Simulation` does not
+expose — the tick, say — which it cannot add itself.
+
+### D-079 · Point 5 · The declared check, and what it catches
+
+`FRA01_CommandsApplyAtOnePointInTheTick` reads the hash sequence inside each
+tick, in the first level, after the drain — the one point every way of calling
+the loop shares, since a caller running forty ticks in one call sees no boundary
+between them. It compares three ways of submitting the same script against one
+reference and against a run with no commands.
+
+The plan predates `R-020` and point 5 has no `Fails when:` line. The faults were
+introduced anyway, each alone, each undone: drain once per call instead of once
+per tick, drain at the end of the tick, drain after Daily, drain without
+applying — all red on the named test. **Reversing the order passes it**: every
+run reverses alike, and the criterion compares runs with one another. That fault
+is caught by `FRA01_CommandsApplyInTheOrderSubmitted`, which pins the value by
+hand. Correct code passes the criterion, and it proves "same order gives same
+sequence" rather than "the order is the order submitted" — which the criterion
+does not ask for. Not a defect of the criterion, recorded so nobody reads the
+named test as covering order.
+
+### D-080 · Point 5 · The reviewers' findings
+
+Both reviewers: the check is met as written, build and both suites green;
+`2918` and `8` verified by hand.
+
+**Applied.**
+- No public entry after `R-003`, contrary to `D-074`'s hand-off — both. `D-078`.
+- The named test could not see a drain run once per call, since nothing
+  submitted inside a multi-tick call — both. The mid-tick case now runs as one
+  call of every tick; the fault turns it red (`D-079`).
+- Comments citing register entries not yet written — both. True with this commit.
+- "The queue is its replay format" — briefed. DEC-030 says the command *log*; the
+  comment now says nothing writes one yet.
+- "While a tick is running" is safe only on one thread — both. Narrowed.
+- "This one assertion covers the whole surface" overstated — briefed. Narrowed.
+- Pending commands and `SIM-STATE` §Rule — both; the briefed reviewer asked for a
+  question. `SQ-006`.
+
+**Left to the human.** Commands as code or as data, and where future kinds live
+under `R-019` (`D-077`).
+
+**Rejected.** None.

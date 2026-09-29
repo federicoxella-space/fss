@@ -48,7 +48,7 @@ namespace Sim
     /// against tampering.
     /// </para>
     /// </remarks>
-    public static class StateHash
+    internal static class StateHash
     {
         // An empty fold has to start somewhere, and the value it starts from is
         // arbitrary: no choice of it makes a prefix of the folds distinguishable from a

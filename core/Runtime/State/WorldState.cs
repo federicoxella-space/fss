@@ -29,13 +29,19 @@ namespace Sim
     /// without the suite saying so.
     /// </para>
     /// <para>
-    /// The fields are public and mutable because systems mutate state and nothing else
-    /// does (AGENTS.md). Hiding them behind properties would suggest this class
-    /// defends an invariant, and it does not: the invariants of SIM-STATE are asserted
-    /// over the whole state each tick, not at the point of assignment.
+    /// The fields are mutable because systems mutate state and nothing else does
+    /// (AGENTS.md). Hiding them behind properties would suggest this class defends an
+    /// invariant, and it does not: the invariants of SIM-STATE are asserted over the
+    /// whole state each tick, not at the point of assignment.
+    /// </para>
+    /// <para>
+    /// <b>The type is <c>internal</c>, and that is FR-A-01 and FR-A-02 enforced by the
+    /// compiler (R-003).</b> No public member of the core can take or return it, so code
+    /// outside the core can neither write the live state nor read it. The host writes
+    /// through the command queue, which the tick loop drains at one point of the tick.
     /// </para>
     /// </remarks>
-    public sealed class WorldState
+    internal sealed class WorldState
     {
         /// <summary>The only clock: one tick is one world day (DEC-005, FR-T-01).</summary>
         public long Tick;

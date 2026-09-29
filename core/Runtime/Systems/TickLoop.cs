@@ -22,6 +22,12 @@ namespace Sim
     /// both are recorded in <c>DECISIONS-OUTSIDE-SPEC.md</c> under plan point 4.
     /// </para>
     /// <para>
+    /// <b>Commands drain first (FR-A-01, DEC-030).</b> A tick starts by applying, in
+    /// order, the commands waiting when it starts, and only then runs its levels; a
+    /// command submitted while the tick runs waits for the next one. The start is the
+    /// point <c>docs/</c> leaves open; why it is the start is recorded under plan point 5.
+    /// </para>
+    /// <para>
     /// A tick is processed at the state's current <see cref="WorldState.Tick"/>, and the
     /// counter moves only after every level due on it has run, so each level sees the
     /// date it fires on. Phase 3 has no domain, so the levels are empty; the settlement
@@ -31,10 +37,21 @@ namespace Sim
     internal static class TickLoop
     {
         /// <summary>Runs <paramref name="ticks"/> ticks with every level empty, as phase 3 has them.</summary>
-        public static void Advance(WorldState state, long ticks) => Advance(state, ticks, default(NoLevels));
+        public static void Advance(WorldState state, long ticks) => Advance(state, new CommandQueue(), ticks, default(NoLevels));
 
-        /// <summary>Runs <paramref name="ticks"/> ticks, handing each firing to <paramref name="levels"/>.</summary>
+        /// <summary>Runs <paramref name="ticks"/> ticks with every level empty, draining <paramref name="commands"/>.</summary>
+        public static void Advance(WorldState state, CommandQueue commands, long ticks) =>
+            Advance(state, commands, ticks, default(NoLevels));
+
+        /// <summary>Runs <paramref name="ticks"/> ticks with no commands, handing each firing to <paramref name="levels"/>.</summary>
         public static void Advance<T>(WorldState state, long ticks, T levels)
+            where T : struct, ICadenceLevels => Advance(state, new CommandQueue(), ticks, levels);
+
+        /// <summary>
+        /// Runs <paramref name="ticks"/> ticks, draining <paramref name="commands"/> at the
+        /// start of each and handing each firing to <paramref name="levels"/>.
+        /// </summary>
+        public static void Advance<T>(WorldState state, CommandQueue commands, long ticks, T levels)
             where T : struct, ICadenceLevels
         {
             System.Diagnostics.Debug.Assert(ticks >= 0, "The caller asks for ticks to run, never for time to go back.");
@@ -43,6 +60,12 @@ namespace Sim
             for (long i = 0; i < ticks; i++)
             {
                 long d = state.Tick;
+
+                // Only those waiting now: one submitted from here on lands on the next tick.
+                for (int n = commands.Count; n > 0; n--)
+                {
+                    commands.Take().Apply(state);
+                }
 
                 levels.Daily(state);
 
