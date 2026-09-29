@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-076 — audited by `R-018`. The next audit starts at the
+**Register watermark:** D-080 — audited by `R-023`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -27,9 +27,8 @@ line to tell the human how many entries are outstanding, so keep its shape.
 Actions a ruling requires of the code or of the plan. The implementer cites the
 `R-NNN` in the commit that does it; the decider marks it done with that commit.
 
-- **`R-003`**, within plan point 5: no public member of the core exposes mutable
-  world state for reading or writing. `StateHash.Of(WorldState)` and the public
-  entry to `TickLoop` are both in its path (`D-071`, `D-074`).
+- ~~**`R-003`**, within plan point 5: no public member of the core exposes mutable
+  world state for reading or writing.~~ **Done in `3d7fb31`**, checked by `R-023`.
 - **`R-021`**, within plan point 7: a save carries the commands still pending,
   in submission order, outside the state hash; a load puts them back in the queue.
 - **`R-022`**, no later than plan point 7: a command is a value with a kind and
@@ -37,6 +36,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   `Apply` goes.
 - **`R-004`**, no later than plan point 7: a fresh world takes the core's current
   rule version; a different value enters state only through loading a save.
+  *In part in `3d7fb31`:* the public path stamps the current version; the internal
+  constructor's parameter and the load path remain (`D-078`).
 
 ## Escalated to the user
 
@@ -926,3 +927,38 @@ fields — a free-text name typed by the player is the candidate — which would
 need a bounded encoding, not behaviour.
 **Not verified:** that FR-J-17 and the other requirements naming player actions
 all fit integer fields; they were not reread for it.
+
+### R-023 — The register from `D-077` to `D-080` is ratified, save what R-021 and R-022 ruled
+
+**Date:** 2026-09-29   **Origin:** register audit, `D-077` to `D-080`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Ruled on their own: the queue's status and what a save does with it (`D-077`,
+`SQ-006`) by `R-021`; commands as code or data (`D-077`, `D-080`) by `R-022`.
+
+- **`D-077`, the rest.** The drain is the first thing a tick does, takes only the
+  commands waiting when it starts, in submission order. `docs/` says "a defined
+  point"; the start lets a command see the date its tick's levels see and puts
+  `SIM-ECON`'s Arrivals after it, which is the order a player's action should
+  have against the world's response. The single-threaded queue is right for the
+  core, which may hold no threading primitive; DEC-031's handover is the host's.
+- **`D-078`**, `R-003` met by an internal state type and a public `Simulation`
+  handle. Checked in `3d7fb31`: `WorldState` and `StateHash` are `internal`;
+  `Simulation` exposes a constructor, `Advance` and the hash as a value, and holds
+  the state and queue privately. `R-003` is marked done. That its cost note
+  wrongly predicted `FRW01_…` would break is `R-003`'s error, not the entry's.
+  `Advance(-1)` throwing on the public entry is what `D-074` asked for. `R-004` is
+  met on the public path; the rest stays owed to point 7, as `R-004` allows.
+- **`D-079`**, the check and what it catches. The finding that reversing the
+  order passes the named test is correct and is not a defect of the criterion:
+  the criterion compares runs, and the order is pinned by the test beside it.
+  Point 5 predates `R-020`; the faults were introduced anyway, which is what that
+  rule now asks.
+- **`D-080`**, the reviewers' findings; nothing rejected.
+
+**Cost.** None.
+**Owed by the implementer:** nothing new; `R-004`, `R-021` and `R-022` stand.
+**Would overturn it:** as for `R-008`.
+**Not verified:** build and test results and the mutation outcomes in `D-079`
+were taken as written; the suite was not run.

@@ -2068,6 +2068,8 @@ queue the core owns across threads.
 
 ### D-078 · Point 5 · R-003 by an internal state type and a public handle; R-004 on the public path only
 
+**Ruling:** R-023 — ratified.
+
 **What was decided.**
 
 - `WorldState` and `StateHash` are `internal`. The *type*, not its fields: the
@@ -2103,6 +2105,8 @@ expose — the tick, say — which it cannot add itself.
 
 ### D-079 · Point 5 · The declared check, and what it catches
 
+**Ruling:** R-023 — ratified.
+
 `FRA01_CommandsApplyAtOnePointInTheTick` reads the hash sequence inside each
 tick, in the first level, after the drain — the one point every way of calling
 the loop shares, since a caller running forty ticks in one call sees no boundary
@@ -2121,6 +2125,8 @@ does not ask for. Not a defect of the criterion, recorded so nobody reads the
 named test as covering order.
 
 ### D-080 · Point 5 · The reviewers' findings
+
+**Ruling:** R-023 — ratified; commands as data ruled by R-022.
 
 Both reviewers: the check is met as written, build and both suites green;
 `2918` and `8` verified by hand.
