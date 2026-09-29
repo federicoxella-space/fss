@@ -32,6 +32,9 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   entry to `TickLoop` are both in its path (`D-071`, `D-074`).
 - **`R-021`**, within plan point 7: a save carries the commands still pending,
   in submission order, outside the state hash; a load puts them back in the queue.
+- **`R-022`**, no later than plan point 7: a command is a value with a kind and
+  integer fields, and the drain applies it from `Runtime/Systems/`; `ICommand`'s
+  `Apply` goes.
 - **`R-004`**, no later than plan point 7: a fresh world takes the core's current
   rule version; a different value enters state only through loading a save.
 
@@ -879,3 +882,47 @@ drain and the tick's end, where "pending" would need redefining; or a
 requirement that the hash identify a world together with its queued input.
 **Not verified:** nothing; FR-A-01, NFR-01, NFR-08, AC-02, AC-03, DEC-030 to
 DEC-032, `SIM-STATE` §Rule and the queue and drain in `3d7fb31` were read.
+
+### R-022 — A command is data, applied by a system
+
+**Date:** 2026-09-29   **Origin:** D-077, D-080 (the question left to the human)
+**Verdict:** promoted as DEC-086
+**docs/:** `SIM-DEC` gains DEC-086 under "Integration and operations", after
+DEC-030. Revision already bumped today by `R-021`.
+
+Point 5 made a command an object with `Apply(WorldState)`, and the briefed
+reviewer asked the question `D-077` left open: under `R-019` every future kind's
+`Apply` writes state and must live in `Runtime/Systems/`, while commands as
+immutable data dispatched by the drain keep the writers there by construction.
+`D-077` deferred it because choosing the representation is choosing the replay
+format. It is, and the replay format is no longer the only thing asking.
+
+Three boundaries now require a command to serialise: the host hands it over
+(FR-A-01), DEC-030 makes the command log a replay format, and since `R-021` a
+save carries every command still pending. §20 forbids reflection, so each of
+those needs a written codec either way; what differs is what it encodes. A
+value with a kind and integer fields encodes as a state row does. An object's
+behaviour does not encode at all: the codec writes a tag and fields and rebuilds
+the object on load, which is the data representation with a class hierarchy in
+front of it. The second argument is the rule that predates the code, "systems
+mutate state, nothing else does": an `Apply` on the command is a writer defined
+wherever the kind is. The third is FR-A-01 itself: the host is outside the core,
+and a system applying a value can check it against the state of its tick; an
+object applying itself carries whatever logic its builder gave it, and today
+only `internal` stands in the way.
+
+This is architecture — it binds every command kind of every later phase — so it
+is promoted rather than specified.
+
+**Cost.** `ICommand`, its `Apply`, and the tests' `Fold` stand-in reshape: a
+value type and a dispatch in the drain. Every future kind costs a codec and a
+dispatch entry besides its effect. The queue's `Queue<ICommand>` becomes a queue
+of values, which also removes the one object reference per pending command.
+**Owed by the implementer:** no later than plan point 7, whose serialiser must
+write pending commands under `R-021`: a command is a value with a kind and
+integer fields, and the drain applies it from `Runtime/Systems/`. Cite `R-022`.
+**Would overturn it:** a command kind whose content cannot be stated as integer
+fields — a free-text name typed by the player is the candidate — which would
+need a bounded encoding, not behaviour.
+**Not verified:** that FR-J-17 and the other requirements naming player actions
+all fit integer fields; they were not reread for it.

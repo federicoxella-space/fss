@@ -323,6 +323,14 @@ The game pushes commands into a queue applied at a defined point in the tick, co
 
 **Cost.** Anything the game wants to do immediately waits for the next tick boundary.
 
+### DEC-086 — A command is data; a system applies it
+
+A command is a value: a kind and the integer fields that kind declares, with no behaviour and no object references. Applying it is the work of the core, in the same place as every other write to state, dispatched on the kind.
+
+**Rationale.** A command crosses three boundaries that behaviour cannot: the host hands it over (FR-A-01), the command log records it for replay (DEC-030), and a save carries it while it waits (DEC-032). Each of those is serialisation, with no reflection allowed (SIM-REQ section 20, "Downstream constraints"), and a value serialises as a state row does. Keeping the write in the core also keeps one place where state changes, and lets the core check a command against the state of the tick it lands on rather than trusting whoever built it.
+
+**Cost.** Every kind needs a codec and a dispatch entry as well as its effect, and a new kind touches the core even when its effect is small.
+
 ### DEC-031 — The core runs on a background thread
 
 **Rationale.** The per-day budget is then independent of the frame budget, which is what allows fast travel at roughly one simulated year per 3.6 seconds *(estimate)*.
