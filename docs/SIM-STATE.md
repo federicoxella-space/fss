@@ -200,3 +200,4 @@ A-13 is the one assert about the schedule rather than about state: a firing leav
 2. Decide whether `flowAccumulator` needs per-good history or a single rolling figure.
 3. Decide the chronicle retention policy. Entries accumulate over 60 years and nothing above discards them.
 4. Decide how the chronicle dates prior history. FR-G-03 runs it "before tick 0" and DEC-040 takes the result as tick 0, so entries written during it carry ticks that are negative once the run is relabelled, or later than the run's first tick if it is not.
+5. Decide how an `EntityId` names its table, before a second table issues them. The chronicle's `entities` may mix settlements, kingdoms and agents, and an index plus a generation does not say which; DEC-083's "two distinct entities are distinct keys" holds across tables only if their indices share one space.

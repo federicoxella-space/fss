@@ -1010,3 +1010,39 @@ outside the chronicle.
 **Not verified:** that FR-E-07's "player action" means only the host's commands
 and not also a promoted agent's choices (phase 5); `SIM-REQ` §13 was not read
 for it.
+
+### R-025 — Whether an `EntityId` names its table stays open, until a second table issues one
+
+**Date:** 2026-09-30   **Origin:** D-085 (a finding left to the human)
+**Verdict:** specified — as an open item, not decided
+**docs/:** `SIM-STATE` §Open gains item 5. Revision already bumped today by
+`R-024`.
+
+The briefed reviewer of point 6 found that `EntityId` carries no kind, so the
+chronicle's mixed `entities` list cannot say which table an id belongs to. The
+finding is right and wider than the chronicle. NFR-10 and DEC-081 define an
+`EntityId` as index plus generation; nothing says whether the index is per table
+or drawn from one space shared by all. DEC-083's rationale — "the generation
+makes two distinct entities distinct keys" — is true under a shared space and
+false under per-table spaces, where settlement 7 and agent 7 of the same
+generation are one key and, in a shared channel, one draw. So `docs/` leans on an
+answer it never gives.
+
+It is not decided here. The two answers — one index space, or a kind carried
+with the handle — differ in the generator, the row allocator, DEC-081's packing
+and every column typed `id`, and the tables whose layout would pay for it arrive
+in phase 4 (settlements, kingdoms) and phase 5 (agents). Deciding now would
+choose phase 4's allocator from a phase-3 chronicle that holds no real entity.
+Deciding late costs nothing yet: no state table other than the chronicle stores
+an `EntityId`, and the chronicle writes none that name a row. The item says when
+it falls due, which is what `R-007`'s open item did not and should have.
+
+**Cost.** Until answered, a phase-4 author could pick per-table indices without
+seeing that DEC-083 then needs a channel per entity table.
+**Owed by the implementer:** nothing now; the item binds whichever point first
+gives a second table `EntityId`s.
+**Would overturn it:** a phase-4 plan point issuing settlement ids, which must
+answer the item before it closes.
+**Not verified:** whether `SIM-STATE` means kingdoms and trade links to carry
+`EntityId`s at all; only the agent row types its id, and the settlement's
+`EntityId` rests on NFR-10's "indexed by `EntityId`".
