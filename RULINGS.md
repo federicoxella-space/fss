@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-080 — audited by `R-023`. The next audit starts at the
+**Register watermark:** D-085 — audited by `R-027`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -1088,3 +1088,51 @@ themselves are above the watermark and are audited in their turn.
 **Not verified:** the applied findings were not checked in the code; that the
 seven folders' other `.gitkeep` files are harmless beside real files was
 assumed.
+
+### R-027 — The register from `D-081` to `D-084` is ratified
+
+**Date:** 2026-09-30   **Origin:** register audit, `D-081` to `D-084`
+**Verdict:** ratified
+**docs/:** unchanged
+
+`D-080` was ratified by `R-023` and `D-085` by `R-024` to `R-026`; this covers
+what lies between, point 6's chronicle. Each entry was read against `docs/` and
+its claims about the code against `Systems/Chronicle.cs`, `State/WorldState.cs`
+and `State/StateHash.cs`.
+
+- **`D-081`, the chronicle's shape.** Checked: ids are row plus one from 1,
+  `Chronicle.None = 0`, the tick is read from state, location is an `EntityId`,
+  entities sit in one pool with start and count per row — DEC-085's second shape,
+  as `R-006` left to this point — and the fold runs over the rows in use, never
+  the capacity. `docs/` is silent on each and nothing contradicts it. Two later
+  rulings bear on it without reversing it: under `R-024`, `0` means "no triggering
+  entry", no longer "a root", and the kind says which of FR-E-07's causes it is;
+  under `R-025`, how an `EntityId` names its table is open, which reaches
+  `location` as well as `entities`. `int` ids hold 2^31 entries, far above what a
+  sixty-year run writes at any rate the specification implies; retention (Open
+  item 3) decides the rest.
+- **`D-082`, a bad cause throws in Release.** Right on the merits: an asserted-away
+  forward cause is a chain with no root carried into every save, which AC-11
+  could never pass, and no ruling says internal code may not throw. It departs
+  from the convention of `D-074` and `D-078` for a stated reason, which is what a
+  convention allows. `R-024`'s consistency rule joins this throw.
+- **`D-083`, the hash and its fixture.** Checked: after §World, the count, the six
+  columns over the rows in use, then the pool up to `EntitiesInUse`. Folding the
+  pool last is the one departure from `SIM-STATE`'s field order, named in the
+  remark; `docs/` requires every field in the hash (§Serialisation notes), not an
+  order. The narrowed injectivity remark is correct: the three fields that set
+  how many folds follow fall outside the single-field argument. Perturbing every
+  row in use rather than row 0 is the right fix to the reviewer's fault. The pin
+  moving before any save exists costs nothing. The two test names are `R-026`'s.
+- **`D-084`, the declared check.** A criterion defect under `R-005`'s case 1: "the
+  greps" name nothing, correct code passes, and the proof of shape is in the
+  three tests beside it. Point 6 predates `R-020`; the faults were introduced
+  anyway. FR-I-04 served as structure only is right for phase 3, which has no
+  reader.
+
+**Cost.** None.
+**Owed by the implementer:** nothing new; `R-024` and `R-026` stand.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` as it
+stood when written.
+**Not verified:** the suite was not run; mutation results in `D-083` and `D-084`
+and the reviewers' findings were taken as written.

@@ -2151,6 +2151,8 @@ under `R-019` (`D-077`).
 
 ### D-081 · Point 6 · The chronicle's shape: ids are the order of writing, the pool follows DEC-085
 
+**Ruling:** R-027 — ratified; `0` narrowed by R-024, the id's table left open by R-025.
+
 `SIM-STATE` §Chronicle names the fields and gives three types — `tick` int64,
 `entities` id[], `importance` int — and `cause` as "chronicle id". The rest is
 chosen here.
@@ -2189,6 +2191,8 @@ are still owed there.
 
 ### D-082 · Point 6 · A bad cause throws, in Release too
 
+**Ruling:** R-027 — ratified.
+
 `Chronicle.Append` throws `ArgumentOutOfRangeException` for a cause that is not
 an earlier id, before anything is written: no row, no count, no growth. That
 departs from the convention of `D-074` and `D-078`, where public entries throw
@@ -2205,6 +2209,8 @@ it:** a ruling that the core never throws from internal code, which would move
 the check to a debug assert and accept the corrupt branch in Release.
 
 ### D-083 · Point 6 · The hash and its fixture learn columns
+
+**Ruling:** R-027 — ratified; test names by R-026.
 
 The fold adds the chronicle after §World: the count, then each column over the
 rows in use, then the pool, whose length is read from the last row. That is the
@@ -2238,6 +2244,8 @@ them. The first now says so in its summary.
 **Would overturn it:** a ruling that register citations do not pin test names.
 
 ### D-084 · Point 6 · The declared check, and a word in it that names nothing
+
+**Ruling:** R-027 — ratified.
 
 `FRI01_ChronicleIdsAreStableAndOrdered` appends 1000 entries from a synthetic
 source whose every field is a function of its position — n % 4 entities, a cause
