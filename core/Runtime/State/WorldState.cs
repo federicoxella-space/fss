@@ -11,7 +11,7 @@ namespace Sim
     /// is the same hole with a test that passes.
     /// </para>
     /// <para>
-    /// <b>This point puts the World row here and nothing else.</b> Settlements,
+    /// <b>The World row and the chronicle, and nothing else.</b> Settlements,
     /// cohorts, links, stocks, prices, agents and kingdoms are named by FR-W-01 and
     /// belong to phase 4; the chronicle is named by FR-W-01 too but belongs to this
     /// phase, which SIM-REQ §18 lists as "scheduler, RNG, serialisation, chronicle,
@@ -57,6 +57,38 @@ namespace Sim
 
         /// <summary>Currency in circulation, in smallest units: the target of A-02 and A-03.</summary>
         public long CurrencyTotal;
+
+        // The chronicle (FR-I-01, FR-I-04, SIM-STATE §Chronicle), one row per entry in
+        // append order, under DEC-085: the columns are sized at a capacity and only the
+        // first ChronicleCount rows are state. An entry's id is its row plus one, so 0
+        // is "no entry" and a defaulted cause reads as a root. Entities are variable in
+        // length and live in one shared pool, each row naming its slice by start and
+        // count. Only Systems/Chronicle.cs writes these. Propagation, the last row of
+        // SIM-STATE §Chronicle, is domain and arrives with phase 4.
+
+        /// <summary>Rows of the chronicle in use; also the id of the last entry.</summary>
+        public int ChronicleCount;
+
+        /// <summary>The tick each entry was written on.</summary>
+        public long[] ChronicleTick = new long[0];
+
+        /// <summary>Where each entry happened: a settlement, or <see cref="EntityId.None"/>.</summary>
+        public EntityId[] ChronicleLocation = new EntityId[0];
+
+        /// <summary>The id of the entry that caused each one, or 0 for a root cause.</summary>
+        public int[] ChronicleCause = new int[0];
+
+        /// <summary>What drives each entry's propagation (SIM-STATE §Chronicle, DEC-027).</summary>
+        public int[] ChronicleImportance = new int[0];
+
+        /// <summary>Where each entry's entities begin in <see cref="ChronicleEntities"/>.</summary>
+        public int[] ChronicleEntityStart = new int[0];
+
+        /// <summary>How many entities each entry names.</summary>
+        public int[] ChronicleEntityCount = new int[0];
+
+        /// <summary>The shared pool of entities, addressed by start and count.</summary>
+        public EntityId[] ChronicleEntities = new EntityId[0];
 
         /// <summary>
         /// A world at tick 0 with nothing in it. The three arguments are what the host

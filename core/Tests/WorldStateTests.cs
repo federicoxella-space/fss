@@ -40,12 +40,13 @@ namespace Sim.Tests
         }
 
         /// <summary>
-        /// The five fields of SIM-STATE's World row, no more and no fewer (FR-W-01).
-        /// A missing one is state the save cannot carry; a sixth is not a violation but
-        /// a widening, and the list is here so that the widening is deliberate. Points
-        /// 5 and 6 of this plan do it twice — the command queue and the chronicle both
-        /// influence a future tick and both belong in state — and phase 4 does it for
-        /// every parallel array it adds.
+        /// The five fields of SIM-STATE's World row and the columns of its Chronicle,
+        /// no more and no fewer (FR-W-01).
+        /// A missing one is state the save cannot carry; one more is not a violation but
+        /// a widening, and the list is here so that the widening is deliberate. Point 6
+        /// widened it by the chronicle's columns — the command queue of point 5 is input,
+        /// not state (SIM-STATE §Rule) — and phase 4 does it for every parallel array it
+        /// adds. The name predates the chronicle and is kept because the register cites it.
         /// </summary>
         [Test]
         public void FRW01_WorldStateHoldsTheWorldRowAndNothingElse()
@@ -60,7 +61,12 @@ namespace Sim.Tests
 
             Assert.That(
                 names,
-                Is.EqualTo(new[] { "CurrencyTotal", "GenerationParams", "RuleVersion", "Tick", "WorldSeed" }));
+                Is.EqualTo(new[]
+                {
+                    "ChronicleCause", "ChronicleCount", "ChronicleEntities", "ChronicleEntityCount",
+                    "ChronicleEntityStart", "ChronicleImportance", "ChronicleLocation", "ChronicleTick",
+                    "CurrencyTotal", "GenerationParams", "RuleVersion", "Tick", "WorldSeed",
+                }));
         }
 
         /// <summary>

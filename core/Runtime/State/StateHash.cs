@@ -24,8 +24,9 @@ namespace Sim
     /// The mixing is <see cref="Hash64"/>'s, not a second function: the same
     /// multiply-xorshift avalanche, written in integer operations so the digest is
     /// identical on every build. The order of the folds is part of the digest —
-    /// reordering them changes every hash — which is why they follow SIM-STATE §World
-    /// top to bottom.
+    /// reordering them changes every hash — which is why they follow SIM-STATE,
+    /// §World then §Chronicle, with one exception: the chronicle's shared pool of
+    /// entities is folded after the per-row columns, since its length is read from them.
     /// </para>
     /// <para>
     /// <b>What the fold guarantees, exactly.</b> A state differing from another in
@@ -36,6 +37,13 @@ namespace Sim
     /// therefore exact and not probabilistic. The ceiling: a later fold that
     /// <em>narrows</em> — <c>(ulong)(byte)x</c> — breaks that chain, and a test
     /// perturbing by one would not see it.
+    /// </para>
+    /// <para>
+    /// <b>Three fields fall outside that argument</b>: <c>ChronicleCount</c>, and the
+    /// last row's <c>ChronicleEntityStart</c> and <c>ChronicleEntityCount</c>. Each one
+    /// decides how many folds follow it, so two values of it give chains of different
+    /// lengths and the bijection argument does not apply. For those three a shared
+    /// digest is a 64-bit collision, improbable and not impossible.
     /// </para>
     /// <para>
     /// <b>It guarantees nothing about two fields.</b> Two states differing in two
@@ -63,7 +71,7 @@ namespace Sim
 
         /// <summary>
         /// The digest of every field of <paramref name="state"/>, in the order
-        /// SIM-STATE §World declares them.
+        /// SIM-STATE declares them: §World, then §Chronicle.
         /// </summary>
         public static ulong Of(WorldState state)
         {
@@ -75,7 +83,33 @@ namespace Sim
                 h = Fold(h, state.GenerationParams);
                 h = Hash64.Mix(h ^ (uint)state.RuleVersion);
                 h = Hash64.Mix(h ^ (ulong)state.CurrencyTotal);
+
+                // The chronicle, column by column, over the rows in use only: capacity
+                // is not state, and two worlds with the same entries hash the same
+                // whatever their arrays have grown to.
+                int rows = state.ChronicleCount;
+                h = Hash64.Mix(h ^ (uint)rows);
+                for (int i = 0; i < rows; i++) { h = Hash64.Mix(h ^ (ulong)state.ChronicleTick[i]); }
+                for (int i = 0; i < rows; i++) { h = Fold(h, state.ChronicleLocation[i]); }
+                for (int i = 0; i < rows; i++) { h = Hash64.Mix(h ^ (uint)state.ChronicleCause[i]); }
+                for (int i = 0; i < rows; i++) { h = Hash64.Mix(h ^ (uint)state.ChronicleImportance[i]); }
+                for (int i = 0; i < rows; i++) { h = Hash64.Mix(h ^ (uint)state.ChronicleEntityStart[i]); }
+                for (int i = 0; i < rows; i++) { h = Hash64.Mix(h ^ (uint)state.ChronicleEntityCount[i]); }
+
+                int entities = Chronicle.EntitiesInUse(state);
+                for (int i = 0; i < entities; i++) { h = Fold(h, state.ChronicleEntities[i]); }
+
                 return h;
+            }
+        }
+
+        /// <summary>A handle, its index then its generation.</summary>
+        private static ulong Fold(ulong h, EntityId id)
+        {
+            unchecked
+            {
+                h = Hash64.Mix(h ^ (uint)id.Index);
+                return Hash64.Mix(h ^ (uint)id.Generation);
             }
         }
 

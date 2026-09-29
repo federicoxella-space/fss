@@ -187,6 +187,24 @@ respinto; lasciata aperta all'umano la forma dei comandi, codice o dati
   five fields are filled by something that did not exist to fill them.
 - **Core:** yes
 
+*Esito:* 2026-09-30. Chiuso, **criterio difettoso**.
+`FRI01_ChronicleIdsAreStableAndOrdered` verde, anche da solo: 1000 voci da una
+sorgente sintetica, rilette campo per campo dopo sette crescite delle colonne;
+suite intera verde in Release (41) e in Debug (42), build del core senza avvisi.
+Guasti introdotti uno alla volta e visti rossi sul test nominato: id da 0,
+crescita senza copia, pool sempre da 0, tick non registrato; sui test accanto,
+causa in avanti accettata, colonna fuori dall'hash, fold della sola riga 0, fold
+sulla capacità. `Check: shallow` confermato: la forma è verificata, il contenuto
+di un evento reale no, e `FR-I-04` è servito solo come struttura. Registro:
+`D-081` a `D-085`. Revisione: due revisori, `Core: yes`, entrambi concludono che
+il check è soddisfatto come scritto; applicati tutti i rilievi verificabili, tra
+cui un fold che leggeva la sola riga 0 senza che alcun test lo vedesse; non
+applicata una formulazione ratificata, con la ragione; lasciati aperti all'umano
+i nomi di due test, la cartella vuota `Runtime/Chronicle/` e due note per la
+fase 4 (`D-085`). **Il criterio è difettoso e non è stato riscritto:** "the
+greps" non nomina alcun grep; i controlli che provano la forma sono accanto, in
+`D-084`.
+
 ## 7. The serialiser and the round trip
 
 - **Does:** hand-written save and load over the parallel arrays, carrying a

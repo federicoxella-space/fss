@@ -75,6 +75,27 @@ namespace Sim.Tests
                 names,
                 Is.EqualTo(new[]
                 {
+                    "WorldState.ChronicleCause[0]",
+                    "WorldState.ChronicleCause[1]",
+                    "WorldState.ChronicleCount",
+                    "WorldState.ChronicleEntities[0].Generation",
+                    "WorldState.ChronicleEntities[0].Index",
+                    "WorldState.ChronicleEntities[1].Generation",
+                    "WorldState.ChronicleEntities[1].Index",
+                    "WorldState.ChronicleEntities[2].Generation",
+                    "WorldState.ChronicleEntities[2].Index",
+                    "WorldState.ChronicleEntityCount[0]",
+                    "WorldState.ChronicleEntityCount[1]",
+                    "WorldState.ChronicleEntityStart[0]",
+                    "WorldState.ChronicleEntityStart[1]",
+                    "WorldState.ChronicleImportance[0]",
+                    "WorldState.ChronicleImportance[1]",
+                    "WorldState.ChronicleLocation[0].Generation",
+                    "WorldState.ChronicleLocation[0].Index",
+                    "WorldState.ChronicleLocation[1].Generation",
+                    "WorldState.ChronicleLocation[1].Index",
+                    "WorldState.ChronicleTick[0]",
+                    "WorldState.ChronicleTick[1]",
                     "WorldState.CurrencyTotal",
                     "WorldState.GenerationParams.SettlementCount",
                     "WorldState.RuleVersion",
@@ -107,12 +128,14 @@ namespace Sim.Tests
         /// </summary>
         /// <remarks>
         /// A change here is not a test to update. It is a save format change, and it
-        /// belongs to the migration path NFR-08 requires from the first write.
+        /// belongs to the migration path NFR-08 requires from the first write. The first
+        /// write is point 7's; until it lands no save exists, and point 6 re-pinned this
+        /// value once, for the chronicle (register, point 6).
         /// </remarks>
         [Test]
         public void NFR01_TheDigestIsPinned()
         {
-            Assert.That(StateHash.Of(Reference()), Is.EqualTo(0xCE31A6F9C074C14DUL));
+            Assert.That(StateHash.Of(Reference()), Is.EqualTo(0x22769B0E8F305182UL));
         }
 
         /// <summary>
@@ -135,14 +158,48 @@ namespace Sim.Tests
         /// <summary>
         /// A state whose fields are all distinct and none of them zero, so that a fold
         /// omitting one is not covered up by the omitted field happening to be the
-        /// default.
+        /// default. Two chronicle entries on different ticks, the second caused by the
+        /// first, so that every column has more than one row in use and a fold reading
+        /// the wrong row is not covered up by two rows being equal. Two values are zero
+        /// and cannot be otherwise: the first entry's cause, which is a root, and its
+        /// start in the pool.
         /// </summary>
-        private static WorldState Reference() =>
-            new WorldState(0x0123456789ABCDEFUL, new GenerationParams(2000), 7)
+        private static WorldState Reference()
+        {
+            var state = new WorldState(0x0123456789ABCDEFUL, new GenerationParams(2000), 7)
             {
                 Tick = 41,
                 CurrencyTotal = 1000003,
             };
+
+            int root = Chronicle.Append(state, new EntityId(11, 3), new[] { new EntityId(13, 5) }, Chronicle.None, 17);
+            state.Tick = 43;
+            Chronicle.Append(state, new EntityId(19, 2), new[] { new EntityId(23, 4), new EntityId(29, 6) }, root, 31);
+            return state;
+        }
+
+        /// <summary>The step into an array column: one of its rows in use.</summary>
+        private sealed class Row
+        {
+            public readonly int Index;
+
+            public Row(int index) => Index = index;
+        }
+
+        private static object Get(object step, object owner) =>
+            step is FieldInfo field ? field.GetValue(owner) : ((Array)owner).GetValue(((Row)step).Index);
+
+        private static void Set(object step, object owner, object value)
+        {
+            if (step is FieldInfo field)
+            {
+                field.SetValue(owner, value);
+            }
+            else
+            {
+                ((Array)owner).SetValue(value, ((Row)step).Index);
+            }
+        }
 
         /// <summary>
         /// One leaf of the state, and how to change it. Composites are walked through
@@ -153,9 +210,9 @@ namespace Sim.Tests
         private readonly struct Path
         {
             public readonly string Name;
-            private readonly FieldInfo[] _chain;
+            private readonly object[] _chain;
 
-            public Path(string name, FieldInfo[] chain)
+            public Path(string name, object[] chain)
             {
                 Name = name;
                 _chain = chain;
@@ -165,7 +222,8 @@ namespace Sim.Tests
             /// Writes a different value into the leaf. Structs on the way down are
             /// boxed, written, and assigned back into their parent, because a value
             /// type read out of a <see cref="FieldInfo"/> is a copy and writing to it
-            /// otherwise changes nothing.
+            /// otherwise changes nothing. An array column is a step like a field, into one
+            /// of its rows; being a reference, writing it back is harmless.
             /// </summary>
             public void Perturb(WorldState state)
             {
@@ -174,17 +232,19 @@ namespace Sim.Tests
 
                 for (int i = 0; i < _chain.Length - 1; i++)
                 {
-                    boxes[i] = _chain[i].GetValue(owner);
+                    boxes[i] = Get(_chain[i], owner);
                     owner = boxes[i];
                 }
 
-                FieldInfo leaf = _chain[_chain.Length - 1];
-                leaf.SetValue(owner, Different(leaf.FieldType, leaf.GetValue(owner)));
+                object leaf = _chain[_chain.Length - 1];
+                object current = Get(leaf, owner);
+                Type type = leaf is FieldInfo field ? field.FieldType : owner.GetType().GetElementType();
+                Set(leaf, owner, Different(type, current));
 
                 for (int i = _chain.Length - 2; i >= 0; i--)
                 {
                     object parent = i == 0 ? (object)state : boxes[i - 1];
-                    _chain[i].SetValue(parent, boxes[i]);
+                    Set(_chain[i], parent, boxes[i]);
                 }
             }
         }
@@ -193,8 +253,10 @@ namespace Sim.Tests
         /// Every leaf of <paramref name="type"/>, depth first, in declaration order.
         /// </summary>
         /// <remarks>
-        /// A leaf is a field this fixture knows how to change. A field of any other
-        /// shape — an array, a nested reference — fails in <see cref="Different"/>
+        /// A leaf is a field this fixture knows how to change. An array column is
+        /// walked into every row <see cref="Reference"/> has in use, and no further:
+        /// rows beyond are capacity, and must not move the digest. A field of any other
+        /// shape — a jagged array, a nested reference — fails in <see cref="Different"/>
         /// rather than being skipped: a type this walk cannot perturb is a field it
         /// cannot vouch for, and the phase that introduces one has to say how it enters
         /// the hash. That is the same tripwire as the missing fold, one level up.
@@ -202,28 +264,51 @@ namespace Sim.Tests
         private static List<Path> Paths(Type type, string where)
         {
             var paths = new List<Path>();
-            Walk(paths, type, where, new List<FieldInfo>());
+            Walk(paths, type, where, new List<object>());
             return paths;
         }
 
-        private static void Walk(List<Path> paths, Type type, string where, List<FieldInfo> chain)
+        private static void Walk(List<Path> paths, Type type, string where, List<object> chain)
         {
             foreach (FieldInfo field in type.GetFields(DeclaredInstance))
             {
                 chain.Add(field);
-                string name = where + "." + field.Name;
-
-                if (IsComposite(field.FieldType))
-                {
-                    Walk(paths, field.FieldType, name, chain);
-                }
-                else
-                {
-                    paths.Add(new Path(name, chain.ToArray()));
-                }
-
+                Leaf(paths, field.FieldType, where + "." + field.Name, chain);
                 chain.RemoveAt(chain.Count - 1);
             }
+        }
+
+        private static void Leaf(List<Path> paths, Type type, string name, List<object> chain)
+        {
+            if (type.IsArray && type.GetArrayRank() == 1 && !type.GetElementType().IsArray)
+            {
+                for (int row = 0; row < RowsInUse(name); row++)
+                {
+                    chain.Add(new Row(row));
+                    Leaf(paths, type.GetElementType(), name + "[" + row + "]", chain);
+                    chain.RemoveAt(chain.Count - 1);
+                }
+            }
+            else if (IsComposite(type))
+            {
+                Walk(paths, type, name, chain);
+            }
+            else
+            {
+                paths.Add(new Path(name, chain.ToArray()));
+            }
+        }
+
+        /// <summary>
+        /// How many rows of a column <see cref="Reference"/> holds in use: the pool of
+        /// entities to its own length, every other column to the chronicle's.
+        /// </summary>
+        private static int RowsInUse(string column)
+        {
+            WorldState state = Reference();
+            int rows = column == "WorldState.ChronicleEntities" ? Chronicle.EntitiesInUse(state) : state.ChronicleCount;
+            Assert.That(rows, Is.GreaterThan(1), column + " needs rows in use to perturb");
+            return rows;
         }
 
         /// <summary>

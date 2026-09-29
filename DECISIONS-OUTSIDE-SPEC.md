@@ -2148,3 +2148,159 @@ Both reviewers: the check is met as written, build and both suites green;
 under `R-019` (`D-077`).
 
 **Rejected.** None.
+
+### D-081 · Point 6 · The chronicle's shape: ids are the order of writing, the pool follows DEC-085
+
+`SIM-STATE` §Chronicle names the fields and gives three types — `tick` int64,
+`entities` id[], `importance` int — and `cause` as "chronicle id". The rest is
+chosen here.
+
+- **An id is its row plus one**, from 1; `0` is `Chronicle.None`, the cause of a
+  root. No id column is stored: while nothing is discarded it would repeat the
+  row. `0` for none follows `EntityId.None`, where a defaulted field reads as
+  absent. `int`, not `long`: arrays index by `int`.
+- **The tick is the state's**, not an argument: an entry is dated when it is
+  written (DEC-005). Prior history is `SIM-STATE` Open item 4 and belongs to the
+  generator.
+- **Location is an `EntityId`**, `None` when an event has no place. `docs/` does
+  not say whether a location is a settlement or a position, as it does for
+  buried stock.
+- **Entities live in one shared pool**, each row naming its slice by start and
+  count — DEC-085's second option, literally. The start is derivable from the
+  counts until something is discarded; it is stored because DEC-085 prescribes
+  it and a compaction will need it.
+- **Capacity is not state.** Columns double from 8; only the first
+  `ChronicleCount` rows, and the pool up to `EntitiesInUse`, are hashed.
+- **The writer is `Systems/Chronicle.cs`**, a static class like `TickLoop`,
+  under `R-019`. It is `internal` under `R-003`; nothing reads the chronicle
+  outside the core yet.
+
+**What `docs/` says:** the field list and three types; nothing on id
+numbering, location's type, capacity, or where an entry's tick comes from.
+**Would overturn it:** a retention policy (Open item 3) — dropping the oldest
+entries needs one base id, selective discard needs an id column, and only
+`RowOf` and `ChronicleCount`'s remark change; prior history dated before tick 0
+(Open item 4) needing a tick argument; a decision that location is a position.
+
+**Handed to point 7.** AC-03 compares bytes, so the serialiser writes the rows
+in use and never the capacity: two worlds holding the same entries in columns of
+different length must save identically. `R-021`, `R-022` and the rest of `R-004`
+are still owed there.
+
+### D-082 · Point 6 · A bad cause throws, in Release too
+
+`Chronicle.Append` throws `ArgumentOutOfRangeException` for a cause that is not
+an earlier id, before anything is written: no row, no count, no growth. That
+departs from the convention of `D-074` and `D-078`, where public entries throw
+and internal code only asserts.
+
+The reason is the cost of the other branch. A negative tick count asserted away
+in Release runs zero ticks; a forward cause asserted away is a chain with no
+root, carried into every later save, and AC-11 ("every high-importance entry
+traces back to an exogenous root or a player action") could never hold for it.
+One comparison per entry.
+
+**What `docs/` says:** nothing on validation inside the core. **Would overturn
+it:** a ruling that the core never throws from internal code, which would move
+the check to a debug assert and accept the corrupt branch in Release.
+
+### D-083 · Point 6 · The hash and its fixture learn columns
+
+The fold adds the chronicle after §World: the count, then each column over the
+rows in use, then the pool, whose length is read from the last row. That is the
+one departure from `SIM-STATE`'s order, and the remark says so.
+
+**The injectivity remark is narrowed.** `ChronicleCount` and the last row's
+start and count decide how many folds follow, so for those three the digest is
+injective only up to a 64-bit collision. Both reviewers found it.
+
+**The perturbation fixture walks array columns.** `D-071` deferred it to phase
+4, assuming arrays arrived there; the chronicle brings them in phase 3, and
+`D-071`'s own rule — the phase that introduces one says how it enters the hash —
+puts it here. It perturbs **every row in use**, not the first: a first version
+perturbing row 0 left a fold reading `[0]` in place of `[i]` invisible, and with
+both reference entries on tick 41 nothing caught it (briefed reviewer). The
+reference now writes its entries on ticks 41 and 43, and the fault is red.
+Rows beyond the count are not perturbed: they are capacity and must not move the
+digest, which `FRI01_CapacityDoesNotReachTheHash` checks over all seven columns.
+A jagged array still falls to `Different` and fails loud.
+
+**`NFR01_TheDigestIsPinned` moved**, from `0xCE31A6F9C074C14D` to
+`0x22769B0E8F305182`. Its remark calls a change a save format change; no save
+exists until point 7, so there is nothing to migrate, and a new state field that
+left the digest where it was would be the bug. The remark now says so.
+
+**Two test names kept** though narrower than what they check —
+`FRW01_WorldStateHoldsTheWorldRowAndNothingElse` and
+`NFR01_TheWalkReachesEveryLeafOfTheWorldRow` — because `D-065` and `D-070` cite
+them. The first now says so in its summary.
+
+**Would overturn it:** a ruling that register citations do not pin test names.
+
+### D-084 · Point 6 · The declared check, and a word in it that names nothing
+
+`FRI01_ChronicleIdsAreStableAndOrdered` appends 1000 entries from a synthetic
+source whose every field is a function of its position — n % 4 entities, a cause
+halfway back or none every fifth, a tick every third — and reads every field of
+every entry back after the columns have grown seven times and the pool eight.
+Two worlds fed the same stream give the same ids and hash.
+
+The plan predates `R-020`; the faults were introduced anyway, each alone, each
+undone. Red on the named test: ids from 0, growth without copy, every slice
+starting at 0 in the pool, the tick not stored. Red on siblings the criterion
+does not name: a forward cause accepted (`FRI01_ACauseNamesAnEarlierEntry`), a
+column left out of the fold and a fold reading only row 0
+(`NFR01_EveryStateFieldEntersTheHash`), a fold running to capacity
+(`FRI01_CapacityDoesNotReachTheHash`).
+
+**Criterio difettoso, not rewritten (`R-005`).** The `Check: shallow` line says
+"the greps and the synthetic source prove the shape is there"; no grep is named
+anywhere in the point. Correct code passes the criterion, and its words point at
+a check that does not exist. What proves the shape is beside it:
+`FRW01_WorldStateHoldsTheWorldRowAndNothingElse` (the field list),
+`FRI01_TheChronicleCarriesTheDeclaredTypes` (the types, since the fold's
+`(uint)` would narrow a widened column silently), and
+`NFR01_EveryStateFieldEntersTheHash`. Both reviewers found it.
+
+**`FR-I-04` is served as structure only.** The chronicle is the single place
+entries live; nothing reads it for UI or dialogue, and under `R-003` the host
+has no read path yet.
+
+### D-085 · Point 6 · The reviewers' findings
+
+Both reviewers: the check is met as written, build and both suites green.
+
+**Applied.**
+- A fold reading row 0 of a column passed every test — briefed. `D-083`.
+- The injectivity remark false for three fields — both. `D-083`.
+- A stale remark in `WorldStateTests` calling the command queue state, against
+  `SIM-STATE` §Rule since `R-021` — both. Rewritten.
+- `GenerationParams`' doc comment had slid onto the new `EntityId` fold — blind.
+- Importance cited to FR-I-02, which has no importance term; now `SIM-STATE`
+  and DEC-027 — blind.
+- "Entries are emitted by Bookkeeping" narrower than FR-I-01 and DEC-026's
+  "each event" — both. Now says every event, wherever it happens.
+- The capacity test grew two columns of seven — both. All seven.
+- Column types unpinned — briefed. `FRI01_TheChronicleCarriesTheDeclaredTypes`.
+- A refused append checked by count only — briefed. The hash is compared too.
+- "Hashed and saved" said of a serialiser that does not exist — briefed. Handed
+  to point 7 (`D-081`).
+- Fold order "top to bottom" not quite — briefed. The exception is named.
+- The throw departs from a recorded convention — briefed. `D-082`.
+- "The greps" name nothing — both. `D-084`.
+
+**Not applied, with the reason.** "Every cast into the fold widens" is imprecise
+for `(uint)int` and `(ulong)long`, which reinterpret rather than widen — blind.
+The claim it supports, that each cast is injective, holds; the wording predates
+this point and was ratified with it.
+
+**Left to the human.**
+- The two test names kept for the register's sake (`D-083`) — briefed, taste.
+- `core/Runtime/Chronicle/.gitkeep`, an empty folder named for a subsystem,
+  predating `R-019` — briefed, citing AGENTS.md's "Structure". Removing folders
+  is layout, not this point's.
+- For phase 4, not faults here — briefed: `EntityId` carries no kind, so a mixed
+  `entities` list cannot say which table an id belongs to; and `cause = 0` makes
+  an exogenous root and a player action alike, which AC-11 distinguishes.
+
+**Rejected.** None.
