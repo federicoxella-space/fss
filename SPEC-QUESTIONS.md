@@ -278,6 +278,7 @@ inherits: §20's rows are marked `Decided` and belong to a downstream consumer,
 **Blocks:** no. Point 5 needs only that commands apply at one point of the tick,
 and the hash sequence it compares is the same either way. Point 7 is the first
 place the answer changes code.
+**Status:** **closed 2026-09-29 by R-021.**
 
 `SIM-STATE` §Rule: "Anything that influences a future tick lives here." A
 command the host has submitted and the tick loop has not yet drained influences

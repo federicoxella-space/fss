@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-09-28
+**Revision:** 2026-09-29
 **Companion:** SIM-REQ
 
 ---
@@ -331,9 +331,9 @@ The game pushes commands into a queue applied at a defined point in the tick, co
 
 ### DEC-032 — A save is a full state snapshot plus seed and generation parameters
 
-Format carries a version number and a migration path.
+Format carries a version number and a migration path. It also carries the commands submitted and not yet applied, in submission order; they are input, not state, and stay outside the state hash.
 
-**Rationale.** Load time stays constant instead of growing with campaign length. The seed and parameters travel with the save so any player-reported bug reproduces exactly.
+**Rationale.** Load time stays constant instead of growing with campaign length. The seed and parameters travel with the save so any player-reported bug reproduces exactly. A save that dropped pending commands would not: the world reloaded would miss the player's last action.
 
 **Cost.** Save files are large and get written often.
 

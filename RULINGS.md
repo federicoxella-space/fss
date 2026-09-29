@@ -30,6 +30,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-003`**, within plan point 5: no public member of the core exposes mutable
   world state for reading or writing. `StateHash.Of(WorldState)` and the public
   entry to `TickLoop` are both in its path (`D-071`, `D-074`).
+- **`R-021`**, within plan point 7: a save carries the commands still pending,
+  in submission order, outside the state hash; a load puts them back in the queue.
 - **`R-004`**, no later than plan point 7: a fresh world takes the core's current
   rule version; a different value enters state only through loading a save.
 
@@ -830,3 +832,50 @@ another.
 **Would overturn it:** as in `R-017`.
 **Not verified:** that `/plan-status` reports nothing a `Fails when:` line would
 change; it was grepped for `Closed by`, not read whole.
+
+### R-021 — Pending commands are input, not state, and a save carries them
+
+**Date:** 2026-09-29   **Origin:** SQ-006
+**Verdict:** specified
+**docs/:** `SIM-STATE` §Rule gains a paragraph, input is not state; §Serialisation
+notes gains a line on pending commands. `SIM-DEC` DEC-032, decision and
+rationale; `SIM-REQ` NFR-08. All three revisions bumped.
+
+`SQ-006` sets `SIM-STATE` §Rule, "anything that influences a future tick lives
+here", against AC-02 and NFR-01, which name the command sequence beside the seed
+as what a run is given. A command submitted and not yet drained influences the
+next tick, and is not in the inventory.
+
+The two readings are not equal. If pending commands were state, the state hash
+at the end of tick *t* would differ between a command submitted during *t* and
+the same command submitted after it, though both apply at *t + 1* and every
+later hash is equal. FR-A-01 applies commands "at a defined point in the tick"
+precisely so that the moment of submission does not matter; putting the queue in
+the hash makes it matter. NFR-01 is the stronger text: the command sequence is
+an input the host supplies over time, and a command handed over early is still
+that input. The number of ticks the caller asks for (FR-T-09) influences the
+future too, and no one would list it in state. §Rule is about what the
+simulation must carry to be closed; input is what it is given. The paragraph
+added says so.
+
+That settles the hash, not the save, and DEC-032 is where the readings part. Of
+the three answers the entry lists, dropping loses the player's last action on
+reload, and breaks DEC-032's own rationale, that a save reproduces a reported
+bug exactly. Refusing a save while commands wait makes the host arrange an
+empty queue, which it can only do by advancing time: a save would move the
+world. Carrying them costs one section of the save file, and nothing else: they
+stay outside the hash, and AC-03's round trip compares bytes, which include
+them.
+
+**Cost.** Point 7's serialiser writes a section for pending commands, so every
+command kind needs a codec from the day it exists. Phase 3 defines none, so the
+section is a count of zero, but it is versioned from the first write like the
+rest (NFR-08). How commands are represented is `R-022`.
+**Owed by the implementer:** within point 7: a save carries the pending
+commands in submission order, outside the state hash, and a load returns them to
+the queue. Cite `R-021`.
+**Would overturn it:** a host that must save from inside a tick, between the
+drain and the tick's end, where "pending" would need redefining; or a
+requirement that the hash identify a world together with its queued input.
+**Not verified:** nothing; FR-A-01, NFR-01, NFR-08, AC-02, AC-03, DEC-030 to
+DEC-032, `SIM-STATE` §Rule and the queue and drain in `3d7fb31` were read.

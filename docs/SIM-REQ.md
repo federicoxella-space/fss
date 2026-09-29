@@ -2,7 +2,7 @@
 
 **Document:** SIM-REQ
 **Status:** Draft 1
-**Revision:** 2026-09-28
+**Revision:** 2026-09-29
 **Scope:** Headless simulation core, runnable outside the game
 
 ---
@@ -507,7 +507,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 **NFR-07 — Memory.** Settlement state stays under 50 MB at target scale *(estimate)*.
 
-**NFR-08 — Save format.** A save is a full state snapshot plus generation seed and parameters. Save format carries a version number and a migration path from day one.
+**NFR-08 — Save format.** A save is a full state snapshot plus generation seed and parameters, and the commands submitted and not yet applied. Save format carries a version number and a migration path from day one.
 
 **NFR-09 — Rule versioning.** State records which rule version produced it. On first load after a patch, all deferred entities materialise under the old rules, then continue under the new ones.
 

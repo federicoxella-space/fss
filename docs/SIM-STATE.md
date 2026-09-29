@@ -2,7 +2,7 @@
 
 **Document:** SIM-STATE
 **Status:** Draft
-**Revision:** 2026-09-28
+**Revision:** 2026-09-29
 **Gate:** The assert list is executable.
 
 ---
@@ -10,6 +10,8 @@
 ## Rule
 
 Anything that influences a future tick lives here. Anything not listed here must be derivable from what is, or it is a determinism defect.
+
+Input is not state. A command the host has submitted and the simulator has not yet applied is input, as the rest of the command sequence of NFR-01 is: it sits outside this inventory and outside the state hash. A save carries it all the same (DEC-032).
 
 ---
 
@@ -187,6 +189,7 @@ A-13 is the one assert about the schedule rather than about state: a firing leav
 - Version number and migration path from the first write.
 - No reflection: the serialiser is generated or hand-written, per section 20 of SIM-REQ, "Downstream constraints".
 - The state hash covers every field above. A field excluded from the hash is a determinism hole.
+- A save also carries the commands submitted and not yet applied, in submission order, beside the state and outside the hash.
 
 ---
 
