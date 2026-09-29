@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-09-29
+**Revision:** 2026-09-30
 **Companion:** SIM-REQ
 
 ---
@@ -277,7 +277,7 @@ A plague removes labour, which cuts production, which raises prices, which redir
 
 ### DEC-026 — Events emit chronicle entries carrying their cause
 
-Each entry names entities, location, tick, importance, and the event that triggered it.
+Each entry names entities, location, tick, importance, and its cause: the event that triggered it, the player action, or itself as an exogenous root (FR-E-07).
 
 **Rationale.** One structure serves debugging, causal-chain testing (AC-11), UI, and what a character can tell the player. The cause pointer is what turns a log into a chain.
 

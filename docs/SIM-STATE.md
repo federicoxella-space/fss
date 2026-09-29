@@ -2,7 +2,7 @@
 
 **Document:** SIM-STATE
 **Status:** Draft
-**Revision:** 2026-09-29
+**Revision:** 2026-09-30
 **Gate:** The assert list is executable.
 
 ---
@@ -143,7 +143,8 @@ Sampled transients are not stored. They are enumerated on demand from the draw o
 |---|---|---|
 | id, tick, location | | |
 | entities | id[] | |
-| cause | chronicle id | the pointer that makes chains testable |
+| causeKind | enum | event, player action, exogenous root: the three FR-E-07 allows |
+| cause | chronicle id | the triggering entry when causeKind is event, none otherwise; the pointer that makes chains testable |
 | importance | int | drives propagation |
 | propagation | bounded per settlement | which entries have reached where, with degradation |
 

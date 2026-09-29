@@ -34,6 +34,9 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-022`**, no later than plan point 7: a command is a value with a kind and
   integer fields, and the drain applies it from `Runtime/Systems/`; `ICommand`'s
   `Apply` goes.
+- **`R-024`**, no later than plan point 7: a chronicle entry records its cause's
+  kind — event, player action or exogenous root — beside the cause id, as a
+  column hashed and saved like the others; `Append` takes it.
 - **`R-004`**, no later than plan point 7: a fresh world takes the core's current
   rule version; a different value enters state only through loading a save.
   *In part in `3d7fb31`:* the public path stamps the current version; the internal
@@ -962,3 +965,48 @@ Ruled on their own: the queue's status and what a save does with it (`D-077`,
 **Would overturn it:** as for `R-008`.
 **Not verified:** build and test results and the mutation outcomes in `D-079`
 were taken as written; the suite was not run.
+
+### R-024 — A chronicle entry says which of FR-E-07's three causes it has
+
+**Date:** 2026-09-30   **Origin:** D-085 (a finding left to the human)
+**Verdict:** specified
+**docs/:** `SIM-STATE` §Chronicle gains `causeKind`, and `cause` says when it
+holds an id; `SIM-DEC` DEC-026 names the three causes. Both revisions bumped.
+
+The briefed reviewer of point 6 found that `cause = 0` makes an exogenous root
+and a player action alike, and passed it on as a phase-4 matter. It is not only
+the code's: `docs/` disagrees with itself. FR-E-07 — "Every event records the
+event that triggered it, or records the player action, or records itself as an
+exogenous root" — requires three outcomes, and AC-11 tests two of them as the
+ends a chain may reach. `SIM-STATE` types the one field that could record them as
+"chronicle id", which can say only "this entry" or "none", and DEC-026 names only
+"the event that triggered it". Point 6 built what `SIM-STATE` says, correctly.
+AC-11 could never be checked against it: a chain ending in `None` might end in
+either of the two causes AC-11 accepts, and in nothing at all.
+
+The kind is a field of its own, not a sentinel in `cause`: the field list is
+what `SIM-STATE` states, and two meanings folded into one integer are the reading
+`D-085` found hidden. A player-action entry does not point at the command. A
+command is input, not state (`R-021`), so a pointer from state into input would
+make a save's meaning depend on how long a command log is kept; what the action
+did is the entry's own tick, entities and location.
+
+Timing. Phase 3 writes no event and no command kind, so nothing yet has a cause.
+But point 7's serialiser writes the chronicle's columns into the first save
+format, and a column added after it is a migration under NFR-08 for a field
+known to be missing now. This is structure, not domain: it states the shape of
+an entry, and no event is implemented to fill it.
+
+**Cost.** A seventh column in the chronicle, its hash fold and the fixture that
+walks it; `NFR01_TheDigestIsPinned` moves again; `Append`'s callers, all in
+tests, pass a kind. A consistency rule — `cause` is none unless the kind is
+event — is one more comparison in the throw of `D-082`.
+**Owed by the implementer:** no later than plan point 7, a column recording the
+cause's kind beside the cause id, hashed and saved like the others, and taken by
+`Append`. Cite `R-024`.
+**Would overturn it:** a fourth kind of cause — an entry caused by something no
+event, player or exogenous draw produces — or a ruling that chains are traced
+outside the chronicle.
+**Not verified:** that FR-E-07's "player action" means only the host's commands
+and not also a promoted agent's choices (phase 5); `SIM-REQ` §13 was not read
+for it.
