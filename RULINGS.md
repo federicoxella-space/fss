@@ -44,9 +44,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - ~~**`R-004`**, no later than plan point 7: a fresh world takes the core's current
   rule version; a different value enters state only through loading a save.~~
   **Done in `3d7fb31` and `7e2bdd0`**, checked by `R-030`.
-- **`R-034`**, before the phase 3 gate is declared passed: the hash sequence of
-  the gate's 100k empty ticks is pinned in the repository, as a value produced by
-  a run, and every CI run compares its own sequence against it.
+- **`R-034`**, as refined by **`R-036`**, before the phase 3 gate is declared
+  passed: two hash sequences of 100k ticks are pinned in the repository, each as
+  a value produced by a run — the gate's empty run, and the run with commands of
+  `AC02_DeterminismAcrossRuns` — and every CI run compares its own against them.
 
 ## Escalated to the user
 
@@ -1497,3 +1498,47 @@ stood when written.
 **Not verified:** the full suite and the workflow step were not run; the mutation
 results, test counts and the timing figures in `D-101` and `D-102` were taken as
 written.
+
+### R-036 — `R-034` refined: the run with commands is pinned beside the empty one
+
+**Date:** 2026-10-01   **Origin:** user, on `R-034`
+**Verdict:** resolved
+**docs/:** unchanged
+
+Reading `R-034` again for the user showed a gap it had not stated. In an empty
+world the only field that moves from tick to tick is `Tick`: seed, generation
+parameters, rule version, `CurrencyTotal` and the chronicle stay where the
+constructor put them. The pinned empty sequence is therefore the hash function
+applied to a hundred thousand values of one field, close to what
+`NFR01_TheDigestIsPinned` already checks on its fixture. It adds the runtime and
+the machine, and little else, until phase 4 gives ticks something to change.
+
+Three options were put to the user: keep `R-034` as written; pin the run with
+commands as well; or defer the pin to phase 4 and declare the gate without it,
+which is reserve 2 of `R-001`. The user chose the second: "approvo l'opzione 2,
+applicala".
+
+**The refinement.** Beside the empty sequence, the sequence of the run with
+commands in `AC02_DeterminismAcrossRuns` is pinned too: one command of the
+stand-in kind every 97 ticks, over 100k ticks. That run exercises the drain, the
+order of application and a write to `CurrencyTotal` on every command, so the pin
+has content in phase 3 and not only from phase 4. The command kind is the test's
+own, since phase 3 defines none a host could submit (`DEC-086`, `R-030`); the pin
+therefore lives in the suite, which also puts it under the Debug step and
+compares a second build of each commit. Everything else in `R-034` stands: no OS
+matrix, each value produced by a run and never by the code that checks it, the
+shape the implementer's.
+
+**Cost.** A second value to re-pin, and it moves for one more reason than the
+first: any change to the stand-in kind or to `FoldEffects`, which are test code.
+A re-pin for that reason says so in its commit, as `R-034` asks of any re-pin.
+**Owed by the implementer:** `R-034`'s action, widened: both sequences pinned and
+compared on every CI run before the phase 3 gate is declared passed. Cite
+`R-034` and `R-036`.
+**Would overturn it:** the first real command kind, which moves the run with
+commands onto `Simulation` (`D-100`) and should re-pin it with that kind in place
+of the stand-in.
+**Not verified:** that the stand-in's effect, a fold into `CurrencyTotal`, cannot
+cancel over the run so that the pinned sequence says less than it appears to;
+`AC02_DeterminismAcrossRuns`'s control that the run with commands differs from
+the empty one argues against it, and was run green in this session.
