@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-102 — audited by `R-035`. The next audit starts at the
+**Register watermark:** D-104 — audited by `R-038`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -44,10 +44,12 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - ~~**`R-004`**, no later than plan point 7: a fresh world takes the core's current
   rule version; a different value enters state only through loading a save.~~
   **Done in `3d7fb31` and `7e2bdd0`**, checked by `R-030`.
-- **`R-034`**, as refined by **`R-036`**, before the phase 3 gate is declared
+- ~~**`R-034`**, as refined by **`R-036`**, before the phase 3 gate is declared
   passed: two hash sequences of 100k ticks are pinned in the repository, each as
   a value produced by a run — the gate's empty run, and the run with commands of
-  `AC02_DeterminismAcrossRuns` — and every CI run compares its own against them.
+  `AC02_DeterminismAcrossRuns` — and every CI run compares its own against them.~~
+  **Done in `2ec9fad`**, checked by `R-038`; its first run in CI is point 10's
+  reserve.
 - **`R-037`**, no later than the plan point that first builds cohort rows: the
   step "Tests, three wealth bands" builds worlds with three wealth bands, and the
   point's `Fails when:` names the three-band run ignoring its configuration.
@@ -1587,3 +1589,56 @@ at one, which would leave FR-W-09 nothing to guard.
 **Not verified:** that phase 4's first cohort point is demography, as §18's
 order suggests; the band count's carrier (generation input, build property) was
 not examined, and is that point's decision.
+
+### R-038 — The register from `D-103` to `D-104` is ratified; `R-034`'s pin is done
+
+**Date:** 2026-10-01   **Origin:** register audit, `D-103` to `D-104`
+**Verdict:** ratified, save the three-band finding of `D-104`, ruled by `R-037`
+**docs/:** unchanged
+
+Point 10, the pin owed by `R-034` and `R-036`. Each entry was read against `AC-02`,
+`NFR-01`, §18 and the two rulings, and its claims against `b43d57d` and `2ec9fad`.
+`AC02_TheGateSequencesArePinned` and the other `AC02_` tests were run in Release
+and in Debug: all green in both, so two builds of this commit reach the pinned
+values.
+
+- **`D-103`, the point added.** Stands. The user's approval is quoted, and
+  `b43d57d` only appends to `PLAN.md`: nothing above point 10 changes, and the
+  exit condition is left verbatim, as `D-014` requires. Putting both pins in the
+  suite is within the shape `R-034` left to the implementer. The empty run is
+  `Simulation.Advance` called as the runner calls it, so the suite's empty
+  sequence is the gate's. The named faults are the right ones: a drain moved to
+  the end of the tick is invisible to `AC02_DeterminismAcrossRuns`, because two
+  runs of the same wrong code agree, and it is the fault the pin exists for.
+- **`D-104`, the test.** Stands. Checked: two literals, the SHA-256 of each
+  sequence written little-endian, and the same `Empty` and `Commanded` the
+  determinism test compares. Taking the digest from the base class library
+  rather than `Hash64` extends `R-034`'s rule, a value never computed by the code
+  that checks it, to the function that condenses it; it is right for the same
+  reason. The values were taken from a failing run with a placeholder, which
+  is what "produced by a run" asks. `Core: no` holds: `2ec9fad` touches the
+  register, `PLAN.md` and `core/Tests/DeterminismTests.cs` only.
+
+`R-034`'s action is marked done. Its "every CI run compares" half is the reserve
+of point 10: `2ec9fad` has not been pushed.
+
+**The gate, as the files now stand.** CI run `36786627133`, on `b43d57d`, ran
+every step green, including "Harness, one hash per tick" and "Gate, 100k empty
+ticks in two runs". Those are the clauses held in reserve by points 8 and 9, so
+the human's action has happened and the *Riserva sciolta* lines of `R-011` are
+owed by the implementer. What stands between phase 3 and its gate is the push
+of `2ec9fad` and a green run on it, then point 10's line. After that comes the
+moment-two review request, which `AGENTS.md` requires at the gate and which the
+decider answers as a phase gate.
+
+**Cost.** None beyond `R-037`.
+**Owed by the implementer:** nothing new. The *Riserva sciolta* lines are
+`R-011`'s procedure, not a new action.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` as it
+stood when written; for the pin, the CI runner reaching a different digest,
+which would be a determinism defect under `NFR-01` and no longer a matter of the
+register.
+**Not verified:** the full suite was not run, only the `AC02_` tests; the mutation
+results in `D-104` were taken as written; that the literals came from a run
+rather than from the checking code is taken from the entry, and the test's shape
+only rules out the checking code computing them.

@@ -2772,6 +2772,8 @@ point closes with that clause in reserve (`R-011`), beside point 8's.
 
 ### D-103 · Point 10, added mid-plan — the pin owed by `R-034` and `R-036`
 
+**Ruling:** R-038 — ratified.
+
 `R-034` owes the pin before the phase 3 gate and says it enters the plan as a
 point added with the user's approval (`D-014`). The user approved it on
 2026-10-01: "Approvo l'aggiunta al piano di fase 3 di un punto per l'obbligo
@@ -2796,6 +2798,8 @@ pin is taken. **Would overturn it:** a ruling that the empty pin belongs in the
 gate step, next to the two processes it would then compare as well.
 
 ### D-104 · Point 10 · `AC02_TheGateSequencesArePinned`: the digest, the values, the check
+
+**Ruling:** R-038 — ratified; the three-band finding by R-037.
 
 **Decided.**
 - **The digest is SHA-256, from the test assembly,** over each of the 100k
