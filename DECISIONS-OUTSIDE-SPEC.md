@@ -2794,3 +2794,55 @@ left verbatim.
 **What `docs/` says:** `AC-02`, "across builds and machines"; nothing on how a
 pin is taken. **Would overturn it:** a ruling that the empty pin belongs in the
 gate step, next to the two processes it would then compare as well.
+
+### D-104 · Point 10 · `AC02_TheGateSequencesArePinned`: the digest, the values, the check
+
+**Decided.**
+- **The digest is SHA-256, from the test assembly,** over each of the 100k
+  hashes written little-endian, as uppercase hex. Not the core's `Hash64`: an
+  expected value checked through the core's own hash of hashes would move with
+  a change to that function in the same commit and could be re-derived by it;
+  SHA-256 is the base class library's and the core never sees it. The test
+  project is outside `BannedSymbols.txt`, as for the reflection point 3 uses.
+- **The values came from a run,** on the development machine, Release build:
+  the test was run with a placeholder and the failure's actual value written in
+  as the literal, one sequence at a time. Empty run
+  `9C9CC60D…BACC93C4`, run with commands `72FA5937…BC31F715`, in full in the
+  test. The Debug build then passed against them, so two builds of this commit
+  already agree.
+- **Both sequences are the ones `AC02_DeterminismAcrossRuns` compares,** through
+  the same `Empty` and `Commanded`, so the pin and the determinism test cannot
+  drift onto different runs. Each is run once more for the pin; the fixture now
+  runs seven sequences of 100k ticks, under a second in Release.
+- **No workflow change.** The test is in the suite, so each of the three test
+  steps runs it; the gate step stays as point 9 left it (`D-103`).
+
+**Check.** `AC02_TheGateSequencesArePinned` green alone; suite green in Release
+(52), Release with `SIM_WEALTH_BANDS=3` (52) and Debug (53); core build 0
+warnings. Faults of `Fails when:` introduced one at a time and seen red, each
+undone:
+- the drain moved after `state.Tick = d + 1` in `TickLoop.Advance` — the pin
+  red on "the run with commands", the empty pin green, and
+  `AC02_DeterminismAcrossRuns` green in the same run;
+- `Tick = 1` in the `WorldState` constructor — the pin red on "the empty run".
+
+**`Core: no` held.** `git diff --name-only HEAD -- core/Runtime/` prints
+nothing; the only file under `core/` is `core/Tests/DeterminismTests.cs`.
+Reviewers not run.
+
+**Reserve.** "And in CI" waits on the push, which is the human's (`R-011`),
+beside the reserves of points 8 and 9.
+
+**Findings, not acted on.**
+- `SIM_WEALTH_BANDS` is read by nothing in the repository — no `.cs`, `.props`
+  or project file names it — so the step "Tests, three wealth bands" runs the
+  same build with the same behaviour as the first. The point's "each of the
+  three test steps" holds, but the second compares nothing the first did not.
+  `AC-28`'s step is the phase 4 table's to give meaning to; recorded, not
+  touched.
+- The pinned values are from one machine. That the CI runner reaches the same
+  digest is the reserve, not something verified here.
+
+**What `docs/` says:** `AC-02` and `NFR-01`, nothing on the digest.
+**Would overturn it:** a ruling that the pin should use the core's hash, or
+live in the gate step against the harness output.

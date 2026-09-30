@@ -318,3 +318,17 @@ until this point has closed and CI has run it.*
   run turns red.
 - **Core:** no — adds a test and touches no file under `core/Runtime/`.
   Verifiable by `git diff --name-only HEAD -- core/Runtime/` being empty.
+
+*Esito:* 2026-10-01. Chiuso con riserva — "and in CI" attende il push del
+branch, che è dell'umano. `AC02_TheGateSequencesArePinned` verde, anche da solo:
+SHA-256 delle due sequenze da 100k tick di `AC02_DeterminismAcrossRuns`, vuota e
+con comandi, contro due letterali presi da un run in Release sulla macchina di
+sviluppo; la build Debug li ritrova. Suite intera verde in Release (52), con tre
+wealth band (52) e in Debug (53), build del core senza avvisi. Guasti di `Fails
+when:` introdotti uno alla volta e visti rossi: drain spostato dopo l'avanzamento
+del tick, rosso il pin con comandi mentre `AC02_DeterminismAcrossRuns` resta
+verde; `WorldState` nuovo al tick 1, rosso il pin vuoto. Nessuno step CI
+aggiunto: il test gira nei tre step di test esistenti. `git diff --name-only HEAD
+-- core/Runtime/` vuoto: `Core: no` regge, revisori non eseguiti. Registro:
+`D-104`, con un rilievo non trattato: `SIM_WEALTH_BANDS` non è letto da nulla,
+per cui lo step a tre band ripete il primo.
