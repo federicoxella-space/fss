@@ -36,7 +36,14 @@ jobs:
         env:
           SIM_WEALTH_BANDS: 1
 
-      - name: Harness smoke run
+      # NFR-12: the runner prints one hash per tick. The tick is in the hash, so a
+      # line repeated is a line that did not come from its own tick.
+      - name: Harness, one hash per tick
+        shell: pwsh
         run: |
           dotnet build harness/Sim.Harness.csproj -c Release
-          dotnet run --project harness/Sim.Harness.csproj -c Release -- --ticks 100000 --hash
+          $h = @(dotnet run --project harness/Sim.Harness.csproj -c Release --no-build -- --ticks 1000 --seed 1 --hashes)
+          if ($LASTEXITCODE -ne 0) { throw "sim exited $LASTEXITCODE" }
+          if ($h.Count -ne 1000) { throw "expected 1000 hashes, got $($h.Count)" }
+          if (@($h | Where-Object { $_ -cnotmatch '^[0-9a-f]{16}$' }).Count -ne 0) { throw "a line is not a hash" }
+          if (@($h | Sort-Object -Unique).Count -ne 1000) { throw "a hash repeats" }

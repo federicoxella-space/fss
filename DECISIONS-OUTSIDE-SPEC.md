@@ -2620,3 +2620,74 @@ Debug 51 green.
 `Advance`, after being taken from the queue — both, neither as a fault (`D-091`).
 
 **Rejected.** None. **Left to the human.** None.
+
+### D-097 · Point 8 · The runner's interface: two required flags, one hash per line, stdout
+
+`NFR-12` and `DEC-035` ask for a runner that executes N ticks headless and dumps
+state hashes; the point names the command, `sim --ticks 1000 --seed 1 --hashes`.
+The rest is chosen here.
+
+- **`--ticks` and `--seed` are required**, with no defaults: a default seed is a
+  run nobody chose, and `AC-02` is stated per seed. Anything unrecognised or
+  malformed exits 2 with a usage line on stderr, rather than being ignored — the
+  old `--hash` of the CI smoke step ran against a stub that ignored every
+  argument, and that is how a check passes having checked nothing.
+- **With `--hashes`, the hash after each tick, one per line**: line n is tick n,
+  and the hash of tick 0 is not printed. Without it, the final hash only.
+- **16 lowercase hex digits and `\n`, UTF-8 without BOM, on stdout.** The bytes
+  do not depend on the machine's line ending or culture, so point 9 can compare
+  two runs byte for byte. "Writes it where CI can compare it" is stdout, and the
+  workflow redirects it; no `--out` flag, since a redirect does the same thing.
+- **Settlement count 2,000**, the P-02 generator default, as a constant. Phase 3
+  has no generator; the count only sizes the buckets the loop walks. No flag for
+  it until something varies it — sweeps are phase 6.
+- **One `Advance(1)` per tick under `--hashes`**, through the public
+  `Simulation` only: the runner reads no field of the state (`R-003`).
+
+**What `docs/` says:** that the runner exists, runs N ticks and dumps hashes.
+Nothing on flags, output format, or where the output goes. **Would overturn it:**
+point 9 or a later criterion needing the hashes in a file the runner writes
+itself; a sweep needing the settlement count as a parameter.
+
+### D-098 · Point 8 · The CI smoke step replaced by the point's check
+
+The workflow already had a "Harness smoke run" step, `--ticks 100000 --hash`,
+green only because `Program.cs` ignored its arguments. It is replaced by the
+point's command, `--ticks 1000 --seed 1 --hashes`, and a pwsh script that fails
+on a non-zero exit, a count other than 1000, a line that is not 16 lowercase hex
+digits, or a hash repeated. The last one is what makes "one hash per tick" a
+check rather than a line count: the tick is in the state hash, so two equal lines
+did not come from two ticks.
+
+The 100k ticks leave the workflow until point 9, whose criterion they are.
+Keeping them here would have meant a flag the runner does not have, or a
+second run the point does not ask for.
+
+**What `docs/` says:** §17, every criterion runs headless in CI through the
+harness. Nothing on the step. **Would overturn it:** point 9 wiring the 100k run
+differently, which is its to decide.
+
+### D-099 · Point 8 · Verification, and what the point does not cover
+
+**Check.** The CI script run locally in pwsh against the Release build: green,
+1000 hashes. Faults introduced one at a time in `Program.cs`, each seen red on
+that script and undone: one hash per run instead of per tick (count 1); no
+`Advance` inside the loop (a hash repeats); the loop running one tick too many
+(count 1001); uppercase hex (a line is not a hash). The point predates `R-020`
+and has no `Fails when:`. **"Run from the CI workflow"** is a push away, and a
+push is the human's: the point closes with that clause in reserve (`R-011`).
+
+**`Core: no` held.** `git diff --name-only HEAD -- core/` printed nothing; the
+reviewers did not run. Core build 0 warnings, suite green in Release (50) and
+Debug (51).
+
+**Findings, not acted on.**
+- `NFR-12` also asks the runner to write the **chronicle** to CSV. The point's
+  "Does" defers sweeps and metric series to phase 6 and says nothing of the
+  chronicle; phase 3 has a chronicle with no subsystem feeding it. Not built —
+  the point does not ask for it — and not deferred by anyone either. The decider
+  may want to say which phase owes it.
+- `harness/Sim.Harness.csproj` references the core by `ProjectReference`, and
+  §20 says the harness "compile[s] that folder in place". Older than this plan
+  and outside the point; recorded so it is not taken as settled by the point
+  that last touched the harness.

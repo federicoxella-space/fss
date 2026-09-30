@@ -248,6 +248,20 @@ l'header da writer e reader insieme; i controlli mancanti sono accanto, in
 - **Core:** no — touches `harness/` only, verifiable by
   `git diff --name-only HEAD -- core/` being empty.
 
+*Esito:* 2026-09-30. Chiuso con riserva — "run from the CI workflow" attende il
+push del branch, che è dell'umano. In locale, lo script dello step CI eseguito in
+pwsh sulla build Release: `sim --ticks 1000 --seed 1 --hashes` stampa 1000 hash,
+tutti da 16 cifre esadecimali minuscole e tutti distinti. Guasti introdotti uno
+alla volta e visti rossi sullo script: un hash per esecuzione invece che per
+tick, nessun `Advance` nel ciclo, un tick di troppo, esadecimale maiuscolo. Il
+vecchio step `--ticks 100000 --hash`, verde solo perché lo stub ignorava gli
+argomenti, è sostituito; i 100k tick tornano al punto 9. `git diff --name-only
+HEAD -- core/` vuoto: `Core: no` regge, revisori non eseguiti. Core senza
+avvisi, suite verde in Release (50) e in Debug (51). Registro: `D-097` a
+`D-099`, con due rilievi non trattati: il CSV della cronaca chiesto da `NFR-12`,
+che nessun punto consegna né rinvia, e il `ProjectReference` dell'harness
+rispetto al §20.
+
 ## 9. The gate: 100k empty ticks, `AC-02` green in CI
 
 - **Does:** the two runs the gate asks for, wired into the workflow that already
