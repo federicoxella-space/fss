@@ -2374,6 +2374,7 @@ orchestrator, under the permission `AGENTS.md` requires for itself. **The third
 folder goes beyond what was put to the user**, who was shown the first two; the
 principle they approved — an agent may not loosen its own constraint — covers
 the skill that dispatches it, and the design is theirs to review.
+**Confirmed by the user on reading the design, 2026-09-30.**
 
 Any agent holding `Bash` can write round the hooks. That ceiling is stated in
 the design and covered by the orchestrator's mechanical checks, not removed.
