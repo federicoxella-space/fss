@@ -2438,6 +2438,8 @@ point it closes.
 
 ### D-090 · Point 7 · The save format: bytes in the hash's order, a header, a dispatch on its version
 
+**Ruling:** R-029 — ratified
+
 `NFR-08` asks for a full snapshot plus seed and parameters, the pending commands,
 a version number and a migration path from day one; `AC-03` for identical bytes
 on save → load → save; §20 for no reflection. The rest is chosen here.

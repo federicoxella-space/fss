@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-089 — audited by `R-028`. The next audit starts at the
+**Register watermark:** D-090 — audited by `R-029`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -1186,3 +1186,52 @@ or, for `D-087`'s reading, the user meaning to bar decider sessions from
 `.claude/skills/`, which is theirs to say.
 **Not verified:** citations of C1, C2, C4, C6 to C9 and S1; every claim in the
 design's own "Not verified" list, none of which this audit could test.
+
+### R-029 — The save format of `D-090` is ratified, and binds every later format to keep its reader
+
+**Date:** 2026-09-30   **Origin:** D-090
+**Verdict:** ratified
+**docs/:** unchanged
+
+`NFR-08`, DEC-032 and `SIM-STATE` §Serialisation notes say what a save holds and
+that it is versioned with a migration path; §20 forbids reflection. Encoding,
+byte order, layout, header and API are left open, and `D-090` fills each. Checked
+in `7e2bdd0`: `Simulation.Save()` and `Simulation.Load(byte[])` are the only public
+surface, `SaveFormat` is `internal` in `Runtime/Systems/`; the writer's order is
+`StateHash`'s field for field — §World, the seven chronicle columns over the rows
+in use, the pool up to `EntitiesInUse` — then the pending commands; `Read` checks
+the magic, switches on the version and refuses an unknown one;
+`NFR08_TheFormatIsPinned` pins length and SHA-256.
+
+Each choice stands on the merits. A `byte[]` keeps the core off files and streams,
+which `BannedSymbols.txt` and DEC-034 require, and DEC-032's "full snapshot" is
+bounded by what the host holds anyway. Little-endian through `BinaryWriter` is
+fixed by the framework, not the platform, which is what a save moved between
+machines needs. The hash's order makes the save and the hash one walk of one
+field list, so the fixture that keeps the hash complete keeps the save complete;
+two orders would be two lists to keep in step. Writing `ChronicleEntityStart`
+rather than deriving it is right: it is a field of `SIM-STATE`, and a save that
+drops a field on the ground that it can be recomputed is a save that trusts the
+recomputation — the load checks it instead. The two versions stay distinct:
+the format version says how the bytes are laid out (NFR-08), `ruleVersion` which
+rules produced the state (NFR-09, DEC-033), and a save carries both.
+
+**What this binds.** "A later format keeps the reader of every earlier one" is the
+plain reading of NFR-08's "migration path from day one", and it is ratified as
+such. It is architecture in effect: phase 4 adds the settlement tables, so its
+format 2 must read a format-1 save — a world whose settlements have no rows — and
+bring it to the new shape. Nothing in `docs/` limits the duty to saves a player
+holds, and this ruling does not add that limit: it would loosen NFR-08, and no
+entry has asked for it. It is not promoted: NFR-08 already says it, and a
+`SIM-DEC` entry would only repeat a requirement.
+
+**Cost.** Every format change from phase 4 on carries a reader for each earlier
+format, and a migration for worlds that predate a table, for saves that before a
+release only tests hold. A `byte[]` caps a save at what one allocation holds.
+**Owed by the implementer:** nothing.
+**Would overturn it:** a ruling that the migration duty begins at the first
+release, which would be a change to NFR-08; a host needing to stream saves;
+`D-090`'s own conditions.
+**Not verified:** the suite was not run; the SHA-256 pin and the tests' results
+were taken from `D-095` and `D-096`. `BinaryWriter`'s byte order was taken from
+its documentation, not tested on a big-endian machine, which DEC-034 excludes.
