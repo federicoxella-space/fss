@@ -49,7 +49,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-*None.*
+- **`R-031`** — whether the harness's `ProjectReference` meets §20's "compile that
+  folder in place". Recommendation: it does; no change.
 
 ---
 
@@ -1289,3 +1290,43 @@ The five actions owed to point 7 are marked done under "Owed by the implementer"
 stood when written.
 **Not verified:** the suite was not run; build and test counts and the mutation
 results in `D-095` and `D-096` were taken as written.
+
+### R-031 — Whether the harness's `ProjectReference` meets §20 is the user's to say
+
+**Date:** 2026-10-01   **Origin:** D-099 (a finding left to the decider)
+**Verdict:** escalated — reserve 4 of `R-001`: the rule is in `SIM-REQ` section
+20, "Downstream constraints"
+**docs/:** unchanged
+
+`D-099` records that `harness/Sim.Harness.csproj` reaches the core through a
+`ProjectReference`, while §20 says "The consumer project and the harness project
+each compile that folder in place. Neither holds a copy." Checked: the harness
+has no `Compile Include` of core sources and no copy of them; the reference
+builds `core/Sim.Core.csproj`, `netstandard2.1` at C# 9, and links the assembly.
+
+Two readings. **The rule is about copies**: the folder is the single source of
+truth, the harness builds it where it lies through the core's own project, and
+"in place" is satisfied. **The rule is about how each side compiles**: the
+harness includes the sources as the consumer does (§20's integration form is
+source import), so the harness builds the core the way the consumer will.
+
+**Recommendation: the first reading; no change.** On the merits it is the
+better one. Compiling the sources into the harness assembly would make every
+`internal` member visible to the harness and undo `R-003`, which rests on
+FR-A-02; it would also build the core under the harness's rules rather than its
+own analyzers and `BannedSymbols.txt`, and §20's own next rules — separate
+projects, the core as its own assembly — point the same way. What the second
+reading would buy, a harness built as the consumer builds, is already the job of
+the standalone core project that CI builds on every commit.
+
+It is not ruled: the sentence belongs to §20, whose constraints are the
+consumer's, and whether the consumer meant the harness to mirror its source
+import is something this repository cannot see.
+
+**Cost.** None under the recommendation. Under the second reading, the harness
+changes shape and `R-003`'s boundary needs another enforcement.
+**Owed by the implementer:** nothing until the user answers.
+**Would overturn it:** the user, or the consumer through them, meaning the
+harness to compile the sources as the consumer does.
+**Not verified:** that the consumer's source import compiles the folder under
+the same settings as `core/Sim.Core.csproj`; the consumer project is not here.
