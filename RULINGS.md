@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-085 — audited by `R-027`. The next audit starts at the
+**Register watermark:** D-089 — audited by `R-028`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -1136,3 +1136,53 @@ and `State/StateHash.cs`.
 stood when written.
 **Not verified:** the suite was not run; mutation results in `D-083` and `D-084`
 and the reviewers' findings were taken as written.
+
+### R-028 — The register from `D-086` to `D-089` is ratified: the agent workflow, as designed with the user
+
+**Date:** 2026-09-30   **Origin:** register audit, `D-086` to `D-089`
+**Verdict:** ratified
+**docs/:** unchanged
+
+The four entries record the design of the agent workflow
+(`.claude/design/2026-09-30-agent-workflow.md`), approved by the user in
+conversation and not yet built. All four are process: ratified or rejected,
+never promoted (`D-011`). Their governance content — what each role may write,
+what `AGENTS.md` gains, the language of the repository — is the user's decision
+and reserve 1 of `R-001`; this ruling does not rule on it. It checks that the
+entries say what was decided and that the facts they rest on hold, and it grants
+no permission: each edit to `AGENTS.md` still needs a plan point naming it
+(`R-010`).
+
+- **`D-086`, built after phase 3.** Checked: `/plan-status` bounds a plan's range
+  by archive commits and says itself that two live plans break the lookup first;
+  `main` has neither `RULINGS.md` nor `.claude/skills/decide/`, and its
+  `AGENTS.md` does not mention the decider. The reasons hold.
+- **`D-087`, what each role may write.** Stands. One reading is recorded so the
+  plan that builds it does not word it otherwise: "written only by the
+  orchestrator" is a limit among the six agents, not on the decider. Rulings
+  `R-009`, `R-011`, `R-019` and `R-020` applied governance to
+  `.claude/skills/` from a decider session at the user's request, and the rule
+  the design proposes for `AGENTS.md` — change only with the permission
+  `AGENTS.md` requires for itself — allows that path. The converse matters as
+  much: an orchestrator point touching `.claude/skills/decide/` is reserve 1
+  whatever its plan says, and the design's "any change to `/decide`" is rightly
+  among what is not built.
+- **`D-088`, the tester first, the code-reviewer on every code point.** Checked:
+  `D-065` and `D-070` each record a named test passing against an emptied walker;
+  `reviewers.md` is read only for `Core: yes`, so a `Core: no` point is read by
+  no reviewer today. Five of six closed points had a defective criterion (`D-059`,
+  `D-065`, `D-070`, `D-075`, `D-084`; point 5's was not, `R-023`).
+- **`D-089`, comment rules and English.** Stands, with one inaccuracy noted:
+  the entry says every rule cites the entry that applied it, and C10 cites "the
+  code's practice", not a finding. The plan point that writes the section should
+  either cite a finding for C10 or say it records practice. `D-060` and `D-067`
+  were read for C5 and C3 and support them; the other citations were not.
+
+**Cost.** None now. The workflow's cost per point is the design's own open item.
+**Owed by the implementer:** nothing; the entries bind the process plan that
+builds the workflow, which is not yet written.
+**Would overturn it:** the user revising the design before the plan is written;
+or, for `D-087`'s reading, the user meaning to bar decider sessions from
+`.claude/skills/`, which is theirs to say.
+**Not verified:** citations of C1, C2, C4, C6 to C9 and S1; every claim in the
+design's own "Not verified" list, none of which this audit could test.

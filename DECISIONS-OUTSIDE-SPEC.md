@@ -2331,6 +2331,8 @@ heading of their own that names the plan.
 
 ### D-086 · Six agents and an orchestrator, built after phase 3
 
+**Ruling:** R-028 — ratified.
+
 The workflow is split into `tester`, `coder`, `code-reviewer`, `revisioner`,
 `documenter` and `committer`, dispatched by the session running `/plan-next`,
 which keeps reading the point, arbitrating the findings and reporting. The user
@@ -2352,6 +2354,8 @@ the merge is done.
 stalling long enough that the agents are wanted for points 7 to 9.
 
 ### D-087 · What each role may write, and what enforces it
+
+**Ruling:** R-028 — ratified; "only by the orchestrator" read as among the agents, see the ruling.
 
 As the table of the design: tools restricted by name, paths by hooks in each
 agent's frontmatter, three PowerShell 7 scripts (`path-guard`, `git-guard`,
@@ -2385,6 +2389,8 @@ only enforcement; or a model proving unreliable in its role.
 
 ### D-088 · The tester writes before the coder; the code-reviewer reads every point that touches code
 
+**Ruling:** R-028 — ratified.
+
 Two tightenings of the review. The tester writes the named tests from the frozen
 criterion and its "Fails when", before any code exists and without the coder's
 reasoning, and runs the faults afterwards; the coder never edits `core/Tests/`.
@@ -2404,6 +2410,8 @@ across a whole phase, so that its cost buys nothing there; or tests written
 first forcing interfaces the coder then has to fight.
 
 ### D-089 · Comment rules in `AGENTS.md`, drawn from applied findings; everything in English
+
+**Ruling:** R-028 — ratified.
 
 A new section of `AGENTS.md` holds the comment rules C1 to C10 and one rule of
 simplicity, S1, each one a finding reviewers already applied, each citing the
