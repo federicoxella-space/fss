@@ -49,8 +49,7 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-- **`R-031`** — whether the harness's `ProjectReference` meets §20's "compile that
-  folder in place". Recommendation: it does; no change.
+*None.* `R-031` was answered by `R-033`.
 
 ---
 
@@ -1372,3 +1371,25 @@ that must read the chronicle through the runner.
 **Not verified:** the suite was not run; the mutation results and test counts in
 `D-099` were taken as written. The CI step has not run in CI, which is the
 reserve.
+
+### R-033 — `R-031` accepted: the harness's `ProjectReference` meets §20
+
+**Date:** 2026-10-01   **Origin:** user, on `R-031`
+**Verdict:** resolved
+**docs/:** unchanged
+
+The user approved `R-031`'s recommendation: "approvo R-031". Reserve 4 of
+`R-001`, answered by the user.
+
+`SIM-REQ` section 20, "Downstream constraints", "each compile that folder in
+place. Neither holds a copy" is read as a rule about copies: the core's folder is
+the single source of truth, and the harness builds it where it lies through
+`core/Sim.Core.csproj`. The harness's `ProjectReference` complies as it stands,
+and it keeps the core's `internal` members out of the harness's reach, which
+`R-003` relies on. The text of §20 is unchanged; the reading is recorded here.
+
+**Cost.** None.
+**Owed by the implementer:** nothing.
+**Would overturn it:** the consumer requiring the harness to compile the sources
+as the consumer's source import does.
+**Not verified:** as in `R-031`: the consumer's compile settings.
