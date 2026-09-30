@@ -294,3 +294,40 @@ The readings part at DEC-032, "a save is a full state snapshot": a save taken
 while commands are pending either carries them, and the queue is state; or drops
 them, and a reloaded world diverges from the one saved; or is refused until the
 queue is empty, which the host must then arrange. Nothing in `docs/` chooses.
+
+### SQ-007 — §17 wants every criterion driven by the harness alone, and `AC-03` is driven by the test suite
+
+**Raised:** 2026-10-01, writing the moment-two request for the phase 3 gate.
+**Cites:** `docs/SIM-REQ.md:596` §17; `docs/SIM-REQ.md:602` AC-03;
+`docs/SIM-REQ.md:656` AC-19; `docs/SIM-REQ.md:748` §18, phase 3;
+`docs/SIM-DEC.md:360` DEC-034, rationale.
+**Blocks:** yes — the declaration of the phase 3 gate, not a point. No point is
+open for it to fail: the plan's ten points are closed and their reserves
+discharged. The plan's exit condition repeats §17's words, so the gate cannot be
+called met until the reading is chosen.
+**Status:** open.
+
+§17 opens: "Every criterion below runs headless in CI, driven by the
+command-line harness alone." In CI today the harness drives one thing: the
+100k-tick empty run, twice, compared byte for byte. `AC03_SaveRoundTrip`, the
+in-process half of `AC02_DeterminismAcrossRuns` and the pinned sequences of
+`AC02_TheGateSequencesArePinned` run under `dotnet test`. `sim` has no flag that
+saves or loads, and it cannot submit a command, since phase 3 defines no kind a
+host could submit (`DEC-086`, `R-030`).
+
+`docs/` reads both ways:
+
+- **The suite counts.** AC-19 asks that the core's "tests pass from the
+  standalone project … on every commit", and DEC-034's rationale names "the CLI
+  harness, the CI suite, and the parameter sweeps" as three things host
+  independence allows. On this reading §17's "alone" means with no editor and no
+  game client, and the gate is met as it stands.
+- **The harness drives each criterion.** Read literally, "alone" excludes the
+  suite. `AC-03` then needs a round-trip mode in `sim`, and the commanded half of
+  `AC-02` needs a command a host can submit, which no phase 3 kind provides. The
+  first is a small harness change; the second is not possible until the first
+  command kind exists.
+
+Nothing in `docs/` chooses between them. The reading taken so far, never stated,
+is the first: points 7, 9 and 10 put their checks in the suite, and no audit
+remarked on it.

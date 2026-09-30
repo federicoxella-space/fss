@@ -2850,3 +2850,24 @@ beside the reserves of points 8 and 9.
 **What `docs/` says:** `AC-02` and `NFR-01`, nothing on the digest.
 **Would overturn it:** a ruling that the pin should use the core's hash, or
 live in the gate step against the harness output.
+
+### D-105 · The moment-two request, and `SQ-007` raised while writing it
+
+**Decided.** The request of 2026-09-20 is replaced, not amended: the moment has
+moved from one to two, which is the case `D-039` and `D-041` give for replacing.
+
+**Decided.** `SQ-007` is filed as blocking the gate's declaration, and the
+request does not call the gate met. Every clause of §18 is green in CI; §17's
+"driven by the command-line harness alone", which the plan's exit condition
+repeats, is met only on the suite's reading. Calling the gate met would have
+picked that reading, and an objection is never resolved by its finder. No point
+is failed for it: all ten are closed, and the question is about the whole.
+
+**Decided.** The *Riserva sciolta* lines of points 8 and 9 cite the first green
+run, `36786627133` on `b43d57d`, beside the run on `c645462`; point 10's cites
+only the second, the first run on a commit containing `2ec9fad`.
+
+**What `docs/` says:** §17 and AC-19 as set out in `SQ-007`; nothing on review
+requests. **Would overturn it:** the decider or the user ruling that §17's
+"alone" means only no editor and no game client, which closes `SQ-007` and lets
+the gate be declared as the files stand.

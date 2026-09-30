@@ -47,154 +47,119 @@ trace, and only the author knows it.
 
 ---
 
-# Current request — 2026-09-20 — **answered, one item open**
+# Current request — 2026-10-01 — moment two, the phase 3 gate
 
-A reviewer answered every item below on 2026-09-20 and left one thing that was
-not asked for, now item 5. The request stays here rather than being replaced:
-there is no new moment. The next one is **moment two**, the phase 3 gate, and
-`/plan-status` will say so when the plan closes.
+Replaces the request of 2026-09-20, which was moment one. All five of its items
+are closed, the last by `R-009`; it is kept in git.
 
-Replaces the request of 2026-09-19, twice amended. Everything it asked for is
-closed but one item, carried forward below; it described moment three, and the
-situation has moved to moment one. Kept in git.
+**Moment:** two — the gate of phase 3, `docs/SIM-REQ.md` §18: "100k empty ticks;
+AC-02, AC-03 green".
 
-**Moment:** one — with a caveat this request has to state, because it is the
-first time that moment has come up. **No plan exists to read.** `PLAN.md` is
-absent, the lookup plan closed and was archived at `4ed3a94`, and the next plan
-is the rest of phase 3. The argument for interrupting here is that a plan is
-short against a branch, and that argument assumes a plan on the page. There is
-none, so what is offered instead is the criteria before they are written down.
-If you would rather see a draft plan first, this request was written one step
-early — see item 3 below.
+**Branch:** `fase-3-kernel`, 56 commits above `main` at `4ed3a94`. The code as it
+stands is `c645462`, pushed, and CI run `36788322902` is green on it in every
+step. The commits above it touch only Markdown and are not pushed: the *Riserva
+sciolta* lines, `SQ-007`, and this request.
 
-**Amended the same day:** you asked for the plan, which answers item 3 in
-practice. `PLAN.md` now holds nine points for the rest of phase 3, and the
-criteria this request offered for review are on the page rather than in
-prose. The rest of the request stands, and one item was added to it — the §20
-confirmation below, which the plan cannot take for itself.
+**What changed, in one line:** the headless kernel — calendar, `WorldState`,
+state hash, tick loop, command queue, chronicle, serialiser, the `sim` runner,
+the gate in CI and its pinned sequences — in ten points, all closed, with the
+three reserves discharged.
 
-**Branch:** `main`. The code is unchanged since `4ed3a94`, which is pushed and
-CI green; this request, `PLAN.md` and `SQ-004` sit in the commit above it, which
-is not pushed. No branches outstanding — `fase-3-kernel`, which the plan names,
-is not cut until the blocking item below is answered.
+## The gate, clause by clause
 
-**What changed, in one line:** nothing was built — the lookup plan closed and was
-archived, and the repository has been idle since, which is why this is moment
-one and not moment three.
+| Clause | Evidence | State |
+|---|---|---|
+| 100k empty ticks | CI step "Gate, 100k empty ticks in two runs": two processes of `sim`, output compared byte for byte | green in CI |
+| `AC-02`, across runs | `AC02_DeterminismAcrossRuns`, empty and with commands, three controls | green in CI, three steps |
+| `AC-02`, across builds and machines | `AC02_TheGateSequencesArePinned`: two digests taken on the development machine, reached again on the runner in Release and in Debug (`R-034`, `R-036`) | green in CI, three steps |
+| `AC-03` | `AC03_SaveRoundTrip` | green in CI, three steps |
+| "driven by the command-line harness alone" (§17, repeated in the plan's exit condition) | only the empty 100k run goes through `sim`; the rest goes through `dotnet test` | **`SQ-007`, open** |
+
+**So the gate is not declared.** Everything the gate names is green; whether it
+was run the way §17 requires is a question about the specification, and it is
+not mine to answer.
 
 ## Decisions taken outside the specification
 
-`D-038` to `D-043`. Of these `D-040` and `D-043` were named in the amendments to
-the last request; `D-038`, `D-039`, `D-041` and `D-042` have never been in front
-of you.
+`D-044` to `D-104`, all ratified by the decider, watermark at `D-104`. None
+since the last request has been put to you except through the rulings you asked
+for.
 
-- `D-038` — `SQ-003` decided, and the `docs/` edit left to a human.
-- `D-039` and `D-041` — when a request is replaced and when it is amended. The
-  pair is the rule this request has just applied to itself.
-- `D-040` — applying `SQ-003` overran the deposited text by one line.
-- `D-042` — the point lookup is bounded by the plan's commit range rather than by
-  a new trailer. It rests on plans being sequential, which nothing enforces.
-- `D-043` — a check that printed a verdict without having run. Prose inside a
-  register entry passes through no check at all.
+- `D-044` to `D-055` — writing the plan, moment one, `SQ-004`, the §20
+  precondition.
+- `D-056` to `D-085`, `D-090` to `D-104` — points 1 to 10, entries by point.
+- `D-086` to `D-089` — the agent workflow designed with you, to be built after
+  phase 3 (`R-028`).
+
+**The pattern worth looking at as a whole.** Six of the ten criteria turned out
+defective once the code existed: `D-059` (point 1 under-covers its own "Does"),
+`D-065` (point 2 passes against an empty walker), `D-070` (point 3 passes against
+an empty enumeration), `D-075` (point 4 passes a 365-tick year), `D-084` (point 6
+cites greps that name nothing), `D-095` (point 7 passes a serialiser with no
+version number). Each was caught by introducing a fault, each check was left as
+written, and the missing check sits beside it. All six were written by one
+session in one sitting, before `R-017` and `R-020` made a criterion name its
+fault. Point 10 is the only one written under that rule, and it is not a sample.
+
+**Rulings still open, owed later:** `R-007` (how prior history is dated) and
+`R-025` (whether an `EntityId` names its table), both until a later phase needs
+them; `R-037`, the three-band step, by the first point that builds cohort rows;
+`R-032`, the chronicle's CSV, by phase 6.
 
 ## Open questions about the specification
 
-**`SQ-004`, non-blocking.** Raised the same day, writing the plan: §19 says
-`P-17` and `P-01` close in phase 3, and both want the cost of a settlement
-update, which a phase with no domain logic and a gate of empty ticks cannot
-measure. Three readings are set out in the entry; none is picked. Nothing in the
-plan waits on it.
+**`SQ-007`, blocking the gate's declaration.** §17 wants every criterion driven
+by the harness alone; `AC-03` and most of `AC-02` are driven by the suite. AC-19
+and DEC-034 name the suite as its own channel, which argues that it counts. Two
+readings are set out in the entry; none is picked.
 
-`SQ-003` closed on 2026-09-20 and was applied to `docs/` by `7decada`.
+`SQ-001` to `SQ-006` are closed.
 
 ## What was not verified
 
-- **The review protocol has never run.** Unchanged, and now imminent: no point in
-  four plans declared `Core: yes`, and every point of the next plan is in
-  `core/Runtime/` and therefore `Core: yes`. Two reviewers, briefed and blind, a
-  read-only agent type — the part of this with the most moving parts, still with
-  nothing behind it.
-- **Three sources give three different counts of the same thing.** The last
-  request said twenty-three closed points across three plans; the lookup point's
-  outcome says twenty-one; counting `*Esito:*` lines today gives twenty in the
-  three plans archived then, and twenty-one including the lookup's own. The
-  likely reading is that the lookup counted its own point, which was archived in
-  the same commit — but that is a guess, and it is exactly the kind of claim
-  `D-043` says enters a register unchecked. Nothing depends on the number. It is
-  reported, not picked.
-- **Of the twenty-one closed points, thirteen carried a marker** — ten `weak`,
-  three `shallow` — and eight carried none. The eight are not eight mechanical
-  checks: five predate the convention, which the first plan was written before;
-  two are in the twelve-gaps plan; one is the lookup point, the only point that
-  declared no marker with the convention available and a check that runs.
-- **`/plan-status` has now been run by a fresh session** — this one, loading the
-  file from disk and dispatching the read-only agent. That is the first evidence
-  for the version that ships rather than the version its author held in memory.
-  `/plan-next` and `/plan-explain` still have none.
-- **Four archived plans that nobody but their author has read.** Whether they are
-  legible to someone who was not there is untested, and the phase-3 plan is the
-  first that a different session will have to execute.
-- ~~**The phase-3 criteria do not exist yet.**~~ **Attempted 2026-09-20.** The
-  gate does decompose into points that cite `docs/` — nine of them — and the
-  attempt turned up two things reading had not: the §20 confirmation, which is
-  now item 4 below, and `SQ-004`. What remains unverified is the decomposition
-  itself: every point's `Serves` was read out of `docs/` by the same session
-  that wrote the point, so a citation that does not support what the point
-  claims would not have been noticed here. Step 1 of `/plan-next` opens each one
-  independently, and that is the first check on it.
-- **No point of this plan has been costed.** Nine points is a guess at the size
-  of the rest of phase 3, not a measurement, and the serialiser is the one most
-  likely to be two points wearing one number.
+- **"Machines" means two.** The development machine and one GitHub runner image,
+  `windows-2025-vs2026`, both Windows x64. Whether their processors or JIT tiering
+  differ in any way that could expose a divergence was not measured (`R-034`).
+- **The empty pin says little.** In an empty world only `Tick` moves, so the
+  pinned empty sequence is close to the hash function applied to one field
+  (`R-036`). The pin with content is the run with commands.
+- **The run with commands uses a test-only kind** through the internal tick
+  loop. Nothing public submits a command yet, so `Simulation`'s command path is
+  not under any pin (`D-100`). Whether the stand-in's fold into `CurrencyTotal`
+  can cancel over the run was argued against, not proven (`R-036`).
+- **The runner's output is not compared with the pin.** The suite's empty run and
+  `sim` both call `Simulation.Advance(1)` and read the hash, so they should give
+  the same sequence. That was checked by reading, not by comparing bytes.
+- **Three green test steps are two configurations.** "Tests, three wealth bands"
+  sets a variable nothing reads, and repeats the first step (`D-104`, `R-037`).
+- **Reviewers ran on points 1 to 7 only.** Points 8 to 10 declared `Core: no`,
+  and the diff held them to it. Whether the blind reviewer ever saw the briefed
+  one's output, the concern you raised at moment one, was not checked by this
+  request.
+- **Points 1 to 9 predate `Fails when:`.** Their faults were chosen after the
+  code, by its author. Only point 10's were named first.
+- **No one but the author ran the mutations.** The decider's audits `R-035` and
+  `R-038` ran some of the tests and took the mutation results as written.
+- **The chronicle is shallow by declaration.** Its shape is tested; no real
+  event has filled it (point 6).
+- **`P-01` and `P-17` are unmeasured**, moved to phase 4 by `SQ-004`. The only
+  figure is the floor under them: 0.000120 ms per empty tick on the runner,
+  0.00012–0.00013 locally, over 10M ticks net of start-up.
+- **I found no record of a human reading the phase 3 code.** All review in the
+  repository is by agents and by the decider, which is an agent holding your
+  authority by delegation.
 
 ## What I need from you
 
-1. ~~**Carried forward, unanswered:** a look at the three lines `7decada`
-   changed in `docs/`.~~ **Approved 2026-09-20**, all three. The reviewer's
-   account is that the inconsistency was theirs — `DEC-081` was promoted without
-   its ascendants following — and that the agent found and fixed it correctly.
-   **The principle in `D-040` stands and was restated:** the fix is not that the
-   agent hold back the extra line, it is that the deposited text be complete.
-   The rule is unchanged — **the agent deposits, a human applies.**
-2. ~~**The criteria for the rest of phase 3.**~~ **Read 2026-09-20**, with two
-   findings, both recorded in the register and neither changing a criterion:
-   point 7 is the one likely to be two points wearing one number, and if it
-   swells in flight it is **split, not widened**; and the first run of the
-   reviewer protocol wants watching, **particularly that the blind reviewer does
-   not see the briefed one's output.**
-3. ~~**Whether moment one is served by a request like this one, or wants a draft
-   plan attached.**~~ **Answered in practice** on 2026-09-20: you asked for the
-   plan. Recorded as the precedent, not as a rule — the next moment one may want
-   the other shape, and if so it should say why.
-4. **The confirmation `SIM-REQ` §20 asks for, and asks for by name.** Its last
-   line is "Confirm before Phase 3. A wrong guess costs a rewrite of the
-   serialiser," and five of its rows still read `Proposed`: target framework,
-   maximum language level, ahead-of-time support, allowed base class library
-   surface. The code has been built on `netstandard2.1` and C# 9 since before
-   this request — the guess is already made, it has simply never been confirmed.
-   **This one blocks point 7**, the serialiser, and nothing else in the plan;
-   points 1 to 6 and 8 to 9 can run while it is open.
-
-   **Confirmed 2026-09-20**, applied to `docs/` by `0114ad2`: `netstandard2.1`,
-   C# 9, ahead-of-time supported, base class library surface limited to
-   `netstandard2.1` with no third-party packages. All four rows read `Decided`
-   and §20's closing line now reads `Confirmed 2026-09-20`. Point 7 is unblocked
-   with its criterion untouched.
-5. **Escalated 2026-09-23 as `R-005`; approved and applied the same day by
-   `R-009`.**
-   **Open, and not raised by this request — the failure path for a criterion.**
-   The reviewer's words: the field asked for is there and works, but nothing
-   says what happens when a criterion turns out to be wrong *in flight*. The
-   mechanism covers the neighbouring case — `/plan-next` closes a point whose
-   check fails as `FALLITO` and stops the plan, from point 5 of the twelve-gaps
-   plan — and it covers the rule — "a criterion that turns out to be wrong is
-   reported and recorded, never rewritten". **What it does not have is the path
-   between them:** who is told, where the wrong criterion is written down, and
-   whether the plan stops or the point closes failed against a criterion nobody
-   now believes.
-
-   It was gap 8 of the reviewer's own list and is still open. It cannot be
-   closed inside this plan: the points are frozen, and a second `PLAN.md` for
-   process work would be two plans live at once, which `D-042` says is the first
-   thing that breaks the point lookup. **So it waits for the phase 3 plan to
-   close, and this is the note that it is owed** — nine points all `Core: yes`
-   is the run where it will be wanted.
+1. **`SQ-007`: which reading of §17.** This blocks the gate. If the suite counts,
+   the gate is met as it stands. If it does not, `AC-03` needs a round-trip mode
+   in `sim`, and the commanded half of `AC-02` waits for the first command kind,
+   which phase 3 cannot supply.
+2. **A look at the whole.** Especially the six defective criteria: whether the
+   `Fails when:` rule is enough, or whether phase 4's plan should come to moment
+   one with its faults read by someone other than their author.
+3. **The gate, declared or not**, once item 1 is answered. That is yours, or the
+   decider's under `R-001`; the plan cannot declare it for itself.
+4. **The merge into `main`, without squashing**, after the gate. The
+   `Plan-point:` trailers are how `/plan-status` finds each point, and squashing
+   destroys them for the whole history.
