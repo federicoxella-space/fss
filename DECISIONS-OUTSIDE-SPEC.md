@@ -2697,3 +2697,69 @@ Debug (51).
   §20 says the harness "compile[s] that folder in place". Older than this plan
   and outside the point; recorded so it is not taken as settled by the point
   that last touched the harness.
+
+### D-100 · Point 9 · `AC02_DeterminismAcrossRuns`: two worlds in one process, empty and with commands
+
+**Decided.** The test builds two worlds from the same seed and runs each 100k
+ticks, reading the hash after every tick, and compares the two sequences whole.
+The empty runs go through `Simulation`, as the runner calls it, with the
+runner's 2000 settlements, so the settlement buckets fire. The commanded runs go
+through the internal `TickLoop` with the stand-in kind of `CommandQueueTests`,
+one command every 97 ticks, because phase 3 has no public submit and no kind of
+its own (`DEC-086`). Three controls keep the equality from being one every world
+passes: every tick's hash is distinct, seed 2 gives another sequence, and the
+commanded sequence differs from the empty one.
+
+**What `docs/` says:** `AC-02`, "same seed and commands produce the same state
+hash sequence across builds and machines". Nothing on how two runs are made
+independent. **Would overturn it:** a public submit arriving with the first
+command kind, which moves the commanded half onto `Simulation`.
+
+### D-101 · Point 9 · The gate step in CI, and the measurement beside it
+
+**Decided.** One pwsh step after the harness step, reusing its Release build of
+`sim`: two processes of `--ticks 100000 --seed 1 --hashes`, stdout written raw
+to two files by `Start-Process`, so no PowerShell decoding sits between the
+runner and the comparison. The step fails on a non-zero exit, on a length other
+than 100000 lines of 17 bytes, or on any byte differing.
+
+**The measurement is not taken on the 100k run.** Timed from outside the
+process, 100k empty ticks cost less than the process start varies by: net of a
+run of no ticks, the figure came out at −0.000003 and −0.000022 ms. The step
+therefore times a run of 10M ticks without per-tick output, subtracts a run of
+none, and prints `ms per empty tick` in invariant culture. Locally, twice:
+0.000130 and 0.000121 ms, about 125 ns, with 2000 settlements bucketed and
+nothing in them. It is the floor under `P-01` and `P-17`, not either of them
+(`SQ-004`).
+
+**What `docs/` says:** §18, "100k empty ticks; AC-02, AC-03 green"; nothing on
+how a tick is timed. **Would overturn it:** a timing flag in the runner, which
+would measure inside the process and could use the gate's own run; the point's
+"Does" names a test file and a workflow step, not the harness.
+
+### D-102 · Point 9 · Verification, and what the gate does not cover
+
+**Check.** `AC02_DeterminismAcrossRuns` green alone; suite green in Release
+(51), Release with three wealth bands (51) and Debug (52); core build 0
+warnings. The workflow step's script, extracted and run locally in pwsh against
+the Release build: green. Faults introduced one at a time and seen red, each
+undone: a `WorldState` constructor folding a static count of worlds built into
+`CurrencyTotal` — the test red on "the same seed, empty"; the second CI run on
+seed 2 — "the two runs differ"; the second run one tick short — "the two runs
+differ"; both runs one tick short — the length check. The point predates
+`R-020` and has no `Fails when:`.
+
+**`Core: no` held.** `git diff --name-only HEAD -- core/Runtime/` printed
+nothing; the only file under `core/` is the new test. Reviewers not run.
+
+**Reserve.** "Completing in CI" is a push away, and a push is the human's: the
+point closes with that clause in reserve (`R-011`), beside point 8's.
+
+**Findings, not acted on.**
+- `AC-02` says "across builds and machines". Both runs here, in the test and in
+  CI, are one build on one machine; the workflow runs on `windows-latest` alone.
+  The point asks for two independent runs, and that is what it delivers. Whether
+  the phase 3 gate owes a second machine — an OS matrix, or a hash sequence
+  pinned in the repository and compared by every runner — is the decider's.
+- The 10M-tick timing run makes the gate step do a hundred times the ticks the
+  gate names. Its cost locally is about a second.

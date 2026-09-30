@@ -277,3 +277,20 @@ rispetto al §20.
   empty tick. It is not `P-01` and not `P-17`, which need a settlement update to
   measure — see `SQ-004` — but it is the floor under both, and recording it
   costs one line of output.
+
+*Esito:* 2026-10-01. Chiuso con riserva — "100k empty ticks completing in CI"
+attende il push del branch, che è dell'umano. `AC02_DeterminismAcrossRuns`
+verde, anche da solo: due mondi dello stesso seme, 100k tick, hash a ogni tick,
+vuoti e con comandi, con tre controlli perché l'uguaglianza non sia banale;
+suite intera verde in Release (51), con tre wealth band (51) e in Debug (52),
+build del core senza avvisi. Lo script del nuovo step CI, eseguito in locale in
+pwsh sulla build Release: due processi da 100k tick, output confrontati byte per
+byte, verde. Guasti introdotti uno alla volta e visti rossi: un `WorldState` che
+conta i mondi costruiti, sul test; seme diverso al secondo run, secondo run un
+tick più corto, entrambi un tick più corti, sullo script. Misura: 0,00012–0,00013
+ms per tick vuoto in locale, presa su 10M tick al netto di un run da zero,
+perché su 100k tick il costo sta sotto il rumore dell'avvio e la cifra usciva
+negativa (`D-101`). `git diff --name-only HEAD -- core/Runtime/` vuoto: `Core:
+no` regge, revisori non eseguiti. Registro: `D-100` a `D-102`, con un rilievo
+non trattato: `AC-02` dice "across builds and machines" e i due run sono una
+build su una macchina.
