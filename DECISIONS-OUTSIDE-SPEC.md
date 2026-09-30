@@ -2700,6 +2700,8 @@ Debug (51).
 
 ### D-100 · Point 9 · `AC02_DeterminismAcrossRuns`: two worlds in one process, empty and with commands
 
+**Ruling:** R-035 — ratified
+
 **Decided.** The test builds two worlds from the same seed and runs each 100k
 ticks, reading the hash after every tick, and compares the two sequences whole.
 The empty runs go through `Simulation`, as the runner calls it, with the
@@ -2716,6 +2718,8 @@ independent. **Would overturn it:** a public submit arriving with the first
 command kind, which moves the commanded half onto `Simulation`.
 
 ### D-101 · Point 9 · The gate step in CI, and the measurement beside it
+
+**Ruling:** R-035 — ratified
 
 **Decided.** One pwsh step after the harness step, reusing its Release build of
 `sim`: two processes of `--ticks 100000 --seed 1 --hashes`, stdout written raw
@@ -2738,6 +2742,8 @@ would measure inside the process and could use the gate's own run; the point's
 "Does" names a test file and a workflow step, not the harness.
 
 ### D-102 · Point 9 · Verification, and what the gate does not cover
+
+**Ruling:** R-035 — ratified; the machines finding resolved by R-034
 
 **Check.** `AC02_DeterminismAcrossRuns` green alone; suite green in Release
 (51), Release with three wealth bands (51) and Debug (52); core build 0

@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-099 — audited by `R-032`. The next audit starts at the
+**Register watermark:** D-102 — audited by `R-035`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -1453,3 +1453,47 @@ DEC-034 widened beyond Windows x64, which would make a matrix owed.
 runners differ in processor or JIT tiering in any way that could expose a
 divergence; the pin is insurance whose value on an integer-only core was not
 measured.
+
+### R-035 — The register from `D-100` to `D-102` is ratified, save the finding `R-034` resolved
+
+**Date:** 2026-10-01   **Origin:** register audit, `D-100` to `D-102`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Point 9, the gate. Each entry was read against `AC-02`, `NFR-01`, §17 and §18, and
+its claims against `f1e825b`. `AC02_DeterminismAcrossRuns` was run alone in
+Release: green.
+
+- **`D-100`, the test.** Stands. Checked: `Simulation.Advance` calls
+  `TickLoop.Advance` with `NoLevels`, as the commanded half does directly, so
+  both halves step the same buckets over 2000 settlements and the difference
+  between them is the commands' alone. The commanded half going through the
+  internal loop with the stand-in kind is what `R-030` left: no public submit
+  exists until the first command kind, and the entry names that as its
+  overturning. The three controls are what keep an equality of two runs from
+  passing a world that ignores its seed or its input.
+- **`D-101`, the step and the measurement.** Stands. Raw bytes through
+  `Start-Process` keep PowerShell's decoding out of a byte-for-byte comparison.
+  Taking the figure on 10M ticks net of a run of none is right, and the negative
+  figure on 100k is the proof. The step prints the figure and fails on nothing
+  but the exit code, which is correct: `P-01` and `P-17` are phase 4's
+  (`SQ-004`), and a threshold on a shared runner would fail for the runner's
+  load. The durable record of the figure is the entry itself; CI logs expire.
+- **`D-102`, verification.** Stands. *Chiuso con riserva* is `R-011` applied, and
+  the reserve keeps the gate unmet until the step has run in CI. The first
+  finding is `R-034`, which owes a pinned sequence before the gate is declared
+  passed. The second, a hundred times the gate's ticks for about a second, is
+  accepted as the cost of a measurement the plan asked for.
+
+**The gate, as the files now stand.** Three things stand between phase 3 and its
+gate: the pushes that discharge the reserves of points 8 and 9, and `R-034`'s pin.
+The request for review at moment two, which `AGENTS.md` requires at the gate, is
+owed by the implementer when those have landed; this audit is not it.
+
+**Cost.** None beyond `R-034`.
+**Owed by the implementer:** nothing new; `R-034` stands.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` as it
+stood when written.
+**Not verified:** the full suite and the workflow step were not run; the mutation
+results, test counts and the timing figures in `D-101` and `D-102` were taken as
+written.
