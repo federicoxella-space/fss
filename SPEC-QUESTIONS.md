@@ -331,3 +331,46 @@ host could submit (`DEC-086`, `R-030`).
 Nothing in `docs/` chooses between them. The reading taken so far, never stated,
 is the first: points 7, 9 and 10 put their checks in the suite, and no audit
 remarked on it.
+
+### SQ-008 — a state hash at every tick costs the whole state every tick, and phase 4 makes the state large
+
+**Raised:** 2026-10-01, in the look at the whole of phase 3 asked for by the
+moment-two request.
+**Cites:** `docs/SIM-REQ.md:496` NFR-01; `docs/SIM-REQ.md:600` AC-02;
+`docs/SIM-REQ.md:508` NFR-07; `docs/SIM-REQ.md:526` P-01;
+`docs/SIM-STATE.md:192` §Serialisation notes.
+**Blocks:** no. Phase 3's state is five fields and an empty chronicle. The
+question is phase 4's, from the first table it adds.
+**Status:** open.
+
+NFR-01 asks for "an identical state hash at every tick" and AC-02 for "the same
+state hash sequence"; `SIM-STATE` says the hash covers every field. Today
+`StateHash.Of` folds every field and every chronicle row in use, so one hash
+costs the whole state, and the checks take one per tick: `AC02_DeterminismAcrossRuns`
+and `AC02_TheGateSequencesArePinned` build seven sequences of 100k ticks between
+them, in each of CI's three test steps, and `sim --hashes` one per tick.
+
+In phase 3 that is free. From phase 4 it grows with the state. At NFR-07's bound,
+50 MB of settlement state, a hash folds some six million 64-bit values, and at
+one or two nanoseconds a fold — **an estimate, not measured** — one hash is of
+the order of P-01's whole budget of 10 ms per simulated day. Seven sequences of
+100k ticks at that cost run for hours per test step. At a smaller phase 4 state
+the figures shrink in proportion, but they grow with every table and with the
+chronicle, which only appends.
+
+The game itself need not hash at every tick: NFR-01 states a property of the
+sequence, not a computation the core must run. What is at stake is how the
+property is checked. `docs/` leaves open:
+
+- **The full sequence, always.** Every tick hashed in full in CI, and the cost
+  accepted, or the tick counts of the checks lowered — which the gate's "100k"
+  does not allow for its own run.
+- **An incremental hash**, maintained by the systems as they write. Every tick
+  then has its hash at little cost, but every write to state must also update
+  it, and a write that forgets is exactly the hole `SIM-STATE` names.
+- **A sampled sequence in CI**: the full hash every k ticks, or on a cadence.
+  Cheaper, and reads AC-02's "sequence" as less than every tick, which is the
+  reading `R-034` declined for "machines" and not the implementer's to take.
+
+The first phase 4 point that adds a table is the first place the answer changes
+code, and the pins move there anyway (`R-034`, Cost).

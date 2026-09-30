@@ -2871,3 +2871,44 @@ only the second, the first run on a commit containing `2ec9fad`.
 requests. **Would overturn it:** the decider or the user ruling that §17's
 "alone" means only no editor and no game client, which closes `SQ-007` and lets
 the gate be declared as the files stand.
+
+### D-106 · Look at the whole of phase 3 · A refused command stops the tick halfway, left to phase 4
+
+A finding, not a decision: recorded so that the first phase 4 point introducing
+a command kind meets it in its criteria rather than in a bug. Raised in the look
+at the whole the moment-two request asked for, and left to phase 4 at the
+user's request.
+
+**What the code does.** `TickLoop.Advance` takes each command from the queue and
+hands it to `CommandDrain.Apply`, which throws on a kind it does not know. A
+command refused halfway through a drain leaves the commands before it applied,
+the tick counter where it was, and the refused command already out of the
+queue: the world is between two ticks. Advancing again finishes the tick with
+the commands left, as if the refused one had been dropped — deterministic, but
+only because the host caught the exception, and nothing records the drop. A
+refusal against the state is an ordinary outcome of play, not a programming
+error; thrown across the host boundary, on the core's own thread under DEC-031,
+it makes every host write the same catch. `FRA01_ACommandOfNoKnownKindIsRefused`
+submits one command only, so it sees none of this. `D-091` recorded the lost
+command on load and judged it unreachable in phase 3; it still is, since no
+kind exists for a command to apply before the one refused.
+
+**What `docs/` says.** DEC-086: the core checks "a command against the state of
+the tick it lands on rather than trusting whoever built it" — the check belongs
+to the drain, and moving it to submission would contradict it. `docs/` does not
+say what the drain does with a command it refuses. FR-A-02's typed event stream
+is the obvious place to report one, and is not built.
+
+**Owed to the phase 4 point that adds the first command kind**, as questions its
+criteria should answer, not as answers:
+- what a refused command does to the tick: nothing, with the tick running on,
+  is what replay needs, and it is not what the code does now;
+- whether the host hears of a refusal, and through what;
+- whether a command's *form* — a kind this build knows, fields in the ranges
+  its kind declares — is checked at submission and at load as well, since that
+  check needs no state, and a load that accepts a kind no build could have
+  written is the case `D-091`'s title refuses and its body let through.
+
+**Would overturn it:** a ruling that a refused command is a programming error
+the host must never make, which would make throwing correct and leave only the
+lost command to fix.

@@ -158,6 +158,11 @@ readings are set out in the entry; none is picked.
 2. **A look at the whole.** Especially the six defective criteria: whether the
    `Fails when:` rule is enough, or whether phase 4's plan should come to moment
    one with its faults read by someone other than their author.
+   **Taken 2026-10-01, in conversation.** Two findings left to phase 4 at your
+   request: the cost of a full state hash at every tick, `SQ-008`, non-blocking;
+   and a refused command stopping the tick halfway, `D-106`. The question on the
+   faults, and on building the agent workflow of `D-086` to `D-089` first, is
+   carried to phase 4's moment one.
 3. **The gate, declared or not**, once item 1 is answered. That is yours, or the
    decider's under `R-001`; the plan cannot declare it for itself.
 4. **The merge into `main`, without squashing**, after the gate. The
