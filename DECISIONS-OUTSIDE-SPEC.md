@@ -2912,3 +2912,30 @@ criteria should answer, not as answers:
 **Would overturn it:** a ruling that a refused command is a programming error
 the host must never make, which would make throwing correct and leave only the
 lost command to fix.
+
+### D-107 · Closing phase 3 · The archive, the promotion pass, and the merge
+
+The user confirmed the gate: "Confermo il gate di fase 3, procedi con il merge in
+main". The design note ties archival to the plan's close, not to the merge, and
+`main` never carries a live `PLAN.md`, so the archive and the pass come first.
+
+**Decided.**
+- **The archive's name** is `2026-09-20-fase-3-kernel.md`, the date the plan was
+  written and the branch it ran on, as the earlier archives are named. The
+  confirmation is appended under the last point, below a rule, in the way a
+  *Riserva sciolta* line is: nothing above it is touched. The archive commit
+  adds exactly one file under `.claude/plans/`, since `/plan-status` finds a
+  plan's range by the commits that add one.
+- **The pass proposes three candidates** and names three near misses. `D-073`
+  is left out because `SIM-ECON` holds its question open, and closing an open
+  item is not a promotion. `D-090` is left out because `R-029` declined it.
+- **The request is replaced**, moment two by moment three: the gate is answered
+  and the situation has moved (`D-039`, `D-041`).
+- **The merge is `--no-ff`**, so the branch's commits and their `Plan-point:`
+  trailers reach `main` as they are. `main` is not pushed: a push is the
+  human's (`R-011`).
+
+**What `docs/` says:** nothing on archiving or merging; §18 on the gate.
+**Would overturn it:** the decider rejecting the gate record's place in the
+archive rather than in `RULINGS.md`, or a candidate found to be in `docs/`
+already.

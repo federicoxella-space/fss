@@ -348,3 +348,12 @@ verdi; suite passata in Release (52), con tre wealth band (52) e in Debug (53),
 nessun test saltato, gli stessi conteggi della macchina di sviluppo. Il runner
 ritrova i due letterali presi in locale: build e macchina diverse, come chiede
 `R-034`.
+
+---
+
+*Gate:* 2026-10-01 — confermato dall'utente: "Confermo il gate di fase 3,
+procedi con il merge in main". Dopo le riserve sciolte dei punti 8–10, `R-039`
+su `SQ-007` e l'occhiata d'insieme della review request di momento due, che ha
+lasciato alla fase 4 `SQ-008` e `D-106`. Piano archiviato con il vaglio di
+promozione sulle voci `D-044`–`D-106`; `fase-3-kernel` unito in `main` senza
+squash.

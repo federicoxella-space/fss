@@ -36,6 +36,103 @@ here would collide with whatever else is in flight.
 
 ---
 
+## Pass of 2026-10-01 — three candidates, phase 3
+
+Run over `D-044` to `D-106` on archiving the phase 3 plan, the headless kernel.
+The first pass over a development that built the simulator rather than its
+apparatus, and the first to find candidates since the first pass.
+
+**Not listed, by kind.** `D-044` to `D-055` and `D-086` to `D-089` are process:
+how the plan, the requests and the agent workflow work (`D-011`). The criterion
+defects — `D-059`, `D-064`, `D-065`, `D-070`, `D-075`, `D-084`, `D-095` — are
+about checks, not the simulator. The test and CI entries of points 8 to 10 bind
+tooling, not the core. What the rulings already put into `docs/` is not
+re-proposed: `D-057` (`R-007`), `D-064` (`R-006`, DEC-085), `D-074` (`R-014`),
+the queue as input (`R-021`), the command as data (`R-022`, DEC-086), the cause
+kind (`R-024`).
+
+**Near misses.**
+- `D-073`, the level order and the first tick of the period. It binds every
+  phase 4 system, but `docs/` holds the question open in `SIM-ECON`'s item 4,
+  and the entry itself declined to pin it. Closing an open item is the
+  decider's, not a promotion.
+- `D-090`, the save format. `R-029` read "a later format keeps the reader of
+  every earlier one" as NFR-08's plain meaning and declined to promote it.
+  Not re-proposed.
+- `D-106`, a refused command. A finding for phase 4, with no answer to promote.
+
+### C-5 — commands apply at the start of the tick
+
+From `D-077`. **Why:** FR-A-01 asks for "a defined point in the tick" and
+`docs/` does not say which. Every phase 4 system runs after it or before it,
+and the replay log of DEC-030 depends on it.
+
+> ### DEC-0NN — Commands apply at the start of the tick, in the order submitted
+>
+> A tick opens by applying, in submission order, every command waiting when it
+> starts; only then does any level run. A command submitted while a tick runs
+> waits for the next one.
+>
+> **Rationale.** The tick a command lands on then depends only on when it was
+> submitted relative to the tick boundaries, not on how the host calls the loop
+> — one tick per call or many — which is what makes AC-02's "same commands"
+> reproducible and what DEC-030's log records. Applying before the levels means
+> every level of the tick, the settlement update included, sees the action on
+> the day it lands.
+>
+> **Cost.** Anything submitted during a tick waits up to a whole tick, which is
+> DEC-030's cost made exact. What the drain does with a command the state
+> refuses is not settled by this entry.
+
+### C-6 — only the rows in use are state
+
+From `D-081` and `D-083`. **Why:** DEC-085 fixes how a variable-length field is
+laid out, not what of it is state. Every table that grows — the chronicle now,
+pools and agents later — needs the answer, and a walk that reads to the array's
+length rather than the count is a determinism hole with passing tests.
+
+> ### DEC-0NN — Only the rows in use are state
+>
+> A column may be sized beyond the rows it holds. Its capacity is not state: a
+> count in state says how many rows are in use, and the state hash, the save and
+> every check walk those rows and no further.
+>
+> **Rationale.** Growing by doubling is how an append-only table stays cheap, and
+> the capacity it reaches depends on the history of its growth, not on what the
+> world holds. Counted by capacity, two worlds with the same entries would hash
+> differently and a save would carry rows nothing wrote.
+>
+> **Cost.** Every growable table carries its count in state, and every walk of it
+> must stop at the count. A walk that reads to the length passes every test on a
+> world whose arrays happen to be exactly full.
+
+### C-7 — a load refuses what no build could have written
+
+From `D-091`. **Why:** NFR-08 and DEC-032 say what a save holds, not what a load
+does with bytes that do not hold it. Every reader phase 4 adds meets the
+question, and a load that accepts a world its own systems could not have
+produced fails later, far from the bytes.
+
+> ### DEC-0NN — A load refuses what no build could have written
+>
+> A save is input from outside the core. Reading one checks every count against
+> the bytes left before allocating, every field against the rules its writer
+> keeps, and the format and rule versions against those this build knows. Any
+> failure refuses the whole save, with one error type, and returns no world.
+>
+> **Rationale.** A save crosses the host's disk and a player's hands. A world
+> partly loaded, or holding a row no system could have written, fails ticks
+> later where nothing points back at the save, and the bug report DEC-032 wants
+> reproducible does not reproduce. A rule version later than the build's is
+> refused because the state would claim rules it does not run (NFR-09).
+>
+> **Cost.** Each writer's rule is stated twice, where it writes and where the load
+> checks it, and a rule changed in one place only refuses valid saves or admits
+> invalid ones. Pending commands are checked only as far as the build knows
+> their kinds (`D-106`).
+
+---
+
 ## Pass of 2026-09-19 — closed
 
 **All four candidates were written into `SIM-DEC` on 2026-09-19, as `DEC-081` to
