@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-096 — audited by `R-030`. The next audit starts at the
+**Register watermark:** D-099 — audited by `R-032`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -1330,3 +1330,45 @@ changes shape and `R-003`'s boundary needs another enforcement.
 harness to compile the sources as the consumer does.
 **Not verified:** that the consumer's source import compiles the folder under
 the same settings as `core/Sim.Core.csproj`; the consumer project is not here.
+
+### R-032 — The register from `D-097` to `D-099` is ratified; the chronicle's CSV is phase 6's
+
+**Date:** 2026-10-01   **Origin:** register audit, `D-097` to `D-099`
+**Verdict:** ratified, save the §20 finding of `D-099`, escalated by `R-031`
+**docs/:** unchanged
+
+Point 8, the runner. Each entry was read against NFR-12, DEC-035, `SIM-REQ` §17
+and §18, and its claims against `c6f786f`. The CI step was run locally: exit 0,
+1000 lines, all 16 lowercase hex digits, all distinct; the old `--hash` now
+exits 2.
+
+- **`D-097`, the interface.** Stands. Required `--ticks` and `--seed` follow
+  from AC-02 being stated per seed; refusing an unknown argument is right on the
+  merits, and the old smoke step is the proof. Output as fixed bytes on stdout is
+  what point 9's byte-for-byte comparison needs. P-02 as a constant is the
+  generator default `SIM-REQ` names; the runner reads nothing but `Simulation`'s
+  public surface, as `R-003` requires.
+- **`D-098`, the CI step.** Stands. The distinctness check holds because the
+  tick is a field of the hash and `D-069` guarantees single-field injectivity,
+  and an empty world changes only its tick. Moving the 100k ticks to point 9
+  weakens no gate: they are §18's gate for phase 3 and point 9's criterion, and
+  the gate is not passed until point 9 runs them.
+- **`D-099`, verification.** Stands. *Chiuso con riserva* is `R-011` applied:
+  the push is the human's, and **the reserve keeps the plan's exit condition, the
+  phase 3 gate, unmet until the step has run in CI.** The first finding is
+  answered here. NFR-12 and DEC-035 list what the runner does, not when; §18
+  gives the when, placing "CSV output" in phase 6 without distinguishing the
+  chronicle from the metric series, and phase 3's content and gate name the
+  runner and no CSV. So the chronicle's CSV is owed by phase 6, with the metric
+  series. It is not needed earlier: phase 4 checks AC-11 through the suite, which
+  reads the chronicle directly. The second finding is `R-031`.
+
+**Cost.** None now. Phase 6's plan owes the chronicle's CSV as well as the
+metric series; a phase-4 or phase-5 need to inspect chains outside the suite
+would pull it forward.
+**Owed by the implementer:** nothing.
+**Would overturn it:** as for `R-008`; for the CSV, a criterion before phase 6
+that must read the chronicle through the runner.
+**Not verified:** the suite was not run; the mutation results and test counts in
+`D-099` were taken as written. The CI step has not run in CI, which is the
+reserve.

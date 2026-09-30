@@ -2623,6 +2623,8 @@ Debug 51 green.
 
 ### D-097 · Point 8 · The runner's interface: two required flags, one hash per line, stdout
 
+**Ruling:** R-032 — ratified
+
 `NFR-12` and `DEC-035` ask for a runner that executes N ticks headless and dumps
 state hashes; the point names the command, `sim --ticks 1000 --seed 1 --hashes`.
 The rest is chosen here.
@@ -2651,6 +2653,8 @@ itself; a sweep needing the settlement count as a parameter.
 
 ### D-098 · Point 8 · The CI smoke step replaced by the point's check
 
+**Ruling:** R-032 — ratified
+
 The workflow already had a "Harness smoke run" step, `--ticks 100000 --hash`,
 green only because `Program.cs` ignored its arguments. It is replaced by the
 point's command, `--ticks 1000 --seed 1 --hashes`, and a pwsh script that fails
@@ -2668,6 +2672,8 @@ harness. Nothing on the step. **Would overturn it:** point 9 wiring the 100k run
 differently, which is its to decide.
 
 ### D-099 · Point 8 · Verification, and what the point does not cover
+
+**Ruling:** R-032 — ratified; the §20 finding escalated by R-031
 
 **Check.** The CI script run locally in pwsh against the Release build: green,
 1000 hashes. Faults introduced one at a time in `Program.cs`, each seen red on
