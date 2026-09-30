@@ -44,6 +44,9 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - ~~**`R-004`**, no later than plan point 7: a fresh world takes the core's current
   rule version; a different value enters state only through loading a save.~~
   **Done in `3d7fb31` and `7e2bdd0`**, checked by `R-030`.
+- **`R-034`**, before the phase 3 gate is declared passed: the hash sequence of
+  the gate's 100k empty ticks is pinned in the repository, as a value produced by
+  a run, and every CI run compares its own sequence against it.
 
 ## Escalated to the user
 
@@ -1393,3 +1396,60 @@ and it keeps the core's `internal` members out of the harness's reach, which
 **Would overturn it:** the consumer requiring the harness to compile the sources
 as the consumer's source import does.
 **Not verified:** as in `R-031`: the consumer's compile settings.
+
+### R-034 — `AC-02`'s "across builds and machines" is owed by the phase 3 gate: a pinned sequence, not an OS matrix
+
+**Date:** 2026-10-01   **Origin:** D-102 (a finding left to the decider)
+**Verdict:** resolved; one action owed
+**docs/:** unchanged
+
+`D-102` records that both runs of point 9, in the test and in CI, are one build
+on one machine, and asks whether the gate owes more. `AC-02` reads "Same seed and
+commands produce the same state hash sequence across builds and machines", and
+the gate of `SIM-REQ` §18 is "AC-02, AC-03 green". Two runs of one build in one
+place show that a run reads nothing but its seed and commands — no static left
+over, no clock — which is necessary and is what point 9 asked for. They cannot
+show the second half of the sentence. `NFR01_TheDigestIsPinned` does cover builds,
+for the hash of one fixture state (`D-070`), so the hash function is checked
+across builds; the sequence the loop produces is not.
+
+Declaring the gate green on what exists would read `AC-02` short of its text.
+That reading loosens an acceptance criterion and a phase gate, reserve 2 of
+`R-001`, and is not the decider's to take. Holding the criterion to its text is
+within the delegation, so the question is only what "machines" costs.
+
+**Not an OS matrix.** `NFR-01` bounds determinism to "any Windows x64 build" and
+DEC-034 targets Windows x64 alone. A Linux or ARM runner tests a platform the
+specification excludes: a difference there would not be a defect under `NFR-01`,
+and a gate that can fail on something no requirement forbids is a wrong gate.
+
+**A pinned sequence.** A digest of the gate's hash sequence, produced by a run
+and committed, then compared by every CI run against its own. The value comes
+from another build on another machine than any runner that checks it, so every
+fresh runner is a comparison across both, and a later commit that moves the
+sequence without meaning to is caught the way `NFR01_TheDigestIsPinned` catches a
+moved digest. If the comparison lives in the suite, the Debug step compares a
+second build of the same commit as well. The pin must come from a run, never be
+computed by the code that checks it: a checker that derives its own expected
+value is a round trip, and `D-095` already showed a round trip proves nothing
+made symmetric. The shape — which digest, in a test or in the workflow step, one
+seed or two — is the implementer's.
+
+**Cost.** The pin moves whenever the state of an empty world changes shape, which
+phase 4 does with every table it adds; each such commit re-pins, as the digest
+pin already makes it do. A re-pin is a statement that the sequence was meant to
+change, and should say so in its commit. The plan's points are closed and frozen,
+so the action enters the plan as a point added with the user's approval
+(`D-014`); the gate stays unmet until it lands and CI has run it, alongside the
+reserves of points 8 and 9 (`R-011`).
+**Owed by the implementer:** before the phase 3 gate is declared passed, the hash
+sequence of the gate's 100k empty ticks is pinned in the repository, as a value
+produced by a run, and every CI run compares its own sequence against it. Cite
+`R-034`.
+**Would overturn it:** the user ruling that `AC-02`'s "machines" is met by
+DEC-001's integer discipline without a check, which is reserve 2 and theirs; or
+DEC-034 widened beyond Windows x64, which would make a matrix owed.
+**Not verified:** that the development machine and GitHub's `windows-latest`
+runners differ in processor or JIT tiering in any way that could expose a
+divergence; the pin is insurance whose value on an integer-only core was not
+measured.
