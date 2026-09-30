@@ -53,7 +53,7 @@ namespace Sim.Tests
 
             // The commands did something: without them the sequence is another one.
             var idle = new Host(new CommandQueue(), new Dictionary<long, long[]>());
-            TickLoop.Advance(NewWorld(), idle.Commands, Ticks, idle);
+            TickLoop.Advance(NewWorld(), idle.Commands, Ticks, idle, default(FoldEffects));
             Assert.That(idle.Hashes, Is.Not.EqualTo(reference));
         }
 
@@ -67,11 +67,11 @@ namespace Sim.Tests
         {
             var state = NewWorld();
             var commands = new CommandQueue();
-            commands.Submit(new Fold(3));
-            commands.Submit(new Fold(1));
-            commands.Submit(new Fold(4));
+            commands.Submit(Fold(3));
+            commands.Submit(Fold(1));
+            commands.Submit(Fold(4));
 
-            TickLoop.Advance(state, commands, 1);
+            TickLoop.Advance(state, commands, 1, default(NoLevels), default(FoldEffects));
 
             // Fold at tick 0 is c * 31 + v: ((3 * 31) + 1) * 31 + 4.
             Assert.That(state.CurrencyTotal, Is.EqualTo(2918));
@@ -84,19 +84,47 @@ namespace Sim.Tests
             var state = NewWorld();
             var host = new Host(new CommandQueue(), new Dictionary<long, long[]> { [0] = new long[] { 7 } });
 
-            TickLoop.Advance(state, host.Commands, 1, host);
+            TickLoop.Advance(state, host.Commands, 1, host, default(FoldEffects));
             Assert.That(state.CurrencyTotal, Is.Zero, "applied inside the tick it was submitted in");
             Assert.That(host.Commands.Count, Is.EqualTo(1));
 
-            TickLoop.Advance(state, host.Commands, 1, host);
+            TickLoop.Advance(state, host.Commands, 1, host, default(FoldEffects));
             Assert.That(host.Commands.Count, Is.Zero);
             Assert.That(state.CurrencyTotal, Is.EqualTo(7 + 1), "Fold at tick 1");
         }
 
+        /// <summary>
+        /// DEC-086: the core applies a command by its kind, and phase 3 defines none, so the
+        /// core's own drain refuses every command before writing anything. A drain that
+        /// skipped what it does not know would drop the host's input without a word.
+        /// </summary>
         [Test]
-        public void FRA01_SubmittingNothingIsRefused()
+        public void FRA01_ACommandOfNoKnownKindIsRefused()
         {
-            Assert.That(() => new CommandQueue().Submit(null), Throws.ArgumentNullException);
+            var state = NewWorld();
+            var commands = new CommandQueue();
+            commands.Submit(Fold(3));
+            ulong before = StateHash.Of(state);
+
+            Assert.Throws<System.ArgumentOutOfRangeException>(() => TickLoop.Advance(state, commands, 1));
+            Assert.That(StateHash.Of(state), Is.EqualTo(before));
+        }
+
+        /// <summary>
+        /// R-022 and DEC-086: a command is a value, a kind and integer fields, with no
+        /// behaviour of its own. The interface a command applied itself through is gone.
+        /// </summary>
+        [Test]
+        public void FRA01_ACommandIsAValue()
+        {
+            Assert.That(typeof(Command).IsValueType, Is.True);
+            foreach (var field in typeof(Command).GetFields(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic))
+            {
+                Assert.That(field.FieldType == typeof(int) || field.FieldType == typeof(long), field.Name + " is an integer field");
+            }
+
+            Assert.That(typeof(Command).GetMethods(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly), Is.Empty, "no behaviour");
+            Assert.That(typeof(Simulation).Assembly.GetType("Sim.ICommand"), Is.Null);
         }
 
         /// <summary>
@@ -120,7 +148,7 @@ namespace Sim.Tests
         public void FRA01_ThePublicEntryAdvancesAndHashesTheSameWorld()
         {
             var sim = new Simulation(worldSeed: 1, new GenerationParams(settlementCount: 10));
-            var state = new WorldState(worldSeed: 1, new GenerationParams(settlementCount: 10), Simulation.CurrentRuleVersion);
+            var state = new WorldState(worldSeed: 1, new GenerationParams(settlementCount: 10));
             Assert.That(sim.StateHash, Is.EqualTo(StateHash.Of(state)));
 
             sim.Advance(9);
@@ -138,7 +166,7 @@ namespace Sim.Tests
             for (int t = 0; t < Ticks; t++)
             {
                 SubmitFor(host.Commands, t);
-                TickLoop.Advance(state, host.Commands, 1, host);
+                TickLoop.Advance(state, host.Commands, 1, host, default(FoldEffects));
             }
 
             return host.Hashes;
@@ -161,7 +189,7 @@ namespace Sim.Tests
 
             var host = new Host(new CommandQueue(), shifted);
             SubmitFor(host.Commands, 0);
-            TickLoop.Advance(NewWorld(), host.Commands, Ticks, host);
+            TickLoop.Advance(NewWorld(), host.Commands, Ticks, host, default(FoldEffects));
             return host.Hashes;
         }
 
@@ -175,7 +203,7 @@ namespace Sim.Tests
             SubmitFor(host.Commands, 0);
             foreach (int stop in Stops)
             {
-                TickLoop.Advance(state, host.Commands, stop - state.Tick, host);
+                TickLoop.Advance(state, host.Commands, stop - state.Tick, host, default(FoldEffects));
                 SubmitFor(host.Commands, stop);
             }
 
@@ -188,27 +216,32 @@ namespace Sim.Tests
             {
                 foreach (long v in values)
                 {
-                    commands.Submit(new Fold(v));
+                    commands.Submit(Fold(v));
                 }
             }
         }
 
         private static WorldState NewWorld() =>
-            new WorldState(worldSeed: 1, new GenerationParams(settlementCount: 10), ruleVersion: 1);
+            new WorldState(worldSeed: 1, new GenerationParams(settlementCount: 10));
+
+        /// <summary>A kind no phase 3 core knows, which only <see cref="FoldEffects"/> applies.</summary>
+        internal const int FoldKind = 1;
+
+        internal static Command Fold(long value) => new Command(FoldKind, value);
 
         /// <summary>
-        /// Folds its value and the tick into <see cref="WorldState.CurrencyTotal"/> in a way
-        /// that does not commute, so applying the same commands in another order, or on
-        /// another tick, leaves another hash. A test stand-in: phase 3 has no command kinds.
+        /// Folds a command's value and the tick into <see cref="WorldState.CurrencyTotal"/>
+        /// in a way that does not commute, so applying the same commands in another order,
+        /// or on another tick, leaves another hash. A test stand-in for the core's dispatch:
+        /// phase 3 has no command kinds.
         /// </summary>
-        private sealed class Fold : ICommand
+        internal readonly struct FoldEffects : ICommandEffects
         {
-            private readonly long value;
-
-            public Fold(long value) => this.value = value;
-
-            public void Apply(WorldState state) =>
-                state.CurrencyTotal = state.CurrencyTotal * 31 + value + state.Tick;
+            public void Apply(WorldState state, in Command command)
+            {
+                Assert.That(command.Kind, Is.EqualTo(FoldKind));
+                state.CurrencyTotal = state.CurrencyTotal * 31 + command.A + state.Tick;
+            }
         }
 
         /// <summary>
@@ -235,7 +268,7 @@ namespace Sim.Tests
                 {
                     foreach (long v in values)
                     {
-                        Commands.Submit(new Fold(v));
+                        Commands.Submit(Fold(v));
                     }
                 }
             }

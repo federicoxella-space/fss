@@ -63,7 +63,7 @@ namespace Sim.Tests
                 names,
                 Is.EqualTo(new[]
                 {
-                    "ChronicleCause", "ChronicleCount", "ChronicleEntities", "ChronicleEntityCount",
+                    "ChronicleCause", "ChronicleCauseKind", "ChronicleCount", "ChronicleEntities", "ChronicleEntityCount",
                     "ChronicleEntityStart", "ChronicleImportance", "ChronicleLocation", "ChronicleTick",
                     "CurrencyTotal", "GenerationParams", "RuleVersion", "Tick", "WorldSeed",
                 }));
@@ -71,13 +71,13 @@ namespace Sim.Tests
 
         /// <summary>
         /// A state that is not a determinism hole is one whose fields survive a save.
-        /// The types SIM-STATE gives are the ones the serialiser of point 7 will write,
+        /// The types SIM-STATE gives are the ones the serialiser writes,
         /// and a widened or narrowed field is a save format changed by accident.
         /// </summary>
         [Test]
         public void FRW01_TheWorldRowCarriesTheDeclaredTypes()
         {
-            var state = new WorldState(1, new GenerationParams(2000), 3);
+            var state = new WorldState(1, new GenerationParams(2000));
 
             Assert.That(typeof(WorldState).GetField("Tick").FieldType, Is.EqualTo(typeof(long)));
             Assert.That(typeof(WorldState).GetField("WorldSeed").FieldType, Is.EqualTo(typeof(ulong)));
@@ -88,7 +88,7 @@ namespace Sim.Tests
             Assert.That(state.CurrencyTotal, Is.Zero, "an empty world has no currency (A-02, A-03)");
             Assert.That(state.WorldSeed, Is.EqualTo(1UL));
             Assert.That(state.GenerationParams.SettlementCount, Is.EqualTo(2000));
-            Assert.That(state.RuleVersion, Is.EqualTo(3));
+            Assert.That(state.RuleVersion, Is.EqualTo(Simulation.CurrentRuleVersion), "a new world is this build's (R-004)");
         }
 
         /// <summary>

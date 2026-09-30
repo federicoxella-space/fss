@@ -47,12 +47,18 @@ namespace Sim
         public static void Advance<T>(WorldState state, long ticks, T levels)
             where T : struct, ICadenceLevels => Advance(state, new CommandQueue(), ticks, levels);
 
-        /// <summary>
-        /// Runs <paramref name="ticks"/> ticks, draining <paramref name="commands"/> at the
-        /// start of each and handing each firing to <paramref name="levels"/>.
-        /// </summary>
+        /// <summary>Runs <paramref name="ticks"/> ticks, draining <paramref name="commands"/> through the core's own dispatch.</summary>
         public static void Advance<T>(WorldState state, CommandQueue commands, long ticks, T levels)
+            where T : struct, ICadenceLevels => Advance(state, commands, ticks, levels, default(CommandDrain));
+
+        /// <summary>
+        /// Runs <paramref name="ticks"/> ticks, draining <paramref name="commands"/> into
+        /// <paramref name="effects"/> at the start of each and handing each firing to
+        /// <paramref name="levels"/>.
+        /// </summary>
+        public static void Advance<T, TEffects>(WorldState state, CommandQueue commands, long ticks, T levels, TEffects effects)
             where T : struct, ICadenceLevels
+            where TEffects : struct, ICommandEffects
         {
             System.Diagnostics.Debug.Assert(ticks >= 0, "The caller asks for ticks to run, never for time to go back.");
 
@@ -64,7 +70,7 @@ namespace Sim
                 // Only those waiting now: one submitted from here on lands on the next tick.
                 for (int n = commands.Count; n > 0; n--)
                 {
-                    commands.Take().Apply(state);
+                    effects.Apply(state, commands.Take());
                 }
 
                 levels.Daily(state);

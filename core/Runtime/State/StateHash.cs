@@ -91,6 +91,7 @@ namespace Sim
                 h = Hash64.Mix(h ^ (uint)rows);
                 for (int i = 0; i < rows; i++) { h = Hash64.Mix(h ^ (ulong)state.ChronicleTick[i]); }
                 for (int i = 0; i < rows; i++) { h = Fold(h, state.ChronicleLocation[i]); }
+                for (int i = 0; i < rows; i++) { h = Hash64.Mix(h ^ (uint)state.ChronicleCauseKind[i]); }
                 for (int i = 0; i < rows; i++) { h = Hash64.Mix(h ^ (uint)state.ChronicleCause[i]); }
                 for (int i = 0; i < rows; i++) { h = Hash64.Mix(h ^ (uint)state.ChronicleImportance[i]); }
                 for (int i = 0; i < rows; i++) { h = Hash64.Mix(h ^ (uint)state.ChronicleEntityStart[i]); }

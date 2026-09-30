@@ -61,10 +61,10 @@ namespace Sim
         // The chronicle (FR-I-01, FR-I-04, SIM-STATE §Chronicle), one row per entry in
         // append order, under DEC-085: the columns are sized at a capacity and only the
         // first ChronicleCount rows are state. An entry's id is its row plus one, so 0
-        // is "no entry" and a defaulted cause reads as a root. Entities are variable in
-        // length and live in one shared pool, each row naming its slice by start and
-        // count. Only Systems/Chronicle.cs writes these. Propagation, the last row of
-        // SIM-STATE §Chronicle, is domain and arrives with phase 4.
+        // is "no entry". Entities are variable in length and live in one shared pool,
+        // each row naming its slice by start and count. Only Systems/Chronicle.cs
+        // appends to these, and Systems/SaveFormat.cs fills them on a load. Propagation,
+        // the last row of SIM-STATE §Chronicle, is domain and arrives with phase 4.
 
         /// <summary>Rows of the chronicle in use; also the id of the last entry.</summary>
         public int ChronicleCount;
@@ -75,7 +75,10 @@ namespace Sim
         /// <summary>Where each entry happened: a settlement, or <see cref="EntityId.None"/>.</summary>
         public EntityId[] ChronicleLocation = new EntityId[0];
 
-        /// <summary>The id of the entry that caused each one, or 0 for a root cause.</summary>
+        /// <summary>Which of FR-E-07's three causes each entry has (R-024).</summary>
+        public CauseKind[] ChronicleCauseKind = new CauseKind[0];
+
+        /// <summary>The id of the entry that caused each one when its kind is event, 0 otherwise.</summary>
         public int[] ChronicleCause = new int[0];
 
         /// <summary>What drives each entry's propagation (SIM-STATE §Chronicle, DEC-027).</summary>
@@ -91,15 +94,16 @@ namespace Sim
         public EntityId[] ChronicleEntities = new EntityId[0];
 
         /// <summary>
-        /// A world at tick 0 with nothing in it. The three arguments are what the host
-        /// supplies; <see cref="Tick"/> and <see cref="CurrencyTotal"/> belong to the
-        /// simulation and start where an empty world puts them.
+        /// A world at tick 0 with nothing in it. The two arguments are what the host
+        /// supplies; the rule version is this build's (R-004), and <see cref="Tick"/> and
+        /// <see cref="CurrencyTotal"/> start where an empty world puts them. Another rule
+        /// version enters state only through a load.
         /// </summary>
-        public WorldState(ulong worldSeed, GenerationParams generationParams, int ruleVersion)
+        public WorldState(ulong worldSeed, GenerationParams generationParams)
         {
             WorldSeed = worldSeed;
             GenerationParams = generationParams;
-            RuleVersion = ruleVersion;
+            RuleVersion = Simulation.CurrentRuleVersion;
         }
     }
 }

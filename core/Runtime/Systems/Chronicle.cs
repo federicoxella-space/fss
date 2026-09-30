@@ -19,6 +19,12 @@ namespace Sim
     /// a pointer carried into every later save.
     /// </para>
     /// <para>
+    /// <b>The kind says which of FR-E-07's three causes it is (R-024)</b>, and the cause
+    /// holds an id exactly when the kind is event: SIM-STATE gives it as "the triggering
+    /// entry when causeKind is event, none otherwise". A load checks the same rule, through
+    /// <see cref="CheckCause"/>, so a save cannot bring in a row this method would refuse.
+    /// </para>
+    /// <para>
     /// The tick is the state's: an entry is dated when it is written. Dating the entries
     /// of prior history is SIM-STATE Open item 4, and belongs to the generator.
     /// </para>
@@ -39,21 +45,24 @@ namespace Sim
             WorldState state,
             EntityId location,
             System.ReadOnlySpan<EntityId> entities,
+            CauseKind causeKind,
             int cause,
             int importance)
         {
             int row = state.ChronicleCount;
             int id = row + 1;
 
-            if (cause < None || cause >= id)
+            string refused = CheckCause(causeKind, cause, id);
+            if (refused != null)
             {
-                throw new System.ArgumentOutOfRangeException(nameof(cause), "A cause is an entry already written, or none.");
+                throw new System.ArgumentOutOfRangeException(nameof(cause), refused);
             }
 
             int start = row == 0 ? 0 : state.ChronicleEntityStart[row - 1] + state.ChronicleEntityCount[row - 1];
 
             Reserve(ref state.ChronicleTick, id);
             Reserve(ref state.ChronicleLocation, id);
+            Reserve(ref state.ChronicleCauseKind, id);
             Reserve(ref state.ChronicleCause, id);
             Reserve(ref state.ChronicleImportance, id);
             Reserve(ref state.ChronicleEntityStart, id);
@@ -62,6 +71,7 @@ namespace Sim
 
             state.ChronicleTick[row] = state.Tick;
             state.ChronicleLocation[row] = location;
+            state.ChronicleCauseKind[row] = causeKind;
             state.ChronicleCause[row] = cause;
             state.ChronicleImportance[row] = importance;
             state.ChronicleEntityStart[row] = start;
@@ -70,6 +80,26 @@ namespace Sim
 
             state.ChronicleCount = id;
             return id;
+        }
+
+        /// <summary>
+        /// Why entry <paramref name="id"/> may not carry this cause, or null if it may: the
+        /// kind is one of the three, and the cause is an earlier entry for an event and none
+        /// for anything else.
+        /// </summary>
+        public static string CheckCause(CauseKind causeKind, int cause, int id)
+        {
+            if (causeKind != CauseKind.Event && causeKind != CauseKind.PlayerAction && causeKind != CauseKind.ExogenousRoot)
+            {
+                return "A cause is an event, a player action or an exogenous root.";
+            }
+
+            if (causeKind == CauseKind.Event)
+            {
+                return cause > None && cause < id ? null : "An event's cause is an entry already written.";
+            }
+
+            return cause == None ? null : "Only an event names the entry that caused it.";
         }
 
         /// <summary>The row of the columns that entry <paramref name="id"/> occupies.</summary>
@@ -83,7 +113,7 @@ namespace Sim
         }
 
         // Capacity is not state: only the rows in use are hashed, and are all the
-        // serialiser of point 7 may write, so doubling leaves nothing a future tick reads.
+        // serialiser writes, so doubling leaves nothing a future tick reads.
         private static void Reserve<T>(ref T[] column, int length)
         {
             if (column.Length < length)

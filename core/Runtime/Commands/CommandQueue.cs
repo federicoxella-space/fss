@@ -28,12 +28,12 @@ namespace Sim
     /// which nothing writes yet.
     /// </para>
     /// <para>
-    /// <b>The queue is input, not state.</b> It holds what the host has asked and the
-    /// world has not yet done. AC-02 names seed and commands as the two inputs whose
-    /// repetition must repeat the hash sequence, so the queue sits beside
-    /// <see cref="WorldState"/> rather than in it, as the count of ticks to run does.
-    /// What a save does with commands still waiting is point 7's to decide; see
-    /// <c>DECISIONS-OUTSIDE-SPEC.md</c>, point 5.
+    /// <b>The queue is input, not state</b> (SIM-STATE §Rule, R-021). It holds what the
+    /// host has asked and the world has not yet done. AC-02 names seed and commands as the
+    /// two inputs whose repetition must repeat the hash sequence, so the queue sits beside
+    /// <see cref="WorldState"/> rather than in it, as the count of ticks to run does, and
+    /// stays out of the state hash. A save carries it all the same, in submission order,
+    /// and a load puts it back (DEC-032).
     /// </para>
     /// <para>
     /// Everything here is <c>internal</c> because phase 3 has no command a host could
@@ -44,33 +44,55 @@ namespace Sim
     /// </remarks>
     internal sealed class CommandQueue
     {
-        private readonly Queue<ICommand> pending = new Queue<ICommand>();
+        private readonly Queue<Command> pending = new Queue<Command>();
 
         /// <summary>How many commands are waiting.</summary>
         public int Count => pending.Count;
 
         /// <summary>Queues <paramref name="command"/> for the start of the next tick.</summary>
-        public void Submit(ICommand command)
-        {
-            if (command == null)
-            {
-                throw new System.ArgumentNullException(nameof(command));
-            }
-
-            pending.Enqueue(command);
-        }
+        public void Submit(Command command) => pending.Enqueue(command);
 
         /// <summary>The oldest waiting command, removed. Only the tick loop drains.</summary>
-        public ICommand Take() => pending.Dequeue();
+        public Command Take() => pending.Dequeue();
+
+        /// <summary>The waiting commands, oldest first, left in place. What a save writes.</summary>
+        public Queue<Command>.Enumerator GetEnumerator() => pending.GetEnumerator();
     }
 
     /// <summary>
-    /// One thing the host asks of the world. The core applies it; nothing outside the core
-    /// writes state (FR-A-01).
+    /// One thing the host asks of the world: a kind and the integer fields that kind
+    /// declares, and nothing else (DEC-086, R-022).
     /// </summary>
-    internal interface ICommand
+    /// <remarks>
+    /// <para>
+    /// A value, so that it crosses the three boundaries DEC-086 names — the host's
+    /// hand-over, the replay log, a save — the way a state row does. The core applies it,
+    /// dispatching on <see cref="Kind"/> from <c>Runtime/Systems/</c>; nothing outside the
+    /// core writes state (FR-A-01).
+    /// </para>
+    /// <para>
+    /// Four fields, because phase 3 has no kind to count them from. A kind declares which
+    /// it reads and leaves the rest at zero; a kind needing more widens this struct, and
+    /// the save format with it, under a new format version.
+    /// </para>
+    /// </remarks>
+    internal readonly struct Command
     {
-        /// <summary>Called by the tick loop, once, at the drain point of the tick it lands on.</summary>
-        void Apply(WorldState state);
+        /// <summary>What the command is. Phase 3 defines none; the kinds are domain.</summary>
+        public readonly int Kind;
+
+        public readonly long A;
+        public readonly long B;
+        public readonly long C;
+        public readonly long D;
+
+        public Command(int kind, long a = 0, long b = 0, long c = 0, long d = 0)
+        {
+            Kind = kind;
+            A = a;
+            B = b;
+            C = c;
+            D = d;
+        }
     }
 }

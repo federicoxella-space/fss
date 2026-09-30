@@ -218,6 +218,25 @@ greps" non nomina alcun grep; i controlli che provano la forma sono accanto, in
   not amended: §20 says the cost is a rewrite of the serialiser, and pretending
   otherwise would be the criterion bending to fit the delivery.
 
+*Esito:* 2026-09-30. Chiuso, **criterio difettoso**. `AC03_SaveRoundTrip`
+verde, anche da solo: save, load, save, byte identici, per un mondo vuoto, per
+uno con ogni campo in uso e comandi in attesa, e dall'ingresso pubblico; suite
+intera verde in Release (50) e in Debug (51), build del core senza avvisi.
+Guasti introdotti uno alla volta e visti rossi sul test nominato: reader che
+perde `CurrencyTotal`, writer senza comandi, colonna omessa, entità del pool
+saltata, comandi invertiti al load, campo `B` di un comando perso; sui test
+accanto, controllo dei tick e della rule version tolti, header tolto, scambio
+simmetrico di due campi. Debiti di `RULINGS.md` saldati nello stesso commit:
+`R-021`, `R-022`, `R-024`, `R-004`, `R-026`. Registro: `D-090` a `D-096`.
+Revisione: due revisori, `Core: yes`, entrambi concludono che il check è
+soddisfatto come scritto; applicati tutti i rilievi verificabili, tra cui la
+rule version successiva a quella della build rifiutata al load e i campi dei
+comandi che nessun test vedeva; nessuno respinto, nessuno lasciato all'umano.
+**Il criterio è difettoso e non è stato riscritto:** il round trip passa anche
+contro un serialiser che non scrive alcun numero di versione, visto togliendo
+l'header da writer e reader insieme; i controlli mancanti sono accanto, in
+`D-095`.
+
 ## 8. The command-line runner
 
 - **Does:** `sim` runs N ticks headless, dumps the state hash sequence, and

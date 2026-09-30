@@ -75,6 +75,8 @@ namespace Sim.Tests
                 names,
                 Is.EqualTo(new[]
                 {
+                    "WorldState.ChronicleCauseKind[0]",
+                    "WorldState.ChronicleCauseKind[1]",
                     "WorldState.ChronicleCause[0]",
                     "WorldState.ChronicleCause[1]",
                     "WorldState.ChronicleCount",
@@ -114,8 +116,8 @@ namespace Sim.Tests
         {
             Assert.That(StateHash.Of(Reference()), Is.EqualTo(StateHash.Of(Reference())));
             Assert.That(
-                StateHash.Of(new WorldState(0, default, 0)),
-                Is.EqualTo(StateHash.Of(new WorldState(0, default, 0))));
+                StateHash.Of(new WorldState(0, default)),
+                Is.EqualTo(StateHash.Of(new WorldState(0, default))));
         }
 
         /// <summary>
@@ -128,14 +130,14 @@ namespace Sim.Tests
         /// </summary>
         /// <remarks>
         /// A change here is not a test to update. It is a save format change, and it
-        /// belongs to the migration path NFR-08 requires from the first write. The first
-        /// write is point 7's; until it lands no save exists, and point 6 re-pinned this
-        /// value once, for the chronicle (register, point 6).
+        /// belongs to the migration path NFR-08 requires from the first write. Point 6
+        /// re-pinned this value for the chronicle, and point 7 for its cause kind (R-024),
+        /// in the commit that wrote the first save (register, points 6 and 7).
         /// </remarks>
         [Test]
         public void NFR01_TheDigestIsPinned()
         {
-            Assert.That(StateHash.Of(Reference()), Is.EqualTo(0x22769B0E8F305182UL));
+            Assert.That(StateHash.Of(Reference()), Is.EqualTo(0x0D5FFF6FB35D1584UL));
         }
 
         /// <summary>
@@ -152,7 +154,7 @@ namespace Sim.Tests
             Assert.Throws<AssertionException>(() => Different(typeof(double), 0.0), "and NFR-02 keeps this one out of state anyway");
 
             Assert.That(Different(typeof(long), 1L), Is.Not.EqualTo(1L));
-            Assert.That(Different(typeof(HashChannel), HashChannel.Market), Is.Not.EqualTo((int)HashChannel.Market));
+            Assert.That(Different(typeof(HashChannel), HashChannel.Market), Is.InstanceOf<HashChannel>().And.Not.EqualTo(HashChannel.Market));
         }
 
         /// <summary>
@@ -164,17 +166,18 @@ namespace Sim.Tests
         /// and cannot be otherwise: the first entry's cause, which is a root, and its
         /// start in the pool.
         /// </summary>
-        private static WorldState Reference()
+        internal static WorldState Reference()
         {
-            var state = new WorldState(0x0123456789ABCDEFUL, new GenerationParams(2000), 7)
+            var state = new WorldState(0x0123456789ABCDEFUL, new GenerationParams(2000))
             {
+                RuleVersion = 7,
                 Tick = 41,
                 CurrencyTotal = 1000003,
             };
 
-            int root = Chronicle.Append(state, new EntityId(11, 3), new[] { new EntityId(13, 5) }, Chronicle.None, 17);
+            int root = Chronicle.Append(state, new EntityId(11, 3), new[] { new EntityId(13, 5) }, CauseKind.ExogenousRoot, Chronicle.None, 17);
             state.Tick = 43;
-            Chronicle.Append(state, new EntityId(19, 2), new[] { new EntityId(23, 4), new EntityId(29, 6) }, root, 31);
+            Chronicle.Append(state, new EntityId(19, 2), new[] { new EntityId(23, 4), new EntityId(29, 6) }, CauseKind.Event, root, 31);
             return state;
         }
 
@@ -207,7 +210,7 @@ namespace Sim.Tests
         /// would prove the struct reaches the hash, not that each of its members does,
         /// and the two coincide only while it has one member (D-067).
         /// </summary>
-        private readonly struct Path
+        internal readonly struct Path
         {
             public readonly string Name;
             private readonly object[] _chain;
@@ -261,7 +264,7 @@ namespace Sim.Tests
         /// cannot vouch for, and the phase that introduces one has to say how it enters
         /// the hash. That is the same tripwire as the missing fold, one level up.
         /// </remarks>
-        private static List<Path> Paths(Type type, string where)
+        internal static List<Path> Paths(Type type, string where)
         {
             var paths = new List<Path>();
             Walk(paths, type, where, new List<object>());
@@ -327,8 +330,9 @@ namespace Sim.Tests
         {
             if (type.IsEnum)
             {
-                current = Convert.ChangeType(current, Enum.GetUnderlyingType(type));
-                type = Enum.GetUnderlyingType(type);
+                // Changed as its underlying integer, handed back as the enum: an array of an
+                // enum refuses to store the bare integer.
+                return Enum.ToObject(type, Different(Enum.GetUnderlyingType(type), Convert.ChangeType(current, Enum.GetUnderlyingType(type))));
             }
 
             if (type == typeof(long)) { return unchecked((long)current + 1); }

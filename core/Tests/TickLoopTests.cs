@@ -140,7 +140,7 @@ namespace Sim.Tests
         }
 
         private static WorldState NewWorld(int settlements) =>
-            new WorldState(worldSeed: 1, new GenerationParams(settlements), ruleVersion: 1);
+            new WorldState(worldSeed: 1, new GenerationParams(settlements));
 
         private static void ExactlyOncePerPeriod(string level, int[] perPeriod, int period)
         {

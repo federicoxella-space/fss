@@ -2430,3 +2430,179 @@ already written are not translated, and points 7 to 9 of the phase 3 plan are
 written as points 1 to 6 were.
 
 **Would overturn it:** the user wanting English at once, from point 7.
+
+## 2026-09-30 — Phase 3, the headless kernel, points 7 to 9
+
+The plan of 2026-09-20, continued after the section above. Each entry names the
+point it closes.
+
+### D-090 · Point 7 · The save format: bytes in the hash's order, a header, a dispatch on its version
+
+`NFR-08` asks for a full snapshot plus seed and parameters, the pending commands,
+a version number and a migration path from day one; `AC-03` for identical bytes
+on save → load → save; §20 for no reflection. The rest is chosen here.
+
+- **A save is a `byte[]`**, written by `Simulation.Save()` and read by
+  `Simulation.Load(byte[])`, both public. Where the bytes go is the host's: the
+  core may not touch a file (`BannedSymbols.txt`). A `Stream` API was rejected:
+  it adds nothing a host cannot do with an array, and a partial write to a
+  stream the host owns is a failure mode the core would have to reason about.
+- **Little-endian integers through `BinaryWriter`/`BinaryReader`**, which fix
+  the byte order on every platform. No framing per section, no lengths but the
+  counts: the reader knows the shape from the version.
+- **The order is `StateHash`'s**: §World, then §Chronicle column by column over
+  the rows in use, then the pool up to `EntitiesInUse`, then the pending
+  commands. Column-major, as the state is held; capacity never written (`D-081`
+  handed that on). `ChronicleEntityStart` is written and checked on load rather
+  than derived: it is a hashed field of the state, DEC-085 names the offset, and
+  a save omitting it would not be the "full state snapshot" NFR-08 asks for.
+- **A header of magic `"SIMS"` and format version 1.** The migration path is the
+  `switch` on the version in `SaveFormat.Read`: a later format adds a case and
+  keeps the reader of every earlier one, each bringing its save to the current
+  shape; an unknown version is refused. Version 1 has no predecessor, so there
+  is nothing yet to migrate.
+- **`SaveFormat` is in `Runtime/Systems/`**: the load builds and fills a
+  `WorldState`, which makes it a writer under `R-019`, as the generator is.
+- **The format is pinned** by `NFR08_TheFormatIsPinned`, length and SHA-256 of
+  one save. A change to it is a new format version, as a change to the digest
+  pin is.
+
+**What `docs/` says:** what a save contains, that it is versioned with a
+migration path, that nothing reflects. Nothing on encoding, byte order, layout,
+header, or API shape. **Would overturn it:** a host needing to stream saves too
+large to hold in memory; a second format version whose migration cannot be a
+reader of the old bytes into the new shape.
+
+### D-091 · Point 7 · A load is input from outside the core, and refuses what no build could have written
+
+`SaveFormat.Read` throws `InvalidDataException`, and returns no world, for:
+bytes that are not a save, a format version it does not read, a save that ends
+early or runs on past its end, a negative tick or settlement count, a count the
+remaining bytes cannot hold (checked before allocating), a chronicle
+`Chronicle.Append` could not have written — a cause failing `CheckCause`, the
+rule `Append` uses; an entry dated before the one preceding it or after the
+world's tick; a pool that is not contiguous — and a rule version outside
+`1..CurrentRuleVersion`.
+
+- **The rule version.** A save from a later build, loaded here, would run under
+  this build's rules while claiming the later ones, and `NFR-09` says state
+  records which rule version *produced* it. DEC-033 covers only the other
+  direction, an older save brought forward. Found by both reviewers (`D-096`).
+  The test reference world keeps its rule version 7, which the hash tests need
+  distinct; the save tests bring it to the current version first.
+- **Not checked:** the kinds of the pending commands. DEC-086 has the core check
+  a command against the state of the tick it lands on, which is the drain. In
+  phase 3 every kind is unknown, so a save holding commands loads and the next
+  `Advance` throws; the command has been taken from the queue by then and is
+  lost. Nothing issues a command in phase 3, so the loss is unreachable from the
+  host. Nor is any `EntityId`'s generation checked, which `Append` does not
+  check either.
+- **One exception type for every refusal**, `InvalidDataException`, against
+  `ArgumentOutOfRangeException` from `Append`: bytes from outside and a bad
+  argument from a caller in the core are different failures.
+
+**What `docs/` says:** nothing on validating a save. **Would overturn it:** a
+ruling that the core never throws on input, or that an older build may run a
+newer save; the first command kind, which may want its fields checked at load.
+
+### D-092 · Point 7 · `R-022`: a command is a kind and four `long`s, dispatched by a struct type parameter
+
+- **`Command` is a `readonly struct`**: `int Kind` and four `long` fields `A` to
+  `D`, zero when a kind does not use them. DEC-086's "the integer fields that
+  kind declares" is read as the kind declaring which of them it reads, in its
+  dispatch case. Four because phase 3 has no kind to count from; a kind needing
+  more widens the struct and the save under a new format version. The save
+  writes every kind through one codec.
+- **`ICommand` and its `Apply` are gone.** The queue holds `Command` values; the
+  null check on submit went with the reference.
+- **The dispatch is `Systems/CommandDrain.cs`**, a `switch` on the kind that
+  throws for every kind, since phase 3 defines none. The tick loop takes the
+  effects as a struct type parameter (`ICommandEffects`), as it takes the
+  levels; every production path uses `CommandDrain`, and the tests supply a
+  stand-in kind, `FoldEffects`, without the core defining one. The briefed
+  reviewer judged it does not reopen `R-022`, the pattern being `ICadenceLevels`'.
+
+**What `docs/` says:** DEC-086, a value with a kind and integer fields, applied
+by the core. Nothing on the width or the dispatch's shape. **Would overturn it:**
+a kind whose fields cannot fit four `long`s, or a ruling that tests may not
+inject an effect into the drain.
+
+### D-093 · Point 7 · `R-024`: the cause kind is numbered from 1, and an event must name its cause
+
+- **`CauseKind`**: `Event = 1`, `PlayerAction = 2`, `ExogenousRoot = 3`, an
+  `int` enum. Zero is none of them, so a defaulted row is refused rather than
+  read as one; the numbers are pinned by
+  `FRI01_TheChronicleCarriesTheDeclaredTypes` because every save holds them.
+- **The column sits before `cause`** in `WorldState`, the hash and the save,
+  following `SIM-STATE` §Chronicle's field order. `NFR01_TheDigestIsPinned`
+  moved to `0x0D5FFF6FB35D1584`, as `R-024`'s cost foresaw.
+- **`Chronicle.CheckCause`** holds the rule for `Append` and the load alike: the
+  kind is one of the three; an event names an earlier entry; anything else
+  names none. `R-024` wrote only "cause is none unless the kind is event"; the
+  converse is `SIM-STATE`'s "the triggering entry when causeKind is event" and
+  FR-E-07's "records the event that triggered it". The briefed reviewer found it
+  supported, not invented.
+
+**Would overturn it:** a fourth kind of cause (`R-024`), or an event allowed to
+have no recorded trigger.
+
+### D-094 · Point 7 · `R-004` completed, `R-026` done
+
+- `WorldState`'s constructor takes seed and parameters and stamps
+  `Simulation.CurrentRuleVersion`. Another value enters state through the load
+  (`D-091`), and through tests writing the field directly, as they already write
+  `Tick`.
+- `core/Runtime/Chronicle/` removed, `.gitkeep` and folder, as `R-026` asked.
+
+Nothing decided beyond what the rulings say.
+
+### D-095 · Point 7 · The declared check proves less than the point asks
+
+`AC03_SaveRoundTrip` is green, alone and in both suites. **The criterion is
+defective, and was not rewritten:** its "Does" asks for a version number, and the
+check passes against a serialiser that writes none — seen by removing the header
+from writer and reader together, with the round trip staying green. A round trip
+is blind to any change made symmetrically to both halves; it proves the reader
+inverts the writer, not what the writer writes. Correct code passes it, so the
+point closes (`R-005`, first case).
+
+The missing checks are beside it:
+- `NFR08_ASaveCarriesItsFormatVersion` — red on the header removed;
+- `NFR08_TheFormatIsPinned` — red on fields `B` and `C` of a command swapped in
+  writer and reader alike, which the round trip passed;
+- `NFR08_EveryStateFieldEntersTheSave` — the hash fixture's walk, red on the
+  writer omitting a column;
+- `NFR08_ASaveCarriesThePendingCommandsInOrder`,
+  `NFR08_ALoadRefusesWhatNoSaveHolds`,
+  `NFR09_ALoadedWorldKeepsTheRuleVersionOfItsSave`.
+
+The point predates `R-020` and has no `Fails when:`. Faults were introduced one
+at a time anyway and seen red on `AC03_SaveRoundTrip`: the reader dropping
+`CurrencyTotal`; the writer dropping the commands; the writer omitting
+importance; the reader skipping a pool entity; the commands reversed on load;
+the reader dropping a command's `B`. And on the tests beside it: no tick check,
+no rule-version check, the header gone, the symmetric swap. "No reflection
+anywhere in the core" is the build's, through `BannedSymbols.txt`.
+
+### D-096 · Point 7 · The reviewers' findings
+
+Both reviewers: the check is met as written; build 0 warnings, Release 50 and
+Debug 51 green.
+
+**Applied.**
+- The comment on the load claimed it refused anything `Append` would not write,
+  and it accepted entries dated in the future or out of order — both. Tick
+  checks added, comment narrowed to what is checked.
+- A load accepted a rule version later than the build's — both, citing NFR-09.
+  Refused, with 0 and below (`D-091`).
+- The command fields `B`, `C`, `D` and any kind but 1 were in no test, so a
+  reader dropping them passed everything — briefed. A second kind with every
+  field in use is saved in the round trip and the pin.
+- `CauseKind`'s numbers unpinned — briefed. Pinned.
+- `CommandDrain` said each kind gains "a codec in the save", and there is one
+  codec — briefed. Reworded.
+
+**Recorded, not changed.** A loaded command of unknown kind throws on the next
+`Advance`, after being taken from the queue — both, neither as a fault (`D-091`).
+
+**Rejected.** None. **Left to the human.** None.
