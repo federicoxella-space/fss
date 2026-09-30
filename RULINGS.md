@@ -48,6 +48,9 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   passed: two hash sequences of 100k ticks are pinned in the repository, each as
   a value produced by a run — the gate's empty run, and the run with commands of
   `AC02_DeterminismAcrossRuns` — and every CI run compares its own against them.
+- **`R-037`**, no later than the plan point that first builds cohort rows: the
+  step "Tests, three wealth bands" builds worlds with three wealth bands, and the
+  point's `Fails when:` names the three-band run ignoring its configuration.
 
 ## Escalated to the user
 
@@ -1542,3 +1545,45 @@ of the stand-in.
 cancel over the run so that the pinned sequence says less than it appears to;
 `AC02_DeterminismAcrossRuns`'s control that the run with commands differs from
 the empty one argues against it, and was run green in this session.
+
+### R-037 — The three-band CI step must vary the bands from the first cohort table
+
+**Date:** 2026-10-01   **Origin:** D-104 (a finding recorded, not acted on)
+**Verdict:** resolved; one action owed
+**docs/:** unchanged
+
+`D-104` found that `SIM_WEALTH_BANDS` is read by nothing. Checked: `ci.yml` sets
+it on three steps, and no `.cs`, `.props` or project file names it, as has been
+the case since the skeleton (`fe7c2c0`). Nor can the core read it:
+`BannedSymbols.txt` bans `System.Environment` in the core. So "Tests, three wealth
+bands" runs the same build and the same suite as the step before it.
+
+In phase 3 the outcome is correct. No cohort exists, AC-28 has nothing to test,
+and no gate of `SIM-REQ` §18 up to this one names it. The danger comes later.
+FR-W-09 says the three-band configuration "exists to break any code that assumed
+a single row per mestiere", and DEC-054 rests on it: shipping the general key is
+safe *because* CI catches code that assumes the degenerate one. A step that
+varies nothing passes that code, and on the day the cohort table arrives it
+would read as AC-28 met. This is the defect of `D-065` and `D-070` a phase
+early: a check that cannot fail for the reason it exists.
+
+`docs/` needs nothing. FR-W-08, FR-W-09, AC-28, DEC-054 and `SIM-STATE` §Cohort
+say what the configuration is and what it is for. How the band count reaches a
+world is the implementer's: the core reads no environment, so the test side
+supplies it, and where it lives follows §Rule as for any other value. That
+point records it in the register as usual.
+
+The step stays until then. It costs one run, and it is where the check will go.
+
+**Cost.** The point that builds cohorts carries one more clause and one more
+fault to introduce. Until it lands, AC-28 is satisfied vacuously, which is
+correct while no cohort exists and wrong the moment one does.
+**Owed by the implementer:** no later than the plan point that first builds
+cohort rows, the three-band step builds worlds with three wealth bands per
+mestiere, and the point's `Fails when:` names the three-band run ignoring its
+configuration and sees it red. Cite `R-037`.
+**Would overturn it:** DEC-054 revisited, with the wealth axis dropped or fixed
+at one, which would leave FR-W-09 nothing to guard.
+**Not verified:** that phase 4's first cohort point is demography, as §18's
+order suggests; the band count's carrier (generation input, build property) was
+not examined, and is that point's decision.
