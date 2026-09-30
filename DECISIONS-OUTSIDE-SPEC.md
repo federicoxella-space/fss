@@ -2314,3 +2314,110 @@ this point and was ratified with it.
   an exogenous root and a player action alike, which AC-11 distinguishes.
 
 **Rejected.** None.
+
+## 2026-09-30 — The agent workflow, designed
+
+A design session with the user, between points 6 and 7 of the phase 3 plan. No
+code and no plan: the result is `.claude/design/2026-09-30-agent-workflow.md`,
+to be built by a `Kind: process` plan once the phase 3 plan is archived.
+
+Every choice below was the user's, put as options with a recommendation. They
+are governance, reserve 1 of `R-001`, which the decider escalates rather than
+rules. `docs/` says nothing on any of them: it describes the simulator, not the
+way it is built (`D-011`).
+
+The entries of points 7 to 9 of the phase 3 plan follow this section, under a
+heading of their own that names the plan.
+
+### D-086 · Six agents and an orchestrator, built after phase 3
+
+The workflow is split into `tester`, `coder`, `code-reviewer`, `revisioner`,
+`documenter` and `committer`, dispatched by the session running `/plan-next`,
+which keeps reading the point, arbitrating the findings and reporting. The user
+wanted all four aims put to them: separation enforced by tools, independence
+between roles, cost, and a clean orchestrating context.
+
+Built after the phase 3 plan closes. Two plans live at once break the
+`/plan-status` lookup, which bounds a plan by the archive commits in
+`.claude/plans/`; `main` lacks `/decide`, `RULINGS.md` and the decider's
+sections of `AGENTS.md`; and point 7, the serialiser, is the wrong place for the
+first run of an untried workflow.
+
+**Rejected.** Building it now through rulings, as `R-002` and `R-010` changed
+the process: the decider writes no code, and the hooks are code. A parallel
+branch merged afterwards: the order of the archive commits would depend on how
+the merge is done.
+
+**Would overturn it:** the lookup ceasing to rest on archive commits, or phase 3
+stalling long enough that the agents are wanted for points 7 to 9.
+
+### D-087 · What each role may write, and what enforces it
+
+As the table of the design: tools restricted by name, paths by hooks in each
+agent's frontmatter, three PowerShell 7 scripts (`path-guard`, `git-guard`,
+`mutate`). The coder works against a denylist; the tester writes `core/Tests/`
+only and introduces faults through `mutate`; both reviewers are read-only; the
+documenter holds `Edit` alone, insert-only, on the register, `PLAN.md` and
+`SPEC-QUESTIONS.md`; the committer runs `git` only, through `git-guard`.
+
+The documenter writes the point's record and nothing else. `docs/` stays the
+decider's, and the user chose this over also writing doc comments, README files,
+or no documenter at all.
+
+Models and effort: tester opus/high, coder sonnet/medium, code-reviewer
+sonnet/medium, revisioner opus/high, documenter sonnet/low, committer haiku/low.
+The coder's was the user's own; the rest was the profile recommended, with opus
+only where the register shows subtle defects.
+
+`.claude/agents/`, `.claude/hooks/` and `.claude/skills/` are written only by the
+orchestrator, under the permission `AGENTS.md` requires for itself. **The third
+folder goes beyond what was put to the user**, who was shown the first two; the
+principle they approved — an agent may not loosen its own constraint — covers
+the skill that dispatches it, and the design is theirs to review.
+
+Any agent holding `Bash` can write round the hooks. That ceiling is stated in
+the design and covered by the orchestrator's mechanical checks, not removed.
+
+**Would overturn it:** frontmatter hooks not firing for an agent dispatched from
+a skill, which would leave the tools list and the orchestrator's checks as the
+only enforcement; or a model proving unreliable in its role.
+
+### D-088 · The tester writes before the coder; the code-reviewer reads every point that touches code
+
+Two tightenings of the review. The tester writes the named tests from the frozen
+criterion and its "Fails when", before any code exists and without the coder's
+reasoning, and runs the faults afterwards; the coder never edits `core/Tests/`.
+Two of the six closed points of phase 3 had a named test that passed against an
+empty implementation (`D-065`, `D-070`).
+
+The code-reviewer runs on every point that touches code, `Core: no` included,
+which today no one reads. The briefed and blind revisioners stay as
+`reviewers.md` has them, on `Core: yes`.
+
+**Rejected.** The tester after the coder: it would see the code and write tests
+shaped like it. One reviewer definition dispatched twice: `Core: no` points stay
+unread. The code-reviewer as the blind reviewer: a new name, nothing gained.
+
+**Would overturn it:** the code-reviewer finding nothing on `Core: no` points
+across a whole phase, so that its cost buys nothing there; or tests written
+first forcing interfaces the coder then has to fight.
+
+### D-089 · Comment rules in `AGENTS.md`, drawn from applied findings; everything in English
+
+A new section of `AGENTS.md` holds the comment rules C1 to C10 and one rule of
+simplicity, S1, each one a finding reviewers already applied, each citing the
+entry that applied it. None is invented; a new rule arrives as a finding, a
+register entry and a ruling. It lands through a plan point that names it
+(`R-010`).
+
+**Rejected.** The rules only in the agents' definitions: a session without
+agents would not see them, and two copies would drift. A separate file cited by
+`AGENTS.md`: nothing loads it on its own.
+
+Every artefact of the repository is written in English from the point that
+writes the rule: code, comments, register, outcome lines, plans, commit
+messages. Until now outcome lines and commit subjects were Italian. Records
+already written are not translated, and points 7 to 9 of the phase 3 plan are
+written as points 1 to 6 were.
+
+**Would overturn it:** the user wanting English at once, from point 7.
