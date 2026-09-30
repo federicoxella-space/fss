@@ -1642,3 +1642,79 @@ register.
 results in `D-104` were taken as written; that the literals came from a run
 rather than from the checking code is taken from the entry, and the test's shape
 only rules out the checking code computing them.
+
+### R-039 — §17's harness is the headless driver, not the `sim` executable: the suite counts
+
+**Date:** 2026-10-01   **Origin:** SQ-007
+**Verdict:** specified
+**docs/:** `SIM-REQ` §17, the opening sentence names the two drivers and what
+"alone" excludes; `SIM-DEC` DEC-035, rationale. Both revisions bumped.
+
+`SQ-007` reads §17's "driven by the command-line harness alone" two ways: the
+harness as any headless driver, the suite included, or the `sim` executable and
+nothing else. The entry cites AC-19 and DEC-034 for the first. Three more places
+bear on it, and they settle it.
+
+**The vocabulary.** §1 sets the dichotomy the sentence works in: the core is
+"driven either by a game client or by a command-line harness". DEC-005 calls the
+second "the test harness". In the specification's own terms the suite is a
+headless driver that is not the game client, and "alone" excludes the other half
+of §1's pair, as DEC-034's rationale says outright: the harness, "the CI suite"
+and the sweeps run "with no editor and no game client".
+
+**The narrow reading contradicts §17's own criteria.** AC-19 is met when the
+core's "tests pass from the standalone project"; AC-28 when "the full suite
+passes under the three-band CI configuration". Under the narrow reading neither
+can be met by any code, since a criterion about the suite cannot be driven by
+something that is not the suite. AC-56's "runs at load, not in a test" makes the
+same point from the other side: the author treated a test as a criterion's
+default vehicle. A reading under which correct code cannot pass two criteria is
+not the stricter standard; it is a defective one.
+
+**The narrow reading ties §18 in a knot.** The commanded half of AC-02 would need
+a command a host can submit through `sim`. Phase 3 defines none: it holds no
+domain (`AGENTS.md`, Scope), and `DEC-086` and `R-030` leave the first kind to
+the phase that needs it. §18 says no phase starts before the previous gate is
+green. The gate of phase 3 would wait for a kind no later phase could start to
+supply, unless AC-02's "commands" were read as the empty sequence, which is
+reading AC-02 short of its text, as `R-034` declined to do.
+
+**The rulings already hold the broad reading.** `R-034` left the pin "in a test
+or in the workflow step", and `R-036`, the user's choice, put both pins in the
+suite so that the Debug step compares a second build. Under the narrow reading
+those pins would count for nothing at the gate. `R-036` binds this ruling.
+
+**Not reserve 2.** No criterion and no gate changes content: 100k empty ticks,
+AC-02 and AC-03 stay exactly what they were. The sentence is ambiguous, and the
+reading taken is the one the specification's own terms, criteria and past
+rulings support; the other makes two criteria unsatisfiable and the phase
+sequence impossible. `R-034`'s case was different: "across builds and machines"
+had one meaning, and the evidence fell short of it.
+
+DEC-035's rationale, "Every acceptance criterion in SIM-REQ runs through it",
+said the narrow reading as a fact, and now names both drivers. Nothing else in
+`docs/` states it: NFR-12, DEC-039, §20 and FR-W-09 were read and agree with
+either reading or with this one. The plan's exit condition, "run by the
+command-line harness in CI, as §17 requires of every criterion", defers to §17
+and is read through it; `PLAN.md` is not touched.
+
+That the suite reading costs no code is not its reason. The arguments above
+held before any code existed.
+
+**Cost.** A criterion driven by the suite can pass on a path no host takes,
+since the suite sees the core's internals through `InternalsVisibleTo`. The
+instance today is the commanded half of AC-02, through the internal loop with a
+test-only kind; `R-036` already moves it onto `Simulation` with the first real
+kind. A criterion stated as what a host observes should be checked on the host's
+surface when one exists, but this ruling does not make that a rule. `sim` loses
+the claim to be every criterion's driver; its reason to exist is the runs, hash
+dumps and sweeps of NFR-12.
+**Owed by the implementer:** nothing. The gate's evidence stands as it is; the
+gate itself is declared, or not, by the moment-two review, which this ruling is
+not.
+**Would overturn it:** a requirement that acceptance be checked only through the
+core's public surface, black-box. That would reword AC-19 and AC-28, and would
+put a public command path before the gate of phase 3.
+**Not verified:** what the author of §17 meant, which no file records; the
+suite was not run in this session, and the green CI run `36788322902` on
+`c645462` is taken from the review request.

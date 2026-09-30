@@ -151,10 +151,10 @@ readings are set out in the entry; none is picked.
 
 ## What I need from you
 
-1. **`SQ-007`: which reading of §17.** This blocks the gate. If the suite counts,
+1. ~~**`SQ-007`: which reading of §17.** This blocks the gate. If the suite counts,
    the gate is met as it stands. If it does not, `AC-03` needs a round-trip mode
    in `sim`, and the commanded half of `AC-02` waits for the first command kind,
-   which phase 3 cannot supply.
+   which phase 3 cannot supply.~~ **Answered by `R-039`: the suite counts.**
 2. **A look at the whole.** Especially the six defective criteria: whether the
    `Fails when:` rule is enough, or whether phase 4's plan should come to moment
    one with its faults read by someone other than their author.

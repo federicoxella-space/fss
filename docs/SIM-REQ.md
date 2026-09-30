@@ -2,7 +2,7 @@
 
 **Document:** SIM-REQ
 **Status:** Draft 1
-**Revision:** 2026-09-29
+**Revision:** 2026-10-01
 **Scope:** Headless simulation core, runnable outside the game
 
 ---
@@ -593,7 +593,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 ## 17. Acceptance criteria
 
-Every criterion below runs headless in CI, driven by the command-line harness alone.
+Every criterion below runs headless in CI, with no editor and no game client, driven by the command-line harness or by the core's test suite from the standalone project (AC-19).
 
 **AC-01 — Conservation.** Population, currency, and goods invariants hold at every tick of every run.
 

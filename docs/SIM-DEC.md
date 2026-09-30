@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-09-30
+**Revision:** 2026-10-01
 **Companion:** SIM-REQ
 
 ---
@@ -373,7 +373,7 @@ The core is written against a declared runtime profile and language level, recor
 
 Runs N ticks headless, dumps state hashes, writes chronicle and metric series to CSV, runs parameter sweeps.
 
-**Rationale.** Every acceptance criterion in SIM-REQ runs through it, and Phase 6 tuning is not feasible without sweeps.
+**Rationale.** The acceptance criteria run headless, through it or through the core's test suite (SIM-REQ section 17, "Acceptance criteria"), and Phase 6 tuning is not feasible without sweeps.
 
 **Cost.** A second entry point to maintain alongside the game integration.
 

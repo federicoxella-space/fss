@@ -305,7 +305,7 @@ queue is empty, which the host must then arrange. Nothing in `docs/` chooses.
 open for it to fail: the plan's ten points are closed and their reserves
 discharged. The plan's exit condition repeats §17's words, so the gate cannot be
 called met until the reading is chosen.
-**Status:** open.
+**Status:** **closed 2026-10-01 by R-039.**
 
 §17 opens: "Every criterion below runs headless in CI, driven by the
 command-line harness alone." In CI today the harness drives one thing: the
