@@ -2477,6 +2477,8 @@ reader of the old bytes into the new shape.
 
 ### D-091 · Point 7 · A load is input from outside the core, and refuses what no build could have written
 
+**Ruling:** R-030 — ratified
+
 `SaveFormat.Read` throws `InvalidDataException`, and returns no world, for:
 bytes that are not a save, a format version it does not read, a save that ends
 early or runs on past its end, a negative tick or settlement count, a count the
@@ -2509,6 +2511,8 @@ newer save; the first command kind, which may want its fields checked at load.
 
 ### D-092 · Point 7 · `R-022`: a command is a kind and four `long`s, dispatched by a struct type parameter
 
+**Ruling:** R-030 — ratified
+
 - **`Command` is a `readonly struct`**: `int Kind` and four `long` fields `A` to
   `D`, zero when a kind does not use them. DEC-086's "the integer fields that
   kind declares" is read as the kind declaring which of them it reads, in its
@@ -2531,6 +2535,8 @@ inject an effect into the drain.
 
 ### D-093 · Point 7 · `R-024`: the cause kind is numbered from 1, and an event must name its cause
 
+**Ruling:** R-030 — ratified
+
 - **`CauseKind`**: `Event = 1`, `PlayerAction = 2`, `ExogenousRoot = 3`, an
   `int` enum. Zero is none of them, so a defaulted row is refused rather than
   read as one; the numbers are pinned by
@@ -2550,6 +2556,8 @@ have no recorded trigger.
 
 ### D-094 · Point 7 · `R-004` completed, `R-026` done
 
+**Ruling:** R-030 — ratified
+
 - `WorldState`'s constructor takes seed and parameters and stamps
   `Simulation.CurrentRuleVersion`. Another value enters state through the load
   (`D-091`), and through tests writing the field directly, as they already write
@@ -2559,6 +2567,8 @@ have no recorded trigger.
 Nothing decided beyond what the rulings say.
 
 ### D-095 · Point 7 · The declared check proves less than the point asks
+
+**Ruling:** R-030 — ratified
 
 `AC03_SaveRoundTrip` is green, alone and in both suites. **The criterion is
 defective, and was not rewritten:** its "Does" asks for a version number, and the
@@ -2587,6 +2597,8 @@ no rule-version check, the header gone, the symmetric swap. "No reflection
 anywhere in the core" is the build's, through `BannedSymbols.txt`.
 
 ### D-096 · Point 7 · The reviewers' findings
+
+**Ruling:** R-030 — ratified
 
 Both reviewers: the check is met as written; build 0 warnings, Release 50 and
 Debug 51 green.

@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-090 — audited by `R-029`. The next audit starts at the
+**Register watermark:** D-096 — audited by `R-030`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -29,20 +29,21 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 - ~~**`R-003`**, within plan point 5: no public member of the core exposes mutable
   world state for reading or writing.~~ **Done in `3d7fb31`**, checked by `R-023`.
-- **`R-021`**, within plan point 7: a save carries the commands still pending,
-  in submission order, outside the state hash; a load puts them back in the queue.
-- **`R-022`**, no later than plan point 7: a command is a value with a kind and
+- ~~**`R-021`**, within plan point 7: a save carries the commands still pending,
+  in submission order, outside the state hash; a load puts them back in the queue.~~
+  **Done in `7e2bdd0`**, checked by `R-030`.
+- ~~**`R-022`**, no later than plan point 7: a command is a value with a kind and
   integer fields, and the drain applies it from `Runtime/Systems/`; `ICommand`'s
-  `Apply` goes.
-- **`R-024`**, no later than plan point 7: a chronicle entry records its cause's
+  `Apply` goes.~~ **Done in `7e2bdd0`**, checked by `R-030`.
+- ~~**`R-024`**, no later than plan point 7: a chronicle entry records its cause's
   kind — event, player action or exogenous root — beside the cause id, as a
-  column hashed and saved like the others; `Append` takes it.
-- **`R-026`**: `core/Runtime/Chronicle/` goes, `.gitkeep` and folder. A trivial
-  change under `AGENTS.md`; any commit may carry it.
-- **`R-004`**, no later than plan point 7: a fresh world takes the core's current
-  rule version; a different value enters state only through loading a save.
-  *In part in `3d7fb31`:* the public path stamps the current version; the internal
-  constructor's parameter and the load path remain (`D-078`).
+  column hashed and saved like the others; `Append` takes it.~~ **Done in
+  `7e2bdd0`**, checked by `R-030`.
+- ~~**`R-026`**: `core/Runtime/Chronicle/` goes, `.gitkeep` and folder.~~ **Done in
+  `7e2bdd0`**, checked by `R-030`.
+- ~~**`R-004`**, no later than plan point 7: a fresh world takes the core's current
+  rule version; a different value enters state only through loading a save.~~
+  **Done in `3d7fb31` and `7e2bdd0`**, checked by `R-030`.
 
 ## Escalated to the user
 
@@ -1235,3 +1236,56 @@ release, which would be a change to NFR-08; a host needing to stream saves;
 **Not verified:** the suite was not run; the SHA-256 pin and the tests' results
 were taken from `D-095` and `D-096`. `BinaryWriter`'s byte order was taken from
 its documentation, not tested on a big-endian machine, which DEC-034 excludes.
+
+### R-030 — The register from `D-091` to `D-096` is ratified; the actions owed to point 7 are done
+
+**Date:** 2026-09-30   **Origin:** register audit, `D-091` to `D-096`
+**Verdict:** ratified
+**docs/:** unchanged
+
+`D-090` was ratified by `R-029`; this covers the rest of point 7. Each entry was
+read against `docs/` and its claims about the code against `7e2bdd0`.
+
+- **`D-091`, the load refuses what no build could have written.** Right on the
+  merits: a save is input from outside the core, and a half-read world carried
+  into later ticks is a determinism defect with no trace of its cause. Refusing a
+  rule version above the build's follows from NFR-09's "produced it"; DEC-033
+  speaks only of an older save brought forward, and nothing in `docs/` lets a
+  build run rules it does not have. One exception type for input and another for
+  a caller's error is a distinction worth keeping. The unchecked command kind is
+  recorded honestly: a loaded command of unknown kind is dequeued and then
+  throws, and the loss is unreachable in phase 3 only because no kind exists.
+  **It falls due with the first command kind**, which must decide whether a load
+  checks kinds or the drain refuses without consuming; the entry's own "would
+  overturn it" names that moment, and this ruling binds it.
+- **`D-092`, `R-022` applied.** Checked: `Command` is an `internal readonly
+  struct`, `ICommand` is gone and a test asserts it; `ICommandEffects`,
+  `CommandDrain` and every `TickLoop.Advance` overload are `internal`, and
+  `Simulation.Advance` passes `CommandDrain`. The effect injected by tests is
+  therefore reachable from no host, which is what DEC-086's "rather than
+  trusting whoever built it" requires. Four `long`s read DEC-086's "fields that
+  kind declares" as the kind declaring which of them it reads: acceptable while
+  no kind exists, and a width change is a format version under `R-029`. That the
+  host has no public way to submit a command yet is consistent with phase 3,
+  which defines no kind; FR-A-01's host path arrives with the first one.
+- **`D-093`, `R-024` applied.** Checked: `CauseKind` is 1 to 3 with zero none of
+  them, and the column precedes `cause` as `SIM-STATE` §Chronicle orders them.
+  The converse rule, an event must name an earlier entry, is `SIM-STATE`'s "the
+  triggering entry when causeKind is event" and not an addition.
+- **`D-094`, `R-004` and `R-026` completed.** Checked: `WorldState`'s constructor
+  stamps `Simulation.CurrentRuleVersion`; `core/Runtime/Chronicle/` is gone.
+- **`D-095`, criterion defective.** `R-005`'s first case, correctly applied: a
+  round trip cannot see a change made symmetrically to writer and reader, so it
+  proves no version number; the tests beside it do. The finding is general and
+  worth keeping for later plans: a round trip criterion needs a pin beside it.
+- **`D-096`, the reviewers' findings.** Nothing rejected, nothing left open; the
+  one finding recorded rather than changed is `D-091`'s command kind, bound above.
+
+The five actions owed to point 7 are marked done under "Owed by the implementer".
+
+**Cost.** None now. The first command kind carries the question `D-091` leaves.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` as it
+stood when written.
+**Not verified:** the suite was not run; build and test counts and the mutation
+results in `D-095` and `D-096` were taken as written.
