@@ -2769,3 +2769,28 @@ point closes with that clause in reserve (`R-011`), beside point 8's.
   pinned in the repository and compared by every runner — is the decider's.
 - The 10M-tick timing run makes the gate step do a hundred times the ticks the
   gate names. Its cost locally is about a second.
+
+### D-103 · Point 10, added mid-plan — the pin owed by `R-034` and `R-036`
+
+`R-034` owes the pin before the phase 3 gate and says it enters the plan as a
+point added with the user's approval (`D-014`). The user approved it on
+2026-10-01: "Approvo l'aggiunta al piano di fase 3 di un punto per l'obbligo
+R-034/R-036 (pin delle due sequenze di hash), secondo D-014". Appended as point
+10, after nine closed points; nothing above it rewritten, the exit condition
+left verbatim.
+
+**Decided in writing the point.**
+- **Both pins in the suite, none in the workflow step.** `R-036` puts the
+  commanded pin in the suite, since its command kind is test code; the empty
+  one goes beside it rather than into the gate step, so one test holds both and
+  each of the three CI test steps compares them — two builds of each commit, as
+  `R-034` notes. The gate step stays as point 9 left it.
+- **The named faults.** The drain moved to the end of the tick is the fault the
+  pin exists for: `AC02_DeterminismAcrossRuns` cannot see it, since two runs of
+  the same wrong code agree. A world starting at tick 1 is the one fault the
+  empty pin can catch in a phase 3 world, where only `Tick` moves (`R-036`).
+- **Left to the point:** which digest of the sequence, and the test's layout.
+
+**What `docs/` says:** `AC-02`, "across builds and machines"; nothing on how a
+pin is taken. **Would overturn it:** a ruling that the empty pin belongs in the
+gate step, next to the two processes it would then compare as well.

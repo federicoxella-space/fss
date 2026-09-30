@@ -294,3 +294,27 @@ negativa (`D-101`). `git diff --name-only HEAD -- core/Runtime/` vuoto: `Core:
 no` regge, revisori non eseguiti. Registro: `D-100` a `D-102`, con un rilievo
 non trattato: `AC-02` dice "across builds and machines" e i due run sono una
 build su una macchina.
+
+## 10. The two hash sequences of the gate, pinned
+
+*Added 2026-10-01, after points 1 to 9 closed, with the user's approval ("approvo
+l'aggiunta al piano di fase 3 di un punto per l'obbligo R-034/R-036"), under
+`D-014`: appended, not inserted, and no criterion above rewritten. Owed by `R-034`
+as refined by `R-036`; the gate of the exit condition is not declared passed
+until this point has closed and CI has run it.*
+
+- **Does:** pins in the suite a digest of each of the two 100k-tick sequences of
+  `AC02_DeterminismAcrossRuns` — the empty run and the run with commands of the
+  stand-in kind every 97 ticks — each value produced by a run and written as a
+  literal, never computed by the code that checks it. Every CI run compares its
+  own against both, in each of the three test steps.
+- **Serves:** `AC-02`, `NFR-01`, `SIM-REQ` §18, `R-034`, `R-036`
+- **Closed by:** `AC02_TheGateSequencesArePinned` green in Release and in Debug,
+  and in CI.
+- **Fails when:** the drain moves from the start of the tick to its end — the
+  pin of the run with commands turns red while `AC02_DeterminismAcrossRuns`
+  stays green, because two runs of the moved drain still agree with each other.
+  And a fresh `WorldState` starting at tick 1 instead of 0 — the pin of the empty
+  run turns red.
+- **Core:** no — adds a test and touches no file under `core/Runtime/`.
+  Verifiable by `git diff --name-only HEAD -- core/Runtime/` being empty.
