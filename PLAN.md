@@ -262,6 +262,10 @@ avvisi, suite verde in Release (50) e in Debug (51). Registro: `D-097` a
 che nessun punto consegna né rinvia, e il `ProjectReference` dell'harness
 rispetto al §20.
 
+*Riserva sciolta:* 2026-10-01 — branch pushato dall'umano. Step "Harness, one
+hash per tick" verde nel run CI `36786627133` su `b43d57d` e di nuovo nel run
+`36788322902` su `c645462`.
+
 ## 9. The gate: 100k empty ticks, `AC-02` green in CI
 
 - **Does:** the two runs the gate asks for, wired into the workflow that already
@@ -294,6 +298,11 @@ negativa (`D-101`). `git diff --name-only HEAD -- core/Runtime/` vuoto: `Core:
 no` regge, revisori non eseguiti. Registro: `D-100` a `D-102`, con un rilievo
 non trattato: `AC-02` dice "across builds and machines" e i due run sono una
 build su una macchina.
+
+*Riserva sciolta:* 2026-10-01 — branch pushato dall'umano. Step "Gate, 100k empty
+ticks in two runs" verde nel run CI `36786627133` su `b43d57d` e di nuovo nel run
+`36788322902` su `c645462`: due processi da 100k tick, output confrontati byte per
+byte. Misura sul runner: 0,000120 ms per tick vuoto.
 
 ## 10. The two hash sequences of the gate, pinned
 
@@ -332,3 +341,10 @@ aggiunto: il test gira nei tre step di test esistenti. `git diff --name-only HEA
 -- core/Runtime/` vuoto: `Core: no` regge, revisori non eseguiti. Registro:
 `D-104`, con un rilievo non trattato: `SIM_WEALTH_BANDS` non è letto da nulla,
 per cui lo step a tre band ripete il primo.
+
+*Riserva sciolta:* 2026-10-01 — branch pushato dall'umano fino a `c645462`, che
+contiene `2ec9fad`. Run CI `36788322902`, `windows-2025-vs2026`: tutti gli step
+verdi; suite passata in Release (52), con tre wealth band (52) e in Debug (53),
+nessun test saltato, gli stessi conteggi della macchina di sviluppo. Il runner
+ritrova i due letterali presi in locale: build e macchina diverse, come chiede
+`R-034`.
