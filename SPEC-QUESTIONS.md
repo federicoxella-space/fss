@@ -16,7 +16,7 @@ can correct it.
   around, not dropped because the work found a way past it. An objection
   answered by the person who found it is an objection that never reached the
   only reader who can act on it.
-- **An objection is never resolved by its finder.** A human answers. The entry
+- **An objection is never resolved by its finder.** A human or the decider answers. The entry
   stays open until then, and a stale open entry is a truer state of affairs than
   a closed one nobody decided.
 - **Every entry declares whether it blocks.** Without that, this file becomes
@@ -28,7 +28,7 @@ can correct it.
   that cannot be checked in a minute will not be checked.
 - **This file does not amend `docs/`.** Nothing here is true of the
   specification. An answer that changes the specification is written into
-  `docs/` by a human, and the entry is then marked with what it became.
+  `docs/` by a human or the decider, and the entry is then marked with what it became.
 
 ## Entries
 
@@ -181,3 +181,196 @@ The **Rationale** of DEC-002 was left alone, deliberately. "Any entity's random
 draw at any past tick can be recomputed directly" is narrower than the decision
 above it and still true; narrowing is not falsehood, and rewriting a rationale
 that was not part of the agreed change would be the edit creeping.
+
+---
+
+### SQ-004 — two phase-3 open items need a measurement phase 3 cannot take
+
+**Raised:** 2026-09-20, writing the plan for the rest of phase 3.
+**Cites:** `docs/SIM-REQ.md:756` §19, rows `P-17` and `P-01`;
+`docs/SIM-REQ.md:748` §18, the phase 3 row; `AGENTS.md`, "Phase 3 contains no
+domain logic".
+**Blocks:** no. The plan's nine points stand either way; only the two items do
+not close.
+
+§19 says both close in phase 3, and gives the procedure:
+
+> | P-17, settlement ceiling | Phase 3 | Measure per-settlement update cost, divide the budget by it |
+> | P-01 validity | Phase 3 | Confirm the 5 µs and 10 µs per-entity estimates the budget rests on |
+
+Both measure the cost of updating a settlement. Phase 3's own gate is **100k
+empty ticks**, and a settlement update in phase 3 would be domain logic, which
+the phase excludes and `AGENTS.md` says not to reach forward for. An empty tick
+measures the scheduler and nothing under it, so neither number can be taken
+where §19 puts it.
+
+NFR-05 carries the same estimate with the same instruction — "*(estimate —
+validate in Phase 3)*" — and has the same problem.
+
+Three readings, none of them ours to pick:
+
+1. **The items move to phase 4**, where the first subsystem gives a real update
+   to time. The phase 3 gate stays as it is.
+2. **Phase 3 builds a synthetic update** of declared cost — a stand-in that
+   touches the arrays the way a real one will — and the measurement is of the
+   harness, not of the economy. Cheap, and its number means only what the
+   stand-in resembles.
+3. **The estimates are confirmed on paper** from the array widths in
+   `SIM-STATE`, which is arithmetic rather than measurement, and says so.
+
+Filed rather than picked because the answer sets what phase 3's exit actually
+proves. The plan records the one measurement empty ticks *can* give — ms per
+empty tick — and does not call it either of these.
+
+**Resolution chosen 2026-09-20: reading 1, and the entry was posed short.**
+`P-63` and `P-64` were already in §16 — cost per settlement update at 9 and at
+27 cohorts, 3.3 µs and 15.8 µs, "Measured, 5 of 12 phases" — and the entry above
+does not mention them, because it was written from §19, §18 and NFR-05 without
+reading §16. Reading 2, a synthetic update, is the benchmark those two figures
+came from: already built, already thrown away, and proposing it was proposing to
+pay twice for an answer the specification had.
+
+**Applied to `docs/` by `0114ad2`**, the human's edit: `P-17` and `P-01` move to
+Phase 4, each row now saying why phase 3 cannot take the measurement and what
+the partial figures already cover; NFR-05's "*validate in Phase 3*" becomes
+"*validate in Phase 4, when a settlement update exists to measure*". Phase 3's
+gate is untouched, and ms per empty tick stays what the plan says it is:
+neither of the two.
+
+**Marked, not removed**, under `D-036`. What this entry cost, and it is the
+half worth keeping: an objection raised against four sections of a document
+whose parameter table was never opened. The citation rule at the top of this
+file says the document, the identifier and the line; it does not say *read the
+neighbouring sections first*, and this entry is the argument that it should.
+
+---
+
+### SQ-005 — `SIM-STATE`'s no-reflection note cites section 19, which is Open items
+
+**Raised:** 2026-09-23, plan point 3, by the blind reviewer.
+**Cites:** `docs/SIM-STATE.md:186` §Serialisation notes; `docs/SIM-REQ.md:756`
+§19 "Open items"; `docs/SIM-REQ.md:771` §20 "Downstream constraints".
+**Blocks:** no. Point 3 uses no reflection in the core either way, and the rule
+the note states is not in doubt — only where it points.
+**Status:** **closed 2026-09-23 by R-012.**
+
+The note reads:
+
+> - No reflection: the serialiser is generated or hand-written, per section 19 of SIM-REQ.
+
+§19 of `SIM-REQ` is **Open items** — a table of six parameters awaiting
+measurement, with no mention of reflection or serialisation. The rule lives in
+§20, Downstream constraints, which is also where the ahead-of-time row sits and
+which `core/BannedSymbols.txt` already cites correctly ("no reflection,
+ahead-of-time safe (NFR-08, section 20)").
+
+Most likely a section that renumbered and a cross-reference that did not. Filed
+rather than assumed, because the two readings differ in what else the note
+inherits: §20's rows are marked `Decided` and belong to a downstream consumer,
+§19's are measurements this repository still owes.
+
+### SQ-006 — commands waiting at a tick boundary influence the next tick, and `SIM-STATE` does not list them
+
+**Raised:** 2026-09-29, plan point 5, by both reviewers.
+**Cites:** `docs/SIM-STATE.md:12` §Rule; `docs/SIM-REQ.md:470` FR-A-01;
+`docs/SIM-REQ.md:600` AC-02; `docs/SIM-DEC.md:318` DEC-030;
+`docs/SIM-DEC.md:332` DEC-032.
+**Blocks:** no. Point 5 needs only that commands apply at one point of the tick,
+and the hash sequence it compares is the same either way. Point 7 is the first
+place the answer changes code.
+**Status:** **closed 2026-09-29 by R-021.**
+
+`SIM-STATE` §Rule: "Anything that influences a future tick lives here." A
+command the host has submitted and the tick loop has not yet drained influences
+the next tick, and `SIM-STATE` lists no queue. Two worlds with equal state hashes
+at a boundary diverge if their queues differ.
+
+AC-02 reads the other way: "same seed and commands produce the same state hash
+sequence" names commands beside the seed as an *input*, and DEC-030 makes the
+command log a replay format, which is a record of inputs. Point 5 took that
+reading — the queue sits beside the state, outside the hash (`D-077`).
+
+The readings part at DEC-032, "a save is a full state snapshot": a save taken
+while commands are pending either carries them, and the queue is state; or drops
+them, and a reloaded world diverges from the one saved; or is refused until the
+queue is empty, which the host must then arrange. Nothing in `docs/` chooses.
+
+### SQ-007 — §17 wants every criterion driven by the harness alone, and `AC-03` is driven by the test suite
+
+**Raised:** 2026-10-01, writing the moment-two request for the phase 3 gate.
+**Cites:** `docs/SIM-REQ.md:596` §17; `docs/SIM-REQ.md:602` AC-03;
+`docs/SIM-REQ.md:656` AC-19; `docs/SIM-REQ.md:748` §18, phase 3;
+`docs/SIM-DEC.md:360` DEC-034, rationale.
+**Blocks:** yes — the declaration of the phase 3 gate, not a point. No point is
+open for it to fail: the plan's ten points are closed and their reserves
+discharged. The plan's exit condition repeats §17's words, so the gate cannot be
+called met until the reading is chosen.
+**Status:** **closed 2026-10-01 by R-039.**
+
+§17 opens: "Every criterion below runs headless in CI, driven by the
+command-line harness alone." In CI today the harness drives one thing: the
+100k-tick empty run, twice, compared byte for byte. `AC03_SaveRoundTrip`, the
+in-process half of `AC02_DeterminismAcrossRuns` and the pinned sequences of
+`AC02_TheGateSequencesArePinned` run under `dotnet test`. `sim` has no flag that
+saves or loads, and it cannot submit a command, since phase 3 defines no kind a
+host could submit (`DEC-086`, `R-030`).
+
+`docs/` reads both ways:
+
+- **The suite counts.** AC-19 asks that the core's "tests pass from the
+  standalone project … on every commit", and DEC-034's rationale names "the CLI
+  harness, the CI suite, and the parameter sweeps" as three things host
+  independence allows. On this reading §17's "alone" means with no editor and no
+  game client, and the gate is met as it stands.
+- **The harness drives each criterion.** Read literally, "alone" excludes the
+  suite. `AC-03` then needs a round-trip mode in `sim`, and the commanded half of
+  `AC-02` needs a command a host can submit, which no phase 3 kind provides. The
+  first is a small harness change; the second is not possible until the first
+  command kind exists.
+
+Nothing in `docs/` chooses between them. The reading taken so far, never stated,
+is the first: points 7, 9 and 10 put their checks in the suite, and no audit
+remarked on it.
+
+### SQ-008 — a state hash at every tick costs the whole state every tick, and phase 4 makes the state large
+
+**Raised:** 2026-10-01, in the look at the whole of phase 3 asked for by the
+moment-two request.
+**Cites:** `docs/SIM-REQ.md:496` NFR-01; `docs/SIM-REQ.md:600` AC-02;
+`docs/SIM-REQ.md:508` NFR-07; `docs/SIM-REQ.md:526` P-01;
+`docs/SIM-STATE.md:192` §Serialisation notes.
+**Blocks:** no. Phase 3's state is five fields and an empty chronicle. The
+question is phase 4's, from the first table it adds.
+**Status:** open.
+
+NFR-01 asks for "an identical state hash at every tick" and AC-02 for "the same
+state hash sequence"; `SIM-STATE` says the hash covers every field. Today
+`StateHash.Of` folds every field and every chronicle row in use, so one hash
+costs the whole state, and the checks take one per tick: `AC02_DeterminismAcrossRuns`
+and `AC02_TheGateSequencesArePinned` build seven sequences of 100k ticks between
+them, in each of CI's three test steps, and `sim --hashes` one per tick.
+
+In phase 3 that is free. From phase 4 it grows with the state. At NFR-07's bound,
+50 MB of settlement state, a hash folds some six million 64-bit values, and at
+one or two nanoseconds a fold — **an estimate, not measured** — one hash is of
+the order of P-01's whole budget of 10 ms per simulated day. Seven sequences of
+100k ticks at that cost run for hours per test step. At a smaller phase 4 state
+the figures shrink in proportion, but they grow with every table and with the
+chronicle, which only appends.
+
+The game itself need not hash at every tick: NFR-01 states a property of the
+sequence, not a computation the core must run. What is at stake is how the
+property is checked. `docs/` leaves open:
+
+- **The full sequence, always.** Every tick hashed in full in CI, and the cost
+  accepted, or the tick counts of the checks lowered — which the gate's "100k"
+  does not allow for its own run.
+- **An incremental hash**, maintained by the systems as they write. Every tick
+  then has its hash at little cost, but every write to state must also update
+  it, and a write that forgets is exactly the hole `SIM-STATE` names.
+- **A sampled sequence in CI**: the full hash every k ticks, or on a cadence.
+  Cheaper, and reads AC-02's "sequence" as less than every tick, which is the
+  reading `R-034` declined for "machines" and not the implementer's to take.
+
+The first phase 4 point that adds a table is the first place the answer changes
+code, and the pins move there anyway (`R-034`, Cost).

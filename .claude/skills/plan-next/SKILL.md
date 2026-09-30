@@ -26,7 +26,9 @@ Read `PLAN.md` at the repository root.
   restarted. Report which point failed and what it says.
 - **Every point closed:** do not invent more. Say the plan is finished, check
   the exit condition, and say that the plan is ready to be archived to
-  `.claude/plans/` and the promotion pass run over its register entries.
+  `.claude/plans/` and the promotion pass run over its register entries. If a
+  point is *Chiuso con riserva* with no *Riserva sciolta* line under it, the
+  plan is not finished: name the reserve and the human action it waits on.
 - **Otherwise:** the point to run is the first `## <n>.` section with no
   `*Esito:*` line. Points run in plan order, including a point added later than
   the ones after it — running them out of order contradicts the rule all three
@@ -110,6 +112,13 @@ dotnet build core/Sim.Core.csproj -c Release
 dotnet test core/Tests/Sim.Core.Tests.csproj -c Release
 dotnet test core/Tests/Sim.Core.Tests.csproj -c Debug
 ```
+
+**Then make it fail.** Introduce the fault the point's `Fails when:` names, run
+the check, see it red for that reason, and undo the fault. The outcome line says
+it was seen. A check that stays green has not proved the point: that is a
+defective criterion, handled in step 6. A plan written before `R-020` has no
+`Fails when:` line; the rule does not apply to it, and the point is not faulted
+for the absence.
 
 **Run the check, do not read it.** On a point that builds nothing — a document,
 a skill, a workflow — the temptation is to reread the work and call it verified.
@@ -197,6 +206,32 @@ survivable.
 
 Everything above the outcome line stays untouched. A criterion that turned out
 to be wrong is reported and recorded, never rewritten to match what was built.
+Two cases, and the line between them is whether correct code can pass the check
+as written (`R-005`):
+
+- **Correct code passes it, but it proves less than the point asks** — it
+  under-covers the "Does", its words diverge from it, or it cannot fail for the
+  reason it exists. Close the point on the criterion as frozen, with the missing
+  check written beside it. The outcome line says *criterio difettoso* and names
+  the register entry; the plan continues. The decider rules on the entry at its
+  next audit, and whatever follows lands under "Owed by the implementer" in
+  `RULINGS.md`, never in `PLAN.md`.
+- **Correct code cannot pass it**, or passing it would build the wrong thing.
+  That is a failure: close the point as below, with *criterio sbagliato* as the
+  reason.
+
+**A clause that only a human can discharge closes the point with a reserve**
+(`R-011`). The work is done and verified, and what is missing is an action this
+skill may not take — a push, so that CI runs; a pull request; a confirmation
+from outside the repository. The outcome line reads `*Esito:* <date>. Chiuso con
+riserva — <the clause> attende <the human action>.`, and the plan continues.
+Not for anything you could do yourself: a reserve is not a way to defer work.
+
+When the human acts, the check the clause names is run and a line is added
+under the outcome line, never in place of it: `*Riserva sciolta:* <date> — <what
+was done, what the check produced>.` It is committed on its own or with the next
+point, and never carries a `Plan-point:` trailer. A reserve still open keeps the
+exit condition unmet, whatever the point count says.
 
 ### 7. Commit
 
@@ -236,6 +271,9 @@ point back. Close it as **failed** rather than leaving it open:
 - **Then stop the plan**, not just the point. Report and wait. Later points may
   rest on this one, and a failure is information the human needs before more
   work is spent against it.
+- **A wrong criterion fails the same way.** The decider rules on its register
+  entry, and the work resumes as a new point added with the human's approval
+  (`D-014`), never as an amendment of the failed one.
 
 **Never declare the plan abandoned.** That is a human's word — a procedure that
 could abandon its own plan when the work got hard is not a procedure. Report the
@@ -246,6 +284,23 @@ failure and let them choose.
 Report: what was done, what the check produced, what the reviewers found
 including what was rejected, and what the next point is. Then stop. The next
 point does not start by itself, and this skill does not chain.
+
+**End the report with one line for the decider**, counted rather than
+estimated. The watermark in `RULINGS.md` is the last `D-NNN` the decider
+audited, or `none`; the line counts the register entries above it:
+
+```
+w=$(grep -m1 -oE '^\*\*Register watermark:\*\* (none|D-[0-9]+)' RULINGS.md | grep -oE '[0-9]+$'); w=${w:-0}
+grep -oE '^### D-[0-9]+' DECISIONS-OUTSIDE-SPEC.md | grep -oE '[0-9]+$' | awk -v w="$w" '$1+0>w{n++; if(!f)f=$1; l=$1} END{print n+0, f, l}'
+```
+
+```
+Decider: N register entries not yet reviewed (D-xxx to D-yyy) — run /decide
+```
+
+With none outstanding the line still appears, saying zero. It is a reminder to
+the human and nothing more: this session does not run `/decide` and does not
+play the decider (`AGENTS.md`).
 
 ## What this skill does not do
 

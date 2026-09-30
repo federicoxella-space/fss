@@ -105,6 +105,7 @@ rewriting the register's history to make a numbering scheme tidy.
 - **Does:** one line.
 - **Serves:** `FR-P-13`, `AC-01`   ← simulator plans only, and mandatory there
 - **Closed by:** the runnable check. `AC01_SmallStocksAreNotImmortal` green.
+- **Fails when:** a fault the check must catch. A stock of 3 that never spoils.
 - **Core:** yes — or `no — <reason checkable against the diff>`
 
 ## 2. <title of the point>
@@ -132,6 +133,21 @@ plan is a frozen contract that a skill does not tidy.
 
 The rule was added after the first run of `/plan-explain` on a process plan
 showed four points each reporting that `docs/` had nothing to say.
+
+### `Fails when`, and why a check states its fault
+
+Four of the first four criteria of the phase 3 plan were defective, and in each
+case correct code passed: two could be satisfied by an empty enumeration, one
+under-covered its point, one missed a year of 365 ticks. Each criterion said
+what should pass and nothing about what should fail, and the implementer found
+the defect only by mutating the code afterwards (`R-017`, `R-020`).
+
+`Fails when` moves that mutation before the code. It names at least one fault
+the check must catch, and the point closes only after the fault has been
+introduced and seen to turn the check red. A criterion that cannot fail for the
+reason it exists is then visible on reading, when it is still cheap. A point
+with no natural fault — a `Check: shallow` — says so in the field. A plan written
+before the rule has no such line and is read as it is.
 
 Everything above the `Esito:` line of a point is **frozen when written**. If a
 criterion turns out to be wrong, say so and record why; do not rewrite it to

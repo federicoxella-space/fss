@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-09-19
+**Revision:** 2026-10-01
 **Companion:** SIM-REQ
 
 ---
@@ -50,6 +50,14 @@ Population, currency, and goods each belong to exactly one simulation level. Lev
 **Rationale.** A world represented at several resolutions holds several copies of the same facts. Naming one copy as the authority is what keeps them from drifting apart over decades of world time.
 
 **Cost.** Producing a number sometimes means aggregating from the owning level rather than reading it where it feels natural.
+
+### DEC-085 — State arrays hold values, never arrays
+
+A state field is a value or one contiguous array of values. A per-row quantity of fixed width `w`, such as a treasury of four denominations or one stock per good, is stored as one array of `rows × w`. A per-row quantity of variable length is stored either at a fixed capacity, which is then its width, or in one shared pool addressed by a per-row offset and count. No array holds arrays, and no composite value inside state holds an array.
+
+**Rationale.** An array of arrays is an object graph under another name: each inner array is a reference, which NFR-10 excludes, and each is a separate allocation that DEC-003's bulk serialise, copy and hash cannot cover in one pass. Widths come from static data versioned with `ruleVersion`, so `rows × w` is known whenever the state is.
+
+**Cost.** Every access to a wide field computes an index. A patch that changes a width, a new good for instance, reshapes the arrays that carry it inside the migration of NFR-08. A pooled field needs a compaction rule, and that rule orders by id or it becomes a determinism hole of its own.
 
 ---
 
@@ -105,7 +113,7 @@ War declaration, succession, rebellion, and alliance fire on endogenous threshol
 
 ### DEC-008 — Settlements update in staggered buckets keyed by id
 
-On tick *d*, settlements with `id % 7 == d % 7` update. The bucket comes from the id, never from iteration order.
+On tick *d*, settlements with `id % 7 == d % 7` update, `id` being the row index (FR-T-06). The bucket comes from the id, never from iteration order.
 
 **Rationale.** Per-tick cost stays flat instead of spiking every sixth day, and the assignment stays deterministic regardless of how the collection is traversed.
 
@@ -269,7 +277,7 @@ A plague removes labour, which cuts production, which raises prices, which redir
 
 ### DEC-026 — Events emit chronicle entries carrying their cause
 
-Each entry names entities, location, tick, importance, and the event that triggered it.
+Each entry names entities, location, tick, importance, and its cause: the event that triggered it, the player action, or itself as an exogenous root (FR-E-07).
 
 **Rationale.** One structure serves debugging, causal-chain testing (AC-11), UI, and what a character can tell the player. The cause pointer is what turns a log into a chain.
 
@@ -315,6 +323,14 @@ The game pushes commands into a queue applied at a defined point in the tick, co
 
 **Cost.** Anything the game wants to do immediately waits for the next tick boundary.
 
+### DEC-086 — A command is data; a system applies it
+
+A command is a value: a kind and the integer fields that kind declares, with no behaviour and no object references. Applying it is the work of the core, in the same place as every other write to state, dispatched on the kind.
+
+**Rationale.** A command crosses three boundaries that behaviour cannot: the host hands it over (FR-A-01), the command log records it for replay (DEC-030), and a save carries it while it waits (DEC-032). Each of those is serialisation, with no reflection allowed (SIM-REQ section 20, "Downstream constraints"), and a value serialises as a state row does. Keeping the write in the core also keeps one place where state changes, and lets the core check a command against the state of the tick it lands on rather than trusting whoever built it.
+
+**Cost.** Every kind needs a codec and a dispatch entry as well as its effect, and a new kind touches the core even when its effect is small.
+
 ### DEC-031 — The core runs on a background thread
 
 **Rationale.** The per-day budget is then independent of the frame budget, which is what allows fast travel at roughly one simulated year per 3.6 seconds *(estimate)*.
@@ -323,9 +339,9 @@ The game pushes commands into a queue applied at a defined point in the tick, co
 
 ### DEC-032 — A save is a full state snapshot plus seed and generation parameters
 
-Format carries a version number and a migration path.
+Format carries a version number and a migration path. It also carries the commands submitted and not yet applied, in submission order; they are input, not state, and stay outside the state hash.
 
-**Rationale.** Load time stays constant instead of growing with campaign length. The seed and parameters travel with the save so any player-reported bug reproduces exactly.
+**Rationale.** Load time stays constant instead of growing with campaign length. The seed and parameters travel with the save so any player-reported bug reproduces exactly. A save that dropped pending commands would not: the world reloaded would miss the player's last action.
 
 **Cost.** Save files are large and get written often.
 
@@ -347,17 +363,17 @@ No engine, rendering, input, or asset API. No `async` in the tick, no unordered 
 
 ### DEC-034a — Consumer runtime constraints live in one place
 
-The core is written against a declared runtime profile and language level, recorded in SIM-REQ section 17. No other requirement or decision names a consumer.
+The core is written against a declared runtime profile and language level, recorded in SIM-REQ section 20, "Downstream constraints". No other requirement or decision names a consumer.
 
 **Rationale.** The language level and runtime surface are set by whoever links the core, not by the core itself. Recording them once keeps that constraint enforceable without letting a specific consumer leak into the design.
 
-**Cost.** Section 17 has to be revisited whenever a new consumer with a narrower profile appears, and the core may then have to drop a language feature it already uses.
+**Cost.** Section 20, "Downstream constraints", has to be revisited whenever a new consumer with a narrower profile appears, and the core may then have to drop a language feature it already uses.
 
 ### DEC-035 — A CLI harness exists from Phase 3
 
 Runs N ticks headless, dumps state hashes, writes chronicle and metric series to CSV, runs parameter sweeps.
 
-**Rationale.** Every acceptance criterion in SIM-REQ runs through it, and Phase 6 tuning is not feasible without sweeps.
+**Rationale.** The acceptance criteria run headless, through it or through the core's test suite (SIM-REQ section 17, "Acceptance criteria"), and Phase 6 tuning is not feasible without sweeps.
 
 **Cost.** A second entry point to maintain alongside the game integration.
 

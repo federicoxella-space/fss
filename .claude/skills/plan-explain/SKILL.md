@@ -42,7 +42,9 @@ the retelling is an objection that did not happen.
 
 4. **If every point has one**, say the plan is finished: the branch is ready to
    close, `PLAN.md` is archived to `.claude/plans/`, and the promotion pass is
-   due over its register entries. Then stop.
+   due over its register entries. Then stop. A point *Chiuso con riserva* is
+   closed but the plan is not finished while its reserve is open — no *Riserva
+   sciolta* line under it: name the human action it waits on (`R-011`).
 
    **If the plan header carries an `**Abandoned:**` declaration**, say so with
    its reason and stop. Do not present the next open point: it was not reached,
@@ -66,7 +68,10 @@ the retelling is an objection that did not happen.
      per point saying so reads as information while carrying none. A process
      plan that still carries `Serves` fields, or a plan with no `Kind` line at
      all, was written before this rule: read it as it is and do not tidy it.
-   - what will close it: the runnable check, quoted from the plan. If it carries
+   - what will close it: the runnable check, quoted from the plan, and the fault
+     its `Fails when:` names. Object if the fault could be introduced and the
+     check stay green; a plan written before `R-020` has no such line, and its
+     absence there is not an objection. If the check carries
      a `Check: weak` or `Check: shallow` marker, report which, the reason, and
      what the plan says would prove it properly; object if either half is
      missing, since a marker with no replacement authorises the weakness instead

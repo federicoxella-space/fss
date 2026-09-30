@@ -36,7 +36,40 @@ jobs:
         env:
           SIM_WEALTH_BANDS: 1
 
-      - name: Harness smoke run
+      # NFR-12: the runner prints one hash per tick. The tick is in the hash, so a
+      # line repeated is a line that did not come from its own tick.
+      - name: Harness, one hash per tick
+        shell: pwsh
         run: |
           dotnet build harness/Sim.Harness.csproj -c Release
-          dotnet run --project harness/Sim.Harness.csproj -c Release -- --ticks 100000 --hash
+          $h = @(dotnet run --project harness/Sim.Harness.csproj -c Release --no-build -- --ticks 1000 --seed 1 --hashes)
+          if ($LASTEXITCODE -ne 0) { throw "sim exited $LASTEXITCODE" }
+          if ($h.Count -ne 1000) { throw "expected 1000 hashes, got $($h.Count)" }
+          if (@($h | Where-Object { $_ -cnotmatch '^[0-9a-f]{16}$' }).Count -ne 0) { throw "a line is not a hash" }
+          if (@($h | Sort-Object -Unique).Count -ne 1000) { throw "a hash repeats" }
+
+      # SIM-REQ §18, the gate of phase 3: 100k empty ticks, and AC-02 across two runs
+      # that share nothing but the seed — two processes, their outputs compared byte for
+      # byte. Then the floor under P-01 and P-17: ms per empty tick, from a timed run of 10M
+      # ticks net of a run of none. 100k empty ticks take less than the start of the
+      # process varies by, and gave a negative figure.
+      - name: Gate, 100k empty ticks in two runs
+        shell: pwsh
+        run: |
+          $sim = "harness/bin/Release/net8.0/sim.dll"
+          foreach ($run in "a", "b") {
+            $p = Start-Process dotnet -ArgumentList "$sim --ticks 100000 --seed 1 --hashes" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "hashes-$run.txt"
+            if ($p.ExitCode -ne 0) { throw "run $run exited $($p.ExitCode)" }
+          }
+          $a = [IO.File]::ReadAllBytes("hashes-a.txt")
+          $b = [IO.File]::ReadAllBytes("hashes-b.txt")
+          if ($a.Length -ne 100000 * 17) { throw "expected 100000 lines of 17 bytes, got $($a.Length) bytes" }
+          if (-not [Linq.Enumerable]::SequenceEqual($a, $b)) { throw "the two runs differ" }
+          $ms = foreach ($n in 0, 10000000) {
+            $w = [Diagnostics.Stopwatch]::StartNew()
+            $p = Start-Process dotnet -ArgumentList "$sim --ticks $n --seed 1" -NoNewWindow -Wait -PassThru -RedirectStandardOutput "final-$n.txt"
+            $w.Stop()
+            if ($p.ExitCode -ne 0) { throw "timed run of $n ticks exited $($p.ExitCode)" }
+            $w.Elapsed.TotalMilliseconds
+          }
+          [string]::Format([Globalization.CultureInfo]::InvariantCulture, "ms per empty tick: {0:F6}", ($ms[1] - $ms[0]) / 10000000)

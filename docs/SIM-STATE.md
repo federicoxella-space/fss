@@ -2,7 +2,7 @@
 
 **Document:** SIM-STATE
 **Status:** Draft
-**Revision:** 2026-09-19
+**Revision:** 2026-09-30
 **Gate:** The assert list is executable.
 
 ---
@@ -10,6 +10,8 @@
 ## Rule
 
 Anything that influences a future tick lives here. Anything not listed here must be derivable from what is, or it is a determinism defect.
+
+Input is not state. A command the host has submitted and the simulator has not yet applied is input, as the rest of the command sequence of NFR-01 is: it sits outside this inventory and outside the state hash. A save carries it all the same (DEC-032).
 
 ---
 
@@ -141,7 +143,8 @@ Sampled transients are not stored. They are enumerated on demand from the draw o
 |---|---|---|
 | id, tick, location | | |
 | entities | id[] | |
-| cause | chronicle id | the pointer that makes chains testable |
+| causeKind | enum | event, player action, exogenous root: the three FR-E-07 allows |
+| cause | chronicle id | the triggering entry when causeKind is event, none otherwise; the pointer that makes chains testable |
 | importance | int | drives propagation |
 | propagation | bounded per settlement | which entries have reached where, with degradation |
 
@@ -170,20 +173,24 @@ Goods, recipes, mestieri, crops, climate curves, event class definitions. Versio
 | A-11 | Every fixed-point quantity held in state is inside its declared range |
 | A-11b | No accumulator has overflowed. Checked in debug builds, where the cost of checking every intermediate is affordable |
 | A-12 | Danger on every link is inside its range |
-| A-13 | Each cadence bucket fires exactly once per its period |
+| A-13 | Each cadence bucket fires exactly once per its period, and consecutive firings of a bucket are exactly one period apart |
 | A-14 | No cohort holds negative count, currency, or goods |
 | A-15 | Buried stock only decreases |
 
 A-02 and A-03 together are the currency invariant. A-01 and A-14 are the population invariant. A-04 is the goods invariant.
+
+A-13 is the one assert about the schedule rather than about state: a firing leaves nothing in state for a per-tick check to read, and a check inside the loop would be the loop testing itself. It is verified by test over whole periods, at least one year, which covers every case, since the schedule is a function of the tick modulo 364. The second clause is what rules out drift: a level firing every 365 ticks still fires once in each of the first 364 years.
 
 ---
 
 ## Serialisation notes
 
 - Struct of arrays, `EntityId` as index plus generation, no object references.
+- The `int[4]`, `int[]`, `fixed[]`, `id[]` and bounded fields of the tables above are per-row quantities, stored flattened under DEC-085, never as an array per row.
 - Version number and migration path from the first write.
-- No reflection: the serialiser is generated or hand-written, per section 19 of SIM-REQ.
+- No reflection: the serialiser is generated or hand-written, per section 20 of SIM-REQ, "Downstream constraints".
 - The state hash covers every field above. A field excluded from the hash is a determinism hole.
+- A save also carries the commands submitted and not yet applied, in submission order, beside the state and outside the hash.
 
 ---
 
@@ -192,3 +199,5 @@ A-02 and A-03 together are the currency invariant. A-01 and A-14 are the populat
 1. Confirm the age band count for cohorts, which multiplies cohort width.
 2. Decide whether `flowAccumulator` needs per-good history or a single rolling figure.
 3. Decide the chronicle retention policy. Entries accumulate over 60 years and nothing above discards them.
+4. Decide how the chronicle dates prior history. FR-G-03 runs it "before tick 0" and DEC-040 takes the result as tick 0, so entries written during it carry ticks that are negative once the run is relabelled, or later than the run's first tick if it is not.
+5. Decide how an `EntityId` names its table, before a second table issues them. The chronicle's `entities` may mix settlements, kingdoms and agents, and an index plus a generation does not say which; DEC-083's "two distinct entities are distinct keys" holds across tables only if their indices share one space.

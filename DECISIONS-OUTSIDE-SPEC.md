@@ -19,6 +19,8 @@ Commit `3f97af8`, branch `hash64-soggetto-e-range`. Three fixes in
 
 ### D-001 · 1. The draw subject is a 64-bit key, not an entity
 
+**Ruling:** R-008 — ratified.
+
 **Promoted 2026-09-19 as `DEC-081`.** The text went in close to the draft; the
 specification now states the subject coordinate and this entry is history.
 
@@ -32,6 +34,8 @@ document says how the two key spaces coexist. Rejected: a second hash function
 for non-entity draws, which would need every property proved twice.
 
 ### D-002 · 2. A non-entity row key keeps its high half at zero
+
+**Ruling:** R-008 — ratified.
 
 **Promoted 2026-09-19 as `DEC-082`.** The reservation of generation 0 is now a
 decision of record rather than something inferred from `EntityId.None`.
@@ -53,11 +57,15 @@ enforces it.
 
 ### D-003 · 4. `Range` takes a count, not an interval
 
+**Ruling:** R-008 — ratified.
+
 `Range(draw, count)` returns `0 .. count - 1`; callers wanting `min .. max`
 write `min + Range(draw, max - min + 1)`. No specification input. Rejected:
 overloads for inclusive and exclusive bounds, as unrequested surface.
 
 ### D-004 · 5. A-11 is checked in debug builds only, and by `checked` rather than an assert
+
+**Ruling:** R-008 — ratified.
 
 **Superseded 2026-09-19, not promoted.** `SQ-002` closed by splitting the
 invariant: A-11 is now the range of fixed-point quantities held in state, A-11b
@@ -81,6 +89,8 @@ want it at state level instead of per call.
 
 ### D-005 · 7. Process choices
 
+**Ruling:** R-008 — ratified.
+
 - One commit rather than two. Splitting DEC-002 from A-11 would have to split
   `PrimitivesTests.cs`, leaving an intermediate commit whose A-11 test fails in
   Debug. The message names both identifiers.
@@ -98,6 +108,8 @@ numbers, so the series above now skips 3 and 6.
 
 ### D-006 · 1. `Hash64.Range` is a plain modulo
 
+**Ruling:** R-008 — ratified.
+
 **Promoted 2026-09-19 as `DEC-084`.**
 
 The reduction is `(int)(draw % (ulong)count)`. Rejection and re-mixing are gone,
@@ -113,6 +125,8 @@ it. The magnitude is documented at `Range`, where the next reader will ask.
 
 ### D-007 · 2. One channel per kind of non-entity subject
 
+**Ruling:** R-008 — ratified.
+
 **Promoted 2026-09-19 as `DEC-083`.** It was a rule living in a source comment
 and unenforced by the build; it is now a numbered decision, still unenforced by
 the build.
@@ -124,6 +138,8 @@ but the channel. Unenforced by the build, like the rest of that contract.
 
 ### D-008 · 3. CI runs the debug build
 
+**Ruling:** R-008 — ratified.
+
 A `dotnet test -c Debug` step, so the A-11 guard and
 `A11_ApplyRefusesAProductThatLeaves64Bits` run somewhere other than a
 developer's machine. Added as a step in the existing job rather than a matrix
@@ -131,6 +147,8 @@ over configurations: a matrix would also fan out the wealth-band steps, which
 are release-configuration checks and have their own reason to run twice.
 
 ### D-009 · 4. The histogram tolerance was left alone
+
+**Ruling:** R-008 — ratified.
 
 `NFR03_RangeCoversTheIntervalEvenly` keeps its 5% band. Review allowed widening
 it if it had been sized around exact uniformity; it was not. 5% is about 5.4
@@ -140,6 +158,8 @@ that has nothing to do with the claim that changed. The reasoning is now in the
 test.
 
 ### D-010 · 5. Left as found
+
+**Ruling:** R-008 — ratified.
 
 The remark on `Hash64.Of` still phrases channel separation as the sensible
 answer rather than as the rule it now is. `HashChannel` states the rule; further
@@ -155,6 +175,8 @@ belong to.
 
 ### D-011 · Whole plan — `docs/` is silent, and stays silent
 
+**Ruling:** R-008 — ratified.
+
 Every point of this plan declares `docs/` silent, so the declaration is made once
 here instead of five times in the plan. `SIM-REQ` §18 plans the simulator; it
 does not plan how the simulator gets built, and it should not start. Process work
@@ -162,6 +184,8 @@ that wrote itself into the specification would be indistinguishable, a year from
 now, from the design the specification exists to hold.
 
 ### D-012 · Point 1 — the rule in `AGENTS.md`
+
+**Ruling:** R-008 — ratified.
 
 **An agent edited the standing instructions.** The rule given on 2026-09-16 is
 that permanent instructions are changed by a human. Permission for this one was
@@ -177,6 +201,8 @@ instructions, which are the part a human owns. The cost is that the rule and its
 procedure can drift apart, and nothing but reading catches it.
 
 ### D-013 · Point 2 — `/plan-explain`
+
+**Ruling:** R-008 — ratified.
 
 **A point is open until it carries an outcome line, and nothing else counts.**
 The skill finds the next point by looking for the first one without `*Esito:*`,
@@ -205,6 +231,8 @@ last, on the state the commit will contain.
 
 ### D-014 · Point 5, added mid-plan — a plan may gain points, with approval
 
+**Ruling:** R-008 — ratified.
+
 The first run of `/plan-explain` in a fresh session showed the defect it was
 built to show, one level up from where it was looking: every point of this plan
 reports a `Serves` field that says nothing, because `docs/` is not silent about
@@ -230,6 +258,8 @@ a plan, not from a reviewer on a diff. Worth noting for the same reason the
 protocol exists: the cheapest place to find a defect is upstream of the work.
 
 ### D-015 · Point 3 — `/plan-status`
+
+**Ruling:** R-008 — ratified.
 
 **Commits are resolved by the `Plan-point:` trailer, not by heuristics.** The
 first run of `/plan-explain` objected that this point's criterion asks for
@@ -273,6 +303,8 @@ already exists and is easy to skip on a documentation point: run the check.
 
 ### D-016 · Point 4 — `/plan-next` and the reviewer briefs
 
+**Ruling:** R-008 — ratified.
+
 **"Do not edit the code" is enforced by the reviewer's tools, not by its
 compliance.** Both reviewers are dispatched as a read-only agent type — `Plan`,
 or `Explore` — which has no `Edit` and no `Write`. An instruction not to edit is
@@ -314,6 +346,8 @@ procedure.
 
 ### D-017 · Point 5 — `Kind` in the header, `Serves` made conditional
 
+**Ruling:** R-008 — ratified.
+
 **A missing `Serves` under `Kind: simulator` stops the work rather than being
 filled in.** The field is mandatory there, so its absence is a defect in a frozen
 contract, and the three skills treat it the way they treat an ambiguous
@@ -338,6 +372,8 @@ specification has no jurisdiction. The second reading invites someone, later, to
 go and add one.
 
 ### D-018 · Closing the plan — what the exit condition could and could not verify
+
+**Ruling:** R-008 — ratified.
 
 Three of its four clauses were checked directly: the plan, the three skills and
 the rule in `AGENTS.md` exist and agree with the design.
@@ -371,6 +407,8 @@ mechanism the previous section built.
 
 ### D-019 · Point 1 — the criterion to the reviewers, and citations opened
 
+**Ruling:** R-008 — ratified.
+
 **The criterion is pasted, not summarised.** Both reviewers receive the point's
 frozen text verbatim from `PLAN.md` — statement, citations, check, and any
 `Check: weak` marker. A summary written by the author of the code under review is
@@ -395,6 +433,8 @@ citation check had nothing to open. Consistent with the declared weak check, and
 worth stating rather than leaving a reader to assume the rule was tried.
 
 ### D-020 · Point 2 — `Core:` defaults to yes
+
+**Ruling:** R-008 — ratified.
 
 **A missing reason is resolved as `yes`, and the plan is not stopped for it.**
 Point 1 established that a defect in a frozen plan stops the work; this is the
@@ -432,6 +472,8 @@ brief had been written the day before.
 
 ### D-021 · Point 3 — re-reading the plan before the outcome line
 
+**Ruling:** R-008 — ratified.
+
 **The re-read diagnoses; the anchored edit protects.** Both appends are made with
 an exact-match edit against text just read, not a rewrite of the file. An edit
 that cannot find its anchor fails loudly; a rewrite from memory wins silently
@@ -460,6 +502,8 @@ that a document read at step 1 and written at step 6 has a gap in the middle
 wide enough to lose an edit in.
 
 ### D-022 · Point 4 — `Check: weak`, declared early and with both halves
+
+**Ruling:** R-008 — ratified.
 
 **Both halves are required, and the second is the one that does the work.**
 "This cannot be proved today" and "this cannot be proved" are different
@@ -491,6 +535,8 @@ raised with the human as a candidate for its own point — which it became, as
 point 13.
 
 ### D-023 · Point 5 — a failed point and an abandoned plan
+
+**Ruling:** R-008 — ratified.
 
 **A failed point is closed, not left open.** It carries an outcome line saying
 `FALLITO`, a register entry, and a commit with the usual trailer. Leaving it open
@@ -525,6 +571,8 @@ decision that belongs in `SIM-DEC`.
 
 ### D-024 · Point 6 — the threshold below which no plan is needed
 
+**Ruling:** R-008 — ratified; its open question answered by R-010.
+
 **The permission to edit `AGENTS.md` was read from the approved plan.** The
 standing rule is that permanent instructions are changed by a human and an agent
 needs specific permission. Point 6 names `AGENTS.md` in its statement and the
@@ -557,6 +605,8 @@ which supplies the right word, is not closed yet.
 
 ### D-025 · Point 7 — `Satisfies` in simulator plans
 
+**Ruling:** R-008 — ratified.
+
 **`Satisfies` and `Serves` are not one field at two scales.** `Serves` is per
 point and stops a point from inventing a requirement. `Satisfies` is per plan and
 stops an acceptance criterion from having nothing behind it. They could have been
@@ -579,6 +629,8 @@ simulator plan is where it either works or does not, and that is also the first
 time the coverage question can be asked at all.
 
 ### D-026 · Point 8 — `SPEC-QUESTIONS.md`
+
+**Ruling:** R-008 — ratified.
 
 **It opens with a real question, not an empty state.** `SQ-001` records a genuine
 inconsistency found while building `Hash64.Subject` three days ago: DEC-002 and
@@ -612,6 +664,8 @@ file existing.
 
 ### D-027 · Point 9 — archival, and identifiers in this register
 
+**Ruling:** R-008 — ratified.
+
 **The archive trigger is the plan closing, not the branch merging.** A branch can
 hold two plans in sequence — this one does — and tying the archive to the merge
 would leave a finished plan at the root pretending to be current while its
@@ -644,6 +698,8 @@ pass, so the assignment is deterministic and reviewable as a single
 transformation rather than twenty-six chances to mistype.
 
 ### D-028 · Point 10 — the promotion pass
+
+**Ruling:** R-008 — ratified.
 
 **A third root file, `PROMOTIONS.md`, rather than a section of the register.**
 The register records what was decided; this proposes to change `docs/`. Folding
@@ -683,6 +739,8 @@ decision back against the specification it was taken under.
 
 ### D-029 · Point 11 — the read-only skills run as read-only agents
 
+**Ruling:** R-008 — ratified.
+
 **The dispatch works and the guarantee is real.** `/plan-status` was run as a
 `Plan` agent, which has no `Edit` and no `Write`. It reported the plan correctly
 and the working tree was byte-identical afterwards — `git status --short` and
@@ -700,6 +758,8 @@ one step from resolving the objection by editing the text. The criteria are
 frozen by this, not only by the instruction that says so.
 
 ### D-030 · Point 11 — three defects the read-only agent found
+
+**Ruling:** R-008 — ratified.
 
 The dispatch was meant to prove a mechanism and immediately did the job the
 mechanism exists for. All three are this author's, none was caught by reading.
@@ -736,6 +796,8 @@ the author.
 
 ### D-031 · Point 12 — no squash, and a clause that could not be met
 
+**Ruling:** R-008 — ratified; its missing outcome supplied by R-011.
+
 **A pull request template, not just this branch's body.** The criterion asked
 for the note in the pull request for this branch; a template puts it in every
 one, and makes the criterion's own clause true automatically whenever a request
@@ -766,6 +828,8 @@ the remote, so the rewrite would have been a force push over work the human has
 already fetched.
 
 ### D-032 · Point 13 — `Check: shallow`
+
+**Ruling:** R-008 — ratified.
 
 **The remedies are the reason the distinction exists**, not the vocabulary.
 `weak` is a wait for a tool that does not exist; `shallow` is an admission that
@@ -798,6 +862,8 @@ Branch `plan-e-skill`, third plan, planned in `PLAN.md`. Asked for by the human
 while away, after a review of the mechanism built in the two plans above.
 
 ### D-033 · Point 1 — `REVIEW-REQUEST.md` and the three moments
+
+**Ruling:** R-008 — ratified.
 
 **Everything else in this mechanism is a record, and a record waits.** That is
 the right shape for a record and the wrong one for a question. The file exists
@@ -835,6 +901,8 @@ example that hides its own shape teaches the wrong one.
 
 ### D-034 · Point 2 — the reminders, and which skill owes which moment
 
+**Ruling:** R-008 — ratified.
+
 **One moment each, except the first, which two skills carry.** `/plan-explain`
 and `/plan-next` both announce moment one on the first point of a plan, because
 either can be the command someone runs first and a reminder that depends on
@@ -871,6 +939,8 @@ loop, and what the answers cost.
 
 ### D-035 · The return channel worked, and returned more than it was asked
 
+**Ruling:** R-008 — ratified.
+
 **Both questions closed, and neither closed the way it was posed.**
 
 `SQ-001` asked which arity was normative. The answer gave the five-coordinate
@@ -895,6 +965,8 @@ It took a channel that runs the other way to find out the code did not.
 
 ### D-036 · Bookkeeping, and what marking costs
 
+**Ruling:** R-008 — ratified.
+
 **Four register entries marked with what they became**, `D-001` → `DEC-081`,
 `D-002` → `DEC-082`, `D-007` → `DEC-083`, `D-006` → `DEC-084`, and the
 candidates struck in `PROMOTIONS.md` but kept as the record of what was
@@ -914,6 +986,8 @@ indistinguishable from one that was skipped.
 
 ### D-037 · `SQ-003`, filed rather than answered
 
+**Ruling:** R-008 — ratified.
+
 `NFR-03` and `DEC-002` still read `entity_id`, while FR-X-02 now writes the
 subject form and cites "under NFR-03" as its authority. The documents that *use*
 the draw were updated; the two that *define* it were not.
@@ -928,6 +1002,8 @@ It is the residue of `SQ-001`, which was the same shape, went unrecorded for
 three days, and turned out to be hiding the tick question.
 
 ### D-038 · `SQ-003` decided, and the edit left to a human
+
+**Ruling:** R-008 — ratified.
 
 **Resolution A: the definitions move.** `NFR-03` and `DEC-002` take the subject
 form rather than FR-X-02 re-pointing its citation at `DEC-081`. `SIM-REQ` states
@@ -955,6 +1031,8 @@ whole discipline is that a record states what was true at its moment.
 
 ### D-039 · The stale request was replaced, not amended
 
+**Ruling:** R-008 — ratified.
+
 The request of the morning was false by the evening: the branch it described is
 merged, its commits pushed, both its questions closed. It was replaced whole
 rather than corrected in place, which is what the design says — one request at a
@@ -967,6 +1045,8 @@ part of it false. Reading a stale one is worse than reading nothing, because it
 looks current.
 
 ### D-040 · Applying `SQ-003` overran the text that had been deposited
+
+**Ruling:** R-008 — ratified.
 
 The entry said "nothing else in `docs/` needs to move". It was wrong: the World
 note at `SIM-STATE:26` carried the entity form too, and the two agreed lines
@@ -993,6 +1073,8 @@ a claim about `docs/`, because that claim was prose rather than a criterion.
 
 ### D-041 · The request was amended, not replaced
 
+**Ruling:** R-008 — ratified.
+
 The request of the evening asked for `SQ-003`, which is now answered. It was
 amended in place rather than replaced whole, against the precedent set hours
 earlier by `D-039`.
@@ -1011,6 +1093,8 @@ Branch `main`, planned in `PLAN.md`, one point. Approved by the human, who
 deferred the phase-3 plan to a clean session.
 
 ### D-042 · The range, not a new trailer
+
+**Ruling:** R-008 — ratified.
 
 **The lookup is bounded, the commit format is unchanged.** The alternative was a
 second trailer naming the plan — `Plan: 2026-09-19-dodici-lacune` — which would
@@ -1036,6 +1120,8 @@ rather than done quietly.
 
 ### D-043 · A check that passed without running
 
+**Ruling:** R-008 — ratified.
+
 The first version of this point's check was a Python script. It printed
 `ESITO: tutti i punti risolvono a un commit solo` and had verified nothing: a
 parsing mistake left its list of plans empty, so the loop never ran and the
@@ -1055,3 +1141,1801 @@ to the check itself.
 
 The register's own claims are the next place this bites, and `D-040` said so two
 commits ago: prose inside an entry passes through no check at all.
+
+---
+
+## 2026-09-20 — The moment-one request, written without a plan
+
+No plan. `REVIEW-REQUEST.md` rewritten on the human's instruction, after
+`/plan-status` reported a request owed before the next plan starts.
+
+### D-044 · Replaced, not amended — and the rule that decided it
+
+**Ruling:** R-008 — ratified.
+
+`D-039` and `D-041` between them say when each applies: **replaced** when the
+situation the request describes has moved, **amended** when one of its items is
+answered and the rest still stands. Here the situation moved — the request
+described moment three, and the moment is now one — so it was replaced whole.
+
+One item of the old request survived the replacement and was carried forward
+verbatim in substance: the look at the three `docs/` lines of `7decada`. It was
+never answered, and an unanswered item does not close because the request around
+it did. Replacing a request is not a way of retiring what it asked for.
+
+### D-045 · Moment one was served without a plan to read, and says so
+
+**Ruling:** R-008 — ratified.
+
+The file's own argument for moment one is that "the plan is short — a few
+hundred words against a branch", which presupposes a plan on the page. There is
+none: `PLAN.md` is absent and the phase-3 plan has not been drafted. Two
+readings were available.
+
+- Draft the plan first, then request a review of it. This matches the argument
+  but inverts the moment: a wrong criterion would then be found in a document
+  already written, which is cheaper than a branch but dearer than a
+  conversation.
+- Request the review of the **criteria** before they are written down. Cheapest,
+  and matches `AGENTS.md` — "before a plan starts, where a wrong criterion costs
+  one conversation rather than every point built on it".
+
+**The second was taken, and the ambiguity was put in the request itself** as its
+third ask, rather than resolved quietly here. The mechanism will meet moment one
+again; which of the two shapes it wants is a question about the mechanism, and
+that belongs to the human who owns it. What would overturn this: an answer
+saying moment one wants a draft attached, in which case this request was written
+one step early and the next one waits for a plan.
+
+### D-046 · Three counts of the closed points, reported rather than reconciled
+
+**Ruling:** R-008 — ratified.
+
+The last request said twenty-three closed points, the lookup point's outcome
+says twenty-one, and counting `*Esito:*` lines today gives twenty across the
+three plans archived at that moment. The plausible reading — the lookup counted
+its own point, archived in the same commit — was **not** written down as the
+answer, because it is a guess, and `D-043` is two entries above about exactly
+that: a claim that enters the record because it sounds right.
+
+Nothing depends on the number, which is why this is the right place to hold the
+line. A discrepancy nobody needs is the cheapest one to leave standing, and
+reconciling it by assertion would teach the register that assertion is how
+discrepancies get closed.
+
+---
+
+## 2026-09-20 — The plan for the rest of phase 3
+
+Written on instruction, the same day the moment-one request went up. No code.
+
+### D-047 · Where phase 3 stops, decided three times
+
+**Ruling:** R-008 — ratified.
+
+`SIM-REQ` §18 names phase 3's content in five words — "scheduler, RNG,
+serialisation, chronicle, CLI runner" — and each of the last three reaches into
+something the phase excludes. Three lines were drawn, all of them in the plan
+rather than here, so that the reviewer sees the exclusion beside the point that
+makes it.
+
+- **Chronicle: structure and append, no propagation.** FR-I-01 and FR-I-04 are
+  buildable with no domain; FR-I-02, FR-I-03 and FR-I-05 need traffic, retelling
+  and neighbours, which are phase 4. The point carries `Check: shallow` for
+  exactly this reason — nothing emits an entry yet, so the shape is testable and
+  the content is not.
+- **NFR-12: the runner runs ticks and dumps hashes; sweeps and CSV metric series
+  wait.** The requirement lists four capabilities in one sentence and phase 6 is
+  where the metrics exist. Building a CSV writer for columns nothing produces is
+  scaffolding.
+- **`WorldState` holds the World row and nothing else.** Settlements and cohorts
+  are rows of `SIM-STATE` that phase 3 would have to invent behaviour for.
+
+**What would overturn this:** a reading of §18 under which "chronicle" means the
+propagation model, in which case the phase gate is unreachable without phase 4
+and that is a `SPEC-QUESTIONS` entry, not a plan revision.
+
+### D-048 · Point 7 declared blocked rather than deferred or built anyway
+
+**Ruling:** R-008 — ratified.
+
+§20 ends "Confirm before Phase 3. A wrong guess costs a rewrite of the
+serialiser," and five of its rows read `Proposed`. Three options.
+
+Build the serialiser on the current guess and hope — which is what has been
+happening silently since the first commit, the code being on `netstandard2.1`
+and C# 9 already. Move the point out of this plan, which hides a phase-3
+deliverable behind a plan boundary. Or declare it blocked in the plan and put
+the confirmation in the request.
+
+**The third.** The sentence in §20 is unusually specific about who pays and how
+much, and a plan that quietly built past it would be deciding a question the
+specification explicitly reserved. The point also states its own failure mode:
+if the confirmation contradicts the guess, the point is **reported failed and
+rewritten, not amended** — criteria are frozen, and a serialiser rewrite is what
+§20 says the wrong guess costs.
+
+Everything else in the plan was checked against the block: points 1–6 and 8–9
+touch no serialised format, so the block costs no ordering.
+
+### D-049 · Tests are named for invariants and requirements, not only for AC numbers
+
+**Ruling:** R-008 — ratified.
+
+`AGENTS.md` says tests carry the number of what they verify and gives acceptance
+criteria as the list. Four points of this plan verify things with no AC number:
+`A-13` is an invariant of `SIM-STATE`, `FR-T-05a`, `NFR-10` and `FR-A-01` are
+requirements. Their tests are named `A13_`, `FRT05a_`, `NFR10_`, `FRA01_`.
+
+The rule's actual content is that **a test names what it verifies and verifies
+something named**, which the identifier prefix satisfies whichever document the
+identifier lives in. The alternative — reserving the convention for AC numbers —
+would leave the majority of phase 3 with names that say nothing, since the phase
+has two acceptance criteria and nine points.
+
+**What would overturn it:** a preference that only `AC-` tests carry prefixes,
+which would want the other names chosen deliberately rather than left to
+whoever writes them.
+
+### D-050 · Two points exempt from the reviewers, on a diff-checkable line
+
+**Ruling:** R-008 — ratified.
+
+Points 8 and 9 declare `Core: no`. Point 8 touches `harness/` only, point 9 adds
+a test file and a workflow step; both state the command that falsifies the claim
+— `git diff --name-only HEAD -- core/` and the same over `core/Runtime/`. That
+is the form `D-002` of the twelve-gaps plan asked for: an exemption a diff can
+contradict, not a judgement about size or risk.
+
+Worth noting against the standing entry in `REVIEW-REQUEST.md`: seven of the
+nine points are `Core: yes`, so **the review protocol finally runs here**, on
+point 1, having had no exercise in four plans. If it is broken, point 1 is where
+that is found, which is the cheapest point in the plan for it to happen on.
+
+### D-051 · The plan is installed on `main`, and `fase-3-kernel` is not cut
+
+**Ruling:** R-008 — ratified.
+
+`66a908d` installed the previous plan on the development branch, and this one
+goes on `main` instead. The reason is what the commit contains: a plan, a
+specification question and a request that asks a human to answer before the work
+starts. A request nobody can see does not interrupt, and a branch would make
+answering it cost a merge first.
+
+It follows `D-042`, which put the lookup point on `main` for the same shape of
+reason — no code, and a human about to open a clean session. Here there is not
+even a point closed: the plan's own `Branch: fase-3-kernel` stays true and
+describes where the nine points will be built, once there is a reason to cut it.
+
+**What would overturn it:** a preference that `PLAN.md` never appear on `main`,
+which is defensible — `/plan-status` reads whatever `PLAN.md` it finds — and
+would mean installing the plan on the branch and leaving only the request here.
+
+---
+
+## 2026-09-20 — The reviewer's answers, recorded
+
+Every item of the request answered, `docs/` edited by the human in `0114ad2`,
+and one gap left behind that the request had not asked about.
+
+### D-052 · `SQ-004` closed by marking what it got wrong, not by tidying it
+
+**Ruling:** R-008 — ratified.
+
+The entry proposed three readings of how `P-17` and `P-01` could close. Reading
+2 — build a synthetic settlement update and measure it — **had already been
+done**: `P-63` and `P-64` sit in §16 with the note "Measured, 5 of 12 phases",
+and they are the output of exactly that benchmark. The entry did not mention
+them because it was written from §19, §18 and NFR-05 without opening §16.
+
+The entry was **not** rewritten to remove the dead option. It was marked with
+the resolution and with why it was posed short, under `D-036`'s rule that
+promoted entries are marked and kept. A specification question tidied after the
+answer teaches nothing; this one carries a lesson the citation rule does not:
+cite the line, and read the section that holds the numbers.
+
+**What would overturn it:** nothing about this case. The general rule it
+suggests — that an objection names the parameter table it checked — is worth
+having and is not adopted here, because it belongs to `SPEC-QUESTIONS.md`'s own
+rules and those are not edited in passing.
+
+### D-053 · The met precondition is recorded in the plan, the points are not touched
+
+**Ruling:** R-008 — ratified.
+
+§20 was confirmed and `SQ-004` closed, both before any point started, so point 7
+is unblocked. The plan says so in the precondition section that declared the
+block, dated, with a line stating that nothing above it was rewritten.
+
+The alternative was editing point 7 to drop its blocked clause. Rejected:
+criteria are frozen when written, and while a met precondition is not a
+criterion, the edit would be indistinguishable in the diff from one that was.
+**The block was deliberately written outside the point for this reason**, and
+taking the other path would have wasted the precaution.
+
+### D-054 · The request is marked answered, not replaced
+
+**Ruling:** R-008 — ratified.
+
+`D-039` replaces a request when the situation moved, `D-041` amends it when one
+item was answered. Here **every** item was answered and no new moment arrived:
+the next is moment two, the phase 3 gate. A replacement would have had to invent
+a moment to be written at, which the file forbids in as many words — "at those
+moments, not near them".
+
+So the request stays, marked answered in its heading, with each item struck and
+its answer beside it, and one open item added. **What would overturn it:** a
+preference that `REVIEW-REQUEST.md` hold only live requests, with answered ones
+going to git — defensible, and it would mean the file is empty between moments,
+which is information too.
+
+### D-055 · The failure path is recorded as owed and deliberately not built
+
+**Ruling:** R-008 — ratified.
+
+The reviewer's gap 8: nothing says what happens when a criterion turns out to be
+wrong **in flight**. The neighbouring cases exist — a failed check closes the
+point `FALLITO` and stops the plan, and the rule that a wrong criterion is
+reported rather than rewritten is in three skills — but the path between them is
+not written: who is told, where the wrong criterion is recorded, whether the
+plan stops.
+
+It is not built now, for a reason that is mechanical rather than a judgement
+about priority: **it is process work, process work needs a plan, and a second
+`PLAN.md` would be two plans live at once.** `D-042` says that is the first
+thing that breaks the point lookup, and the lookup was fixed eight commits ago.
+
+Recorded as item 5 of `REVIEW-REQUEST.md`, open, to be taken up when the phase 3
+plan closes. **What would overturn it:** the first point of phase 3 hitting a
+wrong criterion, in which case the gap stops being theoretical and the phase 3
+plan is the one that has to stop and say so.
+
+## 2026-09-20 — Phase 3, the headless kernel
+
+The plan's points, each under the number it closes.
+
+### D-056 · Point 1 · `Calendar`, a static class of six divisions, zero-based
+
+**Ruling:** R-008 — ratified.
+
+`docs/` fixes the arithmetic and nothing about its shape: no type name, no
+namespace, no signature. What was chosen — `Sim.Calendar`, a static class in
+`core/Runtime/Time/`, holding four constants and seven methods and no state.
+
+Three sub-choices worth naming, because each had a defensible other side.
+
+**Season, week and month are zero-based.** FR-T-05a is normative and writes
+`season = dayOfYear / 91  // 0..3`; FR-T-05's prose says "Season 1 begins the
+year and is spring". The two agree on the boundaries — one-based days 1, 92,
+183, 274 are zero-based 0, 91, 182, 273 — so this is a presentation convention,
+not a contradiction, and **no `SPEC-QUESTIONS.md` entry was filed.** Both
+reviewers were asked and both agreed. The core returns what the formula returns;
+adding one belongs to whatever shows a date to a player.
+
+**`Year` returns `long`, the other five return `int`.** `SIM-STATE` types `tick`
+as int64 and fixes nothing downstream. `Year` is the only one of the six
+unbounded in `tick`; the other five are provably inside 0..363. The asymmetry in
+the signatures is the asymmetry in the arithmetic.
+
+**`NewYearsDayFollows(tick)` is the whole of FR-T-03.** A 364-tick year with no
+365th case *is* a festival that consumes no tick, and DEC-006a asks for exactly
+that — "no special case in the scheduler". The predicate adds no behaviour; it
+names the boundary for a caller that wants to show the festival.
+
+**What would overturn it:** a host or a later phase needing a date type rather
+than six independent queries — a `struct Date` would then be the shape, and the
+methods become its constructor.
+
+### D-057 · Point 1 · A tick is non-negative, checked in debug only
+
+**Ruling:** R-007 — ratified; prior-history dating recorded as open in `SIM-STATE`.
+
+`Calendar` asserts `tick >= 0` under `Conditional("DEBUG")` and defines nothing
+below zero. `docs/` does not say ticks are non-negative, and one line reads the
+other way: **FR-G-03** generates prior history "for P-18 years **before tick
+0**". **DEC-040** settles it — the run "takes the result as tick 0" — so
+prehistory is relabelled, not numbered backwards. Both reviewers found the same
+line and reached the same resolution independently.
+
+Floor division was rejected. `Fixed.DivFloor` would make the six methods total
+over the whole of int64, at the price of no longer reading as FR-T-05a writes
+them, in order to define a state the simulation cannot occupy. The cost of being
+wrong is visible and bounded: in Release the guard is compiled out, and
+`tick = -1` returns year 0, dayOfYear -1, dayOfMonth -1.
+
+The reasoning is in the file's remark as well as here, because the blind
+reviewer's objection was precisely that the code asserted a fact and gave no
+reason for it.
+
+**What would overturn it:** phase 14 implementing FR-G-03 the way FR-G-03 words
+it. That is a decision about world generation, not about the calendar, and it
+would fail loudly in a debug build rather than quietly — which is the point of
+the guard.
+
+### D-058 · Point 1 · Weekday is not in the core; the test defines it
+
+**Ruling:** R-008 — ratified.
+
+The point's "Does" is exhaustive — "the tick-to-date arithmetic and nothing
+else" — and does not list a weekday, yet the criterion's first test is
+`FRT02_EveryDateFallsOnTheSameWeekday`. `Calendar` exposes no weekday, and the
+test takes `tick % 7`.
+
+This is not the test inventing a formula to agree with. A week is seven
+consecutive ticks and nothing interrupts the stream, so `tick % 7` is the
+definition of a weekday, external to the calendar, and it is the one DEC-006a's
+own rationale reasons with. The tautological alternative, `dayOfYear % 7`, holds
+for any year length and would test nothing. Since `364 % 7 == 0`, a host that
+later wants a weekday gets the same answer from either.
+
+**What would overturn it:** a subsystem needing the weekday inside the core,
+which point 4's `id % 7 == d % 7` bucket is not — that derives from the id.
+
+### D-059 · Point 1 · The criterion under-covers the point, and was not rewritten
+
+**Ruling:** R-008 — ratified.
+
+Finding, from the blind reviewer, confirmed: the point's "Does" requires "the
+New Year's Day that sits between two ticks without consuming one", and the two
+tests named in "Closed by" touch none of it. Under the criterion as frozen,
+`NewYearsDayFollows` ships uncovered.
+
+A third test was written, `FRT03_NewYearsDayConsumesNoTick`, checking that the
+predicate and the year turnover agree on every tick of the span and that exactly
+three boundaries fall in four years. **The criterion was not amended.** "Closed
+by" says what must be green to close the point, not what may exist; adding a
+test neither weakens the standard nor rewrites it. It is recorded here because a
+criterion gap filled silently is how a criterion stops being what closes a
+point.
+
+**What would overturn it:** a reading of "Closed by" as exhaustive, which would
+make the third test an out-of-scope addition rather than a gap report. Nothing
+in `AGENTS.md` or the three skills supports that reading, but it is the
+alternative.
+
+### D-060 · Point 1 · The reviewers' findings, including the one rejected
+
+**Ruling:** R-008 — ratified.
+
+Both reviewers ran `Core: yes`, built Release and ran both suites, and both said
+the point is sound. Their overlap was near total, which is worth recording as a
+fact about the mechanism: the blind reviewer found nothing the briefed one
+missed except the sharper reading of FR-G-03's wording, and neither found a
+defect in the arithmetic.
+
+Applied: two constants deleted (`WeeksPerYear = 52`, `SeasonsPerYear = 4`, read
+by nothing and pinned by nothing — both reviewers checked independently that
+changing them left all twenty tests green); the remark's "year 0 for the two
+years either side of the origin" tightened to the exact span, 727 ticks from
+-363 to 363, after the two reviewers disagreed about whether the phrase was
+loose or correct; and the four entries above, which are findings that wanted
+recording rather than code.
+
+**Rejected:** the briefed reviewer's note that `FRT02` dimensions its array from
+`Calendar.MonthsPerYear` and `Calendar.DaysPerMonth` while `FRT05a` deliberately
+uses literals, so the policy is not applied consistently. True as stated, and it
+buys nothing: `FRT05a` pins both constants against the literals of FR-T-05a on
+every one of 1456 ticks, so a wrong value fails there before `FRT02` is reached.
+The reviewer raised it as an observation and did not press it. **What would
+overturn it:** `FRT05a` ceasing to pin those two constants, at which point
+`FRT02`'s array bounds become the only thing holding them and should stop
+deriving from the values they are meant to check.
+
+### D-061 · Point 2 · `record` in SIM-STATE is a composite value, not the C# keyword
+
+**Ruling:** R-008 — ratified.
+
+`SIM-STATE` §World types `generationParams` as `record`. A C# `record` is a
+class, and NFR-10 says "No object references inside serialised state", so the
+two would contradict each other under the keyword reading. `GenerationParams`
+is a `readonly struct`.
+
+`docs/` says nothing about C#. Its Type column is a type language of its own —
+`int64`, `uint64`, `fixed`, `bitfield`, `id[]`, `bounded record[]`, `flag plus
+record`, `sparse record`, `enum plus int`, `derived` — and not one entry in it
+is spelled the way C# spells it. Reading `record` as the keyword while reading
+`int64` as prose is the inconsistent reading. The decisive argument is internal
+to the document: `knowledgeTable | bounded record[]` and `guildHall | flag plus
+record` sit inside rows the same file's serialisation notes say hold "no object
+references", so under the keyword reading SIM-STATE contradicts SIM-STATE.
+
+**No `SPEC-QUESTIONS.md` entry was filed.** Nothing in `docs/` is wrong here,
+which is what an `SQ` is for; the word is used consistently and means
+"composite". Had `record` appeared only in this one row, the answer would have
+gone the other way.
+
+**What would overturn it:** a future revision of SIM-STATE that names C# types
+explicitly, or a row that needs a genuinely variable-length composite, which a
+struct cannot be.
+
+### D-062 · Point 2 · `GenerationParams` carries one parameter, and it is P-02
+
+**Ruling:** R-008 — ratified.
+
+`docs/` nowhere enumerates the generation parameter set. FR-G-02 says only that
+"the generator seed and all generation parameters are stored in the save file",
+and §16's table mixes generator inputs with simulation constants. The struct
+holds `SettlementCount` and nothing else.
+
+The seed is not in it: SIM-STATE gives `worldSeed` as "also the RNG root", so
+FR-G-02's seed is that field.
+
+Two alternatives were rejected. **An empty struct** — a field whose type has
+exactly one value cannot be perturbed, so point 3's hash test would report it
+as covered while proving nothing about it, which is the determinism hole
+SIM-STATE names in the same sentence. **Also P-03 and P-04** — "inhabited
+fraction 15%" and "map extent 1,000 km per side" cannot be stored without
+inventing a unit and a fixed-point scale that `docs/` does not give, and each
+invention is a decision belonging to the generator that does not exist yet.
+P-02 is a bare count with no representation question attached, and it is the
+one generation parameter the state layout has a stake in: it is the length of
+every settlement array phase 4 adds.
+
+That last claim is true because of FR-W-10 ("settlement count is fixed for the
+run") and DEC-067, **not** because of P-02, which fixes a default and not a
+length. The code cited P-02 for it; the briefed reviewer caught the substitution
+and the comment now cites FR-W-10.
+
+This is not reaching into phase 4 in the sense `AGENTS.md` forbids. The rule
+bans implementing a subsystem early; an `int` carried in a save has no
+behaviour and no update, and no phase-4 gate is weakened by its presence.
+
+**What would overturn it:** phase 4's generator needing a second parameter, at
+which point it is added under the migration path NFR-08 requires from the first
+write — which is why the cost of being wrong here is one save version, not a
+rewrite.
+
+### D-063 · Point 2 · The container is a class; only its contents obey NFR-10
+
+**Ruling:** R-003 — ratified; the open question resolved, mutable state leaves the public surface at point 5.
+
+NFR-10 reads "Struct-of-arrays, indexed by `EntityId`. No object references
+inside serialised state." `WorldState` is a `sealed class` with public mutable
+fields.
+
+Struct-of-arrays is a layout term — one object holding parallel arrays, rather
+than an array holding objects — and the type discipline lives in the second
+sentence, which says *inside*. A C# `struct` container would buy nothing DEC-003
+asks for: with arrays inside, a struct copy is a shallow copy of the same
+arrays, so its value semantics are an illusion that costs defensive copies on a
+state SIM-REQ sizes at 50 MB. Neither AC-02 nor AC-03 can see the difference:
+the hash covers field values and the serialiser of point 7 writes named fields.
+
+**Open, and passed to the human rather than settled here.** The briefed reviewer
+observed that public mutable fields leave FR-A-01 ("nothing outside the core
+writes world state directly") enforced by convention only, and that `internal`
+fields would enforce it at compile time for free, since the core already
+declares `InternalsVisibleTo("Sim.Core.Tests")` and both reflection walkers pass
+`BindingFlags.NonPublic`. Against it: every core type so far is public, and
+point 8's runner will want some surface. **This belongs to point 5**, which is
+the point that claims FR-A-01 — but it is cheaper decided before a serialiser
+and a runner are written against the public fields than after.
+
+**What would overturn it:** that decision at point 5, or a host that needs to
+pass state by value.
+
+### D-064 · Point 2 · The walker allows one level of array, which the criterion's words do not
+
+**Ruling:** R-006 — promoted as DEC-085.
+
+The criterion says the test fails "on any reference type". An array is a
+reference type, and the walker lets one through at depth 0.
+
+The point's own "Does" says *parallel arrays*, and SIM-STATE's serialisation
+notes say "Struct of arrays … no object references" in one breath. A walker
+that failed on `int[]` would fail the layout the same sentence mandates. The
+line the code draws is between *one object holding contiguous values* —
+`EntityId[]`, and `int[,]`, which falls through the same branch — and *an object
+holding objects*: `int[][]`, `List<int>`, and any struct holding an array,
+since the recursion into a struct's fields forbids arrays. The first shape
+serialises, copies and hashes in bulk; the second is the object graph DEC-003
+exists to keep out.
+
+**The criterion was not amended.** Its words and the point's "Does" disagree,
+and the code resolved the disagreement toward the "Does". Today the divergence
+carries nothing: `WorldState` has no array field, so the test is green under
+the strict reading too. From the first parallel array of phase 4 it will carry
+everything, and the criterion as frozen would fail the layout it exists to
+protect.
+
+**This decides part of the phase-4 state layout, from a private helper in a test
+file.** SIM-STATE's per-row `treasury int[4]`, `allocationVector fixed[]`,
+`ageDistribution int[]`, `goods int[]` and `flowAccumulator int[]` must each
+arrive flattened — one `int[]` of length `rows * width`, or an `int[,]` —
+because both the jagged and the array-inside-a-struct shapes fail this walker.
+Recording it here because the next person to meet the rule will meet it as a
+red test, with no statement anywhere of why.
+
+**What would overturn it:** a phase-4 row field that genuinely needs variable
+width per row, which a flat array cannot express without an offset table.
+
+### D-065 · Point 2 · The declared check cannot fail today, and the test that pins it is not named by the criterion
+
+**Ruling:** R-008 — ratified.
+
+`NFR10_StateHoldsNoObjectReferences` passes against a walker whose body is
+`return;`. Verified rather than reasoned: `Check` was replaced by an immediate
+`return`, the fixture run, and exactly one of its four tests went red —
+`NFR10_TheWalkerRejectsWhatItIsThereToReject`, the negative control, which the
+criterion does not name. The declared test stayed green, because no field of
+today's `WorldState` offends under any implementation.
+
+So the criterion certifies that a list built by an unspecified procedure came
+back empty. This is a sharper failure than point 1's `D-059`, where the check
+merely under-covered the point: here the check as written cannot fail for the
+reason it exists.
+
+**The criterion was not amended, and the extra tests were not folded into it.**
+"Closed by" says what must be green, not what may exist — the reading `D-059`
+settled. Three tests were added beside it: the negative control above, which is
+what makes the declared check mean anything;
+`FRW01_WorldStateHoldsTheWorldRowAndNothingElse`, which enforces the "Does"
+clause "holding at first only the World row"; and
+`FRW01_TheWorldRowCarriesTheDeclaredTypes`, which pins four of the five field
+types against SIM-STATE's Type column. The fifth field's type is pinned by the
+declared test itself, which would fail if `GenerationParams` became a class.
+
+**What would overturn it:** nothing about the criterion, which stays as frozen.
+The finding is for whoever writes the next one: a check that names a mechanism
+should name the test that can break the mechanism.
+
+### D-066 · Point 2 · Two tests carry `FR-W-01`, because `SIM-STATE` §World has no number
+
+**Ruling:** R-008 — ratified.
+
+`AGENTS.md` requires that a test carry the number of what it verifies. The two
+tests above verify the World row's field list and field types, which is
+`SIM-STATE` §World — and §World has no identifier of its own. They were first
+written with an `NFR10_` prefix, which the blind reviewer flagged: NFR-10 is
+state *layout*, and a field list is not layout.
+
+`FR-W-01` is the nearest requirement that says anything about what lives in
+world state, and it is in the point's "Serves", so the two tests carry it. It is
+an approximation: FR-W-01 fixes no field types. Recording the gap rather than
+hiding it behind a number that fits less well.
+
+**What would overturn it:** `docs/` giving §World rows identifiers, at which
+point the tests should carry those.
+
+### D-067 · Point 2 · The reviewers' findings, and the two left open
+
+**Ruling:** R-003, R-004 — both open questions resolved; R-008 — the rest ratified.
+
+Both reviewers ran `Core: yes`, built Release and ran both suites, and both
+answered that the point closes. They overlapped on three findings and each
+found things the other did not.
+
+**Applied.** The comment claiming the chronicle "belongs to later phases" —
+false, SIM-REQ §18 lists it inside phase 3 and point 6 builds it, found by the
+blind reviewer and confirmed against §18. The docstring calling a sixth state
+field "a subsystem arriving before its phase" — the same error, and wrong twice
+over, since points 5 and 6 both widen the World row inside this plan. The
+recursion guard in the walker and its comment: the comment said an array can
+carry a struct back to itself, which is true of C# and false of this walker,
+because every descending call passes `arrayAllowed: false` and an array met that
+way is reported without being entered; both reviewers traced it independently
+and both reached "dead code with a false comment", the `D-060` standard, so the
+`HashSet` went and the termination argument is now stated where it is true. The
+two files moved from `core/Runtime/` into `core/Runtime/State/`, the folder the
+scaffolding commit reserved and left empty, which is where `Time/Calendar.cs`
+sets the pattern. The P-02 citation corrected to FR-W-10, per `D-062`. The
+equality surface of `GenerationParams` — `IEquatable`, both `Equals`,
+`GetHashCode`, `==`, `!=` — deleted: read by nothing, pinned by nothing, the
+same deletion `D-060` already made once. Its `GetHashCode` was also worth
+removing on its own, being a name one letter away from the state hash and
+carrying none of its guarantees.
+
+**Open, passed to the human rather than settled.** The `internal`-versus-public
+question of `D-063`, which belongs to point 5. And `RuleVersion` as a
+constructor argument: NFR-09 says "state records which rule version produced
+it", which is a property of the build, not a value a caller elects, so a host
+can today record a version that produced nothing and DEC-033's materialisation
+would run against it. Nothing in phase 3 forces a shape; flagged so that it is
+decided when it is decided rather than inherited.
+
+**Rejected:** nothing outright. The blind reviewer's observation that the
+register and the outcome line were missing was true when it looked and is what
+this entry closes. Its note that `#pragma warning disable CS0649` appears in the
+test fixture stands as recorded rather than acted on: `AGENTS.md` places the
+suppression rule in the section about the core's analyzers, the test project
+sets no `TreatWarningsAsErrors`, and the suppressed warning is "field never
+assigned" on a type whose fields exist to be read by reflection and are never
+assigned by design.
+
+**Carried forward to point 3, which is where it lands.** Its criterion perturbs
+the fields of `WorldState`; with `GenerationParams` a composite, perturbing the
+field proves the struct reaches the hash, not that each member of it does. The
+two coincide while it has one member. When phase 4 adds a second, a member that
+never reaches the hash passes point 3's test unless that test recurses the way
+this one does.
+
+### D-068 · Point 3 · `StateHash`, a static fold, and the mixer made `internal`
+
+**Ruling:** R-018 — ratified.
+
+**What was decided.** The digest is `StateHash.Of(WorldState)`, a static method
+in `Runtime/State/`, folding each field as `h = Hash64.Mix(h ^ x)` from a
+constant origin, in the order `SIM-STATE` §World declares them. It is not a
+method on `WorldState`: that type is a data container, and a `Hash()` on it
+would sit one letter from the state hash while carrying none of its guarantees —
+the same collision of names `D-067` deleted `GenerationParams.GetHashCode` for.
+
+`Hash64.Mix` went from `private` to `internal` so the fold reuses it. The
+alternative was a second copy of `MixA` and `MixB` in another file, which is two
+determinism-critical constants to keep identical across builds where the pinned
+vectors in `PrimitivesTests` guard only one of them. `internal` is narrower than
+`public` and the core's public surface is unchanged; `SIM-REQ` §20 constrains
+framework, language level, reflection and dependencies and says nothing about
+member visibility, and `R-003` constrains mutable world state, which a mixing
+function is not. Note that `Sim.Core.csproj` already carries
+`InternalsVisibleTo("Sim.Core.Tests")`, so `internal` here means the core plus
+the test assembly; no test calls `Mix`.
+
+**What `docs/` says.** `SIM-STATE` §Serialisation notes requires that the hash
+cover every field and calls an excluded field a determinism hole. It does not
+say what the hash is, how it is seeded, or where it lives. `NFR-01` and `AC-02`
+require the digest to be identical across builds and machines, which rules out
+the base class library's hash codes and is why the mixing is written out in
+integer operations.
+
+**What would overturn it.** A ruling that the digest belongs on `WorldState`
+after all; or `R-003` landing at point 5 in a form that makes `WorldState`
+`internal` — see `D-071`.
+
+### D-069 · Point 3 · The fold's guarantee is single-field injectivity, not collision resistance
+
+**Ruling:** R-018 — ratified.
+
+**What was decided.** The file states what the construction actually gives and
+not more. A state differing in exactly **one** field can never share another's
+digest: every cast into the fold widens and is injective, xor with the
+accumulator is a bijection, and `Mix` is a bijection, so with the other fields
+held fixed the digest is an injective function of each one. The perturbation
+test is therefore exact, not probabilistic.
+
+Two fields are a different matter and the comment now says so. Two states
+differing in two fields collide in two evaluations of `Mix`: choose the second
+field to absorb what the first did to the accumulator. Verified against the real
+function rather than argued — with `SettlementCount=2000`, `RuleVersion=7` and
+`CurrencyTotal=1000003` in both, `Tick=41` with
+`WorldSeed=0x0123456789ABCDEF` and `Tick=42` with
+`WorldSeed=0x729E20E7458C7D96` both digest to `0xCE31A6F9C074C14D`.
+
+This is a property of any `h = Mix(h ^ x)` chain, not a 64-bit birthday
+collision, and it costs nothing under `AC-02`, which compares two runs of the
+same build where a divergence is systematic rather than adversarial. It is the
+reason this is a digest and not a checksum against tampering.
+
+**What `docs/` says.** Nothing about the hash's strength. `AC-02` asks for equal
+sequences from equal inputs, which the construction gives exactly.
+
+**Correction carried into a file this point did not otherwise touch.**
+`Hash64.Of` carried the identical false sentence — "no two different coordinate
+tuples cancel out into the same state" — written before this point and false for
+the same reason. It is corrected in the same commit. Fixing one and leaving the
+other standing would have left a known-false claim in the file the corrected one
+cites. The change is a comment and nothing else; no draw moves.
+
+**What would overturn it.** A later use of the state hash that needs resistance
+to a chosen second field — an integrity check on a save file, say — which this
+construction does not give and would need a keyed or wider digest.
+
+### D-070 · Point 3 · The criterion is again vacuously satisfiable alone, and again was not rewritten
+
+**Ruling:** R-018 — ratified; the question on criteria escalated as R-017.
+
+**The defect.** `NFR01_EveryStateFieldEntersTheHash` asserts that no field was
+left unreached. An enumeration returning nothing satisfies that, forever and
+silently — the same shape as `D-065` one point earlier, where the declared check
+passed against an emptied walker. What rules it out here is
+`NFR01_TheWalkReachesEveryLeafOfTheWorldRow`, which spells the five leaves out,
+and `NFR01_EqualStatesHashEqual`, which rules out a fold returning a fresh value
+on every call. Neither is named by the criterion.
+
+**Not sanato by rewriting.** Correct code passes the criterion as frozen, so
+this is `R-005`'s first case: the point closes, the missing checks are written
+beside it here, and the plan continues. The criterion above the outcome line is
+untouched.
+
+**A second-order note the decider may want with it.** The criterion's selling
+point is "a field added later without reaching the hash fails this test without
+anyone remembering to extend it." That holds for the named test. The guard that
+makes it non-vacuous carries a hard-coded five-element leaf list, which *must*
+be edited on every field addition. The property bought is that forgetting is
+loud, not that there is nothing to remember. `D-065` and this entry are the same
+defect twice; whether a plan's "Closed by" clause should be required to name
+every test that keeps the named one honest is a question for the decider, not
+one to settle here.
+
+**Two further checks added, neither named by the criterion.**
+`NFR01_TheDigestIsPinned` writes `0xCE31A6F9C074C14D` out: `AC-02` compares hash
+sequences *across builds and machines*, and without it a reordered fold, a
+widened cast or a changed seed leaves every other test green while every world
+ever saved hashes differently. Point 9's gate does not cover this — it compares
+two runs of the same build. `NFR01_ThePerturbationRejectsWhatItCannotChange`
+pins the tripwire, on the precedent and for the reason of
+`NFR10_TheWalkerRejectsWhatItIsThereToReject`: a permissive fallback added later
+to quiet a phase-4 array would pass every other test in the file.
+
+### D-071 · Point 3 · What point 3 hands to point 5, and one docs defect found on the way
+
+**Ruling:** R-018 — ratified; the two walkers stay apart.
+
+**`R-003` will not compile against `StateHash` as written.** `R-003` is owed
+within plan point 5: no public member of the core exposes mutable world state.
+`public static ulong Of(WorldState)` takes one as a parameter, so when
+`WorldState` goes `internal` this is CS0051 — inconsistent accessibility.
+`R-003`'s cost section predates this file and enumerates only `WorldState` and
+the tests that read its fields. The capability survives — `R-003` blesses the
+state hash as a value for point 8's runner — and only the signature moves.
+Recorded so point 5 does not rediscover it.
+
+**`SQ-005` filed, non-blocking.** `docs/SIM-STATE.md:186` attributes the
+no-reflection rule to "section 19 of SIM-REQ", which is Open items; the rule is
+in §20. Not ours to fix.
+
+**Left open to the human, not settled.** Two reflection walkers now descend
+`WorldState` — `WorldStateTests.Check` and `StateHashTests.Walk` — with two
+hard-coded field lists between them. They answer different questions (what may
+be in state, what reaches the hash) and merging them would couple `NFR-10` to
+`NFR-01`, so they are left apart; whether that is one walker too many is taste,
+and the author of the code does not arbitrate its review.
+
+**Rejected, with the reason.** The suggestion to tie `StateHash.Seed` to
+`Hash64.GoldenGap` — they share bits today — is the bug, not the cleanup: the
+two play unrelated roles, and coupling them means a future change to the RNG's
+additive tweak silently rewrites every saved world's state hash. The comment now
+says they need not stay equal, and `NFR01_TheDigestIsPinned` turns any such
+change into a red test rather than a paragraph someone skimmed. Also rejected:
+teaching the perturbation fixture about array fields now. Arrays arrive with
+phase 4 under `DEC-003`, reaching for them here is the scope rule `AGENTS.md`
+forbids, and the `Assert.Fail` makes the first one loud — traced by both
+reviewers and pinned by a test. Both reviewers noted the consequence and neither
+disputed the default: the fixture goes red on phase 4's first array field
+whether or not the fold is correct, which is fail-loud rather than skip-silent.
+
+**Not a finding, recorded because both reviewers reached it independently.** A
+value type with zero declared instance fields walks to zero leaves and is
+verified by neither test. Such a type carries no state, so the silence is
+correct; it is the one hole in the walk's "every leaf" guarantee and is written
+down in case a later phase gives it content.
+
+### D-072 · Point 4 · The loop lives in `Systems/`, which keeps one half of a sentence in `AGENTS.md`
+
+**Ruling:** R-016 — escalated to the user, with a recommendation.
+
+**What was decided.** `TickLoop` is `core/Runtime/Systems/TickLoop.cs`. The
+"Structure" section of `AGENTS.md` says `Runtime/Systems/` holds "one file per
+phase of the settlement update … and those files are the only ones that write to
+state". The loop writes `WorldState.Tick` and is not a phase of the settlement
+update, so every placement breaks one half: in `Time/` a file outside `Systems/`
+writes state; in `Systems/` a file that is not a phase sits among them. The half
+kept is the write boundary, because it is the one a reader relies on to find
+every mutation, and the one `WorldState`'s own comment cites.
+
+**What `docs/` says.** Nothing: the sentence is in `AGENTS.md`, not `docs/`.
+Both reviewers reached the same tension; the briefed one notes that point 5's
+command queue and phase 4's generator will meet it again.
+
+**Left to the human, not settled.** Rewording `AGENTS.md` needs a human's
+permission for that change, and this point does not claim it.
+
+**What would overturn it.** A ruling on the sentence, in either direction.
+
+### D-073 · Point 4 · Unstaggered levels fire on the first tick of their period, and levels run finest first
+
+**Ruling:** R-018 — ratified.
+
+**What was decided.** Basin fires on `tick % 28 == 0`, kingdom on
+`tick % 364 == 0` — the first tick of the month and of the year, so tick 0 fires
+every level, and the annual update falls just after New Year's Day rather than
+just before it. Within a tick the levels run in the order of FR-T-04's table:
+daily, then the settlement bucket, then basin, then kingdom. The counter moves
+after all of them, so each sees the date it fires on.
+
+**What `docs/` says.** FR-T-04 gives periods and nothing about phase; FR-T-06
+staggers settlements only. `SIM-ECON` "What the sequence does not yet cover",
+item 4, leaves kingdom spending "not yet placed relative to the settlement update
+that receives it" — the same question from the other side. First tick was chosen
+because it is FR-T-06's own formula with the id at zero, which invents least.
+The alternative, `tick % P == P - 1`, closes each period before the next opens
+and would put taxation before the festival. Neither is observable in phase 3.
+
+**Deliberately not pinned by a test.** `FRT04_ConsecutiveFiringsOfALevelAreOnePeriodApart`
+checks spacing from a first firing inside the first period, and passes for any
+phase — verified with basin at day 27. Pinning the phase would freeze a choice
+`docs/` has not made.
+
+**What would overturn it.** The decider closing `SIM-ECON` item 4, or phase 4's
+first basin or kingdom system needing the end of the period.
+
+### D-074 · Point 4 · The loop is `internal`, reached through a struct seam, and ids are row indices
+
+**Ruling:** R-014 — specified: FR-T-06's `id` is the row index; the rest ratified.
+
+**What was decided.**
+
+- `TickLoop` is `internal`. A public entry now would be one more thing `R-003`
+  reworks at point 5. **Hand-off, from the briefed reviewer:** point 8 is
+  `Core: no`, so it cannot add the public entry; it has to arrive at point 5, with
+  `R-003`'s handle and FR-A-01's defined point in the tick.
+- The levels are a struct type parameter `T : ICadenceLevels`. The only core
+  implementation is the empty `NoLevels`; the tests supply counting ones. Both run
+  the same method body, so the tests observe the schedule the core runs. The
+  rejected alternative — pure predicates the test iterates itself — would count
+  the predicate, not the loop.
+- A settlement's id is its row index. FR-W-10 fixes the count and forbids
+  deletion, so a row's generation never moves; phase 4's generator must not issue
+  ids that differ from the index.
+- A negative tick count is a `Debug.Assert`, as `Calendar` does for negative
+  ticks. In Release it runs zero ticks. A public entry is a trust boundary and
+  wants an exception.
+- The daily level fires every tick with nothing behind it. FR-T-08's fast travel
+  is that level over zero hot agents; the loop has no notion of fast travel.
+
+**What `docs/` says.** Nothing about shape or visibility. `SIM-STATE` gives the
+Settlement row an `id` and `EntityId` as index plus generation.
+
+**What would overturn it.** Point 5 shaping the public entry differently; a
+generator that needs sparse ids.
+
+### D-075 · Point 4 · The criterion passes a 365-tick year, and was not rewritten
+
+**Ruling:** R-015 — specified: A-13 gains the one-period spacing clause and is verified by test; the rest ratified.
+
+**The defect.** Found by the briefed reviewer, confirmed by mutation: with the
+kingdom firing every 365 ticks, `A13_EachCadenceBucketFiresOncePerPeriod` stays
+green over 100k ticks. The firing at `365j` falls in year `j + j/364`, which is
+year `j` for every `j` up to 363; the first skipped year starts at tick 132,860.
+That is the one-day-a-year drift DEC-006a was written to rule out. 363, 366, 27
+and 29 are caught.
+
+**Not sanato by rewriting.** Correct code passes the criterion, so this is
+`R-005`'s first case: the point closes, and the missing check is beside it —
+`FRT04_ConsecutiveFiringsOfALevelAreOnePeriodApart`, not named by the criterion,
+red against the 365 mutation. Six other mutations of the loop (bucket start,
+step, basin period, kingdom never, one settlement short, daily skipped) turn the
+named test red on its own, so unlike `D-065` and `D-070` it is not vacuous.
+
+**For the decider, from the blind reviewer.** `SIM-STATE` lists A-13 under
+"Invariants, asserted every tick". Nothing asserts it inside the loop, and no
+point of this plan builds the per-tick invariant check. Point 4's criterion asks
+for the test only, so the point is not short; the gap belongs to no point.
+
+### D-076 · Point 4 · The reviewers' findings
+
+**Ruling:** R-018 — ratified.
+
+Both reviewers: the check is met as written and passes for the reason the
+criterion asks; nothing blocking. Build and both suites run by each.
+
+**Applied.** The 365-tick blind spot (`D-075`). The comment in `TickLoop.cs`
+cited register entries not yet written — both reviewers; true once this commit
+lands, since `D-073` is it. The non-generic `Advance`, untested, is now called in
+`FRT09_TheCallerDecidesHowManyTicksRun`. The id-equals-index assumption and the
+point-5 hand-off are recorded in `D-074`.
+
+**Left to the human.** The placement against `AGENTS.md` (`D-072`).
+
+**Rejected.** None.
+
+### D-077 · Point 5 · Commands drain at the start of every tick, and the queue is input, not state
+
+**Ruling:** R-021 — the queue as input, and saves carrying it; R-022 — commands as data, promoted as DEC-086; the rest ratified by R-023.
+
+**What was decided.**
+
+- **The reading of the criterion.** "Submitting them at a different moment of the
+  caller's loop changes nothing" is read as: any moment before a tick starts —
+  between calls of one tick, between calls of many, or from inside the tick
+  before — lands a command on that tick. DEC-030's cost fixes it: "anything the
+  game wants to do immediately waits for the next tick boundary". The rejected
+  reading, commands stamped with a target tick and submitted arbitrarily early,
+  is not excluded by `docs/`, but it holds commands for future ticks and so pulls
+  them into state under `SIM-STATE` §Rule; it costs more and nothing asks for it.
+- **The drain is the first thing a tick does,** before every level, and applies
+  only the commands waiting when it starts; one submitted during the tick waits
+  for the next. `docs/` says only "a defined point". The start lets a command see
+  the tick its levels see (`D-073`), and puts SIM-ECON's Arrivals, where FR-J-17's
+  reported outcomes would land, after it. Draining until empty instead of taking
+  the count is indistinguishable today — `Apply` has no queue to submit to — and
+  no test tells them apart.
+- **Order is submission order,** FIFO. `docs/` says "identical command sequence"
+  (NFR-01) and nothing more.
+- **The queue lives beside `WorldState`, outside the state hash.** AC-02 names
+  seed and commands as inputs; the queue holds input not yet applied. This is in
+  tension with `SIM-STATE` §Rule and is filed as `SQ-006`, non-blocking. **Owed to
+  point 7:** what a save does with commands still waiting — carry, drop or refuse.
+- **A command is an `ICommand` object with `Apply(WorldState)`,** internal, so
+  only the core (and the tests, through `InternalsVisibleTo`) can define one. Phase
+  3 defines no kind; the tests' `Fold` is a stand-in. **Open for the human, from
+  the briefed reviewer:** under `R-019` every future kind's `Apply` is a writer and
+  must live in `Runtime/Systems/`; commands as immutable data dispatched by the
+  drain would keep the writers there and give point 7 a codec per kind rather than
+  per class. Not settled here: nothing violates `R-019` today, and choosing the
+  command representation is choosing the replay format, which is phase 7's.
+- **The queue is single-threaded.** DEC-031's host thread cannot submit to it
+  safely; the core may not hold threading primitives, so the handover is the host
+  integration's.
+
+**What `docs/` says.** FR-A-01: a queue, a defined point in the tick. DEC-030: the
+command log is a replay format. Nothing on the point, the order, the
+representation or whether the queue is state.
+
+**What would overturn it.** An answer to `SQ-006` that makes pending commands
+state; a command kind that must apply mid-tick; DEC-031's handover requiring a
+queue the core owns across threads.
+
+### D-078 · Point 5 · R-003 by an internal state type and a public handle; R-004 on the public path only
+
+**Ruling:** R-023 — ratified.
+
+**What was decided.**
+
+- `WorldState` and `StateHash` are `internal`. The *type*, not its fields: the
+  compiler then refuses any public member that takes or returns the state, and
+  `FRW01_TheWorldRowCarriesTheDeclaredTypes`, which looks fields up with default
+  binding flags, still sees them. `R-003`'s cost note expected that test to break;
+  it did not, because the fields are still public members of a non-public type.
+- **`Simulation`, public, is the host's entry**: a constructor from seed and
+  generation parameters, `Advance(long)`, and `StateHash` as a value. The state and
+  the queue are private fields. This is `D-074`'s hand-off: point 8 is `Core: no`
+  and could not have added it. The first draft left the core with no public entry
+  at all; both reviewers found it (`D-080`).
+- **No public submit.** `ICommand` takes the internal state, so it cannot be
+  public, and phase 3 has no kind to issue. The drain still runs inside
+  `Simulation.Advance`.
+- **`Advance(-1)` throws** `ArgumentOutOfRangeException` on the public entry,
+  where `D-074` said a trust boundary wants an exception; the internal loop keeps
+  its `Debug.Assert`.
+- **`R-004`, in part.** `Simulation` stamps a new world with
+  `Simulation.CurrentRuleVersion = 1`, so no host chooses a rule version. The
+  internal `WorldState` constructor still takes one, used by the tests; removing it
+  and loading a foreign version through a save remain point 7's, as `R-004` allows.
+  `1` is arbitrary: phase 3 has no rules to version.
+- `FRA01_WorldStateIsNotVisibleOutsideTheCore` checks visibility and is the
+  floor of `R-003`, not the whole guard: once phase 4 adds arrays, a public member
+  returning one would hand out a live alias and pass it. Said in its comment.
+
+**What `docs/` says.** FR-A-01, FR-A-02, FR-A-03; nothing on the shape. `R-003`
+leaves it to the implementer.
+
+**What would overturn it.** Point 8 needing something `Simulation` does not
+expose — the tick, say — which it cannot add itself.
+
+### D-079 · Point 5 · The declared check, and what it catches
+
+**Ruling:** R-023 — ratified.
+
+`FRA01_CommandsApplyAtOnePointInTheTick` reads the hash sequence inside each
+tick, in the first level, after the drain — the one point every way of calling
+the loop shares, since a caller running forty ticks in one call sees no boundary
+between them. It compares three ways of submitting the same script against one
+reference and against a run with no commands.
+
+The plan predates `R-020` and point 5 has no `Fails when:` line. The faults were
+introduced anyway, each alone, each undone: drain once per call instead of once
+per tick, drain at the end of the tick, drain after Daily, drain without
+applying — all red on the named test. **Reversing the order passes it**: every
+run reverses alike, and the criterion compares runs with one another. That fault
+is caught by `FRA01_CommandsApplyInTheOrderSubmitted`, which pins the value by
+hand. Correct code passes the criterion, and it proves "same order gives same
+sequence" rather than "the order is the order submitted" — which the criterion
+does not ask for. Not a defect of the criterion, recorded so nobody reads the
+named test as covering order.
+
+### D-080 · Point 5 · The reviewers' findings
+
+**Ruling:** R-023 — ratified; commands as data ruled by R-022.
+
+Both reviewers: the check is met as written, build and both suites green;
+`2918` and `8` verified by hand.
+
+**Applied.**
+- No public entry after `R-003`, contrary to `D-074`'s hand-off — both. `D-078`.
+- The named test could not see a drain run once per call, since nothing
+  submitted inside a multi-tick call — both. The mid-tick case now runs as one
+  call of every tick; the fault turns it red (`D-079`).
+- Comments citing register entries not yet written — both. True with this commit.
+- "The queue is its replay format" — briefed. DEC-030 says the command *log*; the
+  comment now says nothing writes one yet.
+- "While a tick is running" is safe only on one thread — both. Narrowed.
+- "This one assertion covers the whole surface" overstated — briefed. Narrowed.
+- Pending commands and `SIM-STATE` §Rule — both; the briefed reviewer asked for a
+  question. `SQ-006`.
+
+**Left to the human.** Commands as code or as data, and where future kinds live
+under `R-019` (`D-077`).
+
+**Rejected.** None.
+
+### D-081 · Point 6 · The chronicle's shape: ids are the order of writing, the pool follows DEC-085
+
+**Ruling:** R-027 — ratified; `0` narrowed by R-024, the id's table left open by R-025.
+
+`SIM-STATE` §Chronicle names the fields and gives three types — `tick` int64,
+`entities` id[], `importance` int — and `cause` as "chronicle id". The rest is
+chosen here.
+
+- **An id is its row plus one**, from 1; `0` is `Chronicle.None`, the cause of a
+  root. No id column is stored: while nothing is discarded it would repeat the
+  row. `0` for none follows `EntityId.None`, where a defaulted field reads as
+  absent. `int`, not `long`: arrays index by `int`.
+- **The tick is the state's**, not an argument: an entry is dated when it is
+  written (DEC-005). Prior history is `SIM-STATE` Open item 4 and belongs to the
+  generator.
+- **Location is an `EntityId`**, `None` when an event has no place. `docs/` does
+  not say whether a location is a settlement or a position, as it does for
+  buried stock.
+- **Entities live in one shared pool**, each row naming its slice by start and
+  count — DEC-085's second option, literally. The start is derivable from the
+  counts until something is discarded; it is stored because DEC-085 prescribes
+  it and a compaction will need it.
+- **Capacity is not state.** Columns double from 8; only the first
+  `ChronicleCount` rows, and the pool up to `EntitiesInUse`, are hashed.
+- **The writer is `Systems/Chronicle.cs`**, a static class like `TickLoop`,
+  under `R-019`. It is `internal` under `R-003`; nothing reads the chronicle
+  outside the core yet.
+
+**What `docs/` says:** the field list and three types; nothing on id
+numbering, location's type, capacity, or where an entry's tick comes from.
+**Would overturn it:** a retention policy (Open item 3) — dropping the oldest
+entries needs one base id, selective discard needs an id column, and only
+`RowOf` and `ChronicleCount`'s remark change; prior history dated before tick 0
+(Open item 4) needing a tick argument; a decision that location is a position.
+
+**Handed to point 7.** AC-03 compares bytes, so the serialiser writes the rows
+in use and never the capacity: two worlds holding the same entries in columns of
+different length must save identically. `R-021`, `R-022` and the rest of `R-004`
+are still owed there.
+
+### D-082 · Point 6 · A bad cause throws, in Release too
+
+**Ruling:** R-027 — ratified.
+
+`Chronicle.Append` throws `ArgumentOutOfRangeException` for a cause that is not
+an earlier id, before anything is written: no row, no count, no growth. That
+departs from the convention of `D-074` and `D-078`, where public entries throw
+and internal code only asserts.
+
+The reason is the cost of the other branch. A negative tick count asserted away
+in Release runs zero ticks; a forward cause asserted away is a chain with no
+root, carried into every later save, and AC-11 ("every high-importance entry
+traces back to an exogenous root or a player action") could never hold for it.
+One comparison per entry.
+
+**What `docs/` says:** nothing on validation inside the core. **Would overturn
+it:** a ruling that the core never throws from internal code, which would move
+the check to a debug assert and accept the corrupt branch in Release.
+
+### D-083 · Point 6 · The hash and its fixture learn columns
+
+**Ruling:** R-027 — ratified; test names by R-026.
+
+The fold adds the chronicle after §World: the count, then each column over the
+rows in use, then the pool, whose length is read from the last row. That is the
+one departure from `SIM-STATE`'s order, and the remark says so.
+
+**The injectivity remark is narrowed.** `ChronicleCount` and the last row's
+start and count decide how many folds follow, so for those three the digest is
+injective only up to a 64-bit collision. Both reviewers found it.
+
+**The perturbation fixture walks array columns.** `D-071` deferred it to phase
+4, assuming arrays arrived there; the chronicle brings them in phase 3, and
+`D-071`'s own rule — the phase that introduces one says how it enters the hash —
+puts it here. It perturbs **every row in use**, not the first: a first version
+perturbing row 0 left a fold reading `[0]` in place of `[i]` invisible, and with
+both reference entries on tick 41 nothing caught it (briefed reviewer). The
+reference now writes its entries on ticks 41 and 43, and the fault is red.
+Rows beyond the count are not perturbed: they are capacity and must not move the
+digest, which `FRI01_CapacityDoesNotReachTheHash` checks over all seven columns.
+A jagged array still falls to `Different` and fails loud.
+
+**`NFR01_TheDigestIsPinned` moved**, from `0xCE31A6F9C074C14D` to
+`0x22769B0E8F305182`. Its remark calls a change a save format change; no save
+exists until point 7, so there is nothing to migrate, and a new state field that
+left the digest where it was would be the bug. The remark now says so.
+
+**Two test names kept** though narrower than what they check —
+`FRW01_WorldStateHoldsTheWorldRowAndNothingElse` and
+`NFR01_TheWalkReachesEveryLeafOfTheWorldRow` — because `D-065` and `D-070` cite
+them. The first now says so in its summary.
+
+**Would overturn it:** a ruling that register citations do not pin test names.
+
+### D-084 · Point 6 · The declared check, and a word in it that names nothing
+
+**Ruling:** R-027 — ratified.
+
+`FRI01_ChronicleIdsAreStableAndOrdered` appends 1000 entries from a synthetic
+source whose every field is a function of its position — n % 4 entities, a cause
+halfway back or none every fifth, a tick every third — and reads every field of
+every entry back after the columns have grown seven times and the pool eight.
+Two worlds fed the same stream give the same ids and hash.
+
+The plan predates `R-020`; the faults were introduced anyway, each alone, each
+undone. Red on the named test: ids from 0, growth without copy, every slice
+starting at 0 in the pool, the tick not stored. Red on siblings the criterion
+does not name: a forward cause accepted (`FRI01_ACauseNamesAnEarlierEntry`), a
+column left out of the fold and a fold reading only row 0
+(`NFR01_EveryStateFieldEntersTheHash`), a fold running to capacity
+(`FRI01_CapacityDoesNotReachTheHash`).
+
+**Criterio difettoso, not rewritten (`R-005`).** The `Check: shallow` line says
+"the greps and the synthetic source prove the shape is there"; no grep is named
+anywhere in the point. Correct code passes the criterion, and its words point at
+a check that does not exist. What proves the shape is beside it:
+`FRW01_WorldStateHoldsTheWorldRowAndNothingElse` (the field list),
+`FRI01_TheChronicleCarriesTheDeclaredTypes` (the types, since the fold's
+`(uint)` would narrow a widened column silently), and
+`NFR01_EveryStateFieldEntersTheHash`. Both reviewers found it.
+
+**`FR-I-04` is served as structure only.** The chronicle is the single place
+entries live; nothing reads it for UI or dialogue, and under `R-003` the host
+has no read path yet.
+
+### D-085 · Point 6 · The reviewers' findings
+
+**Ruling:** R-026 — ratified; cause kind specified by R-024, entity kind left open by R-025.
+
+Both reviewers: the check is met as written, build and both suites green.
+
+**Applied.**
+- A fold reading row 0 of a column passed every test — briefed. `D-083`.
+- The injectivity remark false for three fields — both. `D-083`.
+- A stale remark in `WorldStateTests` calling the command queue state, against
+  `SIM-STATE` §Rule since `R-021` — both. Rewritten.
+- `GenerationParams`' doc comment had slid onto the new `EntityId` fold — blind.
+- Importance cited to FR-I-02, which has no importance term; now `SIM-STATE`
+  and DEC-027 — blind.
+- "Entries are emitted by Bookkeeping" narrower than FR-I-01 and DEC-026's
+  "each event" — both. Now says every event, wherever it happens.
+- The capacity test grew two columns of seven — both. All seven.
+- Column types unpinned — briefed. `FRI01_TheChronicleCarriesTheDeclaredTypes`.
+- A refused append checked by count only — briefed. The hash is compared too.
+- "Hashed and saved" said of a serialiser that does not exist — briefed. Handed
+  to point 7 (`D-081`).
+- Fold order "top to bottom" not quite — briefed. The exception is named.
+- The throw departs from a recorded convention — briefed. `D-082`.
+- "The greps" name nothing — both. `D-084`.
+
+**Not applied, with the reason.** "Every cast into the fold widens" is imprecise
+for `(uint)int` and `(ulong)long`, which reinterpret rather than widen — blind.
+The claim it supports, that each cast is injective, holds; the wording predates
+this point and was ratified with it.
+
+**Left to the human.**
+- The two test names kept for the register's sake (`D-083`) — briefed, taste.
+- `core/Runtime/Chronicle/.gitkeep`, an empty folder named for a subsystem,
+  predating `R-019` — briefed, citing AGENTS.md's "Structure". Removing folders
+  is layout, not this point's.
+- For phase 4, not faults here — briefed: `EntityId` carries no kind, so a mixed
+  `entities` list cannot say which table an id belongs to; and `cause = 0` makes
+  an exogenous root and a player action alike, which AC-11 distinguishes.
+
+**Rejected.** None.
+
+## 2026-09-30 — The agent workflow, designed
+
+A design session with the user, between points 6 and 7 of the phase 3 plan. No
+code and no plan: the result is `.claude/design/2026-09-30-agent-workflow.md`,
+to be built by a `Kind: process` plan once the phase 3 plan is archived.
+
+Every choice below was the user's, put as options with a recommendation. They
+are governance, reserve 1 of `R-001`, which the decider escalates rather than
+rules. `docs/` says nothing on any of them: it describes the simulator, not the
+way it is built (`D-011`).
+
+The entries of points 7 to 9 of the phase 3 plan follow this section, under a
+heading of their own that names the plan.
+
+### D-086 · Six agents and an orchestrator, built after phase 3
+
+**Ruling:** R-028 — ratified.
+
+The workflow is split into `tester`, `coder`, `code-reviewer`, `revisioner`,
+`documenter` and `committer`, dispatched by the session running `/plan-next`,
+which keeps reading the point, arbitrating the findings and reporting. The user
+wanted all four aims put to them: separation enforced by tools, independence
+between roles, cost, and a clean orchestrating context.
+
+Built after the phase 3 plan closes. Two plans live at once break the
+`/plan-status` lookup, which bounds a plan by the archive commits in
+`.claude/plans/`; `main` lacks `/decide`, `RULINGS.md` and the decider's
+sections of `AGENTS.md`; and point 7, the serialiser, is the wrong place for the
+first run of an untried workflow.
+
+**Rejected.** Building it now through rulings, as `R-002` and `R-010` changed
+the process: the decider writes no code, and the hooks are code. A parallel
+branch merged afterwards: the order of the archive commits would depend on how
+the merge is done.
+
+**Would overturn it:** the lookup ceasing to rest on archive commits, or phase 3
+stalling long enough that the agents are wanted for points 7 to 9.
+
+### D-087 · What each role may write, and what enforces it
+
+**Ruling:** R-028 — ratified; "only by the orchestrator" read as among the agents, see the ruling.
+
+As the table of the design: tools restricted by name, paths by hooks in each
+agent's frontmatter, three PowerShell 7 scripts (`path-guard`, `git-guard`,
+`mutate`). The coder works against a denylist; the tester writes `core/Tests/`
+only and introduces faults through `mutate`; both reviewers are read-only; the
+documenter holds `Edit` alone, insert-only, on the register, `PLAN.md` and
+`SPEC-QUESTIONS.md`; the committer runs `git` only, through `git-guard`.
+
+The documenter writes the point's record and nothing else. `docs/` stays the
+decider's, and the user chose this over also writing doc comments, README files,
+or no documenter at all.
+
+Models and effort: tester opus/high, coder sonnet/medium, code-reviewer
+sonnet/medium, revisioner opus/high, documenter sonnet/low, committer haiku/low.
+The coder's was the user's own; the rest was the profile recommended, with opus
+only where the register shows subtle defects.
+
+`.claude/agents/`, `.claude/hooks/` and `.claude/skills/` are written only by the
+orchestrator, under the permission `AGENTS.md` requires for itself. **The third
+folder goes beyond what was put to the user**, who was shown the first two; the
+principle they approved — an agent may not loosen its own constraint — covers
+the skill that dispatches it, and the design is theirs to review.
+**Confirmed by the user on reading the design, 2026-09-30.**
+
+Any agent holding `Bash` can write round the hooks. That ceiling is stated in
+the design and covered by the orchestrator's mechanical checks, not removed.
+
+**Would overturn it:** frontmatter hooks not firing for an agent dispatched from
+a skill, which would leave the tools list and the orchestrator's checks as the
+only enforcement; or a model proving unreliable in its role.
+
+### D-088 · The tester writes before the coder; the code-reviewer reads every point that touches code
+
+**Ruling:** R-028 — ratified.
+
+Two tightenings of the review. The tester writes the named tests from the frozen
+criterion and its "Fails when", before any code exists and without the coder's
+reasoning, and runs the faults afterwards; the coder never edits `core/Tests/`.
+Two of the six closed points of phase 3 had a named test that passed against an
+empty implementation (`D-065`, `D-070`).
+
+The code-reviewer runs on every point that touches code, `Core: no` included,
+which today no one reads. The briefed and blind revisioners stay as
+`reviewers.md` has them, on `Core: yes`.
+
+**Rejected.** The tester after the coder: it would see the code and write tests
+shaped like it. One reviewer definition dispatched twice: `Core: no` points stay
+unread. The code-reviewer as the blind reviewer: a new name, nothing gained.
+
+**Would overturn it:** the code-reviewer finding nothing on `Core: no` points
+across a whole phase, so that its cost buys nothing there; or tests written
+first forcing interfaces the coder then has to fight.
+
+### D-089 · Comment rules in `AGENTS.md`, drawn from applied findings; everything in English
+
+**Ruling:** R-028 — ratified.
+
+A new section of `AGENTS.md` holds the comment rules C1 to C10 and one rule of
+simplicity, S1, each one a finding reviewers already applied, each citing the
+entry that applied it. None is invented; a new rule arrives as a finding, a
+register entry and a ruling. It lands through a plan point that names it
+(`R-010`).
+
+**Rejected.** The rules only in the agents' definitions: a session without
+agents would not see them, and two copies would drift. A separate file cited by
+`AGENTS.md`: nothing loads it on its own.
+
+Every artefact of the repository is written in English from the point that
+writes the rule: code, comments, register, outcome lines, plans, commit
+messages. Until now outcome lines and commit subjects were Italian. Records
+already written are not translated, and points 7 to 9 of the phase 3 plan are
+written as points 1 to 6 were.
+
+**Would overturn it:** the user wanting English at once, from point 7.
+
+## 2026-09-30 — Phase 3, the headless kernel, points 7 to 9
+
+The plan of 2026-09-20, continued after the section above. Each entry names the
+point it closes.
+
+### D-090 · Point 7 · The save format: bytes in the hash's order, a header, a dispatch on its version
+
+**Ruling:** R-029 — ratified
+
+`NFR-08` asks for a full snapshot plus seed and parameters, the pending commands,
+a version number and a migration path from day one; `AC-03` for identical bytes
+on save → load → save; §20 for no reflection. The rest is chosen here.
+
+- **A save is a `byte[]`**, written by `Simulation.Save()` and read by
+  `Simulation.Load(byte[])`, both public. Where the bytes go is the host's: the
+  core may not touch a file (`BannedSymbols.txt`). A `Stream` API was rejected:
+  it adds nothing a host cannot do with an array, and a partial write to a
+  stream the host owns is a failure mode the core would have to reason about.
+- **Little-endian integers through `BinaryWriter`/`BinaryReader`**, which fix
+  the byte order on every platform. No framing per section, no lengths but the
+  counts: the reader knows the shape from the version.
+- **The order is `StateHash`'s**: §World, then §Chronicle column by column over
+  the rows in use, then the pool up to `EntitiesInUse`, then the pending
+  commands. Column-major, as the state is held; capacity never written (`D-081`
+  handed that on). `ChronicleEntityStart` is written and checked on load rather
+  than derived: it is a hashed field of the state, DEC-085 names the offset, and
+  a save omitting it would not be the "full state snapshot" NFR-08 asks for.
+- **A header of magic `"SIMS"` and format version 1.** The migration path is the
+  `switch` on the version in `SaveFormat.Read`: a later format adds a case and
+  keeps the reader of every earlier one, each bringing its save to the current
+  shape; an unknown version is refused. Version 1 has no predecessor, so there
+  is nothing yet to migrate.
+- **`SaveFormat` is in `Runtime/Systems/`**: the load builds and fills a
+  `WorldState`, which makes it a writer under `R-019`, as the generator is.
+- **The format is pinned** by `NFR08_TheFormatIsPinned`, length and SHA-256 of
+  one save. A change to it is a new format version, as a change to the digest
+  pin is.
+
+**What `docs/` says:** what a save contains, that it is versioned with a
+migration path, that nothing reflects. Nothing on encoding, byte order, layout,
+header, or API shape. **Would overturn it:** a host needing to stream saves too
+large to hold in memory; a second format version whose migration cannot be a
+reader of the old bytes into the new shape.
+
+### D-091 · Point 7 · A load is input from outside the core, and refuses what no build could have written
+
+**Ruling:** R-030 — ratified
+
+`SaveFormat.Read` throws `InvalidDataException`, and returns no world, for:
+bytes that are not a save, a format version it does not read, a save that ends
+early or runs on past its end, a negative tick or settlement count, a count the
+remaining bytes cannot hold (checked before allocating), a chronicle
+`Chronicle.Append` could not have written — a cause failing `CheckCause`, the
+rule `Append` uses; an entry dated before the one preceding it or after the
+world's tick; a pool that is not contiguous — and a rule version outside
+`1..CurrentRuleVersion`.
+
+- **The rule version.** A save from a later build, loaded here, would run under
+  this build's rules while claiming the later ones, and `NFR-09` says state
+  records which rule version *produced* it. DEC-033 covers only the other
+  direction, an older save brought forward. Found by both reviewers (`D-096`).
+  The test reference world keeps its rule version 7, which the hash tests need
+  distinct; the save tests bring it to the current version first.
+- **Not checked:** the kinds of the pending commands. DEC-086 has the core check
+  a command against the state of the tick it lands on, which is the drain. In
+  phase 3 every kind is unknown, so a save holding commands loads and the next
+  `Advance` throws; the command has been taken from the queue by then and is
+  lost. Nothing issues a command in phase 3, so the loss is unreachable from the
+  host. Nor is any `EntityId`'s generation checked, which `Append` does not
+  check either.
+- **One exception type for every refusal**, `InvalidDataException`, against
+  `ArgumentOutOfRangeException` from `Append`: bytes from outside and a bad
+  argument from a caller in the core are different failures.
+
+**What `docs/` says:** nothing on validating a save. **Would overturn it:** a
+ruling that the core never throws on input, or that an older build may run a
+newer save; the first command kind, which may want its fields checked at load.
+
+### D-092 · Point 7 · `R-022`: a command is a kind and four `long`s, dispatched by a struct type parameter
+
+**Ruling:** R-030 — ratified
+
+- **`Command` is a `readonly struct`**: `int Kind` and four `long` fields `A` to
+  `D`, zero when a kind does not use them. DEC-086's "the integer fields that
+  kind declares" is read as the kind declaring which of them it reads, in its
+  dispatch case. Four because phase 3 has no kind to count from; a kind needing
+  more widens the struct and the save under a new format version. The save
+  writes every kind through one codec.
+- **`ICommand` and its `Apply` are gone.** The queue holds `Command` values; the
+  null check on submit went with the reference.
+- **The dispatch is `Systems/CommandDrain.cs`**, a `switch` on the kind that
+  throws for every kind, since phase 3 defines none. The tick loop takes the
+  effects as a struct type parameter (`ICommandEffects`), as it takes the
+  levels; every production path uses `CommandDrain`, and the tests supply a
+  stand-in kind, `FoldEffects`, without the core defining one. The briefed
+  reviewer judged it does not reopen `R-022`, the pattern being `ICadenceLevels`'.
+
+**What `docs/` says:** DEC-086, a value with a kind and integer fields, applied
+by the core. Nothing on the width or the dispatch's shape. **Would overturn it:**
+a kind whose fields cannot fit four `long`s, or a ruling that tests may not
+inject an effect into the drain.
+
+### D-093 · Point 7 · `R-024`: the cause kind is numbered from 1, and an event must name its cause
+
+**Ruling:** R-030 — ratified
+
+- **`CauseKind`**: `Event = 1`, `PlayerAction = 2`, `ExogenousRoot = 3`, an
+  `int` enum. Zero is none of them, so a defaulted row is refused rather than
+  read as one; the numbers are pinned by
+  `FRI01_TheChronicleCarriesTheDeclaredTypes` because every save holds them.
+- **The column sits before `cause`** in `WorldState`, the hash and the save,
+  following `SIM-STATE` §Chronicle's field order. `NFR01_TheDigestIsPinned`
+  moved to `0x0D5FFF6FB35D1584`, as `R-024`'s cost foresaw.
+- **`Chronicle.CheckCause`** holds the rule for `Append` and the load alike: the
+  kind is one of the three; an event names an earlier entry; anything else
+  names none. `R-024` wrote only "cause is none unless the kind is event"; the
+  converse is `SIM-STATE`'s "the triggering entry when causeKind is event" and
+  FR-E-07's "records the event that triggered it". The briefed reviewer found it
+  supported, not invented.
+
+**Would overturn it:** a fourth kind of cause (`R-024`), or an event allowed to
+have no recorded trigger.
+
+### D-094 · Point 7 · `R-004` completed, `R-026` done
+
+**Ruling:** R-030 — ratified
+
+- `WorldState`'s constructor takes seed and parameters and stamps
+  `Simulation.CurrentRuleVersion`. Another value enters state through the load
+  (`D-091`), and through tests writing the field directly, as they already write
+  `Tick`.
+- `core/Runtime/Chronicle/` removed, `.gitkeep` and folder, as `R-026` asked.
+
+Nothing decided beyond what the rulings say.
+
+### D-095 · Point 7 · The declared check proves less than the point asks
+
+**Ruling:** R-030 — ratified
+
+`AC03_SaveRoundTrip` is green, alone and in both suites. **The criterion is
+defective, and was not rewritten:** its "Does" asks for a version number, and the
+check passes against a serialiser that writes none — seen by removing the header
+from writer and reader together, with the round trip staying green. A round trip
+is blind to any change made symmetrically to both halves; it proves the reader
+inverts the writer, not what the writer writes. Correct code passes it, so the
+point closes (`R-005`, first case).
+
+The missing checks are beside it:
+- `NFR08_ASaveCarriesItsFormatVersion` — red on the header removed;
+- `NFR08_TheFormatIsPinned` — red on fields `B` and `C` of a command swapped in
+  writer and reader alike, which the round trip passed;
+- `NFR08_EveryStateFieldEntersTheSave` — the hash fixture's walk, red on the
+  writer omitting a column;
+- `NFR08_ASaveCarriesThePendingCommandsInOrder`,
+  `NFR08_ALoadRefusesWhatNoSaveHolds`,
+  `NFR09_ALoadedWorldKeepsTheRuleVersionOfItsSave`.
+
+The point predates `R-020` and has no `Fails when:`. Faults were introduced one
+at a time anyway and seen red on `AC03_SaveRoundTrip`: the reader dropping
+`CurrencyTotal`; the writer dropping the commands; the writer omitting
+importance; the reader skipping a pool entity; the commands reversed on load;
+the reader dropping a command's `B`. And on the tests beside it: no tick check,
+no rule-version check, the header gone, the symmetric swap. "No reflection
+anywhere in the core" is the build's, through `BannedSymbols.txt`.
+
+### D-096 · Point 7 · The reviewers' findings
+
+**Ruling:** R-030 — ratified
+
+Both reviewers: the check is met as written; build 0 warnings, Release 50 and
+Debug 51 green.
+
+**Applied.**
+- The comment on the load claimed it refused anything `Append` would not write,
+  and it accepted entries dated in the future or out of order — both. Tick
+  checks added, comment narrowed to what is checked.
+- A load accepted a rule version later than the build's — both, citing NFR-09.
+  Refused, with 0 and below (`D-091`).
+- The command fields `B`, `C`, `D` and any kind but 1 were in no test, so a
+  reader dropping them passed everything — briefed. A second kind with every
+  field in use is saved in the round trip and the pin.
+- `CauseKind`'s numbers unpinned — briefed. Pinned.
+- `CommandDrain` said each kind gains "a codec in the save", and there is one
+  codec — briefed. Reworded.
+
+**Recorded, not changed.** A loaded command of unknown kind throws on the next
+`Advance`, after being taken from the queue — both, neither as a fault (`D-091`).
+
+**Rejected.** None. **Left to the human.** None.
+
+### D-097 · Point 8 · The runner's interface: two required flags, one hash per line, stdout
+
+**Ruling:** R-032 — ratified
+
+`NFR-12` and `DEC-035` ask for a runner that executes N ticks headless and dumps
+state hashes; the point names the command, `sim --ticks 1000 --seed 1 --hashes`.
+The rest is chosen here.
+
+- **`--ticks` and `--seed` are required**, with no defaults: a default seed is a
+  run nobody chose, and `AC-02` is stated per seed. Anything unrecognised or
+  malformed exits 2 with a usage line on stderr, rather than being ignored — the
+  old `--hash` of the CI smoke step ran against a stub that ignored every
+  argument, and that is how a check passes having checked nothing.
+- **With `--hashes`, the hash after each tick, one per line**: line n is tick n,
+  and the hash of tick 0 is not printed. Without it, the final hash only.
+- **16 lowercase hex digits and `\n`, UTF-8 without BOM, on stdout.** The bytes
+  do not depend on the machine's line ending or culture, so point 9 can compare
+  two runs byte for byte. "Writes it where CI can compare it" is stdout, and the
+  workflow redirects it; no `--out` flag, since a redirect does the same thing.
+- **Settlement count 2,000**, the P-02 generator default, as a constant. Phase 3
+  has no generator; the count only sizes the buckets the loop walks. No flag for
+  it until something varies it — sweeps are phase 6.
+- **One `Advance(1)` per tick under `--hashes`**, through the public
+  `Simulation` only: the runner reads no field of the state (`R-003`).
+
+**What `docs/` says:** that the runner exists, runs N ticks and dumps hashes.
+Nothing on flags, output format, or where the output goes. **Would overturn it:**
+point 9 or a later criterion needing the hashes in a file the runner writes
+itself; a sweep needing the settlement count as a parameter.
+
+### D-098 · Point 8 · The CI smoke step replaced by the point's check
+
+**Ruling:** R-032 — ratified
+
+The workflow already had a "Harness smoke run" step, `--ticks 100000 --hash`,
+green only because `Program.cs` ignored its arguments. It is replaced by the
+point's command, `--ticks 1000 --seed 1 --hashes`, and a pwsh script that fails
+on a non-zero exit, a count other than 1000, a line that is not 16 lowercase hex
+digits, or a hash repeated. The last one is what makes "one hash per tick" a
+check rather than a line count: the tick is in the state hash, so two equal lines
+did not come from two ticks.
+
+The 100k ticks leave the workflow until point 9, whose criterion they are.
+Keeping them here would have meant a flag the runner does not have, or a
+second run the point does not ask for.
+
+**What `docs/` says:** §17, every criterion runs headless in CI through the
+harness. Nothing on the step. **Would overturn it:** point 9 wiring the 100k run
+differently, which is its to decide.
+
+### D-099 · Point 8 · Verification, and what the point does not cover
+
+**Ruling:** R-032 — ratified; the §20 finding escalated by R-031
+
+**Check.** The CI script run locally in pwsh against the Release build: green,
+1000 hashes. Faults introduced one at a time in `Program.cs`, each seen red on
+that script and undone: one hash per run instead of per tick (count 1); no
+`Advance` inside the loop (a hash repeats); the loop running one tick too many
+(count 1001); uppercase hex (a line is not a hash). The point predates `R-020`
+and has no `Fails when:`. **"Run from the CI workflow"** is a push away, and a
+push is the human's: the point closes with that clause in reserve (`R-011`).
+
+**`Core: no` held.** `git diff --name-only HEAD -- core/` printed nothing; the
+reviewers did not run. Core build 0 warnings, suite green in Release (50) and
+Debug (51).
+
+**Findings, not acted on.**
+- `NFR-12` also asks the runner to write the **chronicle** to CSV. The point's
+  "Does" defers sweeps and metric series to phase 6 and says nothing of the
+  chronicle; phase 3 has a chronicle with no subsystem feeding it. Not built —
+  the point does not ask for it — and not deferred by anyone either. The decider
+  may want to say which phase owes it.
+- `harness/Sim.Harness.csproj` references the core by `ProjectReference`, and
+  §20 says the harness "compile[s] that folder in place". Older than this plan
+  and outside the point; recorded so it is not taken as settled by the point
+  that last touched the harness.
+
+### D-100 · Point 9 · `AC02_DeterminismAcrossRuns`: two worlds in one process, empty and with commands
+
+**Ruling:** R-035 — ratified
+
+**Decided.** The test builds two worlds from the same seed and runs each 100k
+ticks, reading the hash after every tick, and compares the two sequences whole.
+The empty runs go through `Simulation`, as the runner calls it, with the
+runner's 2000 settlements, so the settlement buckets fire. The commanded runs go
+through the internal `TickLoop` with the stand-in kind of `CommandQueueTests`,
+one command every 97 ticks, because phase 3 has no public submit and no kind of
+its own (`DEC-086`). Three controls keep the equality from being one every world
+passes: every tick's hash is distinct, seed 2 gives another sequence, and the
+commanded sequence differs from the empty one.
+
+**What `docs/` says:** `AC-02`, "same seed and commands produce the same state
+hash sequence across builds and machines". Nothing on how two runs are made
+independent. **Would overturn it:** a public submit arriving with the first
+command kind, which moves the commanded half onto `Simulation`.
+
+### D-101 · Point 9 · The gate step in CI, and the measurement beside it
+
+**Ruling:** R-035 — ratified
+
+**Decided.** One pwsh step after the harness step, reusing its Release build of
+`sim`: two processes of `--ticks 100000 --seed 1 --hashes`, stdout written raw
+to two files by `Start-Process`, so no PowerShell decoding sits between the
+runner and the comparison. The step fails on a non-zero exit, on a length other
+than 100000 lines of 17 bytes, or on any byte differing.
+
+**The measurement is not taken on the 100k run.** Timed from outside the
+process, 100k empty ticks cost less than the process start varies by: net of a
+run of no ticks, the figure came out at −0.000003 and −0.000022 ms. The step
+therefore times a run of 10M ticks without per-tick output, subtracts a run of
+none, and prints `ms per empty tick` in invariant culture. Locally, twice:
+0.000130 and 0.000121 ms, about 125 ns, with 2000 settlements bucketed and
+nothing in them. It is the floor under `P-01` and `P-17`, not either of them
+(`SQ-004`).
+
+**What `docs/` says:** §18, "100k empty ticks; AC-02, AC-03 green"; nothing on
+how a tick is timed. **Would overturn it:** a timing flag in the runner, which
+would measure inside the process and could use the gate's own run; the point's
+"Does" names a test file and a workflow step, not the harness.
+
+### D-102 · Point 9 · Verification, and what the gate does not cover
+
+**Ruling:** R-035 — ratified; the machines finding resolved by R-034
+
+**Check.** `AC02_DeterminismAcrossRuns` green alone; suite green in Release
+(51), Release with three wealth bands (51) and Debug (52); core build 0
+warnings. The workflow step's script, extracted and run locally in pwsh against
+the Release build: green. Faults introduced one at a time and seen red, each
+undone: a `WorldState` constructor folding a static count of worlds built into
+`CurrencyTotal` — the test red on "the same seed, empty"; the second CI run on
+seed 2 — "the two runs differ"; the second run one tick short — "the two runs
+differ"; both runs one tick short — the length check. The point predates
+`R-020` and has no `Fails when:`.
+
+**`Core: no` held.** `git diff --name-only HEAD -- core/Runtime/` printed
+nothing; the only file under `core/` is the new test. Reviewers not run.
+
+**Reserve.** "Completing in CI" is a push away, and a push is the human's: the
+point closes with that clause in reserve (`R-011`), beside point 8's.
+
+**Findings, not acted on.**
+- `AC-02` says "across builds and machines". Both runs here, in the test and in
+  CI, are one build on one machine; the workflow runs on `windows-latest` alone.
+  The point asks for two independent runs, and that is what it delivers. Whether
+  the phase 3 gate owes a second machine — an OS matrix, or a hash sequence
+  pinned in the repository and compared by every runner — is the decider's.
+- The 10M-tick timing run makes the gate step do a hundred times the ticks the
+  gate names. Its cost locally is about a second.
+
+### D-103 · Point 10, added mid-plan — the pin owed by `R-034` and `R-036`
+
+**Ruling:** R-038 — ratified.
+
+`R-034` owes the pin before the phase 3 gate and says it enters the plan as a
+point added with the user's approval (`D-014`). The user approved it on
+2026-10-01: "Approvo l'aggiunta al piano di fase 3 di un punto per l'obbligo
+R-034/R-036 (pin delle due sequenze di hash), secondo D-014". Appended as point
+10, after nine closed points; nothing above it rewritten, the exit condition
+left verbatim.
+
+**Decided in writing the point.**
+- **Both pins in the suite, none in the workflow step.** `R-036` puts the
+  commanded pin in the suite, since its command kind is test code; the empty
+  one goes beside it rather than into the gate step, so one test holds both and
+  each of the three CI test steps compares them — two builds of each commit, as
+  `R-034` notes. The gate step stays as point 9 left it.
+- **The named faults.** The drain moved to the end of the tick is the fault the
+  pin exists for: `AC02_DeterminismAcrossRuns` cannot see it, since two runs of
+  the same wrong code agree. A world starting at tick 1 is the one fault the
+  empty pin can catch in a phase 3 world, where only `Tick` moves (`R-036`).
+- **Left to the point:** which digest of the sequence, and the test's layout.
+
+**What `docs/` says:** `AC-02`, "across builds and machines"; nothing on how a
+pin is taken. **Would overturn it:** a ruling that the empty pin belongs in the
+gate step, next to the two processes it would then compare as well.
+
+### D-104 · Point 10 · `AC02_TheGateSequencesArePinned`: the digest, the values, the check
+
+**Ruling:** R-038 — ratified; the three-band finding by R-037.
+
+**Decided.**
+- **The digest is SHA-256, from the test assembly,** over each of the 100k
+  hashes written little-endian, as uppercase hex. Not the core's `Hash64`: an
+  expected value checked through the core's own hash of hashes would move with
+  a change to that function in the same commit and could be re-derived by it;
+  SHA-256 is the base class library's and the core never sees it. The test
+  project is outside `BannedSymbols.txt`, as for the reflection point 3 uses.
+- **The values came from a run,** on the development machine, Release build:
+  the test was run with a placeholder and the failure's actual value written in
+  as the literal, one sequence at a time. Empty run
+  `9C9CC60D…BACC93C4`, run with commands `72FA5937…BC31F715`, in full in the
+  test. The Debug build then passed against them, so two builds of this commit
+  already agree.
+- **Both sequences are the ones `AC02_DeterminismAcrossRuns` compares,** through
+  the same `Empty` and `Commanded`, so the pin and the determinism test cannot
+  drift onto different runs. Each is run once more for the pin; the fixture now
+  runs seven sequences of 100k ticks, under a second in Release.
+- **No workflow change.** The test is in the suite, so each of the three test
+  steps runs it; the gate step stays as point 9 left it (`D-103`).
+
+**Check.** `AC02_TheGateSequencesArePinned` green alone; suite green in Release
+(52), Release with `SIM_WEALTH_BANDS=3` (52) and Debug (53); core build 0
+warnings. Faults of `Fails when:` introduced one at a time and seen red, each
+undone:
+- the drain moved after `state.Tick = d + 1` in `TickLoop.Advance` — the pin
+  red on "the run with commands", the empty pin green, and
+  `AC02_DeterminismAcrossRuns` green in the same run;
+- `Tick = 1` in the `WorldState` constructor — the pin red on "the empty run".
+
+**`Core: no` held.** `git diff --name-only HEAD -- core/Runtime/` prints
+nothing; the only file under `core/` is `core/Tests/DeterminismTests.cs`.
+Reviewers not run.
+
+**Reserve.** "And in CI" waits on the push, which is the human's (`R-011`),
+beside the reserves of points 8 and 9.
+
+**Findings, not acted on.**
+- `SIM_WEALTH_BANDS` is read by nothing in the repository — no `.cs`, `.props`
+  or project file names it — so the step "Tests, three wealth bands" runs the
+  same build with the same behaviour as the first. The point's "each of the
+  three test steps" holds, but the second compares nothing the first did not.
+  `AC-28`'s step is the phase 4 table's to give meaning to; recorded, not
+  touched.
+- The pinned values are from one machine. That the CI runner reaches the same
+  digest is the reserve, not something verified here.
+
+**What `docs/` says:** `AC-02` and `NFR-01`, nothing on the digest.
+**Would overturn it:** a ruling that the pin should use the core's hash, or
+live in the gate step against the harness output.
+
+### D-105 · The moment-two request, and `SQ-007` raised while writing it
+
+**Decided.** The request of 2026-09-20 is replaced, not amended: the moment has
+moved from one to two, which is the case `D-039` and `D-041` give for replacing.
+
+**Decided.** `SQ-007` is filed as blocking the gate's declaration, and the
+request does not call the gate met. Every clause of §18 is green in CI; §17's
+"driven by the command-line harness alone", which the plan's exit condition
+repeats, is met only on the suite's reading. Calling the gate met would have
+picked that reading, and an objection is never resolved by its finder. No point
+is failed for it: all ten are closed, and the question is about the whole.
+
+**Decided.** The *Riserva sciolta* lines of points 8 and 9 cite the first green
+run, `36786627133` on `b43d57d`, beside the run on `c645462`; point 10's cites
+only the second, the first run on a commit containing `2ec9fad`.
+
+**What `docs/` says:** §17 and AC-19 as set out in `SQ-007`; nothing on review
+requests. **Would overturn it:** the decider or the user ruling that §17's
+"alone" means only no editor and no game client, which closes `SQ-007` and lets
+the gate be declared as the files stand.
+
+### D-106 · Look at the whole of phase 3 · A refused command stops the tick halfway, left to phase 4
+
+A finding, not a decision: recorded so that the first phase 4 point introducing
+a command kind meets it in its criteria rather than in a bug. Raised in the look
+at the whole the moment-two request asked for, and left to phase 4 at the
+user's request.
+
+**What the code does.** `TickLoop.Advance` takes each command from the queue and
+hands it to `CommandDrain.Apply`, which throws on a kind it does not know. A
+command refused halfway through a drain leaves the commands before it applied,
+the tick counter where it was, and the refused command already out of the
+queue: the world is between two ticks. Advancing again finishes the tick with
+the commands left, as if the refused one had been dropped — deterministic, but
+only because the host caught the exception, and nothing records the drop. A
+refusal against the state is an ordinary outcome of play, not a programming
+error; thrown across the host boundary, on the core's own thread under DEC-031,
+it makes every host write the same catch. `FRA01_ACommandOfNoKnownKindIsRefused`
+submits one command only, so it sees none of this. `D-091` recorded the lost
+command on load and judged it unreachable in phase 3; it still is, since no
+kind exists for a command to apply before the one refused.
+
+**What `docs/` says.** DEC-086: the core checks "a command against the state of
+the tick it lands on rather than trusting whoever built it" — the check belongs
+to the drain, and moving it to submission would contradict it. `docs/` does not
+say what the drain does with a command it refuses. FR-A-02's typed event stream
+is the obvious place to report one, and is not built.
+
+**Owed to the phase 4 point that adds the first command kind**, as questions its
+criteria should answer, not as answers:
+- what a refused command does to the tick: nothing, with the tick running on,
+  is what replay needs, and it is not what the code does now;
+- whether the host hears of a refusal, and through what;
+- whether a command's *form* — a kind this build knows, fields in the ranges
+  its kind declares — is checked at submission and at load as well, since that
+  check needs no state, and a load that accepts a kind no build could have
+  written is the case `D-091`'s title refuses and its body let through.
+
+**Would overturn it:** a ruling that a refused command is a programming error
+the host must never make, which would make throwing correct and leave only the
+lost command to fix.
+
+### D-107 · Closing phase 3 · The archive, the promotion pass, and the merge
+
+The user confirmed the gate: "Confermo il gate di fase 3, procedi con il merge in
+main". The design note ties archival to the plan's close, not to the merge, and
+`main` never carries a live `PLAN.md`, so the archive and the pass come first.
+
+**Decided.**
+- **The archive's name** is `2026-09-20-fase-3-kernel.md`, the date the plan was
+  written and the branch it ran on, as the earlier archives are named. The
+  confirmation is appended under the last point, below a rule, in the way a
+  *Riserva sciolta* line is: nothing above it is touched. The archive commit
+  adds exactly one file under `.claude/plans/`, since `/plan-status` finds a
+  plan's range by the commits that add one.
+- **The pass proposes three candidates** and names three near misses. `D-073`
+  is left out because `SIM-ECON` holds its question open, and closing an open
+  item is not a promotion. `D-090` is left out because `R-029` declined it.
+- **The request is replaced**, moment two by moment three: the gate is answered
+  and the situation has moved (`D-039`, `D-041`).
+- **The merge is `--no-ff`**, so the branch's commits and their `Plan-point:`
+  trailers reach `main` as they are. `main` is not pushed: a push is the
+  human's (`R-011`).
+
+**What `docs/` says:** nothing on archiving or merging; §18 on the gate.
+**Would overturn it:** the decider rejecting the gate record's place in the
+archive rather than in `RULINGS.md`, or a candidate found to be in `docs/`
+already.

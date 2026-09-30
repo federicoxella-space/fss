@@ -18,18 +18,48 @@ Read the relevant document. Do not infer the design from the code.
 | Which feedback loops exist and what brakes them | `docs/SIM-LOOPS.md` |
 | What lives in state, and what is asserted every tick | `docs/SIM-STATE.md` |
 | What a settlement update does, in order | `docs/SIM-ECON.md` |
+| What has been ruled about the specification, and what you owe | `RULINGS.md` |
 
-## Do not edit `docs/`
+## `docs/` is not yours to edit
 
-Not to record what you built, not to fix a discrepancy, not to tidy. If the
-code cannot satisfy a requirement, stop and say so. Changing the specification
-to match the implementation destroys the only independent account of the design.
+Not to record what was built, not to reconcile a discrepancy, not to tidy. If
+the code cannot satisfy a requirement, stop and say so. A specification edited
+to match an implementation is no longer an independent account of the design.
 
-**Say so in `SPEC-QUESTIONS.md`**, not only in conversation. Every objection to
-the specification goes there — a requirement that contradicts another, one that
-cannot be built, one that is simply wrong — and none of them is resolved by
-whoever found it. A conversation is outside the repository and gone by the next
-session, and this is the only channel that runs back towards `docs/`.
+One exception: a human may ask you to apply a change to
+`docs/`. When that happens:
+
+- The text or patch comes from the human. You transcribe it, you do not
+  compose it, and you do not extend it to the places it "should" also touch.
+- Something that ought to change and is not in what you were given is a
+  finding, not a licence. Say so, and leave it.
+- Prefer `git apply` over editing by hand, so that the diff cannot exceed the
+  text you were given.
+- Record the permission in `DECISIONS-OUTSIDE-SPEC.md`: who granted it, what
+  it covered, and whether the applied diff matched the deposit exactly.
+
+### The decider answers what this file sends to a human
+
+`docs/` has one other writer: the **decider**, a separate role run by `/decide`
+and holding the human's authority by delegation (`R-001` in `RULINGS.md`). It
+answers `SPEC-QUESTIONS.md`, `REVIEW-REQUEST.md` and `PROMOTIONS.md`, audits
+`DECISIONS-OUTSIDE-SPEC.md`, and edits `docs/`.
+
+Nothing above changes for you. An implementer session never edits `docs/` and
+never plays the decider; a decider session never writes code. A ruling binds you
+as `docs/` does. Before writing a plan and before each point, read "Owed by the
+implementer" in `RULINGS.md`, and name the `R-NNN` in the commit that acts on
+one.
+
+## This file changes only with permission, and the permission is recorded
+
+An agent edits `AGENTS.md` only with a human's permission for that change.
+Approving a plan grants it only to a point that says, in its own text, that it
+edits this file and which rule it adds or changes; a point that touches the file
+without saying so has no permission for it. Record the permission in
+`DECISIONS-OUTSIDE-SPEC.md` — who granted it and what it covered — or, in a
+decider session, in the ruling. Every commit carries the human's name whoever
+wrote it, so the record is the only place the difference shows (`R-010`).
 
 ## Plan the development before starting it
 
@@ -42,10 +72,18 @@ belongs to `/plan-next`, `/plan-explain` and `/plan-status`, and the reasoning t
   plainly that `docs/` does not cover them. A plan that invents requirements is a
   specification edited to match its implementation, one level down.
 - **Criteria are frozen when written.** A criterion that turns out to be wrong is
-  reported and recorded, never rewritten to match what was built.
+  reported and recorded, never rewritten to match what was built. If correct
+  code passes it, the point closes with the missing check beside it and the plan
+  goes on; if correct code cannot pass it, the point closes `FALLITO` and the
+  plan stops. Either way the register names the defect and the decider rules on
+  it (`R-005`). A clause only a human can discharge — a push, a pull request —
+  closes the point *con riserva*: the plan goes on, and its exit condition is
+  not met until the human has acted (`R-011`).
 - **A point is one commit with a runnable check.** The commit carries the record
   with it: the register entry and the plan's own outcome line are written first
-  and committed together with the code.
+  and committed together with the code. The check names at least one fault it
+  must catch, and the point closes only once that fault, introduced, has turned
+  it red (`R-020`).
 - **A point touching `core/Runtime/` passes two reviewers**, one briefed with the
   author's doubts and one blind to them. Their findings reach
   `DECISIONS-OUTSIDE-SPEC.md` even when rejected, with the reason.
@@ -128,9 +166,11 @@ a decision, and decisions belong to a human.
 ## Structure
 
 State lives in one place as parallel arrays. Folders named after subsystems
-would suggest an isolation that does not exist. `Runtime/Systems/` holds one
-file per phase of the settlement update, in the order given by `SIM-ECON`, and
-those files are the only ones that write to state.
+would suggest an isolation that does not exist. `Runtime/Systems/` holds every
+file that writes simulation state, and nothing outside it does. Most of them are
+the phases of the settlement update, one file each, in the order given by
+`SIM-ECON`; the few writers that are not phases — the tick loop, the command
+drain, the generator — are named for what they do (`R-019`).
 
 ## Tests carry the number of what they verify
 
