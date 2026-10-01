@@ -2853,6 +2853,8 @@ live in the gate step against the harness output.
 
 ### D-105 · The moment-two request, and `SQ-007` raised while writing it
 
+**Ruling:** R-044 — ratified.
+
 **Decided.** The request of 2026-09-20 is replaced, not amended: the moment has
 moved from one to two, which is the case `D-039` and `D-041` give for replacing.
 
@@ -2874,7 +2876,7 @@ the gate be declared as the files stand.
 
 ### D-106 · Look at the whole of phase 3 · A refused command stops the tick halfway, left to phase 4
 
-**Ruling:** R-042 — the third question answered by DEC-089, due at the same point; the first two stay with that point. Not otherwise audited.
+**Ruling:** R-042 — the third question answered by DEC-089, due at the same point; the first two stay with that point. The rest ratified by R-044.
 
 A finding, not a decision: recorded so that the first phase 4 point introducing
 a command kind meets it in its criteria rather than in a bug. Raised in the look
@@ -2916,6 +2918,8 @@ the host must never make, which would make throwing correct and leave only the
 lost command to fix.
 
 ### D-107 · Closing phase 3 · The archive, the promotion pass, and the merge
+
+**Ruling:** R-044 — ratified; the gate recorded in `RULINGS.md` as well.
 
 The user confirmed the gate: "Confermo il gate di fase 3, procedi con il merge in
 main". The design note ties archival to the plan's close, not to the merge, and

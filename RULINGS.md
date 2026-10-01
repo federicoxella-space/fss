@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-104 — audited by `R-038`. The next audit starts at the
+**Register watermark:** D-107 — audited by `R-044`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -1941,3 +1941,49 @@ cost of the tick at a world size the checks need, which would reopen the
 incremental hash with a full hash cross-checking it on a cadence.
 **Not verified:** the cost of a fold and of a settlement update, both estimated;
 nothing exists in phase 3 to measure either against.
+
+### R-044 — The register from `D-105` to `D-107` is ratified; phase 3 is closed
+
+**Date:** 2026-10-02   **Origin:** register audit, `D-105` to `D-107`
+**Verdict:** ratified
+**docs/:** unchanged
+
+The close of phase 3: the moment-two request, the look at the whole, the archive
+and the merge. Each entry was read against `SIM-REQ` §17 and §18 and the rulings
+it cites, and its claims against `3933e1d`, `c943618` and the archive.
+
+- **`D-105`, the moment-two request.** Stands. Filing `SQ-007` as blocking rather
+  than declaring the gate on the suite's reading is what `AGENTS.md` asks: an
+  objection is never resolved by its finder. `R-039` resolved it. Checked: the
+  *Riserva sciolta* lines of points 8 and 9 cite run `36786627133` on `b43d57d`
+  and run `36788322902` on `c645462`, point 10's only the second, as the entry
+  says.
+- **`D-106`, a refused command.** Stands as a finding: the description of
+  `TickLoop` and `CommandDrain` agrees with `R-030`'s reading of the same code,
+  and DEC-086 places the check in the drain. Its third question was answered by
+  `R-042`; the first two, what a refusal does to the tick and whether the host
+  hears of it, remain owed to the point that adds the first command kind, as the
+  user left them.
+- **`D-107`, the close.** Stands. Checked: `3933e1d` renames `PLAN.md` to
+  `.claude/plans/2026-09-20-fase-3-kernel.md`, which `git log --diff-filter=A`
+  finds as the one file added under `.claude/plans/`, so `/plan-status`'s lookup
+  holds; `c943618` is a merge with two parents; no `PLAN.md` is live on `main`.
+  Process throughout, so ratified, never promoted (`D-011`).
+
+**The gate.** The entry's "would overturn it" asks whether the gate's record
+belongs in the archive or here. Both: the archive holds the user's words under
+the last point, and this file, the decider's only memory, records that **the
+gate of phase 3 in `SIM-REQ` §18 — "100k empty ticks; AC-02, AC-03 green" — was
+confirmed by the user on 2026-10-01**, in the words "Confermo il gate di fase 3,
+procedi con il merge in main", after `R-039` and with green CI run `36788322902`.
+The decider did not pass it and does not re-pass it; the confirmation was the
+user's.
+
+**Cost.** None.
+**Owed by the implementer:** nothing new. Phase 4 opens with `R-037`, `R-041`,
+`R-042` and `R-043` owed, and with moment one of `REVIEW-REQUEST.md` before its
+plan starts.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` as it
+stood when written.
+**Not verified:** the merge commit has not run in CI; `main` is not pushed, which
+is item 3 of the current review request and the user's.

@@ -103,9 +103,11 @@ written. Near misses named there with their reasons: `D-073`, `D-090`, `D-106`.
 
 ## What I need from you
 
-1. **The three candidates**, promoted, amended or rejected with a reason. The
-   decider answers `PROMOTIONS.md` under `R-001`; numbering is yours or its.
-2. **`SQ-008`**, before or at the first phase 4 point that adds a table.
+1. ~~**The three candidates**, promoted, amended or rejected with a reason. The
+   decider answers `PROMOTIONS.md` under `R-001`; numbering is yours or its.~~
+   **Answered:** promoted as DEC-087 to DEC-089 by `R-040` to `R-042`, two amended.
+2. ~~**`SQ-008`**, before or at the first phase 4 point that adds a table.~~
+   **Answered:** closed by `R-043`, the full hash at every tick, on request.
 3. **The push of `main`.** A push is yours.
 4. **Phase 4's moment one**, when you are ready to plan it: the question carried
    from moment two — whether the `Fails when:` lines are read by someone other
