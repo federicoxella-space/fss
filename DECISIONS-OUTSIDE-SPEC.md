@@ -2477,7 +2477,7 @@ reader of the old bytes into the new shape.
 
 ### D-091 · Point 7 · A load is input from outside the core, and refuses what no build could have written
 
-**Ruling:** R-030 — ratified
+**Ruling:** R-030 — ratified; promoted as DEC-089 by R-042, which adds the pending commands' form to what a load checks
 
 `SaveFormat.Read` throws `InvalidDataException`, and returns no world, for:
 bytes that are not a save, a format version it does not read, a save that ends
@@ -2873,6 +2873,8 @@ requests. **Would overturn it:** the decider or the user ruling that §17's
 the gate be declared as the files stand.
 
 ### D-106 · Look at the whole of phase 3 · A refused command stops the tick halfway, left to phase 4
+
+**Ruling:** R-042 — the third question answered by DEC-089, due at the same point; the first two stay with that point. Not otherwise audited.
 
 A finding, not a decision: recorded so that the first phase 4 point introducing
 a command kind meets it in its criteria rather than in a bug. Raised in the look

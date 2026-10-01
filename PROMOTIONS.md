@@ -31,12 +31,15 @@ identifier it became, and the candidate is struck from here. A candidate they
 reject is struck too, with their reason: an unanswered proposal re-proposed
 every archival is how a rejected idea gets in by attrition.
 
-Numbering is the human's or the decider's: `SIM-DEC` runs to DEC-080 today, and a number claimed
+Numbering is the human's or the decider's: `SIM-DEC` runs to DEC-089 today, and a number claimed
 here would collide with whatever else is in flight.
 
 ---
 
-## Pass of 2026-10-01 — three candidates, phase 3
+## Pass of 2026-10-01 — three candidates, phase 3: closed
+
+**All three were written into `SIM-DEC` on 2026-10-02, as `DEC-087` to `DEC-089`,
+by `R-040` to `R-042`.** The register entries they came from are marked.
 
 Run over `D-044` to `D-106` on archiving the phase 3 plan, the headless kernel.
 The first pass over a development that built the simulator rather than its
@@ -106,7 +109,7 @@ length rather than the count is a determinism hole with passing tests.
 > must stop at the count. A walk that reads to the length passes every test on a
 > world whose arrays happen to be exactly full.
 
-### C-7 — a load refuses what no build could have written
+### ~~C-7 — a load refuses what no build could have written~~ — promoted as DEC-089 by R-042
 
 From `D-091`. **Why:** NFR-08 and DEC-032 say what a save holds, not what a load
 does with bytes that do not hold it. Every reader phase 4 adds meets the

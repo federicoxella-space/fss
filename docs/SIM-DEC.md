@@ -369,6 +369,14 @@ On first load after an update, deferred entities resume under the rules that pro
 
 **Cost.** One slow load per patch, and the old evaluation path stays in the code until every save has migrated.
 
+### DEC-089 — A load refuses what no build could have written
+
+A save is input from outside the core. Reading one checks every count against the bytes left before allocating for it; every field against the rules its writer keeps, the invariants of SIM-STATE that are claims about state among them; the format version against those this build reads, and the rule version against those this build can run or bring forward; and each pending command's form, a kind this build knows with fields inside what that kind declares. Any failure refuses the whole save, as one kind of error distinct from a caller's mistake, and returns no world.
+
+**Rationale.** A save crosses the host's disk and a player's hands. A world partly loaded, or holding a row no system could have written, fails ticks later where nothing points back at the save, and the bug report DEC-032 wants reproducible does not reproduce. A rule version later than the build's is refused because the state would claim rules it does not run (NFR-09); an earlier one is brought forward under DEC-033. A command's form needs no state to check, so a kind the build does not know is refused at the load rather than reaching a drain; whether a command fits the state of the tick it lands on stays the drain's to decide (DEC-086).
+
+**Cost.** Each writer's rule is stated twice, where it writes and where the load checks it, and a rule changed in one place only refuses valid saves or admits invalid ones. The invariants checked at load run in every build, not only where the per-tick asserts do. What the core does with a command the state refuses is not settled here.
+
 ### DEC-034 — The core targets Windows x64 and knows nothing about its host
 
 No engine, rendering, input, or asset API. No `async` in the tick, no unordered parallelism. No dependency outside the base class library.

@@ -507,7 +507,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 **NFR-07 — Memory.** Settlement state stays under 50 MB at target scale *(estimate)*.
 
-**NFR-08 — Save format.** A save is a full state snapshot plus generation seed and parameters, and the commands submitted and not yet applied. Save format carries a version number and a migration path from day one.
+**NFR-08 — Save format.** A save is a full state snapshot plus generation seed and parameters, and the commands submitted and not yet applied. Save format carries a version number and a migration path from day one. A load refuses, whole, a save no build could have written (DEC-089).
 
 **NFR-09 — Rule versioning.** State records which rule version produced it. On first load after a patch, all deferred entities materialise under the old rules, then continue under the new ones.
 

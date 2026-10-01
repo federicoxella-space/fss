@@ -57,6 +57,11 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   test that two worlds holding the same chronicle entries in columns of different
   capacity save to the same bytes, its `Fails when:` naming a writer that walks to
   the array's length.
+- **`R-042`**, no later than the plan point that adds the first command kind: a
+  load refuses a pending command whose kind this build does not know or whose
+  fields fall outside what its kind declares, and the invariants of `SIM-STATE`
+  that are claims about state are checked at load. `D-106`'s first two questions
+  stay that point's to answer in its criteria.
 
 ## Escalated to the user
 
@@ -1818,3 +1823,57 @@ capacity.
 **Not verified:** that `SaveFormat`'s writer stops at the count; `D-090` and
 `R-029` say it does, and the code was grepped, not read for it. `core/Tests/` was
 grepped for a capacity test of the save and none was found.
+
+### R-042 — A load refuses what no build could have written, pending commands included: DEC-089
+
+**Date:** 2026-10-02   **Origin:** C-7, from D-091; D-106's third question
+**Verdict:** promoted as DEC-089
+**docs/:** `SIM-DEC` gains DEC-089 under "Integration and operations", after
+DEC-033; `SIM-REQ` NFR-08 points at it. Both revisions already bumped today by
+`R-040`. `PROMOTIONS.md`'s pass of 2026-10-01 is closed.
+
+NFR-08 and DEC-032 say what a save holds; nothing in `docs/` says what a load does
+with bytes that do not hold it. `D-091` answered for point 7 and `R-030` ratified
+it. Every reader phase 4 adds meets the question again, with more fields and
+more rules, so it is promoted. On the merits it stands on what `docs/` said
+before the code: a save is the one path by which state enters the core from
+outside (`R-004`), DEC-032 exists so that a reported bug reproduces, and a world
+that loads and then fails ticks later reproduces nothing. NFR-09's "produced it"
+excludes running a rule version the build does not have.
+
+**Two additions to the candidate.** The first is the invariants. "The rules its
+writer keeps" read narrowly is each writer's local check, as `Chronicle.Append`'s
+cause rule; but a world violating A-01 is equally one no build could have written,
+and the title says such a world is refused. The decision names the invariants of
+`SIM-STATE` that are claims about state, which excludes A-13 (`R-015`).
+
+The second is the pending commands. `D-091` left their kinds unchecked, and
+`R-030` bound the choice — the load checks kinds, or the drain refuses without
+consuming — to the first command kind. `D-106` asked the same as its third
+question. The candidate's cost line, "checked only as far as the build knows
+their kinds", would have left a contradiction inside the entry: a save holding a
+kind no build knows is the clearest case of what the title refuses. A command's
+form needs no state, so it is checked where the save is; whether it fits the
+state of its tick stays the drain's, as DEC-086 requires. This decides the
+direction of one of `D-106`'s questions. It does not move its timing: the user
+left `D-106` to phase 4 as a finding, and the action falls due at the point
+`D-106` and `R-030` named. Its first two questions — what a refused command does
+to the tick, and whether the host hears of it — are not touched.
+
+**Cost.** Each writer's rule is stated twice, and the invariants checked at load
+run in Release. In phase 3 no kind is known, so applied now the check would refuse
+every save with a command pending, the tests' stand-in kind included; the tests
+that round-trip pending commands (`NFR08_ASaveCarriesThePendingCommandsInOrder`,
+`AC03_SaveRoundTrip`'s "with commands pending") need the load to know the kinds
+the drain is given, and the second saves a kind 7 that no drain knows. That is why the action waits for the first real kind.
+**Owed by the implementer:** no later than the plan point that adds the first
+command kind: a load refuses a pending command whose kind this build does not
+know or whose fields fall outside what its kind declares, and checks the
+invariants of `SIM-STATE` that are claims about state. Cite `R-042`.
+**Would overturn it:** a ruling that a load may accept a world and let the first
+tick find what is wrong, which would need a reason a reported bug still
+reproduces; a host that must load saves from a later build, which is NFR-09's to
+change first.
+**Not verified:** that every phase 4 invariant can be checked on a loaded state
+in a time a load can afford; `SaveFormat`'s other checks were taken from its
+remarks and from `D-091`, not read line by line.
