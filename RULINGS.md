@@ -62,6 +62,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   fields fall outside what its kind declares, and the invariants of `SIM-STATE`
   that are claims about state are checked at load. `D-106`'s first two questions
   stay that point's to answer in its criteria.
+- **`R-043`**, within the first phase 4 plan point that adds a table: the cost of
+  one full state hash is measured against the cost of the tick, on the world the
+  checks of `AC-02` run, and recorded in the register with the size chosen for
+  those checks.
 
 ## Escalated to the user
 
@@ -1877,3 +1881,63 @@ change first.
 **Not verified:** that every phase 4 invariant can be checked on a loaded state
 in a time a load can afford; `SaveFormat`'s other checks were taken from its
 remarks and from `D-091`, not read line by line.
+
+### R-043 — The state hash is checked in full at every tick, and only when a check asks for it
+
+**Date:** 2026-10-02   **Origin:** SQ-008
+**Verdict:** specified
+**docs/:** `SIM-REQ` NFR-01 gains one sentence: the hash is computed in full on
+request, never by the tick, and NFR-05's budget excludes it. Revision already
+bumped today by `R-040`.
+
+`SQ-008` estimates that a full hash at NFR-07's bound costs about one P-01 budget,
+and that the checks of `AC-02`, seven sequences of 100k ticks per test step,
+would then run for hours. It offers three answers: the full sequence always, an
+incremental hash, or a sampled sequence.
+
+**What `docs/` already says.** NFR-01 asks for an identical hash "at every tick",
+`AC-02` for "the same state hash sequence", and `SIM-STATE` for a hash over every
+field. None of them asks the game to hash. The finder reads NFR-01 as stating a
+property, not a computation the core must run, and that reading is right: the
+game has no use for a hash, and DEC-034 keeps the core indifferent to which host
+drives it. It is not written anywhere, though, and an implementer reading "at
+every tick" beside NFR-05 could put the hash inside the tick and spend the
+budget on it. The added sentence closes that.
+
+**The sample is refused**, on the merits and by reserve. A divergence can heal:
+a transient value differs for a tick and is overwritten. A sampled check passes
+it, and NFR-01 says every tick. Reading "sequence" as every *k*-th term
+loosens `AC-02`, which is reserve 2 of `R-001`, as `R-034` found for "machines".
+
+**The incremental hash is refused.** It makes every write to state also a write
+to the hash, so a system that forgets one leaves a field outside the hash: the
+determinism hole `SIM-STATE` §Serialisation notes names, created by the
+mechanism meant to detect it. Catching that needs the full hash computed beside
+it, which is the cost it was meant to avoid. `AGENTS.md`'s "systems mutate
+state" would also gain a second thing every system must keep in step.
+
+**So the full hash, every tick, at check time.** The estimate overstates the
+problem in one direction. A hash folds each word once; a tick at target scale
+does the settlement update on a seventh of the settlements, sorting and
+clearing markets, within the same 10 ms. The hash is therefore of the order of
+the tick, not orders of magnitude above it, and a check that runs a world for
+100k ticks pays for the simulation about as much as for the hashes. What makes
+a check affordable is the size of the world and the length of the run, and
+`AC-02` fixes neither. Only phase 3's gate fixed a length, "100k empty ticks",
+and that gate is passed. Sizing each check is the implementer's, in the point
+that writes it, as `R-034` left the pins' shape. A check on a smaller world
+proves NFR-01 on that world, which is all any finite check proves.
+
+**Cost.** The checks of `AC-02` grow with every table and will need resizing in
+phase 4, and the pins of `R-034` and `R-036` re-pinned when they are. A world
+small enough for CI may not reach a code path a large one does. The estimate in
+`SQ-008` stays unmeasured until the measurement owed below.
+**Owed by the implementer:** within the first phase 4 plan point that adds a
+table: measure the cost of one full state hash against the cost of the tick, on
+the world the checks of `AC-02` run, and record it in the register with the size
+chosen for those checks. Cite `R-043`.
+**Would overturn it:** that measurement showing the full hash many times the
+cost of the tick at a world size the checks need, which would reopen the
+incremental hash with a full hash cross-checking it on a cadence.
+**Not verified:** the cost of a fold and of a settlement update, both estimated;
+nothing exists in phase 3 to measure either against.

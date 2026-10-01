@@ -341,7 +341,7 @@ moment-two request.
 `docs/SIM-STATE.md:192` §Serialisation notes.
 **Blocks:** no. Phase 3's state is five fields and an empty chronicle. The
 question is phase 4's, from the first table it adds.
-**Status:** open.
+**Status:** **closed 2026-10-02 by R-043.**
 
 NFR-01 asks for "an identical state hash at every tick" and AC-02 for "the same
 state hash sequence"; `SIM-STATE` says the hash covers every field. Today

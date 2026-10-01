@@ -493,7 +493,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 ## 15. Non-functional requirements
 
-**NFR-01 — Determinism.** Identical seed plus identical command sequence produces an identical state hash at every tick, on any Windows x64 build.
+**NFR-01 — Determinism.** Identical seed plus identical command sequence produces an identical state hash at every tick, on any Windows x64 build. The hash is a function of the state, computed in full when a check or the runner asks for it: the tick does not compute it, and the budget of NFR-05 does not include it.
 
 **NFR-02 — Numeric representation.** All simulation state is integer or fixed-point. No floating point, no transcendental functions in the core. Floats exist only in the presentation layer.
 
