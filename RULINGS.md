@@ -1718,3 +1718,47 @@ put a public command path before the gate of phase 3.
 **Not verified:** what the author of §17 meant, which no file records; the
 suite was not run in this session, and the green CI run `36788322902` on
 `c645462` is taken from the review request.
+
+### R-040 — Commands apply at the start of the tick, in submission order: DEC-087
+
+**Date:** 2026-10-02   **Origin:** C-5, from D-077
+**Verdict:** promoted as DEC-087
+**docs/:** `SIM-DEC` gains DEC-087 under "Integration and operations", after
+DEC-086, and DEC-030 points at it; `SIM-REQ` FR-A-01 names the point and the
+order. Both revisions bumped.
+
+FR-A-01 and DEC-030 both say "a defined point in the tick" and neither defines
+it. `D-077` chose the start, and `R-023` ratified the choice as a reading of
+point 5. It is more than that: every system phase 4 adds runs after the drain or
+before it, and the replay log of DEC-030 means nothing until it is known on
+which tick a command took effect. A constraint on all later code that a reader
+of `docs/` could not infer is what a `SIM-DEC` entry is for.
+
+The start is right on the merits, against the only other candidate, the end. Both
+make the tick a command lands on a function of submission against tick
+boundaries, which is what NFR-01 needs. They differ in who sees the command
+first. Applied at the end of tick *t*, it changes the state hashed at *t* while no
+level of *t* saw it, and the world responds at *t + 1*; a player's action would
+be dated one day and answered the next. Applied at the start, the action and the
+response share a tick, and `SIM-ECON`'s Arrivals, where reported outcomes land,
+come after it. Submission order follows from NFR-01's "identical command
+sequence": a sequence has an order, and the host's is the only one available
+that no state decides.
+
+The candidate's text is kept, with one sentence added to the cost. Under DEC-031
+the core runs on its own thread, so the boundary a command meets depends on
+when the host hands it over, a wall-clock fact. The run is still deterministic
+given the ticks the commands landed on, and that is what a replay must record.
+This was true before any code; nothing in phase 3 has a second thread.
+
+`SIM-ECON`'s open item 4 and `D-073`'s order of levels are untouched: DEC-087
+places the drain before every level, not the levels among themselves.
+
+**Cost.** None to code: `TickLoop.Advance` takes the count waiting and drains it
+before the first level. Every phase 4 system is written against a world where
+the tick's commands have already applied.
+**Owed by the implementer:** nothing.
+**Would overturn it:** a command kind that must apply mid-tick, between levels,
+which would need a second drain point and a reason `docs/` does not yet hold.
+**Not verified:** that the command log of DEC-030, not yet built, will record the
+tick of application; the entry now says it must.

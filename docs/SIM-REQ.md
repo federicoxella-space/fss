@@ -2,7 +2,7 @@
 
 **Document:** SIM-REQ
 **Status:** Draft 1
-**Revision:** 2026-10-01
+**Revision:** 2026-10-02
 **Scope:** Headless simulation core, runnable outside the game
 
 ---
@@ -467,7 +467,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 ## 13. Player interaction
 
-**FR-A-01** — The game pushes commands into a queue. The simulator applies them at a defined point in the tick. Nothing outside the core writes world state directly.
+**FR-A-01** — The game pushes commands into a queue. The simulator applies them at the start of the tick, in submission order (DEC-087). Nothing outside the core writes world state directly.
 
 **FR-A-02** — The simulator emits a typed event stream. Nothing outside the core reads mutable world state.
 

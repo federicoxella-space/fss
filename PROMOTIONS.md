@@ -61,7 +61,7 @@ kind (`R-024`).
   Not re-proposed.
 - `D-106`, a refused command. A finding for phase 4, with no answer to promote.
 
-### C-5 — commands apply at the start of the tick
+### ~~C-5 — commands apply at the start of the tick~~ — promoted as DEC-087 by R-040
 
 From `D-077`. **Why:** FR-A-01 asks for "a defined point in the tick" and
 `docs/` does not say which. Every phase 4 system runs after it or before it,

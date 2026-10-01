@@ -2021,7 +2021,7 @@ point-5 hand-off are recorded in `D-074`.
 
 ### D-077 · Point 5 · Commands drain at the start of every tick, and the queue is input, not state
 
-**Ruling:** R-021 — the queue as input, and saves carrying it; R-022 — commands as data, promoted as DEC-086; the rest ratified by R-023.
+**Ruling:** R-021 — the queue as input, and saves carrying it; R-022 — commands as data, promoted as DEC-086; the rest ratified by R-023; the drain at the start of the tick promoted as DEC-087 by R-040.
 
 **What was decided.**
 

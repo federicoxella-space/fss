@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-10-01
+**Revision:** 2026-10-02
 **Companion:** SIM-REQ
 
 ---
@@ -317,7 +317,7 @@ Fewer people means more land each, which raises output per worker, which raises 
 
 ### DEC-030 — Commands in, events out, snapshot for reading
 
-The game pushes commands into a queue applied at a defined point in the tick, consumes a typed event stream, and renders from a read-only snapshot.
+The game pushes commands into a queue applied at the start of the tick (DEC-087), consumes a typed event stream, and renders from a read-only snapshot.
 
 **Rationale.** One entry point for mutation makes determinism testable and makes the command log a replay format for debugging.
 
@@ -330,6 +330,14 @@ A command is a value: a kind and the integer fields that kind declares, with no 
 **Rationale.** A command crosses three boundaries that behaviour cannot: the host hands it over (FR-A-01), the command log records it for replay (DEC-030), and a save carries it while it waits (DEC-032). Each of those is serialisation, with no reflection allowed (SIM-REQ section 20, "Downstream constraints"), and a value serialises as a state row does. Keeping the write in the core also keeps one place where state changes, and lets the core check a command against the state of the tick it lands on rather than trusting whoever built it.
 
 **Cost.** Every kind needs a codec and a dispatch entry as well as its effect, and a new kind touches the core even when its effect is small.
+
+### DEC-087 — Commands apply at the start of the tick, in the order submitted
+
+A tick opens by applying, in submission order, every command waiting when it starts; only then does any level run. A command submitted while a tick runs waits for the next one.
+
+**Rationale.** The tick a command lands on then depends only on when it was submitted relative to the tick boundaries, not on how the host calls the loop, one tick per call or many. That is what makes NFR-01's "identical command sequence" a sequence of commands paired with the ticks they land on, and what the command log of DEC-030 records for replay. Applying before the levels means every level of the tick, the settlement update included, sees the action on the day it lands, and a player's action is dated on the tick the world first responds to it.
+
+**Cost.** Anything submitted during a tick waits up to a whole tick, which is DEC-030's cost made exact. Under DEC-031 the boundary a command meets depends on when the host's thread hands it over, so a replay records the tick each command applied on, never the moment it was submitted. What the core does with a command the state refuses is not settled here.
 
 ### DEC-031 — The core runs on a background thread
 
