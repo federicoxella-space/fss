@@ -2,7 +2,7 @@
 
 **Document:** SIM-STATE
 **Status:** Draft
-**Revision:** 2026-09-30
+**Revision:** 2026-10-02
 **Gate:** The assert list is executable.
 
 ---
@@ -190,6 +190,7 @@ A-13 is the one assert about the schedule rather than about state: a firing leav
 - Version number and migration path from the first write.
 - No reflection: the serialiser is generated or hand-written, per section 20 of SIM-REQ, "Downstream constraints".
 - The state hash covers every field above. A field excluded from the hash is a determinism hole.
+- A table's capacity is not state: the hash and the save cover the rows its count says are in use, and no further, under DEC-088.
 - A save also carries the commands submitted and not yet applied, in submission order, beside the state and outside the hash.
 
 ---

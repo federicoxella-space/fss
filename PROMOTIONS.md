@@ -84,7 +84,7 @@ and the replay log of DEC-030 depends on it.
 > DEC-030's cost made exact. What the drain does with a command the state
 > refuses is not settled by this entry.
 
-### C-6 — only the rows in use are state
+### ~~C-6 — only the rows in use are state~~ — promoted as DEC-088 by R-041
 
 From `D-081` and `D-083`. **Why:** DEC-085 fixes how a variable-length field is
 laid out, not what of it is state. Every table that grows — the chronicle now,

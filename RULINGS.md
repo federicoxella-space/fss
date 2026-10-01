@@ -53,6 +53,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-037`**, no later than the plan point that first builds cohort rows: the
   step "Tests, three wealth bands" builds worlds with three wealth bands, and the
   point's `Fails when:` names the three-band run ignoring its configuration.
+- **`R-041`**, no later than the next plan point that changes the save format: a
+  test that two worlds holding the same chronicle entries in columns of different
+  capacity save to the same bytes, its `Fails when:` naming a writer that walks to
+  the array's length.
 
 ## Escalated to the user
 
@@ -1762,3 +1766,55 @@ the tick's commands have already applied.
 which would need a second drain point and a reason `docs/` does not yet hold.
 **Not verified:** that the command log of DEC-030, not yet built, will record the
 tick of application; the entry now says it must.
+
+### R-041 — A table's capacity is not state; only the rows in use are: DEC-088
+
+**Date:** 2026-10-02   **Origin:** C-6, from D-081 and D-083
+**Verdict:** promoted as DEC-088
+**docs/:** `SIM-DEC` gains DEC-088 under "Core representation", after DEC-085;
+`SIM-STATE` §Serialisation notes gains one line pointing at it. `SIM-DEC`'s
+revision already bumped today by `R-040`; `SIM-STATE`'s bumped.
+
+DEC-085 says how a variable-length field is laid out and `SIM-STATE` says the hash
+covers every field. Neither says what of an array is state. `SIM-STATE` §Rule
+implies part of it: capacity is not listed and is not derivable from what is, so
+it may not influence a future tick. It does not imply the rest, that the hash and
+the save stop at the count, and that is where the fault lives. Point 6 met it
+first, with the chronicle; every growable table after it — pools, agents,
+transients — meets it again, and `D-083`'s finding is that the wrong walk passes
+every test on a world whose arrays happen to be full. A constraint every later
+table must keep and nobody could infer from `docs/` is architecture.
+
+On the merits the rule holds without the code. The capacity a doubling table
+reaches records how it grew, not what it holds, so hashing it makes two equal
+worlds unequal, which breaks NFR-01 between a world built in one run and the same
+world built in another order. Saving it breaks AC-03 directly: a load allocates
+for what the bytes say, and a world loaded into columns of another length saves
+to other bytes. Both arguments stand on NFR-01, AC-03 and DEC-085 as written
+before point 6.
+
+The candidate's text is kept, with two changes. The pool's count is named
+explicitly, since DEC-085's pool is the one place where "rows" is not the unit.
+And the cost says what the entry does not settle: a row released inside the
+count, by retention (`SIM-STATE` open item 3) or by DEC-085's compaction, is
+still inside what is walked, and whether it is reset, compacted away or made
+unreachable is those items' decision.
+
+**Cost.** None to code: `StateHash` and `SaveFormat` walk `ChronicleCount` rows
+and the pool to `EntitiesInUse`, and `FRI01_CapacityDoesNotReachTheHash` checks
+the hash half (`R-027`). Each later growable table carries its count in state and
+a check that its capacity reaches neither hash nor save; the chronicle lacks the
+save half, owed below.
+**Owed by the implementer:** the save half's check. No test today shows that two
+worlds holding the same chronicle entries in columns of different capacity save
+to the same bytes: `FRI01_CapacityDoesNotReachTheHash` covers the hash only, and
+AC-03's round trip can pass a writer that saves capacity if the reader allocates
+what it reads. No later than the next plan point that changes the save format,
+a test of that equality, with its `Fails when:` naming a writer that walks to the
+array's length. Cite `R-041`.
+**Would overturn it:** a table whose capacity is itself a quantity of the world
+— a cap a system reads and changes — which would make it a field, and state, not
+capacity.
+**Not verified:** that `SaveFormat`'s writer stops at the count; `D-090` and
+`R-029` say it does, and the code was grepped, not read for it. `core/Tests/` was
+grepped for a capacity test of the save and none was found.

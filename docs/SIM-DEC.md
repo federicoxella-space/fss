@@ -59,6 +59,14 @@ A state field is a value or one contiguous array of values. A per-row quantity o
 
 **Cost.** Every access to a wide field computes an index. A patch that changes a width, a new good for instance, reshapes the arrays that carry it inside the migration of NFR-08. A pooled field needs a compaction rule, and that rule orders by id or it becomes a determinism hole of its own.
 
+### DEC-088 — Only the rows in use are state
+
+A column may be sized beyond the rows it holds. Its capacity is not state: a count in state says how many rows are in use, a pool of DEC-085 has a count of its own, and the state hash, the save and every check walk those rows and no further. Nothing reads a row beyond its count.
+
+**Rationale.** Growing by doubling is how an append-only table stays cheap, and the capacity it reaches depends on the history of its growth, not on what the world holds. Counted by capacity, two worlds holding the same entries would hash differently, and a save would carry rows nothing wrote, so a world loaded into columns of another length would save to other bytes and AC-03 would fail on a correct world.
+
+**Cost.** Every growable table carries its count in state, and every walk of it stops at the count. A walk that reads to the array's length passes every test run on a world whose arrays happen to be exactly full, so that capacity reaches neither the hash nor the save needs a check of its own. A row released inside the count, by a retention policy or a compaction, is not settled here: DEC-085's compaction rule and SIM-STATE's open item 3 decide it.
+
 ---
 
 ## Time

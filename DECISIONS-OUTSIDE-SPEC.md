@@ -2151,7 +2151,7 @@ under `R-019` (`D-077`).
 
 ### D-081 · Point 6 · The chronicle's shape: ids are the order of writing, the pool follows DEC-085
 
-**Ruling:** R-027 — ratified; `0` narrowed by R-024, the id's table left open by R-025.
+**Ruling:** R-027 — ratified; `0` narrowed by R-024, the id's table left open by R-025; capacity not state promoted as DEC-088 by R-041.
 
 `SIM-STATE` §Chronicle names the fields and gives three types — `tick` int64,
 `entities` id[], `importance` int — and `cause` as "chronicle id". The rest is
@@ -2210,7 +2210,7 @@ the check to a debug assert and accept the corrupt branch in Release.
 
 ### D-083 · Point 6 · The hash and its fixture learn columns
 
-**Ruling:** R-027 — ratified; test names by R-026.
+**Ruling:** R-027 — ratified; test names by R-026; rows in use promoted as DEC-088 by R-041.
 
 The fold adds the chronicle after §World: the count, then each column over the
 rows in use, then the pool, whose length is read from the last row. That is the
