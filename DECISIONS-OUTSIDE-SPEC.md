@@ -2412,6 +2412,7 @@ first forcing interfaces the coder then has to fight.
 ### D-089 · Comment rules in `AGENTS.md`, drawn from applied findings; everything in English
 
 **Ruling:** R-028 — ratified.
+**Ruling:** R-045 — widened by the user: the outcome markers are English too.
 
 A new section of `AGENTS.md` holds the comment rules C1 to C10 and one rule of
 simplicity, S1, each one a finding reviewers already applied, each citing the

@@ -108,7 +108,8 @@ written. Near misses named there with their reasons: `D-073`, `D-090`, `D-106`.
    **Answered:** promoted as DEC-087 to DEC-089 by `R-040` to `R-042`, two amended.
 2. ~~**`SQ-008`**, before or at the first phase 4 point that adds a table.~~
    **Answered:** closed by `R-043`, the full hash at every tick, on request.
-3. **The push of `main`.** A push is yours.
+3. ~~**The push of `main`.** A push is yours.~~
+   **Answered:** main pushed 2026-10-02, CI run 36942531774 green.
 4. **Phase 4's moment one**, when you are ready to plan it: the question carried
    from moment two — whether the `Fails when:` lines are read by someone other
    than their author, and whether the agent workflow of `D-086` to `D-089` is

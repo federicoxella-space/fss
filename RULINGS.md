@@ -66,6 +66,9 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   one full state hash is measured against the cost of the tick, on the world the
   checks of `AC-02` run, and recorded in the register with the size chosen for
   those checks.
+- **`R-045`**, within the process plan point that writes `D-089`'s language
+  rule: the five outcome markers become English in `AGENTS.md` and in the three
+  plan skills, which write the English form and recognise both.
 
 ## Escalated to the user
 
@@ -1987,3 +1990,58 @@ plan starts.
 stood when written.
 **Not verified:** the merge commit has not run in CI; `main` is not pushed, which
 is item 3 of the current review request and the user's.
+
+### R-045 — `D-089` widened: the markers of an outcome line are English too
+
+**Date:** 2026-10-02   **Origin:** user, on D-089
+**Verdict:** resolved
+**docs/:** unchanged
+
+`D-089` writes every artefact in English from the point that writes the rule,
+outcome lines included, and says nothing of the markers inside them. Five are
+Italian, and they are not prose but keys the skills match: `*Esito:*`, which
+closes a point; `FALLITO`, closed as failed, the plan stops (`D-023`);
+*Chiuso con riserva* and *Riserva sciolta* (`R-011`); *criterio difettoso*
+(`R-009`). They stand in `AGENTS.md`, under "Criteria are frozen", and in
+`/plan-next`, `/plan-explain` and `/plan-status`. Left as they are, an English
+outcome line would carry Italian keys, an exception to `D-089` that nobody wrote
+down. Asked whether the markers stay or change, the user answered: "D-089: anche
+i marker in inglese". Governance, reserve 1 of `R-001`: the user's decision,
+recorded here.
+
+**The markers.** The English forms are the words the rulings already use for the
+same things in prose — "criterion defective" (`R-005`), "a reserve" (`R-011` and
+after):
+
+| Until now | From the rule |
+|---|---|
+| `*Esito:*` | `*Outcome:*` |
+| `FALLITO` | `FAILED` |
+| *Chiuso con riserva* | *Closed with reserve* |
+| *Riserva sciolta* | *Reserve discharged* |
+| *criterio difettoso* | *criterion defective* |
+
+**When.** With the rest of `D-089`: the point of the process plan that writes the
+language rule, not now. Points before it close under the forms in use, as
+`D-089` leaves points already written as they were.
+
+**Both forms are read.** `D-089` does not translate records already written. The
+five plans archived in `.claude/plans/` close their points with `*Esito:*`, and
+`/plan-status` reads an archived plan when none is live; the process plan itself
+will hold points closed before the rule and after it. So the three skills write
+the English form and recognise both, for as long as any plan carries the Italian
+one — which, for the archives, is always.
+
+**Cost.** Three skills and `AGENTS.md` change in one point, and every search for
+a closed point needs two patterns from then on.
+**Owed by the implementer:** within the process plan point that writes
+`D-089`'s language rule, the five markers become English in `AGENTS.md` and in
+`/plan-next`, `/plan-explain` and `/plan-status`, which write the English form
+and recognise both. The point names `AGENTS.md` and the rule it changes, as
+`R-010` requires. Cite `R-045`.
+**Would overturn it:** the user preferring the markers kept as fixed Italian keys
+inside English prose.
+**Not verified:** which point of the process plan writes the rule, since the plan
+is not written; that nothing outside the files named matches the markers was
+checked by a grep of the repository, which found them only there, in the two
+design notes, in the archived plans and in the two registers.
