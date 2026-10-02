@@ -748,7 +748,7 @@ Each phase has an exit gate. No phase starts before the previous gate is green.
 | 1 | Conceptual model, causal loop diagram | No flow without source and sink; every reinforcing loop has a named balancing loop |
 | 2 | State representation, conservation invariants | Assert list executable |
 | 3 | Headless kernel: scheduler, RNG, serialisation, chronicle, CLI runner | 100k empty ticks; AC-02, AC-03 green |
-| 4 | Subsystems in dependency order: demography → production → market → labour and income → needs → mobility → events | AC-01, AC-04 green per subsystem |
+| 4 | Subsystems in dependency order: production → needs → market → labour and income → demography → mobility → events. Each runs on the state the generator wrote for those not yet built: population stays as generated until demography, and nothing is stubbed | AC-01, AC-04 green per subsystem |
 | 5 | Agent promotion and persistence by difference | AC-05, AC-06 green |
 | 6 | Tuning: sweeps, CSV output, charts | P-11, P-18, AC-04 bounds and AC-09 values recorded |
 | 7 | Host integration | Command queue and snapshot API only |

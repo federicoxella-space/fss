@@ -2286,3 +2286,48 @@ Cite `R-050`.
 say the status hides rather than marks.
 **Not verified:** how many unnumbered values Phase 4 will need; the list above is
 what one reading of `SIM-ECON` and §5 to §8 found.
+
+### R-051 — Phase 4 builds production first and demography fifth, on generated state rather than stubs
+
+**Date:** 2026-10-02   **Origin:** user, design session
+**Verdict:** specified
+**docs/:** `SIM-REQ` §18, "Delivery phases", the content of Phase 4: the order
+changed, and a sentence on what a subsystem runs on before the others exist.
+Revision already today's.
+
+§18 called its order "dependency order" and put demography first. Demography is
+the subsystem that depends on the most: births on food per capita (FR-D-02),
+migration on food, real wage and safety (FR-D-04), mortality on the hunger deficit
+that phases 6 and 7 produce (`SIM-ECON` §Demand). Built first, it would run on
+food, wage and safety held constant by stubs, and "AC-04 green" for it would
+certify a world the game never contains. `R-037` noted the same doubt in its
+"Not verified".
+
+No order is free of a cycle: production needs labour, which is population. What
+breaks the cycle without inventing anything is that the generator already writes
+a population (FR-G-01). A subsystem built before demography runs on the population
+as generated, unchanging; that is real state, of the shape the game ships, and
+nothing has to be removed later. Read so, "dependency order" is the order in which
+each subsystem's inputs become dynamic: production, then needs, which consumes
+what production made, then the market that clears what own consumption left, then
+labour and income, which price the work production used, then demography, which
+reads all four, then mobility, which moves people and goods between settlements
+by what demography and the market compute, then events, which act through all of
+them (FR-E-06).
+
+Put to the user with the current order on stubs and with a single minimal pass
+over the whole update, the user chose this one.
+
+**Cost.** Until demography lands, no run shows a population move, which is what
+`SIM-OBS` says the player notices first; the early gates test economies with a
+fixed population. The first cohort rows arrive with production, not demography,
+so `R-037`'s three-band check binds there.
+**Owed by the implementer:** nothing beyond the order itself; `R-037` binds the
+first point that builds cohort rows, whichever subsystem it serves.
+**Would overturn it:** a subsystem that cannot run on a fixed population without
+a stub — production needing births to be meaningful, say — which would argue for
+the single minimal pass.
+**Not verified:** that market clearing before labour and income runs without a
+wage: phase 2 of `SIM-ECON` computes the wage with the prices, so the market
+subsystem may need a wage from the generator until labour lands; checked against
+the update table, not worked through.
