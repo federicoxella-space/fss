@@ -73,6 +73,9 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   points 1 to 5 and no simulator change; the first point of the phase 4 plan is
   run by the agents, and its criterion carries the design's point 6 check and
   fault.
+- **`R-047`**, within the process plan point that rewires `/plan-next` and
+  `reviewers.md`: the reviewers' brief quotes the `Fails when:` line and asks for
+  missing faults. And every moment-one request carries the `Fails when:` lines.
 
 ## Escalated to the user
 
@@ -2100,3 +2103,51 @@ reason to reopen the process plan's outcome lines.
 **Not verified:** the design's own "Not verified" list — hooks under a skill,
 `pwsh` on Windows, `effort` per agent, the cost of a point — none of which this
 ruling could test.
+
+### R-047 — A `Fails when:` is read by the user at moment one and by the reviewers at close
+
+**Date:** 2026-10-02   **Origin:** review request 2026-10-01, item 4
+**Verdict:** resolved
+**docs/:** unchanged
+
+The moment-two request of phase 3 recorded that no one but the author ran the
+mutations, and item 4 carried the question: is a `Fails when:` read by anyone
+other than the one who wrote it? Today no one is. The reviewers' brief
+(`.claude/skills/plan-next/reviewers.md`) passes the point's statement, what it
+cites and its check, and does not name the `Fails when:` line; the reviewers run
+only for `Core: yes`, after the code; `/plan-explain` objects to a weak fault but
+runs in the author's session; and the decider has taken mutation results as
+written in every audit.
+
+`D-088`'s tester does not close the gap: it runs the faults the plan names, so it
+makes the *running* independent, not the *choosing*. A fault the author did not
+think of is missed by the author and by the tester alike.
+
+Put to the user with four readers, combinable, the user chose two:
+
+1. **The user, at moment one.** The request carries the plan's criteria, its
+   `Fails when:` lines included, and the user reads them before they are
+   frozen (`R-048`). This is the one reading by someone who is not the model that
+   wrote them; the decider reading at moment one was offered and not chosen, for
+   that reason.
+2. **The reviewers, at close.** Their brief quotes the `Fails when:` line with the
+   rest of the frozen criterion, and asks them, besides whether the check was met,
+   which fault the check would miss. A fault proposed is a finding: it goes to the
+   register with the others, accepted or rejected with its reason, and the
+   criterion does not change, as `R-005` and `R-009` require. Whether the
+   implementer also introduces it is the implementer's call, recorded in the same
+   entry. Once `D-088` is built, the code-reviewer on every code point is a
+   reviewer for this purpose.
+
+**Cost.** Moment one asks more of the user: the criteria are read, not skimmed.
+The reviewers' findings grow by one kind, and the register with them.
+**Owed by the implementer:** within the process plan point that rewires
+`/plan-next` and `reviewers.md`, the brief quotes the `Fails when:` line and asks
+for missing faults, and the code-reviewer's definition does the same. Every
+review request at moment one carries the plan's `Fails when:` lines verbatim.
+Cite `R-047`.
+**Would overturn it:** proposed faults that turn out, at audit, to be noise at a
+rate that costs more than they find; or the user finding the moment-one reading
+adds nothing the reviewers do not.
+**Not verified:** that a reviewer briefed to look for missing faults finds the
+ones that matter; nothing has run it.
