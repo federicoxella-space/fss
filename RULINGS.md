@@ -76,6 +76,9 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-047`**, within the process plan point that rewires `/plan-next` and
   `reviewers.md`: the reviewers' brief quotes the `Fails when:` line and asks for
   missing faults. And every moment-one request carries the `Fails when:` lines.
+- **`R-048`**, from the next plan: the draft goes in the moment-one request, and
+  `PLAN.md` is installed on its branch after the user's answer, in a commit that
+  cites it; the process plan point that edits `AGENTS.md` writes the rule.
 
 ## Escalated to the user
 
@@ -2151,3 +2154,51 @@ rate that costs more than they find; or the user finding the moment-one reading
 adds nothing the reviewers do not.
 **Not verified:** that a reviewer briefed to look for missing faults finds the
 ones that matter; nothing has run it.
+
+### R-048 — A plan reaches moment one as a draft, and is frozen by the commit that installs it on its branch
+
+**Date:** 2026-10-02   **Origin:** review request 2026-10-01, item 4; D-051
+**Verdict:** resolved
+**docs/:** unchanged
+
+`AGENTS.md` freezes criteria "when written", and moment one exists because "a
+wrong criterion costs one conversation rather than every point built on it".
+Phase 3 did both at once: `D-051` installed the plan on `main` beside the
+request, and `D-053` then left its points untouched when the answers came. Read
+together, moment one could add a point (`D-014`) or stop the plan, but not
+correct a criterion, and the reading of `Fails when:` lines that `R-047` gives
+the user would have nowhere to land.
+
+Put to the user with three forms, the user chose this one:
+
+- **The plan comes to moment one as a draft, inside the request.** Not
+  `PLAN.md`: the request holds the draft whole, criteria and `Fails when:` lines
+  verbatim, and the user's answer may change any of it.
+- **After the answer, one commit installs `PLAN.md` on the plan's branch**, cut
+  from `main` for it. That commit is the moment of writing in `AGENTS.md`'s
+  sense: from it the criteria are frozen and every later rule about them
+  applies. It cites the answer it follows.
+- **`main` never carries a live `PLAN.md`**, as the plan design note has said
+  since 2026-09-17 and `D-051` departed from. `D-051`'s reason, that a request
+  nobody can see does not interrupt, is met by the request on `main`; its other
+  reason, that a branch makes answering cost a merge, falls away because nothing
+  on the branch exists until the answer.
+
+This reverses `D-051`'s placement for later plans; `R-008` ratified it as right
+for its plan, and that stands.
+
+**Cost.** A plan is written twice, as draft and as file; the installing commit
+must match the draft as amended by the answer, and a difference between them is
+a change no one reviewed. `/plan-explain` reads `PLAN.md` only, so it cannot be
+run on a draft.
+**Owed by the implementer:** from the next plan, the process plan included: the
+draft goes in the moment-one request, and `PLAN.md` is installed on its branch
+after the user's answer, in a commit that cites it and says whether it matches
+the draft as amended. The process plan point that edits `AGENTS.md` states this
+in "Criteria are frozen when written", naming the rule as `R-010` requires. Cite
+`R-048`.
+**Would overturn it:** drafts drifting from their installed plans in ways the
+installing commit does not report; or the user preferring to review the file
+itself, which reopens `D-051`.
+**Not verified:** how large a request becomes with a whole plan inside it; the
+phase 3 plan, at ten points, was not measured for it.
