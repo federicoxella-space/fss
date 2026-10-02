@@ -69,6 +69,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-045`**, within the process plan point that writes `D-089`'s language
   rule: the five outcome markers become English in `AGENTS.md` and in the three
   plan skills, which write the English form and recognise both.
+- **`R-046`**, in the two plans that follow: the process plan holds the design's
+  points 1 to 5 and no simulator change; the first point of the phase 4 plan is
+  run by the agents, and its criterion carries the design's point 6 check and
+  fault.
 
 ## Escalated to the user
 
@@ -2045,3 +2049,54 @@ inside English prose.
 is not written; that nothing outside the files named matches the markers was
 checked by a grep of the repository, which found them only there, in the two
 design notes, in the archived plans and in the two registers.
+
+### R-046 — The agent workflow is built before phase 4; its first real run is phase 4's first point
+
+**Date:** 2026-10-02   **Origin:** review request 2026-10-01, item 4; D-086
+**Verdict:** resolved
+**docs/:** unchanged
+
+Item 4 carried from moment two the question whether the workflow of `D-086` to
+`D-089` is built before phase 4. `R-028` ratified the design and left the
+question to the user, as governance under reserve 1 of `R-001`. Put to the user
+with three alternatives, the user chose to build it first, with the design's
+point 6 moved out of the process plan; asked how the move meets `R-011`, the user
+chose to carry it in the criterion of phase 4's first point.
+
+**Why first.** Of `D-086`'s three reasons to wait, two have lapsed: `main` now
+holds `/decide`, `RULINGS.md` and the decider's sections of `AGENTS.md`, and the
+serialiser of point 7 is behind us. The third, that two live plans break the
+lookup of `/plan-status`, still holds and sets the order: one plan, then the
+other. And the phase 4 plan cannot be written yet in any case: its scope, the
+gate's `AC-04` and the order of its subsystems are open in `docs/`, and those
+questions go to the decider first. The process plan uses that time.
+
+**Why point 6 moves.** The design's point 6 is "the first real point run by the
+agents … on a real change". A real change is a simulator change, and inside a
+`Kind: process` plan it would carry no `Serves` or `Satisfies` and leave its
+`Plan-point:` trailer in the process plan's range. Moved to the phase 4 plan,
+each plan stays of one kind.
+
+**Why not a reserve.** `R-011` says a reserve "is not for work the agent could
+do", and phase 4's first point is the agent's work. So the process plan closes on
+its points 1 to 5, its exit condition being the workflow built and wired, and the
+proof that it runs belongs to the next plan instead: the first point of the phase
+4 plan carries the design's point 6 check as part of its own criterion. Its
+outcome line shows the tester's test red then green, the named fault seen red,
+and every agent the workflow dispatches as having run; its `Fails when:` names an
+agent skipped with no word of it in the outcome.
+
+**Cost.** Phase 4 starts one plan later. Until its first point closes, the
+workflow is built and unproven, and the process plan reads as finished while
+that is so; the line under "Owed by the implementer" is what keeps it visible.
+**Owed by the implementer:** the process plan holds the design's points 1 to 5
+and no simulator change. The first point of the phase 4 plan is run by the
+agents, and its criterion includes the design's point 6 check and fault as above.
+Cite `R-046`.
+**Would overturn it:** the process plan stalling long enough that phase 4 is
+wanted without it, which reopens the order; a failure of the first real run,
+which is a `FAILED` point of phase 4 and a finding about the workflow, not a
+reason to reopen the process plan's outcome lines.
+**Not verified:** the design's own "Not verified" list — hooks under a skill,
+`pwsh` on Windows, `effort` per agent, the cost of a point — none of which this
+ruling could test.
