@@ -521,6 +521,8 @@ Distance enters through travel time and therefore through staleness, never throu
 
 ## 16. Parameters to fix
 
+Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run before any sweep. A value used before it is fixed carries the status **Provisional**: the implementer proposes it in the plan point that first needs it, the decider records it here with its P-number and the phase that replaces it, and the point cites the P-number. A constant in the core that drives the simulation and has no P-number is a defect. Static content — goods, occupations, recipes, crops, building types — is not a parameter and is not set this way: it is approved by the user before the plan that uses it is written.
+
 | # | Parameter | Value | Status |
 |---|---|---|---|
 | P-01 | Budget per simulated day | 10 ms p99 | Decided, supported by measurement |

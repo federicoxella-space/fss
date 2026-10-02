@@ -82,6 +82,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-049`**, within the process plan point that rewires `/plan-next`: step 1
   refuses a plan's first point until the user has answered its moment-one
   request; until then the ruling binds as written.
+- **`R-050`**, from the phase 4 plan: every simulation constant cites a P-number
+  of `SIM-REQ` §16, a new one proposed in the point that needs it.
 
 ## Escalated to the user
 
@@ -2241,3 +2243,46 @@ question. Until that point lands, the rule binds as this ruling. Cite `R-049`.
 changes anything, which would argue for the decider's answer except where the
 user is asked to read.
 **Not verified:** nothing; the step of `/plan-next` and `R-001` were read.
+
+### R-050 — A value used before its sweep is Provisional, numbered in §16; static content is the user's
+
+**Date:** 2026-10-02   **Origin:** user, design session
+**Verdict:** specified
+**docs/:** `SIM-REQ` §16, "Parameters to fix", gains a paragraph above the table
+defining the status Provisional and who sets static content. Revision already
+today's.
+
+§16 holds 33 values `TBD`, all but a handful `TBD by sweep`, and sweeps are
+Phase 6 (§18). Phase 4 must run its subsystems before then, so it runs on values
+nobody has fixed. Many more have no P-number at all: the shape of `f` in
+FR-M-01, `desired_stock`, the per-capita needs of `SIM-ECON` ("The tier table
+has a shape and no numbers"), the share of tax a settlement retains. Left as they
+are, each would be chosen by the implementer inside a point and appear only in
+the register, which makes it design hidden in the diff, and makes `AC-04`'s
+outcome depend on numbers no document names.
+
+Put to the user with three answers, the user chose this one. **A value used
+before it is fixed is Provisional**: the implementer proposes it in the point
+that first needs it, the decider writes it into §16 with a P-number and the
+phase that replaces it, and the point cites the P-number. The decider's part is
+`R-001`'s numbering of identifiers. A constant driving the simulation with no
+P-number is a defect, found by review like any other.
+
+**Static content is different in kind.** Goods, occupations, recipes, crops and
+building types decide which world is simulated, not how fast a variable moves.
+They are approved by the user before the plan that uses them is written, and are
+not proposed point by point. P-09 fixes seven goods and the list itself is still
+"proposed, pending confirmation" in §6; that confirmation is the first of these
+approvals.
+
+**Cost.** A point needing a new value waits on a decider session to number it, or
+carries the proposal to its outcome and the number arrives at the next audit;
+which of the two is the plan's to say. Phase 4's plan cannot be written before
+the content is approved.
+**Owed by the implementer:** from the phase 4 plan, every simulation constant
+cites its P-number; a proposal for a new one is part of the point that needs it.
+Cite `R-050`.
+**Would overturn it:** provisional values outliving Phase 6 unswept, which would
+say the status hides rather than marks.
+**Not verified:** how many unnumbered values Phase 4 will need; the list above is
+what one reading of `SIM-ECON` and §5 to §8 found.
