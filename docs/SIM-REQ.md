@@ -753,6 +753,20 @@ Each phase has an exit gate. No phase starts before the previous gate is green.
 | 6 | Tuning: sweeps, CSV output, charts | P-11, P-18, AC-04 bounds and AC-09 values recorded |
 | 7 | Host integration | Command queue and snapshot API only |
 
+**Phase 4 in full.** Phase 4 builds the whole settlement update of SIM-ECON, all twelve phases and its dated steps, and the generator it runs on. Each subsystem covers:
+
+| Subsystem | SIM-ECON phases and steps | Requirements |
+|---|---|---|
+| Production | 5, 9; sowing, harvest, allocation adjustment, construction | FR-P; FR-J-01 to FR-J-03; FR-C-01, FR-C-02, FR-C-06. Before it, the generator: FR-G-01, FR-G-01a, FR-G-02, with the buried stock of FR-J-14 and FR-J-15 |
+| Needs | 6 | FR-C-03; SIM-ECON §Demand, tiers and the hunger deficit |
+| Market | 1 for goods, 2 for prices, 7, 10 | FR-M-01 to FR-M-07; FR-C-04, FR-C-10, FR-C-11; FR-C-12 to FR-C-18, FR-C-21; FR-J-04, FR-J-05; FR-I-05 to FR-I-06a |
+| Labour and income | 2 for the wage, 3, 4, 8; taxation | FR-C-05, FR-C-07 to FR-C-09, FR-C-19, FR-C-20, FR-C-22 to FR-C-30; FR-X-01, FR-X-06, FR-X-07 for the convoy |
+| Demography | 11 for births and deaths | FR-D-01 to FR-D-03, FR-D-13 |
+| Mobility | 1 for migrants, 11 for migration | FR-D-04, FR-D-05, FR-D-07 to FR-D-12, FR-D-14; FR-M-08 to FR-M-15; FR-J-06 to FR-J-10; FR-X-02, FR-X-03 |
+| Events | 12 | FR-E-01 to FR-E-07; FR-K-01 to FR-K-16; FR-J-11 to FR-J-13, FR-J-16 to FR-J-18; FR-I-01 to FR-I-04 |
+
+Outside Phase 4: FR-D-06, agents, in Phase 5; FR-G-03 and FR-G-04, prior history, in Phase 6 with P-18; FR-X-04, FR-X-05 and §13, what the host observes and does, in Phase 7.
+
 ---
 
 ## 19. Open items

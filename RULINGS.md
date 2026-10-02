@@ -84,6 +84,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   request; until then the ruling binds as written.
 - **`R-050`**, from the phase 4 plan: every simulation constant cites a P-number
   of `SIM-REQ` §16, a new one proposed in the point that needs it.
+- **`R-052`**, in every phase 4 plan: `Satisfies:` and `Serves` are read against
+  the table of `SIM-REQ` §18.
 
 ## Escalated to the user
 
@@ -2331,3 +2333,52 @@ the single minimal pass.
 wage: phase 2 of `SIM-ECON` computes the wage with the prices, so the market
 subsystem may need a wage from the generator until labour lands; checked against
 the update table, not worked through.
+
+### R-052 — Phase 4 is the whole twelve-phase settlement update and the generator, mapped onto its seven subsystems
+
+**Date:** 2026-10-02   **Origin:** user, design session
+**Verdict:** specified
+**docs/:** `SIM-REQ` §18, "Delivery phases", gains a table mapping each
+subsystem of Phase 4 to its `SIM-ECON` phases and its requirements, and a line on
+what lies outside Phase 4. Revision already today's.
+
+§18 named seven subsystems and none of credit, information, denominations,
+taxation, guilds or transients. §19, "Open items", closes P-17 and P-01's validity
+in Phase 4 by measuring "the full twelve-phase settlement update", which contains
+borrowing and repayment (phases 3 and 8), the knowledge table and `changeCapacity`
+(phase 12) and taxation among its dated steps. The two could be read as a phase 4
+of seven narrow subsystems with a measurement it could not take, or as a phase 4
+of the whole update named by its seven largest parts. The generator, FR-G-01,
+was in no phase at all, though every subsystem needs settlements to run on.
+
+Put to the user with the narrow reading and with a new phase between 4 and 5, the
+user chose the whole update. The table now in §18 places every requirement the
+update implements under one subsystem, in the order of `R-051`. Three placements
+are this ruling's own and carry its reasons:
+
+- **Migration is mobility, not demography.** `SIM-ECON` runs both in phase 11, but
+  births and deaths read a settlement's own state, while migration reads its
+  neighbours' and moves people along links, as trade does. Splitting them lets
+  demography close on a closed population first.
+- **Sampled transients are mobility.** Itinerant merchants and adventurers
+  journey as sampled transients (FR-J-08, FR-J-12), and merchant journeys feed the
+  candidate list that rewires the graph (FR-M-08). Observing and interacting with
+  them, FR-X-04 and FR-X-05, is what the host does, and goes to Phase 7 with §13.
+- **The generator opens Phase 4, without prior history.** FR-G-01, FR-G-01a and
+  FR-G-02 come before production. FR-G-03 runs "the simulator itself, at full
+  fidelity", which needs every subsystem, and P-18, its length, closes in Phase 6;
+  it goes there with FR-G-04. This also places `R-007`'s open item, which
+  `R-007` assigned to a "phase 14" that §18 does not contain: it falls due in
+  Phase 6.
+
+**Cost.** Phase 4 is large, and the plan will be long or split into several plans
+in sequence. Placing a requirement under a subsystem is not a claim that it is
+easy to build there.
+**Owed by the implementer:** a phase 4 plan's `Satisfies:` and each point's
+`Serves` are read against this table; a requirement served by a subsystem other
+than its own is a decision for the register. Cite `R-052`.
+**Would overturn it:** a requirement found to need a later phase's machinery —
+an agent, the host — which would move it out of the table by a ruling.
+**Not verified:** that every requirement of §5 to §12 appears in the table;
+FR-W, FR-T and FR-A belong to phase 3 or 7 and were not listed, and the ranges
+were written from the section headings and the first line of each requirement.
