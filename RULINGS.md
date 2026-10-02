@@ -86,6 +86,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   of `SIM-REQ` §16, a new one proposed in the point that needs it.
 - **`R-052`**, in every phase 4 plan: `Satisfies:` and `Serves` are read against
   the table of `SIM-REQ` §18.
+- **`R-053`**, at the closing point of each phase 4 subsystem: `AC-01` and
+  `AC-04` over what exists, against provisional bounds derived from `docs/`.
 
 ## Escalated to the user
 
@@ -2382,3 +2384,53 @@ an agent, the host — which would move it out of the table by a ruling.
 **Not verified:** that every requirement of §5 to §12 appears in the table;
 FR-W, FR-T and FR-A belong to phase 3 or 7 and were not listed, and the ranges
 were written from the section headings and the first line of each requirement.
+
+### R-053 — Phase 4 checks AC-04 against provisional bounds, per subsystem; Phase 6 sets the final ones
+
+**Date:** 2026-10-02   **Origin:** user, design session
+**Verdict:** specified — the user's decision, reserve 2 of `R-001`
+**docs/:** `SIM-REQ` §17 `AC-04`, the provisional bounds and M; §16 gains P-65;
+§18 says what "per subsystem" means; §19's row for the bounds names what it
+replaces. Revision already today's.
+
+Phase 4's gate is "AC-01, AC-04 green per subsystem". `AC-04` fails a run when a
+monitored variable "leaves its declared range", and the ranges are "set in Phase
+6". Read literally, the gate cannot be passed in Phase 4 by any code, since there
+is no range to stay inside; M was undefined; and "per subsystem" said nothing of
+variables that do not exist yet — legitimacy before labour and income, infection
+before events.
+
+Three answers were put to the user: provisional bounds now; only the unbounded
+growth half now; or `AC-04` moved whole to Phase 6. The second and third loosen a
+gate, reserve 2 of `R-001`. The first changes what the gate is read against, and
+whether that holds `AC-04` to its text is itself a judgement about a gate, so all
+three were the user's. The user chose the first.
+
+**The bounds.** Until Phase 6 each hard bound is Provisional under `R-050`, and is
+derived from a bound the specification already states rather than chosen: no
+stock below zero, prices within P-10, a settlement's population within the import
+bound of FR-D-14. A bound derived so can fail, which a bound chosen wide enough
+never would; that is what keeps the provisional gate from being vacuous. The
+other half of `AC-04`, "none grows without bound", runs beside it, with its
+method stated in the point's frozen criterion. Soft bands only warn and start in
+Phase 6. M is P-65, proposed by the first point that runs `AC-04` against the cost
+of sixty simulated years.
+
+**Per subsystem.** When a subsystem closes, `AC-01` and `AC-04` are green over the
+invariants and monitored variables that exist by then, and stay green as later
+subsystems land. A variable joins `AC-04` with the subsystem that makes it.
+
+**Cost.** A provisional bound derived from a structural limit is loose: a world
+can stay inside it and still be wrong in ways Phase 6 will find. Every subsystem's
+close reruns the long runs of every earlier one.
+**Owed by the implementer:** each phase 4 subsystem's closing point runs `AC-01`
+and `AC-04` over what exists, against provisional bounds numbered under `R-050`,
+with a `Fails when:` naming a variable that leaves its derived bound. Cite
+`R-053`.
+**Would overturn it:** a monitored variable with no structural bound to derive
+from, which would need a chosen provisional value and so the second reading for
+that variable; Phase 6 finding the envelopes far inside the provisional bounds,
+which would say the phase 4 gate proved little.
+**Not verified:** that every variable in `AC-04`'s table has a structural bound in
+`docs/`. Migration flow, urban share, legitimacy and infection prevalence were
+not checked for one; prices, stocks and population were.

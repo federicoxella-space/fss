@@ -586,6 +586,7 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-60 | Dungeon regeneration rate | TBD by sweep | Open |
 | P-61 | Time before a cleared dungeon reverts | TBD by sweep | Open |
 | P-62 | Adventurer rank count | 4 | Proposed |
+| P-65 | Seeds per AC-04 run (M) | TBD | Open; Provisional from the first point that runs AC-04, replaced in Phase 6 |
 | P-09 | Goods count | 7 | Decided |
 | P-10 | Price bounds | 0.25× to 4× reference | Decided |
 | P-11 | Trade damping `k` | TBD by sweep | Open |
@@ -618,7 +619,7 @@ Every criterion below runs headless in CI, with no editor and no game client, dr
 | Kingdom legitimacy | minimum |
 | Infection prevalence | maximum |
 
-Each carries a hard bound that fails the test and a soft band that raises a warning. Values are set in Phase 6.
+Each carries a hard bound that fails the test and a soft band that raises a warning. Values are set in Phase 6. Until then each hard bound is Provisional (§16) and derived from a bound the specification already states — no stock below zero, prices within P-10, a settlement's population within what FR-D-14 lets it import — and the test that no variable grows without bound runs beside it, its method stated by the point that writes it. Soft bands start in Phase 6. M is P-65.
 
 **AC-05 — Wake equivalence.** An entity simulated continuously for N ticks and the same entity deferred and resumed at tick N reach the same state within declared tolerance.
 
@@ -765,7 +766,7 @@ Each phase has an exit gate. No phase starts before the previous gate is green.
 | Mobility | 1 for migrants, 11 for migration | FR-D-04, FR-D-05, FR-D-07 to FR-D-12, FR-D-14; FR-M-08 to FR-M-15; FR-J-06 to FR-J-10; FR-X-02, FR-X-03 |
 | Events | 12 | FR-E-01 to FR-E-07; FR-K-01 to FR-K-16; FR-J-11 to FR-J-13, FR-J-16 to FR-J-18; FR-I-01 to FR-I-04 |
 
-Outside Phase 4: FR-D-06, agents, in Phase 5; FR-G-03 and FR-G-04, prior history, in Phase 6 with P-18; FR-X-04, FR-X-05 and §13, what the host observes and does, in Phase 7.
+The gate holds per subsystem: when a subsystem closes, AC-01 and AC-04 are green over the invariants and the monitored variables that exist by then, and stay green as later subsystems land. Outside Phase 4: FR-D-06, agents, in Phase 5; FR-G-03 and FR-G-04, prior history, in Phase 6 with P-18; FR-X-04, FR-X-05 and §13, what the host observes and does, in Phase 7.
 
 ---
 
@@ -778,7 +779,7 @@ All remaining items depend on measurement and close in the phase named.
 | P-11, trade damping `k` | Phase 6 | Sweep `k` against transport cost; accept on AC-09 and AC-04 |
 | P-17, settlement ceiling | Phase 4 | Measure the full twelve-phase settlement update, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach |
 | P-18, prior history length | Phase 6 | Measure cost per simulated year, set against the acceptable wait |
-| AC-04 bounds | Phase 6 | Long runs across seeds, bounds set from observed envelopes |
+| AC-04 bounds | Phase 6 | Long runs across seeds, bounds set from observed envelopes, replacing the provisional bounds of Phase 4 |
 | AC-09 X and Y per good | Phase 6 | Shock injection per good, values recorded against the intent table |
 | P-01 validity | Phase 4 | Confirm the per-entity cost against a real settlement update. The measured subset is in P-63 and P-64; what is unconfirmed is the factor of two carried for the seven unmeasured phases |
 
