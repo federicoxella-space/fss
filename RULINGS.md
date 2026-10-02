@@ -79,6 +79,9 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-048`**, from the next plan: the draft goes in the moment-one request, and
   `PLAN.md` is installed on its branch after the user's answer, in a commit that
   cites it; the process plan point that edits `AGENTS.md` writes the rule.
+- **`R-049`**, within the process plan point that rewires `/plan-next`: step 1
+  refuses a plan's first point until the user has answered its moment-one
+  request; until then the ruling binds as written.
 
 ## Escalated to the user
 
@@ -2202,3 +2205,39 @@ installing commit does not report; or the user preferring to review the file
 itself, which reopens `D-051`.
 **Not verified:** how large a request becomes with a whole plan inside it; the
 phase 3 plan, at ten points, was not measured for it.
+
+### R-049 — A plan's first point waits for the user's answer at moment one
+
+**Date:** 2026-10-02   **Origin:** review request 2026-10-01, item 4
+**Verdict:** resolved
+**docs/:** unchanged
+
+`/plan-next` step 1 says a moment-one request is owed and forbids going on only
+"if the human has not answered a blocking question": a request with no blocking
+question does not stop the first point. And `R-001` lets the decider answer
+`REVIEW-REQUEST.md`, so the answer to moment one could come from the same model
+that wrote the plan.
+
+Put to the user with three answers — the user's always, the decider's except for
+permissions, or the rule as it stands — the user chose the first. It follows from
+`R-047` and `R-048`: the user reads the `Fails when:` lines at moment one, and
+the plan is installed only after the answer, so a first point that starts
+without it starts on a plan nobody installed.
+
+**The rule.** No point of a plan starts before the user has answered its
+moment-one request. The decider still answers what the request asks about
+`docs/` — a `SPEC-QUESTIONS.md` entry, a promotion — under `R-001`; the answer
+that lets the plan start is the user's alone. This narrows `R-001`'s coverage of
+`REVIEW-REQUEST.md` for moment one, at the user's choice; moments two and three
+are unchanged.
+
+**Cost.** Every plan waits on the user once before it starts, even one with no
+open question.
+**Owed by the implementer:** within the process plan point that rewires
+`/plan-next`: step 1 refuses a plan's first point until the user's answer to its
+moment-one request is recorded, whether or not the request holds a blocking
+question. Until that point lands, the rule binds as this ruling. Cite `R-049`.
+**Would overturn it:** plans held up for an answer that, once given, never
+changes anything, which would argue for the decider's answer except where the
+user is asked to read.
+**Not verified:** nothing; the step of `/plan-next` and `R-001` were read.

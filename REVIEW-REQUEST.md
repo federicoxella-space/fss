@@ -110,7 +110,11 @@ written. Near misses named there with their reasons: `D-073`, `D-090`, `D-106`.
    **Answered:** closed by `R-043`, the full hash at every tick, on request.
 3. ~~**The push of `main`.** A push is yours.~~
    **Answered:** main pushed 2026-10-02, CI run 36942531774 green.
-4. **Phase 4's moment one**, when you are ready to plan it: the question carried
+4. ~~**Phase 4's moment one**, when you are ready to plan it: the question carried
    from moment two — whether the `Fails when:` lines are read by someone other
    than their author, and whether the agent workflow of `D-086` to `D-089` is
-   built first.
+   built first.~~
+   **Answered:** the workflow first, by `R-046`; the `Fails when:` lines read by
+   the user at moment one and the reviewers at close, by `R-047`; moment one on a
+   draft and the first point waiting for the user, by `R-048` and `R-049`. The
+   next moment one is the process plan's.
