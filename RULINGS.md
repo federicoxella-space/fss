@@ -2894,3 +2894,22 @@ B9, the brake on abandonment, runs on land per capita and is not weakened.
 tools, which would argue for cheaper crude variants rather than for minting.
 **Not verified:** that no other text gives resettlers goods; FR-D-07, DEC-067,
 DEC-070 and FR-J-18 were read and do not.
+
+### R-062 — OBS-2 and OBS-4 already cover FR-D-04a; `SIM-OBS` is not changed
+
+**Date:** 2026-10-04   **Origin:** user, design session, on the finding of `R-059`
+**Verdict:** resolved — the user's decision, reserve 3 of `R-001`
+**docs/:** unchanged
+
+`R-059` left open whether OBS-2 and OBS-4 should cite FR-D-04a. Neither needs to.
+OBS-2's "Served by" reads "FR-D-01 to FR-D-11", a range FR-D-04a and FR-D-03a fall
+inside; OBS-4's reads "FR-M-12 to FR-M-14", and the refugee sentence lives in
+FR-M-13. `SIM-OBS` lists the requirements that lose their justification if the
+entry is cut, and FR-D-04a would keep its own through OBS-2 if OBS-4 went. The user
+approved leaving the document as it is.
+
+**Cost.** None.
+**Owed by the implementer:** nothing.
+**Would overturn it:** OBS-2 being cut, which would leave FR-D-04a to be justified
+by OBS-4 explicitly.
+**Not verified:** nothing; the five "Served by" lines were read.
