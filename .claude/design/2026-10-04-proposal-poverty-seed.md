@@ -214,7 +214,7 @@ La domanda è limitata dalla valuta, che include quanto preso a prestito in fase
 
 ### PD-15 — I bisogni della stessa classe si sommano
 
-**Stato:** Al decider.
+**Stato:** Deciso dal decider: R-057, con una motivazione diversa. Le due opzioni differiscono nella quantità, non nel grado: sommando, un anno normale mangia il minimo più la quota del tier 1, e la carenza toglie prima la quota, che è rinviabile. La regola vale per ogni coppia di bisogni: ciascuno è una quantità a sé, e un'unità consumata ne soddisfa uno solo.
 
 Due bisogni sulla stessa classe si sommano: per sopravvivere serve una quantità di cibo di qualunque grado, e per il tier 1 serve una quantità *in più* di cibo di grado almeno 1.
 
@@ -343,9 +343,9 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 
 > ### DEC-099 — The plate follows the purse
 >
-> **[DECIDER: PD-15 e PD-16, testo suggerito]** Needs on the same class add. A cohort eats from its own holdings first, lowest grade first; buys survival at the lowest price per unit of value; then, with what remains, replaces units of lower grade with units of higher grade as far as its budget allows. The share of members able to afford each grade is read from the wealth curve. The markets of a class clear in descending grade, and demand rationed out of one grade falls to the next within the update.
+> Needs add: each is a quantity of its own, and a unit consumed meets one need. *(R-057)* **[DECIDER: PD-16, testo suggerito]** A cohort eats from its own holdings first, lowest grade first; buys survival at the lowest price per unit of value; then, with what remains, replaces units of lower grade with units of higher grade as far as its budget allows. The share of members able to afford each grade is read from the wealth curve. The markets of a class clear in descending grade, and demand rationed out of one grade falls to the next within the update.
 >
-> **Rationale.** Adding needs keeps the survival minimum apart from the ordinary meal, so a famine tightens belts before it kills, and stays a season. The plate then shows wealth: within one mestiere the poorer eat grain and the better-off bread, and in a famine bread leaves the poorer tables first.
+> **Rationale.** Adding needs keeps the survival minimum apart from the ordinary meal. An ordinary year eats the minimum and the tier 1 share, so a shortfall first takes the share, which is deferrable, and only then the minimum: a famine tightens belts before it kills, and stays a season. One ration made better by grade would leave no such margin, and every unit short would be hunger. *(R-057)* The plate then shows wealth: within one mestiere the poorer eat grain and the better-off bread, and in a famine bread leaves the poorer tables first.
 >
 > **Cost.** Every food is one more market to ration in the most expensive phase, so the number of foods is set after a measurement. The markets of a class acquire an order. In ordinary years the plate is mixed, and the quantities of the needs table are tuned so that the total is plausible.
 
@@ -394,7 +394,7 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 - Nuovi requisiti dopo FR-P-03:
   > **FR-P-03a** — A goods class is a data record with a name and an optional parent class. A good belongs to one or more classes and carries a value per unit in each, nutrition for food, and one processing grade. Classes and memberships are added or changed without code change.
 
-  > **FR-P-03b** — A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day. Any good of the class or of its subclasses, at or above the minimum grade, meets it in proportion to its value. Tier 0 holds exactly one need, on the food class, and validation at load refuses a needs table that holds another.
+  > **FR-P-03b** — A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day. Any good of the class or of its subclasses, at or above the minimum grade, meets it in proportion to its value. Tier 0 holds exactly one need, on the food class, and validation at load refuses a needs table that holds another. Needs add: each is a quantity of its own, and a unit consumed meets one need only. *(Ultima frase: R-057)*
 
   > **FR-P-03c** — Processing creates no food. Every good carries an embodied food value: a good of the food class, the class the tier 0 need names, carries its value there; another good that recipes produce carries the least food value that any recipe producing it consumes per unit, each input counted at its own embodied food value; any other good carries zero. No recipe yields more food value than its inputs embody, and validation at load refuses a recipe table that breaks this or that passes food value around a cycle. *(R-056)*
 

@@ -2647,3 +2647,44 @@ its value: the subclass's, or its parent's. "Its value in the food class" reads
 both the same only if a subclass measures in its parent's units. The user should
 settle that in FR-P-03a, as a finding on a decision of their own. Nor was it
 checked that no recipe proposed in K-03 forms a cycle.
+
+### R-057 — Needs add: each is a quantity of its own, and a unit consumed meets one need
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), PD-15 (open item O-13)
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in the proposal and
+enters `docs/` with it: `SIM-REQ` FR-P-03b, one sentence; `SIM-DEC` DEC-099, its
+first sentence and the first half of its rationale.
+
+PD-15 proposes that two needs on the same class add. Survival asks for a
+quantity of food of any grade, and tier 1 asks for a further quantity of grade
+at least 1. The alternative is one ration whose grade the tier 1 need raises.
+
+**PD-15 is adopted, for a reason other than the one it gives.** The proposal
+argues that under one ration, whoever loses purchasing power "goes straight
+from eating well to dying". That does not follow. Tier 1 is deferrable, so a
+cohort priced out of bread eats grain, meets its survival need, and only its
+discontent rises, under either option. **The two options differ in quantity,
+not in grade.** With one ration, an ordinary year's consumption equals the
+survival minimum, so every unit short is hunger. With needs that add, an
+ordinary year eats the minimum plus the tier 1 share. A shortfall then takes
+first the share, which is deferrable, and only after it the minimum. That
+margin is what `SIM-ECON` asks for when it makes a famine "a season rather than
+a tick". It also gives DEC-044's severity a scale before mortality:
+discontent, which feeds fragility (FR-E-03), and then hunger.
+
+**Stated generally.** Each need is a quantity of its own, and a unit consumed
+meets one need only. That covers two needs on one class and needs on a class
+and its subclass alike. Otherwise one loaf could count once for survival and
+again for the tier 1 share.
+
+**Cost.** An ordinary year's demand for food is the minimum plus the tier 1
+share. Production, the generator's initial stocks (K-09) and the import bound of
+FR-D-14 are all sized on that larger figure, and the needs table's quantities
+are tuned so that the total is plausible. In every lean year discontent rises
+before anyone is hungry, so fragility moves more often.
+**Owed by the implementer:** nothing now.
+**Would overturn it:** a sweep in which the margin makes famine too rare to see,
+which would argue for a smaller tier 1 share rather than for one ration.
+**Not verified:** how large the tier 1 share must be to give the margin
+`SIM-ECON` wants; that is the needs table's content, which has no numbers yet.
