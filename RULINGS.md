@@ -2434,3 +2434,69 @@ which would say the phase 4 gate proved little.
 **Not verified:** that every variable in `AC-04`'s table has a structural bound in
 `docs/`. Migration flow, urban share, legitimacy and infection prevalence were
 not checked for one; prices, stocks and population were.
+
+### R-054 — Emigrants take their share of what can be carried, and travel as a scheduled transient
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), open item O-5
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in
+`.claude/design/2026-10-04-proposal-poverty-seed.md` and enters `docs/` with the
+proposal, which the user holds until B12b is written: `SIM-REQ` FR-D-04a, FR-P-10d,
+§16 P-72, §18 Mobility; `SIM-STATE` §Transient; `SIM-ECON` phase 11.
+
+Nothing in `docs/` says what a migrant takes with them. Three texts say they
+take something. FR-J-18 and DEC-068 make buried stock of "what its people could
+not carry", which presumes both that people carry and that carrying has a limit.
+FR-P-22 has resettling cohorts carry durables. The proposal's seed reserve
+(PD-4) passes the emigrant's seed to this rule. And phase 1 of `SIM-ECON` lands
+migrants who left in an earlier update, so between one settlement's phase 11
+and another's phase 1 they exist nowhere in `SIM-STATE`. Any currency among
+them breaks A-02 unless it is transient contents.
+
+**The rule.** Members leaving a row take its mean share per member: all of its
+currency, and of its goods and durables outside the seed reserve as much as P-72
+weight per member allows. They take the highest value per unit of weight first,
+ties by good id. Buildings never move. What they leave stays with the row.
+
+- **The mean**, because the row cannot say which of its members leave: the
+  wealth curve has no memory. The mean is also the one share that leaves the
+  per-member currency of those who stay unchanged. Under any other share,
+  emigration would make the stayers richer or poorer.
+- **A weight limit**, because without one FR-J-18 is empty: the last to leave
+  would carry everything movable, and abandonment would make no hoard. The
+  limit gives the hoard its content and follows DEC-016: cloth and tools
+  travel, grain stays.
+- **Currency has no weight here.** A cohort holds no denominations (FR-C-13), and
+  weight applies to none of its coin (FR-C-18). Emigrants are a fraction of a
+  cohort.
+- **The seed reserve stays**, as it does for every use but sowing. It is
+  computed on the land the vector allocates, and land does not leave.
+
+**The candidate is rejected.** The proposal's candidate was to convert goods to
+currency at the local price, within demand. That is a sale outside phase 7: a
+second clearing pass in phase 11, against demand that phase 7 has already met.
+It would run the most expensive part of the update twice. It is also the forced
+sale that `SIM-ECON` lists as not covered (item 1), and it would reopen choice
+two. And it buys nothing. Holdings above a cohort's own needs are already supply
+in phase 7 of every update, so what an emigrant would sell has already been
+offered.
+
+**On the road** emigrants are a scheduled transient of kind *migrants*. Each
+carries a count, the key of the row it left, the hunger deficit of FR-D-03a, its
+currency as one integer and its goods. A-02 counts that currency among transient
+contents, and A-04 those goods among goods in transit. Which row they join on
+arrival is not decided here: Z-14 of the phase 4 note.
+
+**Cost.** A transient kind with fields the others lack. A row that loses most of
+its members keeps the heavy goods the leavers could not carry, so in goods it
+holds more per head than before. One more parameter. FR-P-22 is left unsettled:
+either the resettlers' endowment is what they carry, or P-54 makes durables
+from nothing. This ruling does not choose.
+**Owed by the implementer:** nothing now. The text binds the mobility subsystem
+once it is in `docs/`.
+**Would overturn it:** the user wanting emigrants to sell up before leaving, which
+would first need a rule for who buys; or a sweep finding P-72 small enough to make
+migration irrelevant to goods, in which case the limit is not worth its field.
+**Not verified:** that a transient with these extra fields fits the shapes of
+DEC-085; that no other text in `docs/` assumes migrants arrive with nothing. Only
+§5, §6, §7, `SIM-ECON` and `SIM-STATE` were read for it.

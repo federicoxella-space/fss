@@ -90,7 +90,7 @@ Ogni insediamento ha una riga di **indigenti** (*destitute*): un record di mesti
 - La riserva è esclusa da ogni uso diverso dalla semina: consumo proprio, offerta, input delle ricette.
 - Il bene importato è anche seme: il commercio è la via d'uscita da una carestia pluriennale.
 
-**Motivazione.** Senza seme un raccolto perso costa un anno, mai di più. Mangiare il seme è un prestito al tasso del rapporto di resa, e sposta la carestia dai compratori ai contadini per più anni. In una prima versione la riserva era calcolata sul lavoro, per liberare il seme di chi emigra; ma così poteva superare il seme davvero necessario. Il caso di chi emigra passa alla regola sui migranti (O-5).
+**Motivazione.** Senza seme un raccolto perso costa un anno, mai di più. Mangiare il seme è un prestito al tasso del rapporto di resa, e sposta la carestia dai compratori ai contadini per più anni. In una prima versione la riserva era calcolata sul lavoro, per liberare il seme di chi emigra; ma così poteva superare il seme davvero necessario. Il caso di chi emigra passa alla regola sui migranti (O-5, risolto da R-054: la riserva resta alla riga).
 
 **Costo.** La durata delle carestie dipende dal rapporto di resa, contenuto statico. Nella spec: **planting good** e **seed reserve**, per non confondersi con `worldSeed` e P-65.
 
@@ -413,7 +413,7 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 
   > **FR-P-10c** — A standing crop carries a condition on 0–20000, set to 10000 at sowing. Growth labour below normal care lowers it towards 0; growth labour between normal and full care raises it towards 20000. Exogenous events striking a standing crop multiply it. Both care levels are zero in the shipping configuration; CI runs a configuration where they are not.
 
-  > **FR-P-10d** — A cohort's seed reserve is the planting good needed per unit of land times the land the current allocation vector gives its crop. Only sowing draws on it: own consumption, market supply and recipe inputs leave it untouched. When the planting good is food and the cohort's hunger deficit exceeds P-66, the reserve is released to own consumption only as far as needed to bring the deficit back to P-66. A share P-67 of what is released may become supply.
+  > **FR-P-10d** — A cohort's seed reserve is the planting good needed per unit of land times the land the current allocation vector gives its crop. Only sowing draws on it: own consumption, market supply, recipe inputs and emigrants (FR-D-04a) leave it untouched. When the planting good is food and the cohort's hunger deficit exceeds P-66, the reserve is released to own consumption only as far as needed to bring the deficit back to P-66. A share P-67 of what is released may become supply.
 
   > **FR-P-10e** — A standing crop whose cohort is empty is an open field until its harvest window closes. Labour left unhired once the labour market of FR-C-05 clears is assigned to it and reaps it under FR-P-10b, and each cohort keeps the harvest in proportion to the labour it supplied. An advance against it is written off under FR-C-27.
 
@@ -424,6 +424,9 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 
 - Nuovo requisito dopo FR-D-03:
   > **FR-D-03a** — Unmet tier 0 need accumulates as a hunger deficit per member of each cohort, in units of nutrition, and decays by P-70 per update when the need is met. When members move from one row to another, the receiving row's deficit becomes the average of its own and that of the row they leave, weighted by count; the row they leave keeps its own. The death rate's response to hunger in FR-D-03 reads this deficit.
+
+- Nuovo requisito dopo FR-D-04: *(R-054)*
+  > **FR-D-04a** — Members leaving a row take its mean share per member: all of its currency, and of its goods and durables outside the seed reserve as much as P-72 weight per member allows, highest value per unit of weight first, ties by good id. Buildings never move, and what emigrants do not take stays with the row. On the road, emigrants are a scheduled transient carrying their count, the key of the row they left, their hunger deficit, their currency as one integer and their goods.
 
 **§6, sottosezione Occupations.**
 
@@ -473,6 +476,7 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 | P-69 | Exit margin for the destitute, as a fraction of T | TBD by sweep | Open |
 | P-70 | Hunger deficit decay per update when the tier 0 need is met | TBD by sweep | Open |
 | P-71 | Share of released planting good that may become supply, CI | TBD | Open |
+| P-72 | Weight an emigrant carries, per member (FR-D-04a; R-054) | TBD by sweep | Open |
 
 Riga da modificare: **P-09**, Goods count, da 7 a **8**, stato Decided (decisione dell'utente: la farina, FR-P-04).
 
@@ -500,6 +504,7 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 - *Production*: aggiungere FR-P-03a, FR-P-03c, FR-P-10a … FR-P-10e, FR-J-21, FR-J-22.
 - *Needs*: aggiungere FR-P-03b, FR-D-03a.
 - *Labour and income*: aggiungere "8a" alle fasi, e FR-J-19, FR-J-20.
+- *Mobility*: aggiungere FR-D-04a (R-054).
 
 **§19 Open items** — Le misure di P-17, P-63 e P-64 vanno rifatte con 11 righe per insediamento in produzione e 33 in CI, con 8 beni (P-09) e con il numero di mercati alimentari fissato dal contenuto.
 
@@ -525,6 +530,9 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 
 - **Fase 8a, nuova**, tra la fase 8 e la fase 9:
   > | 8a | Destitution | Cohort members whose wealth falls below the threshold enter the destitute row. Destitute members above the exit threshold leave for their destinations: for agricultural activities only in an update holding a crop's sowing date. | FR-J-19, FR-J-20 |
+
+- **Fase 11** — Aggiungere alla cella "Does": *(R-054)*
+  > Emigrants leave with their share under FR-D-04a, as migrants in transit.
 
 - **Fase 12** — Aggiungere alla cella "Does":
   > Mestiere shares are realigned to the allocation vector for the activities that adjusted in this update.
@@ -576,6 +584,9 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 - **Cohort**, intestazione: sostituire "Roughly 9 rows per settlement at Phase 4" con "Roughly 11 rows per settlement at Phase 4, the destitute and day-labourer rows included".
 
 - **Static data, not state** — Aggiungere "goods classes, needs table, wealth curves".
+
+- **Transient** — Nella riga `kind`, aggiungere `migrants` all'elenco. Sotto la tabella, prima del paragrafo sui transient campionati: *(R-054)*
+  > Migrants are a scheduled transient. Beside the fields above they carry a count, the key of the row they left and its hunger deficit (FR-D-03a); their currency is one integer in smallest units, as a cohort's (FR-C-13), not four denominations. A-02 counts it and A-04 their goods.
 
 - **Invarianti** — Nuovi:
 
@@ -629,7 +640,7 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 
 | # | Questione | A chi | Note |
 |---|---|---|---|
-| O-5 | Cosa portano con sé i migranti | Decider | **Bloccante** per l'intero lotto: B12b e A-02. Candidato: conversione dei beni in moneta al prezzo locale, nei limiti della domanda; copre anche chi liquida prima di partire |
+| O-5 | Cosa portano con sé i migranti | Decider | **Chiuso da R-054.** La quota media della riga: tutta la valuta, beni e durevoli fuori dalla riserva fino a P-72 di peso per membro; in transito sono un transient programmato, contato da A-02. Il candidato (vendita prima della partenza) è scartato |
 | O-6 | Gli indigenti che emigrano sono la "displaced population" di FR-M-13? | Decider | **Bloccante** per l'intero lotto, tramite B12b. Darebbe a R4 la sorgente che oggi non ha |
 | O-7 | Criteri di accettazione | Decider | Candidati: una carestia con seme mangiato dura più di un anno; la ripresa rurale è più lenta di quella urbana; con P-67 = 0 il seme liberato non compare mai nell'offerta; un campo libero viene mietuto da chi è senza impiego; la quota dei braccianti sale durante la finestra di raccolto; dentro un mestiere i membri più poveri mangiano grado più basso dei più ricchi |
 | O-9 | Regola economica per la cura oltre il normale | Decider | Candidato: la coorte assume lavoro di crescita finché il grano in più, al prezzo atteso, supera il salario |
@@ -652,7 +663,7 @@ Chiusi: O-1, O-2, O-3, O-4 (revisioni 4–5), O-10 (il grano è cibo di grado 0)
 | X-2 | Limite della domanda diverso tra FR-C-04 e SIM-ECON | Risolto da PD-11, anche nella cella della fase 7 |
 | X-3 | DEC-047 "once per sowing" contro FR-P-15 | Aperto; coincide con Z-05 |
 | X-4 | `wealthSpread` senza definizione | Risolto da PD-10 |
-| X-5 | Nessuna regola su cosa portano i migranti | Aperto: O-5 |
+| X-5 | Nessuna regola su cosa portano i migranti | Risolto da FR-D-04a (R-054) |
 | X-6 | Effetti di siccità e gelo sul raccolto non specificati | FR-P-10c offre l'aggancio; il resto è K-10 |
 | X-7 | FR-C-25 nomina un campo che non esiste | Risolto dal campo `advance` |
 | X-8 | Tabella delle fasi spezzata in SIM-ECON | Risolto nelle modifiche alla fase 7 |
