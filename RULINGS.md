@@ -2753,3 +2753,100 @@ giving it whole to the cheapest.
 for wealth, gives a plausible share of upgraders. The proposal's own
 approximation in DEC-097, one shape for wealth and currency, is carried one step
 further here.
+
+### R-059 — The poverty and seed proposal enters `docs/`
+
+**Date:** 2026-10-04   **Origin:** user: "sì, trascrivi la proposta in docs/"
+**Verdict:** specified
+**docs/:** all six documents, each revision bumped to today.
+- `SIM-DEC`: DEC-090 to DEC-099 new; DEC-015, DEC-038, DEC-043, DEC-047, DEC-076
+  and DEC-080 edited.
+- `SIM-REQ`:
+  - §5: FR-D-03a and FR-D-04a.
+  - §6: FR-P-01, FR-P-03, FR-P-04, FR-P-10, FR-P-15, FR-J-01 and FR-J-03; new
+    FR-P-03a to FR-P-03c, FR-P-10a to FR-P-10e and FR-J-19 to FR-J-22.
+  - §7: FR-C-03 to FR-C-05 and FR-C-25.
+  - §8: FR-M-13.
+  - §14: FR-G-01.
+  - §16: P-66 to P-72, and P-09 at 8.
+  - §17: AC-09 and AC-56.
+  - §18: the Phase 4 table.
+  - §19: P-17.
+- `SIM-ECON`: phases 4 to 7, 11 and 12; new phase 8a; the paragraph on phase 7
+  moved below the table; dated steps, §Demand, spoilage, and items 2 and 5 of
+  what the sequence does not cover.
+- `SIM-STATE`: §Cohort, §Transient, static data, A-16 and A-17.
+- `SIM-LOOPS`: B2, R4, R5, R7, new R12, the standalone loops, the gate check,
+  and open item 4.
+- `SIM-OBS`: OBS-3, "Served by".
+
+The proposal of 2026-10-04, revision 10, records the decisions the user took in
+the design sessions of revisions 2 to 9. It also holds the text `R-054` to
+`R-058` decided for what the user left to the decider. The user conditioned its
+entry on B12b being written, so that the gate of `SIM-LOOPS` would not reopen.
+`R-055` wrote it, and the user then asked for the transcription. **This ruling
+decides nothing new. It transcribes.**
+
+**How.** A script read each quoted block of the proposal and replaced or
+inserted it at the place the proposal names. It refused any target that was not
+found exactly once. It stripped the ruling markers, and refused any block still
+holding a `[DECIDER]` placeholder. The diff was then read against the proposal,
+document by document.
+
+**What the proposal reserved to the user, and is applied here on the user's
+authority.** The new AC-09 table and AC-56's wording are reserve 2 of `R-001`,
+decided by the user in revision 9. The addition to OBS-3's "Served by" is
+reserve 3, authorised by the user in the same revision. P-09 at 8, with flour,
+is the user's. The decider applied these and did not decide them.
+
+**Where the text differs from the proposal.** Each is form, not content:
+
+- DEC-098's cost said "approved under R-050". `docs/` does not cite rulings, and
+  that rule is already stated in §16, so the cost now reads "approved by the
+  user as static content under SIM-REQ section 16, \"Parameters to fix\"", in
+  the form of `R-013`.
+- Four instructions in the proposal are prose in Italian, not text to insert:
+  - FR-J-01's two additions;
+  - P-17's re-measurement in §19;
+  - DEC-047's sentence;
+  - the R4 lines.
+
+  Each was written in English as the proposal describes it. The P-17 row now
+  says the measurement counts 11 and 33 rows, eight goods and the food markets.
+  P-63 and P-64 stay as measured, with the row stating what they were measured
+  on.
+- §18: Production's "FR-P" now reads "FR-P, save FR-P-03b", since the proposal
+  places FR-P-03b under Needs. Otherwise one requirement would sit under two
+  subsystems.
+- P-72's description drops the ruling number from the parameter's name.
+- "Choice within a class" goes after the Hunger paragraph of §Demand. The
+  proposal gave no place.
+
+**Findings left open.** Each one is the user's or a later point's, not this
+ruling's:
+
+1. PD-14 does not say in whose units a subclass carries its value (`R-056`).
+2. FR-P-22's endowment is either what resettlers carry or durables made from
+   nothing (`R-054`).
+3. OBS-2 and OBS-4 could cite FR-D-04a. That would be reserve 3, and it is not
+   done.
+4. DEC-047's title, "once per sowing", still contradicts FR-P-15's settlement
+   cadence for other activities (X-3, Z-05).
+5. `SIM-ECON` phase 6 implements FR-P-10d, which §18 places under Production.
+   The point that builds the seed reserve must record which subsystem releases
+   it (`R-052`).
+6. FR-P-04's list and all the static content of §16 are still awaiting the
+   user's approval (`R-050`).
+
+**Cost.** Phase 4's scope grows by the destitute and day-labourer rows, the crop
+stages and the goods classes. P-17, P-63 and P-64 must be measured again. The
+static content to approve before the plan grows with them.
+**Owed by the implementer:** nothing new beyond `docs/` as it now stands. The
+phase 4 plan reads its `Satisfies:` against the amended §18 table (`R-052`).
+**Would overturn it:** a passage of `docs/` found to differ from the proposal
+beyond the differences listed above.
+**Not verified:** the diff was read whole, but the transcribed passages were not
+compared word for word against the proposal. That rests on the script's exact
+copying. A grep of `docs/` finds no remaining "Subsistence", "Luxury", "need
+tier", `wealthSpread` or `creditLine`, but references to the old vocabulary in
+other words were not searched for.

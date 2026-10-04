@@ -2,7 +2,7 @@
 
 **Document:** SIM-STATE
 **Status:** Draft
-**Revision:** 2026-10-02
+**Revision:** 2026-10-04
 **Gate:** The assert list is executable.
 
 ---
@@ -53,7 +53,7 @@ Always simulated. Roughly 2,000 rows.
 
 ## Cohort
 
-Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the shipping configuration, three in CI. Roughly 9 rows per settlement at Phase 4.
+Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the shipping configuration, three in CI. Roughly 11 rows per settlement at Phase 4, the destitute and day-labourer rows included.
 
 | Field | Type | Notes |
 |---|---|---|
@@ -61,12 +61,17 @@ Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the s
 | ageDistribution | int[] | bands |
 | currency | int64 | single integer in smallest units |
 | goods | int[] | one per good |
-| wealthSpread | fixed | drives the closed-form affordability fraction |
 | buildings | int[] | per building type, owned by this cohort |
 | durables | int[] | per durable good, with accumulated wear |
 | debt | int64 plus category | owed, counterparty category only |
 | credit | int64 plus category | owed to this cohort |
 | defaultMark | int | ticks remaining |
+| hungerDeficit | fixed | per member, FR-D-03a; read by mortality and by the seed reserve; averaged by count when members arrive |
+| transitionRemainder | fixed | carry of the share entering or leaving destitution; cleared when the row empties |
+| sownLand | int[] | per crop; set at sowing, FR-P-10a |
+| landInField | int[] | per crop; falls through the harvest window, FR-P-10b |
+| condition | fixed[] | per crop, 0–20000, FR-P-10c |
+| advance | int64 | owed against the standing crop, FR-C-25; not included in debt |
 
 ---
 
@@ -116,12 +121,14 @@ Capped at roughly 300 hot. Dormant agents hold a difference record only.
 
 | Field | Type | Notes |
 |---|---|---|
-| kind | enum | caravan, convoy, merchant, adventurer |
+| kind | enum | caravan, convoy, merchant, adventurer, migrants |
 | authoritative | bool | scheduled versus sampled |
 | link or route | id[] | |
 | departureTick, speed | int | |
 | contents | int[] plus int[4] | goods and coin |
 | weight | int | |
+
+Migrants are a scheduled transient. Beside the fields above they carry a count, the key of the row they left and its hunger deficit (FR-D-03a); their currency is one integer in smallest units, as a cohort's (FR-C-13), not four denominations. A-02 counts it and A-04 their goods.
 
 Sampled transients are not stored. They are enumerated on demand from the draw of NFR-03, with the link as subject.
 
@@ -152,7 +159,7 @@ Sampled transients are not stored. They are enumerated on demand from the draw o
 
 ## Static data, not state
 
-Goods, recipes, mestieri, crops, climate curves, event class definitions. Versioned with `ruleVersion`, never mutated at runtime.
+Goods, recipes, mestieri, crops, climate curves, event class definitions, goods classes, needs table, wealth curves. Versioned with `ruleVersion`, never mutated at runtime.
 
 ---
 
@@ -176,6 +183,8 @@ Goods, recipes, mestieri, crops, climate curves, event class definitions. Versio
 | A-13 | Each cadence bucket fires exactly once per its period, and consecutive firings of a bucket are exactly one period apart |
 | A-14 | No cohort holds negative count, currency, or goods |
 | A-15 | Buried stock only decreases |
+| A-16 | For every cohort and crop, landInField ≤ sownLand; for every settlement, sownLand summed over its cohorts and crops ≤ land |
+| A-17 | Destitute rows hold no buildings and no durables |
 
 A-02 and A-03 together are the currency invariant. A-01 and A-14 are the population invariant. A-04 is the goods invariant.
 
