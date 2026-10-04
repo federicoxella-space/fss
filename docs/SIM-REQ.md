@@ -206,7 +206,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-21** — Every recipe that requires a durable has a crude variant requiring none, at a much worse input-to-output ratio (P-52). Iron can be worked with a stone, badly. This breaks the bootstrap circle with data rather than with a special case in code.
 
-**FR-P-22** — Cohorts founding or resettling a settlement carry a basic endowment of durables (P-54).
+**FR-P-22** — Cohorts the generator founds carry a basic endowment of durables (P-54). Cohorts resettling a settlement bring only what their emigrants carried under FR-D-04a; resettlement creates no goods.
 
 **FR-P-23** — Durables wear with use at P-53 and must be replaced. This is the demand for durable goods, without which they are produced and never bought.
 
@@ -606,7 +606,7 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-51 | Building decay rate | TBD by sweep | Open |
 | P-52 | Crude recipe yield ratio | TBD by sweep | Open |
 | P-53 | Durable wear rate per unit of output | TBD by sweep | Open |
-| P-54 | Settlement founding endowment | TBD | Open |
+| P-54 | Founding endowment of durables, generator | TBD | Open |
 | P-55 | Interest rate bounds | TBD by sweep | Open |
 | P-56 | Collateral ratio required to borrow | TBD by sweep | Open |
 | P-57 | Default mark duration | TBD | Open |

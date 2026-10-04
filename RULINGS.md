@@ -2871,3 +2871,26 @@ class tree, and validation at load refuses two values in one tree.
 **Would overturn it:** a class whose subclasses are genuinely incommensurable, which
 should then be two trees, not one.
 **Not verified:** nothing; FR-P-03a to FR-P-03c were read.
+
+### R-061 — Resettlement creates no goods: the endowment is the generator's, resettlers bring what they carried
+
+**Date:** 2026-10-04   **Origin:** user, design session, on the finding of `R-054`
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-22 reworded; §16 P-54 renamed. Revision already today's.
+
+FR-P-22 gave founders and resettlers alike an endowment of durables. Since `R-054`,
+emigrants carry their durables (FR-D-04a), so an endowment at resettlement on top
+of that would create durables from nothing, and emigrating to an empty settlement
+would become a way to mint tools. What FR-P-22 protected against, a cohort that
+cannot work for lack of tools, is already handled by the crude variants of FR-P-21
+and DEC-073; and tools, light and valuable, are what FR-D-04a loads first. Put to
+the user with that recommendation, the user approved it: the generator's founders
+carry P-54, resettlers bring what they carried, and resettlement creates nothing.
+
+**Cost.** A resettled village restarts slower than one founded by the generator.
+B9, the brake on abandonment, runs on land per capita and is not weakened.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** a sweep in which resettled villages never recover their
+tools, which would argue for cheaper crude variants rather than for minting.
+**Not verified:** that no other text gives resettlers goods; FR-D-07, DEC-067,
+DEC-070 and FR-J-18 were read and do not.
