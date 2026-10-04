@@ -2946,3 +2946,41 @@ main". The design note ties archival to the plan's close, not to the merge, and
 **Would overturn it:** the decider rejecting the gate record's place in the
 archive rather than in `RULINGS.md`, or a candidate found to be in `docs/`
 already.
+
+### D-108 · Review of the poverty and seed proposal, and of the batch it became
+
+**Ruling:** none yet. The proposal entered `docs/` through `R-054` to `R-065`; the
+findings on the result are `SQ-009` to `SQ-022`.
+
+The user asked for three things in turn: review the proposal before transcription,
+bring it and the phase 4 note into the repository and resolve the review's points,
+and check the decider's result. No code changed, and nothing in `docs/` was edited
+by this session.
+
+**Decided.**
+- **A branch, `design/poverty-seed`**, rather than commits on `main`: the
+  session's standing rule is to branch before committing on the default branch.
+  The decider's rulings landed on the same branch, so it carries the whole batch
+  and is merged without squashing like any other.
+- **The proposal's place and name** are
+  `.claude/design/2026-10-04-proposal-poverty-seed.md`, dated as the other design
+  notes are. The user's file in Downloads is the origin; revisions 9 and 10 exist
+  only here.
+- **Revision 9 was written by this session from the user's answers**, each put as
+  a choice with a recommendation; every one is marked as the user's in the
+  proposal. Two changes needed no answer and were made as form: the
+  conservation sentence of DEC-098 marked for the decider like FR-P-03c, and
+  FR-C-04's steps 5 and 6 stated as kept.
+- **Twenty-two findings became fourteen entries**: each medium finding its own,
+  the low ones gathered in `SQ-019` and `SQ-022`. Every entry says "Blocks: no"
+  and names the phase 4 point that must not start before it is answered, since
+  no plan exists yet to stop. `SQ-020` is marked the user's, under reserve 4.
+- **`9250363` names D-108 but does not contain it**: a hook refused the edit
+  after the commit had been prepared, and the entry follows in its own commit
+  rather than by amending.
+
+**What `docs/` says:** nothing on where a design proposal lives or how a
+review of the decider's work is filed; `AGENTS.md` sends objections to
+`SPEC-QUESTIONS.md`.
+**Would overturn it:** the user preferring the batch on `main`, or the decider
+wanting the low findings split one per entry.
