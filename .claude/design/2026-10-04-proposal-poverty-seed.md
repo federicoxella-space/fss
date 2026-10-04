@@ -188,7 +188,7 @@ La domanda è limitata dalla valuta, che include quanto preso a prestito in fase
 
 ### PD-13 — Il nuovo anello lavoro–povertà e i suoi freni
 
-**Stato:** Deciso. Il secondo freno dipende da O-5 e O-6, affidati al decider. Il decider li risolve nella stessa sessione, e la proposta entra in `docs/` solo con B12b scritto, così il gate della fase 1 non si riapre (decisione dell'utente).
+**Stato:** Deciso. Il secondo freno dipende da O-5 e O-6, affidati al decider. Il decider li risolve nella stessa sessione, e la proposta entra in `docs/` solo con B12b scritto, così il gate della fase 1 non si riapre (decisione dell'utente). O-5 e O-6 sono risolti da R-054 e R-055, e B12b è scritto in SIM-LOOPS.
 
 - **R12.** Gli indigenti vendono lavoro, il salario scende, altre coorti cadono sotto soglia, gli indigenti aumentano.
 - **B12a.** Con il salario basso il vettore riduce la quota dei braccianti, e l'offerta di lavoro cala. Non agisce quando quella quota è già vicina a zero.
@@ -425,8 +425,8 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 - Nuovo requisito dopo FR-D-03:
   > **FR-D-03a** — Unmet tier 0 need accumulates as a hunger deficit per member of each cohort, in units of nutrition, and decays by P-70 per update when the need is met. When members move from one row to another, the receiving row's deficit becomes the average of its own and that of the row they leave, weighted by count; the row they leave keeps its own. The death rate's response to hunger in FR-D-03 reads this deficit.
 
-- Nuovo requisito dopo FR-D-04: *(R-054)*
-  > **FR-D-04a** — Members leaving a row take its mean share per member: all of its currency, and of its goods and durables outside the seed reserve as much as P-72 weight per member allows, highest value per unit of weight first, ties by good id. Buildings never move, and what emigrants do not take stays with the row. On the road, emigrants are a scheduled transient carrying their count, the key of the row they left, their hunger deficit, their currency as one integer and their goods.
+- Nuovo requisito dopo FR-D-04: *(R-054; la prima frase è di R-055)*
+  > **FR-D-04a** — Emigrants are drawn from a settlement's destitute row first, and from its other rows in proportion to their counts for the rest. Members leaving a row take its mean share per member: all of its currency, and of its goods and durables outside the seed reserve as much as P-72 weight per member allows, highest value per unit of weight first, ties by good id. Buildings never move, and what emigrants do not take stays with the row. On the road, emigrants are a scheduled transient carrying their count, the key of the row they left, their hunger deficit, their currency as one integer and their goods.
 
 **§6, sottosezione Occupations.**
 
@@ -460,6 +460,11 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 
 - **FR-C-25** — Sostituire con:
   > **FR-C-25** — Payment advanced against future output is a loan collateralised by that output: the cohort's standing crop under FR-P-10b. It is held as its own balance, apart from the cohort's other debt. A crop lost before harvest, or left to an open field under FR-P-10e, leaves the advance to be written off under FR-C-27.
+
+**§8 Markets and trade.**
+
+- **FR-M-13** — Aggiungere alla fine: *(R-055)*
+  > Destitute members who emigrate under FR-D-04a are famine refugees: each raises the danger of the link it travels by P-40.
 
 **§14 World generation.**
 
@@ -531,8 +536,10 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 - **Fase 8a, nuova**, tra la fase 8 e la fase 9:
   > | 8a | Destitution | Cohort members whose wealth falls below the threshold enter the destitute row. Destitute members above the exit threshold leave for their destinations: for agricultural activities only in an update holding a crop's sowing date. | FR-J-19, FR-J-20 |
 
-- **Fase 11** — Aggiungere alla cella "Does": *(R-054)*
-  > Emigrants leave with their share under FR-D-04a, as migrants in transit.
+- **Fase 11** — Aggiungere alla cella "Does": *(R-054, R-055)*
+  > Emigrants are drawn from the destitute row first and leave with their share under FR-D-04a, as migrants in transit; destitute emigrants raise danger on the link they take (FR-M-13).
+
+  Aggiungere FR-M-13 agli "Implements".
 
 - **Fase 12** — Aggiungere alla cella "Does":
   > Mestiere shares are realigned to the allocation vector for the activities that adjusted in this update.
@@ -615,10 +622,10 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
   > ### R12 — Destitute labour
   > More destitute → more labour offered → lower wage → more members below the threshold → more destitute.
   > **B12a — Day labour leaves.** A lower wage drives the day-labourer share down under its own rate, and labour offered falls.
-  > **B12b — The destitute emigrate.** **[DECIDER: O-5, O-6]**
-  > *FR-J-19, FR-J-21, FR-C-05, DEC-090, DEC-096.*
+  > **B12b — The destitute emigrate.** Emigration draws on the destitute row first, so those a falling wage pushes below the threshold are the first to leave, and the labour they offered leaves with them. They leave as refugees and raise danger on the links they take, which feeds R4. *(R-054, R-055)*
+  > *FR-J-19, FR-J-21, FR-C-05, FR-D-04a, FR-M-13, DEC-090, DEC-096.*
   >
-  > B12a fails once the day-labourer share is near zero; B12b is the brake that holds.
+  > B12a fails once the day-labourer share is near zero. B12b acts only where a neighbour is more attractive by more than the hysteresis band of FR-D-09. In a region poor throughout nobody leaves, and the loop stops at the lower clamp of the wage (DEC-045), which bounds it without braking it, and at hunger (R5). *(R-055: sostituisce "B12b is the brake that holds")*
 
 - **Balancing loops that stand alone** — Aggiungere:
   > | Day labour against wage | a high wage draws day labourers, which lowers it | FR-J-21, FR-C-05 |
@@ -628,7 +635,11 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 - **Open** — Aggiungere:
   > 4. Full care under DEC-094 raises yield per unit of land up to twice. B1 and B3a assume it fixed; recheck both before care is enabled.
 
-- **R4** — Nessuna modifica in questo lotto. Il collegamento tra indigenti e "Poverty" è O-6.
+- **R4** — *(R-055)* Aggiungere, dopo la riga dell'anello:
+  > Poverty is the destitute row (FR-J-19). The displaced people are those of it who emigrate (FR-D-04a, B12b), and each raises danger on the link it takes.
+
+  Sostituire la riga *FR-J-16, FR-C-08, FR-M-13, FR-M-14. Tuned by P-40 and P-41.* con:
+  > *FR-J-16, FR-C-08, FR-M-13, FR-M-14, FR-D-04a. Tuned by P-40 and P-41.*
 
 ### SIM-OBS
 
@@ -641,7 +652,7 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 | # | Questione | A chi | Note |
 |---|---|---|---|
 | O-5 | Cosa portano con sé i migranti | Decider | **Chiuso da R-054.** La quota media della riga: tutta la valuta, beni e durevoli fuori dalla riserva fino a P-72 di peso per membro; in transito sono un transient programmato, contato da A-02. Il candidato (vendita prima della partenza) è scartato |
-| O-6 | Gli indigenti che emigrano sono la "displaced population" di FR-M-13? | Decider | **Bloccante** per l'intero lotto, tramite B12b. Darebbe a R4 la sorgente che oggi non ha |
+| O-6 | Gli indigenti che emigrano sono la "displaced population" di FR-M-13? | Decider | **Chiuso da R-055.** Sì: l'emigrazione pesca prima dagli indigenti, che in viaggio sono famine refugees e alzano il pericolo del link di P-40 ciascuno. R4 ha la sua sorgente |
 | O-7 | Criteri di accettazione | Decider | Candidati: una carestia con seme mangiato dura più di un anno; la ripresa rurale è più lenta di quella urbana; con P-67 = 0 il seme liberato non compare mai nell'offerta; un campo libero viene mietuto da chi è senza impiego; la quota dei braccianti sale durante la finestra di raccolto; dentro un mestiere i membri più poveri mangiano grado più basso dei più ricchi |
 | O-9 | Regola economica per la cura oltre il normale | Decider | Candidato: la coorte assume lavoro di crescita finché il grano in più, al prezzo atteso, supera il salario |
 | O-12 | Ricaduta immediata di chi esce dagli indigenti | Decider | Senza cancello del credito la frena solo P-69. Se le misure mostrano un ping-pong, un tempo minimo di permanenza come per la migrazione |

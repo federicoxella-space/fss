@@ -2500,3 +2500,73 @@ migration irrelevant to goods, in which case the limit is not worth its field.
 **Not verified:** that a transient with these extra fields fits the shapes of
 DEC-085; that no other text in `docs/` assumes migrants arrive with nothing. Only
 §5, §6, §7, `SIM-ECON` and `SIM-STATE` were read for it.
+
+### R-055 — The destitute emigrate first, and on the road they are the displaced population of FR-M-13
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), open item O-6
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in the proposal and
+enters `docs/` with it: `SIM-REQ` FR-D-04a, first sentence, and FR-M-13; `SIM-ECON`
+phase 11; `SIM-LOOPS` B12b, the paragraph under R12, and R4.
+
+The proposal makes B12b, "the destitute emigrate", the brake that holds R12, and
+leaves it two questions: what emigrants carry, which is `R-054`, and whether the
+destitute who leave are the "displaced population" of FR-M-13, which is O-6.
+B12b needs a third answer that neither question names: **who emigrates**.
+Nothing in `docs/` says which rows emigrants come from. Drawn in proportion to
+count, the destitute would leave only at their share of the population. B12b
+would then be no stronger than emigration in general, and R12 would keep its
+pressure.
+
+**Emigrants are drawn from the destitute row first**, and from the other rows
+in proportion to their counts for the rest. On the merits: the destitute own no
+buildings, durables or seed (DEC-090), so leaving costs them nothing they hold,
+and the landless poor were who moved. It also weakens R1. When those who leave
+were selling labour nobody fully bought, output falls less than when farmers
+go.
+
+**O-6: yes.** FR-M-13 names "famine refugees" first. FR-I-03a says what a
+refugee is: "Refugees from a famine are first-hand sources about it." They are
+migrants who flee hunger. `SIM-OBS` OBS-2 has them "arriving and saying what
+they fled". The destitute row is where members go when they can no longer feed
+themselves at the local price (DEC-090), so its emigrants are those refugees.
+Emigrants from the other rows leave with their property for a better wage, and
+are not displaced. **Each destitute emigrant raises the danger of the link it
+travels by P-40**, which is P-40's own unit: "per unit of displaced
+population". Danger falls only through contracts and garrisons, not by decay,
+so a flow of refugees builds a stock that outlasts them. R4 gains the source it
+lacked: poverty, the destitute row, sends displaced people, its emigrants, onto
+the links.
+
+**The alternative is rejected.** It would make the destitute row itself, in
+place, the displaced population. "Displaced" means moved. That reading would
+give danger a source in every poor settlement whether or not anyone travels, a
+mechanism FR-M-13 does not contain.
+
+**The coupling is named, not hidden.** B12b brakes R12 by exporting it to R4,
+whose brakes B4a and B4b already stand. That is DEC-064's intent: the world
+makes its threats from its own failures. **B12b is not unconditional, and the
+text says so.** It acts only where a neighbour is more attractive by more than
+the hysteresis band (FR-D-09). In a region poor throughout, nobody leaves. R12
+then stops at the lower clamp of the wage (DEC-045), which bounds it without
+braking it, and at hunger, R5. The proposal's sentence "B12b is the brake that
+holds" is replaced by one that says when it holds. This is a statement about a
+loop, not a change to the gate of `SIM-LOOPS`. R12 has two named balancing
+loops, and the gate asks for one.
+
+"Failed migration" and soldiers disbanded at the end of a war, the other two
+sources FR-M-13 names, are not touched.
+
+**Cost.** Refugees take the roads towards more attractive places, usually
+towards towns, so a famine can raise danger on the route that would relieve it.
+That is R4 working, and P-40 is tuned against P-41 for it. The destitute arrive
+somewhere. If they join the destination's destitute row (Z-14 decides), they
+carry R12's pressure there, bounded by the inbound cap of FR-D-10.
+**Owed by the implementer:** nothing now.
+**Would overturn it:** a sweep in which refugee danger cuts relief routes faster
+than famine ends, which would argue for danger from refugees on arrival rather
+than in transit; or regions where R12 settles at the wage clamp for years, which
+would argue for a brake that does not need a destination.
+**Not verified:** that attractiveness under FR-D-04 falls with the wage fast
+enough for B12b to act before hunger does; its weights over food, wage and
+safety are not set.
