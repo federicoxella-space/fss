@@ -1,7 +1,7 @@
 # Proposta di decisioni — Povertà, cibo e raccolto
 
 **Documento:** PROPOSAL-POVERTY-SEED
-**Stato:** Revisione 8, da passare al decider. Le decisioni dell'utente sono marcate Deciso; tutto ciò che resta è affidato al decider, salvo il contenuto statico, che per R-050 resta all'utente. Nulla di quanto segue è ancora nella spec.
+**Stato:** Revisione 9, da passare al decider. Le decisioni dell'utente sono marcate Deciso; tutto ciò che resta è affidato al decider, salvo il contenuto statico, che per R-050 resta all'utente. Nulla di quanto segue è ancora nella spec.
 **Data:** 2026-10-04
 **Base:** `main` @ `54f3180`, il cui SIM-REQ coincide con quello caricato il 2026-10-02. Riferimenti incrociati a `2026-10-02-fase-4-da-decidere.md` (K-xx, Z-xx).
 **Lingua:** motivazioni in italiano; i testi da inserire nella spec sono in inglese, come il corpus, pronti da trascrivere.
@@ -10,6 +10,7 @@
 - *2–6:* conferme puntuali; indigenti e braccianti come righe distinte; curve di ricchezza; fase 8a; riallineamento in fase 12.
 - *7:* recepisce la revisione dell'implementatore (istruzioni non eseguibili e conflitti di contenuto) e i sei punti confermati: chi assume (FR-C-05, Z-06), riserva sulla terra assegnata, niente cancello del credito, freno del nuovo anello lavoro–povertà, curva di ricchezza anche nel razionamento (Z-09), wealth tendency (Z-20). Introduce le classi di beni con grado di lavorazione e valore nutrizionale (PD-14), e propone la somma dei bisogni (PD-15) e il piatto secondo la ricchezza (PD-16). La produzione domestica (orto, animali, raccolta) è lasciata al decider (PD-17).
 - *8:* l'utente affida al decider tutto ciò che resta: PD-15, PD-16, PD-17, la forma dei ruoli di FR-P-03, la regola di conservazione nelle ricette e i punti aperti non di contenuto. Il contenuto statico resta all'utente (R-050).
+- *9:* recepisce la seconda revisione dell'implementatore. Il tier esce dal record del bene anche in FR-P-01, DEC-015, AC-56 e DEC-080; AC-56 protegge i bisogni, non i beni (decisione dell'utente, riserva 2 di R-001). Il grado di lavorazione è uno per bene. AC-09 classifica i consumabili per il tier del bisogno più urgente che soddisfano, con una riga nuova per il tier 1 (decisione dell'utente, riserva 2). La farina entra tra i beni di base e P-09 passa a 8 (decisione dell'utente). Il tier 0 ha un solo bisogno, sul cibo, controllato al caricamento (FR-P-03b); il deficit di fame è in unità di nutrimento. La riserva di semina si calcola sull'allocazione corrente, non su quella della semina successiva. Il deficit di fame è per membro, e quando dei membri cambiano riga la riga che li riceve ne prende la media pesata. FR-C-04: i passi 5 e 6 restano. O-5 e O-6 si decidono nello stesso lotto, e la proposta entra in `docs/` solo con B12b scritto. Minori: posizione del paragrafo di X-8, A-16 sommato anche sulle colture, FR-P-03b sotto Needs in §18, aggiunta a OBS-3 autorizzata dall'utente.
 
 ---
 
@@ -85,7 +86,7 @@ Ogni insediamento ha una riga di **indigenti** (*destitute*): un record di mesti
 
 - Il record della coltura indica un **bene di semina** e il fabbisogno per unità di terra. Per cereali e patate è il bene raccolto stesso; per colture come il cavolo è un bene distinto, non cibo, prodotto dalla coltura come seconda resa.
 - La semina consuma il bene di semina dalle scorte della coorte. Il lavoro di semina è quello dei membri più quello assunto. La terra senza seme o senza braccia resta incolta.
-- **La riserva si calcola sulla terra assegnata:** `fabbisogno per unità di terra × terra assegnata alla coltura della coorte alla prossima semina`. Non supera mai il seme che la semina potrà usare.
+- **La riserva si calcola sulla terra assegnata:** `fabbisogno per unità di terra × terra che il vettore corrente assegna alla coltura della coorte`. Il vettore si muove solo alla semina, prima che la semina consumi il seme, quindi la riserva non supera mai il seme che la semina potrà usare.
 - La riserva è esclusa da ogni uso diverso dalla semina: consumo proprio, offerta, input delle ricette.
 - Il bene importato è anche seme: il commercio è la via d'uscita da una carestia pluriennale.
 
@@ -98,7 +99,8 @@ Ogni insediamento ha una riga di **indigenti** (*destitute*): un record di mesti
 **Stato:** Deciso.
 
 - La regola vale quando il bene di semina è cibo. Con le classi di PD-14 il grano è cibo di grado 0, quindi il seme liberato sfama chi lo possiede.
-- Il deficit di fame è un campo di stato della coorte, in unità di nutrimento: cresce di quanto manca al bisogno di tier 0 e decade di P-70 per aggiornamento quando il bisogno è soddisfatto.
+- Il deficit di fame è un campo di stato della coorte, per membro, in unità di nutrimento: cresce di quanto manca al bisogno di tier 0 e decade di P-70 per aggiornamento quando il bisogno è soddisfatto.
+- Quando dei membri passano da una riga all'altra (ingresso e uscita dagli indigenti, riallineamento, migrazione), la riga che li riceve prende la media del proprio deficit e di quello della riga d'origine, pesata sui membri; la riga d'origine non cambia. Chi entra tra gli indigenti è probabilmente più affamato della media della propria coorte, ma la curva non lo dice: è un'approssimazione.
 - Sotto la soglia P-66 la riserva non si tocca; sopra soglia si libera solo quanto basta a riportare il deficit a P-66.
 - Il seme liberato va solo al consumo proprio. La quota che può entrare nell'offerta è P-67, zero in produzione e P-71 in CI.
 
@@ -186,7 +188,7 @@ La domanda è limitata dalla valuta, che include quanto preso a prestito in fase
 
 ### PD-13 — Il nuovo anello lavoro–povertà e i suoi freni
 
-**Stato:** Deciso. Il secondo freno dipende da O-5 e O-6, affidati al decider e **bloccanti** per il gate della fase 1.
+**Stato:** Deciso. Il secondo freno dipende da O-5 e O-6, affidati al decider. Il decider li risolve nella stessa sessione, e la proposta entra in `docs/` solo con B12b scritto, così il gate della fase 1 non si riapre (decisione dell'utente).
 
 - **R12.** Gli indigenti vendono lavoro, il salario scende, altre coorti cadono sotto soglia, gli indigenti aumentano.
 - **B12a.** Con il salario basso il vettore riduce la quota dei braccianti, e l'offerta di lavoro cala. Non agisce quando quella quota è già vicina a zero.
@@ -201,6 +203,7 @@ La domanda è limitata dalla valuta, che include quanto preso a prestito in fase
 - Una **classe** è un record di dati con un nome e un'eventuale classe madre: cibo, bevande, ingredienti, materie prime, e sottoclassi come "cereali" sotto "cibo". Si aggiungono, si modificano e si annidano senza codice, e viaggiano con `ruleVersion`.
 - Ogni **bene** dichiara le classi a cui appartiene, anche più di una, con un **valore** per unità in ciascuna: per le classi alimentari è il valore nutrizionale. Dichiara anche il **grado di lavorazione**: il grano grado 0, il pane grado 1. La farina è un ingrediente di grado 1, non un cibo.
 - Un **bisogno** è definito su una classe: classe, grado minimo, tier di urgenza, quantità in unità della classe per persona al giorno. Un bisogno su una classe è soddisfatto anche dai beni delle sottoclassi.
+- Il tier 0 ha un solo bisogno, sulla classe cibo, e un controllo al caricamento lo impone. Il deficit di fame, la soglia `T` e P-66 si misurano quindi in unità di nutrimento. Un secondo bisogno di tier 0 richiederebbe una ruling.
 - Il **tier** resta l'urgenza del bisogno (SIM-ECON) e non è una proprietà del bene. Il grado minimo collega le due scale: la sopravvivenza può chiedere "cibo, grado almeno 0", il tier 1 "cibo, grado almeno 1".
 - I ruoli di FR-P-03 descrivono solo il comportamento nella produzione e nel tempo: consumabile, input, durevole. L'urgenza passa ai bisogni. Questo chiude Z-07. *(Al decider)*
 - Nelle classi alimentari nessuna ricetta produce più valore di quanto ne consumi: la lavorazione non crea cibo. *(Al decider)*
@@ -255,7 +258,7 @@ Due bisogni sulla stessa classe si sommano: per sopravvivere serve una quantità
 
 ## Modifiche alla documentazione
 
-I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[DECIDER]** sono testo suggerito o segnaposto per una scelta del decider: PD-15, PD-16, O-5, O-6, la forma di FR-P-03 e FR-P-03c.
+I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[DECIDER]** sono testo suggerito o segnaposto per una scelta del decider: PD-15, PD-16, O-5, O-6, la forma di FR-P-03, FR-P-03c e la regola di conservazione in DEC-098.
 
 ### SIM-DEC
 
@@ -284,7 +287,7 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 
 > ### DEC-092 — Sowing consumes a planting good, protected until desperation when it is food
 >
-> A crop record names its planting good and the amount needed per unit of land. For grain the planting good is the harvest itself; a crop whose seed is not food names a separate good it yields alongside its harvest. Sowing consumes the planting good from the sowing cohort's holdings. The seed reserve is derived, not stored: the amount per unit of land times the land allocated to the cohort's crop at its next sowing, and nothing but sowing draws on it. When the planting good is food, the reserve is released once the cohort's hunger deficit exceeds P-66, only as far as needed to hold the deficit there, and only to own consumption; P-67 is the share that may reach the market, zero in the shipping configuration.
+> A crop record names its planting good and the amount needed per unit of land. For grain the planting good is the harvest itself; a crop whose seed is not food names a separate good it yields alongside its harvest. Sowing consumes the planting good from the sowing cohort's holdings. The seed reserve is derived, not stored: the amount per unit of land times the land the current allocation vector gives the cohort's crop, and nothing but sowing draws on it. When the planting good is food, the reserve is released once the cohort's hunger deficit exceeds P-66, only as far as needed to hold the deficit there, and only to own consumption; P-67 is the share that may reach the market, zero in the shipping configuration.
 >
 > **Rationale.** Without seed a lost harvest costs one year, since the next sowing is whole regardless. Eating seed borrows against next year at the crop's yield ratio, and the choice is distributive: keeping seed pushes the famine onto those who buy, eating it drags it onto those who grow over several years. A threshold produces both. Imported grain is also seed, so trade becomes the way out of a famine that outlasts a year. Bounding the reserve by allocated land keeps it from exceeding what the next sowing can use.
 >
@@ -332,9 +335,9 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 
 > ### DEC-098 — Needs are met by classes of goods, by grade
 >
-> Goods belong to classes, data records that may nest under a parent class. A good carries, for each class it belongs to, a value per unit, nutrition for food, and a processing grade. A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day, and any good of the class or its subclasses at or above the grade meets it. Tier is the urgency of the need, not a property of the good. In a food class no recipe yields more value than it consumes.
+> Goods belong to classes, data records that may nest under a parent class. A good carries a value per unit in each class it belongs to, nutrition for food, and one processing grade. A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day, and any good of the class or its subclasses at or above the grade meets it. Tier is the urgency of the need, not a property of the good. **[DECIDER: O-15, forma della regola di conservazione]** In a food class no recipe yields more value than it consumes.
 >
-> **Rationale.** With needs defined per good, every new food would be one more need: everyone would have to eat bread and also potatoes. Classes make food a set of alternatives, and the minimum grade keeps urgency and processing on separate scales while letting them meet: survival can accept grain, a basic need can ask for bread. Grain becomes food, so a released seed reserve feeds the cohort that holds it. Without the conservation rule, baking would create food, and a famine could be cured in the oven.
+> **Rationale.** With needs defined per good, every new food would be one more need: everyone would have to eat bread and also potatoes. Classes make food a set of alternatives, and the minimum grade keeps urgency and processing on separate scales while letting them meet: survival can accept grain, a basic need can ask for bread. Grain becomes food, so a released seed reserve feeds the cohort that holds it. **[DECIDER: O-15]** Without the conservation rule, baking would create food, and a famine could be cured in the oven.
 >
 > **Cost.** Demand becomes a choice among goods of a class. Static content grows: classes, memberships, values, grades and needs, all approved under R-050.
 
@@ -364,9 +367,18 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 
 - **DEC-054** — Nessuna modifica. P-30 resta 1.
 
+- **DEC-015** — Nel testo, sostituire "Unit weight, reference value, perishability, role, need tier." con:
+  > Unit weight, reference value, perishability, role, classes with a value in each, processing grade.
+
+- **DEC-080** — Nel testo, sostituire "Validation at load proves nothing in tier 0 or tier 1 depends on one." con:
+  > Validation at load proves every tier 0 and tier 1 need can be met without one.
+
 ### SIM-REQ
 
 **§6 Goods and production.**
+
+- **FR-P-01** — Sostituire con:
+  > **FR-P-01** — A good is a data record: unit weight, value reference, perishability, role, the classes it belongs to with a value per unit in each, and its processing grade (FR-P-03a). Adding a good requires no code change.
 
 - **FR-P-03** — Sostituire con: **[DECIDER: testo suggerito]**
   > **FR-P-03** — Every good occupies one of three roles, which describe its behaviour in production and over time:
@@ -380,13 +392,16 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
   > How urgently a good is wanted is not a property of the good but of the needs it meets (FR-P-03b).
 
 - Nuovi requisiti dopo FR-P-03:
-  > **FR-P-03a** — A goods class is a data record with a name and an optional parent class. A good belongs to one or more classes and carries, for each, a value per unit, nutrition for food, and a processing grade. Classes and memberships are added or changed without code change.
+  > **FR-P-03a** — A goods class is a data record with a name and an optional parent class. A good belongs to one or more classes and carries a value per unit in each, nutrition for food, and one processing grade. Classes and memberships are added or changed without code change.
 
-  > **FR-P-03b** — A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day. Any good of the class or of its subclasses, at or above the minimum grade, meets it in proportion to its value.
+  > **FR-P-03b** — A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day. Any good of the class or of its subclasses, at or above the minimum grade, meets it in proportion to its value. Tier 0 holds exactly one need, on the food class, and validation at load refuses a needs table that holds another.
 
   > **FR-P-03c** — In a food class, no recipe yields more value than it consumes. *(Al decider)*
 
-- **FR-P-04** — Sostituire "Baseline goods set *(proposed, pending confirmation)*" con "Baseline goods set *(proposed, pending confirmation, with classes, values and grades under FR-P-03a)*". La lista dei beni resta contenuto da approvare (K-01).
+- **FR-P-04** — Sostituire con: *(Decisione dell'utente: la farina entra subito, e la catena del pane passa da essa.)*
+  > **FR-P-04** — Baseline goods set *(proposed, pending confirmation, with classes, values and grades under FR-P-03a)*: Grain, Flour, Bread, Ore, Timber, Tools, Wool, Cloth. Three chains: Grain→Flour→Bread, Ore+Timber→Tools, Wool→Cloth.
+
+  La lista resta contenuto da approvare (K-01).
 
 - **FR-P-10** — Sostituire con:
   > **FR-P-10** — Crops are not produced continuously. A crop is a data record carrying sowing date, maturation length, harvest date, harvest window length in updates, its planting good and the amount needed per unit of land, yield per unit of land, and labour per unit of land for sowing, for harvest, and for growth at normal care and at full care.
@@ -398,7 +413,7 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 
   > **FR-P-10c** — A standing crop carries a condition on 0–20000, set to 10000 at sowing. Growth labour below normal care lowers it towards 0; growth labour between normal and full care raises it towards 20000. Exogenous events striking a standing crop multiply it. Both care levels are zero in the shipping configuration; CI runs a configuration where they are not.
 
-  > **FR-P-10d** — A cohort's seed reserve is the planting good needed per unit of land times the land allocated to its crop at the next sowing. Only sowing draws on it: own consumption, market supply and recipe inputs leave it untouched. When the planting good is food and the cohort's hunger deficit exceeds P-66, the reserve is released to own consumption only as far as needed to bring the deficit back to P-66. A share P-67 of what is released may become supply.
+  > **FR-P-10d** — A cohort's seed reserve is the planting good needed per unit of land times the land the current allocation vector gives its crop. Only sowing draws on it: own consumption, market supply and recipe inputs leave it untouched. When the planting good is food and the cohort's hunger deficit exceeds P-66, the reserve is released to own consumption only as far as needed to bring the deficit back to P-66. A share P-67 of what is released may become supply.
 
   > **FR-P-10e** — A standing crop whose cohort is empty is an open field until its harvest window closes. Labour left unhired once the labour market of FR-C-05 clears is assigned to it and reaps it under FR-P-10b, and each cohort keeps the harvest in proportion to the labour it supplied. An advance against it is written off under FR-C-27.
 
@@ -408,7 +423,7 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 **§5 Population and demography.**
 
 - Nuovo requisito dopo FR-D-03:
-  > **FR-D-03a** — Unmet tier 0 need accumulates as a hunger deficit per cohort, in the class's units, and decays by P-70 per update when the need is met. The death rate's response to hunger in FR-D-03 reads this deficit.
+  > **FR-D-03a** — Unmet tier 0 need accumulates as a hunger deficit per member of each cohort, in units of nutrition, and decays by P-70 per update when the need is met. When members move from one row to another, the receiving row's deficit becomes the average of its own and that of the row they leave, weighted by count; the row they leave keeps its own. The death rate's response to hunger in FR-D-03 reads this deficit.
 
 **§6, sottosezione Occupations.**
 
@@ -431,7 +446,7 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 - **FR-C-03** — Sostituire con:
   > **FR-C-03** — Consumption order is fixed: a cohort meets its needs from its own holdings first, lowest grade first, then buys the remainder at market.
 
-- **FR-C-04** — Sostituire i passi con:
+- **FR-C-04** — Sostituire i passi 1–4 con quelli che seguono; i passi 5 e 6 restano invariati:
   > 1. Cohorts consume from their own holdings, the seed reserve excepted under FR-P-10d.
   > 2. Unmet need becomes demand, capped by the cohort's currency, which includes what it borrowed this update. **[DECIDER: la scelta del bene dentro la classe segue DEC-099, se adottata]**
   > 3. Holdings above the cohort's own needs and its seed reserve become supply.
@@ -459,18 +474,34 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 | P-70 | Hunger deficit decay per update when the tier 0 need is met | TBD by sweep | Open |
 | P-71 | Share of released planting good that may become supply, CI | TBD | Open |
 
+Riga da modificare: **P-09**, Goods count, da 7 a **8**, stato Decided (decisione dell'utente: la farina, FR-P-04).
+
 P-19 resta come valore predefinito per le attività senza un tasso proprio.
 
-**Contenuto statico da approvare** prima del piano che lo usa (§16, R-050): i record dei mestieri indigente e bracciante, con tasso e tetto del secondo; per ogni mestiere σ, le due curve e la wealth tendency; le classi di beni, le appartenenze, i valori nutrizionali e i gradi; la tabella dei bisogni per classe, grado minimo e tier (K-06); per ogni coltura bene di semina e fabbisogno, resa, lavoro per stadio e livello di cura, finestra.
+**Contenuto statico da approvare** prima del piano che lo usa (§16, R-050): i record dei mestieri indigente e bracciante, con tasso e tetto del secondo; per ogni mestiere σ, le due curve e la wealth tendency; le classi di beni, le appartenenze, i valori nutrizionali e i gradi; la tabella dei bisogni per classe, grado minimo e tier (K-06); il bene farina, le ricette Grain→Flour e Flour→Bread e l'edificio che ciascuna richiede, e il grado del pane ora che la catena ha un passo in più; per ogni coltura bene di semina e fabbisogno, resa, lavoro per stadio e livello di cura, finestra.
 
 **§17 Acceptance criteria.** Nessun criterio aggiunto per ora: O-7.
 
+- **AC-56** — Sostituire "Static validation proves no tier 0 or tier 1 good depends transitively on a dungeon-only material." con: *(Decisione dell'utente, riserva 2 di R-001: con il tier sui bisogni, il criterio protegge i bisogni e non i singoli beni, così i cibi pregiati possono usare materiali di dungeon come vuole la motivazione di DEC-080.)*
+  > Static validation proves that every tier 0 and tier 1 need can be met by at least one good, at or above the need's minimum grade, that depends transitively on no dungeon-only material.
+
+- **AC-09** — Sostituire la tabella con: *(Decisione dell'utente, riserva 2 di R-001: senza i ruoli Subsistence e Luxury, i consumabili si classificano per il bisogno più urgente che soddisfano; la riga del tier 1 è nuova, e la sua intenzione è dell'utente.)*
+  > | Good | X, first price move | Y, return to band |
+  > |---|---|---|
+  > | Consumable, tier 0 | short, within two settlement updates | long, up to the next harvest |
+  > | Consumable, tier 1 | medium | within the season |
+  > | Consumable, tier 2 | medium, bounded by travel | short |
+  > | Input | medium | within the season |
+  > | Durable | long | long |
+  >
+  > A consumable takes the row of the most urgent need it can meet.
+
 **§18 Delivery phases**, tabella dei sottosistemi della fase 4 (R-052):
-- *Production*: aggiungere FR-P-03a, FR-P-03b, FR-P-03c, FR-P-10a … FR-P-10e, FR-J-21, FR-J-22.
-- *Needs*: aggiungere FR-D-03a.
+- *Production*: aggiungere FR-P-03a, FR-P-03c, FR-P-10a … FR-P-10e, FR-J-21, FR-J-22.
+- *Needs*: aggiungere FR-P-03b, FR-D-03a.
 - *Labour and income*: aggiungere "8a" alle fasi, e FR-J-19, FR-J-20.
 
-**§19 Open items** — Le misure di P-17, P-63 e P-64 vanno rifatte con 11 righe per insediamento in produzione e 33 in CI, e con il numero di mercati alimentari fissato dal contenuto.
+**§19 Open items** — Le misure di P-17, P-63 e P-64 vanno rifatte con 11 righe per insediamento in produzione e 33 in CI, con 8 beni (P-09) e con il numero di mercati alimentari fissato dal contenuto.
 
 ### SIM-ECON
 
@@ -490,7 +521,7 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 - **Fase 7** — Sostituire la cella "Does" con:
   > Unmet need becomes demand, capped by currency, which includes what phase 3 lent. Surplus, the seed reserve excluded, becomes supply. Short supply is allocated by ability to pay, the share of a cohort able to pay read from its wealth curve. Currency moves buyer to seller.
 
-  Spostare il paragrafo che segue la riga della fase 7 sotto la tabella, così la tabella non è più spezzata (X-8).
+  Spostare il paragrafo che segue la riga della fase 7 ("Phase 7 dominates the cost of the update …") subito dopo la riga della fase 12, prima del paragrafo "Phases 3 and 8 are the two halves of credit", così la tabella non è più spezzata (X-8).
 
 - **Fase 8a, nuova**, tra la fase 8 e la fase 9:
   > | 8a | Destitution | Cohort members whose wealth falls below the threshold enter the destitute row. Destitute members above the exit threshold leave for their destinations: for agricultural activities only in an update holding a crop's sowing date. | FR-J-19, FR-J-20 |
@@ -535,7 +566,7 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 
 | Field | Type | Notes |
 |---|---|---|
-| hungerDeficit | fixed | FR-D-03a; read by mortality and by the seed reserve |
+| hungerDeficit | fixed | per member, FR-D-03a; read by mortality and by the seed reserve; averaged by count when members arrive |
 | transitionRemainder | fixed | carry of the share entering or leaving destitution; cleared when the row empties |
 | sownLand | int[] | per crop; set at sowing, FR-P-10a |
 | landInField | int[] | per crop; falls through the harvest window, FR-P-10b |
@@ -550,7 +581,7 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 
 | # | Assert |
 |---|---|
-| A-16 | For every cohort and crop, landInField ≤ sownLand; for every settlement, sownLand summed over its cohorts ≤ land |
+| A-16 | For every cohort and crop, landInField ≤ sownLand; for every settlement, sownLand summed over its cohorts and crops ≤ land |
 | A-17 | Destitute rows hold no buildings and no durables |
 
 ### SIM-LOOPS
@@ -581,7 +612,7 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 - **Balancing loops that stand alone** — Aggiungere:
   > | Day labour against wage | a high wage draws day labourers, which lowers it | FR-J-21, FR-C-05 |
 
-- **Gate check** — La riga resta "Met for R1, R2, R4, R5, R6, R7"; R12 vi si aggiunge quando B12b è scritto.
+- **Gate check** — Sostituire "Met for R1, R2, R4, R5, R6, R7" con "Met for R1, R2, R4, R5, R6, R7, R12". B12b è scritto nello stesso lotto (PD-13).
 
 - **Open** — Aggiungere:
   > 4. Full care under DEC-094 raises yield per unit of land up to twice. B1 and B3a assume it fixed; recheck both before care is enabled.
@@ -590,7 +621,7 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 
 ### SIM-OBS
 
-- **OBS-3**, "Served by" — Aggiungere FR-P-03a, FR-P-03b, FR-J-19 a FR-J-22, FR-P-10a, FR-P-10d, FR-P-10e, FR-D-03a, DEC-090, DEC-091, DEC-092, DEC-095, DEC-097, DEC-098, e DEC-099 se adottata.
+- **OBS-3**, "Served by" — Aggiungere FR-P-03a, FR-P-03b, FR-J-19 a FR-J-22, FR-P-10a, FR-P-10d, FR-P-10e, FR-D-03a, DEC-090, DEC-091, DEC-092, DEC-095, DEC-097, DEC-098, e DEC-099 se adottata. *(L'aggiunta è dell'utente: non cambia l'osservabile, ma tocca SIM-OBS, che per la riserva 3 di R-001 il decider non modifica da solo.)*
 
 ---
 
@@ -598,14 +629,14 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 
 | # | Questione | A chi | Note |
 |---|---|---|---|
-| O-5 | Cosa portano con sé i migranti | Decider | **Bloccante** per B12b e per A-02. Candidato: conversione dei beni in moneta al prezzo locale, nei limiti della domanda; copre anche chi liquida prima di partire |
-| O-6 | Gli indigenti che emigrano sono la "displaced population" di FR-M-13? | Decider | **Bloccante** per B12b. Darebbe a R4 la sorgente che oggi non ha |
+| O-5 | Cosa portano con sé i migranti | Decider | **Bloccante** per l'intero lotto: B12b e A-02. Candidato: conversione dei beni in moneta al prezzo locale, nei limiti della domanda; copre anche chi liquida prima di partire |
+| O-6 | Gli indigenti che emigrano sono la "displaced population" di FR-M-13? | Decider | **Bloccante** per l'intero lotto, tramite B12b. Darebbe a R4 la sorgente che oggi non ha |
 | O-7 | Criteri di accettazione | Decider | Candidati: una carestia con seme mangiato dura più di un anno; la ripresa rurale è più lenta di quella urbana; con P-67 = 0 il seme liberato non compare mai nell'offerta; un campo libero viene mietuto da chi è senza impiego; la quota dei braccianti sale durante la finestra di raccolto; dentro un mestiere i membri più poveri mangiano grado più basso dei più ricchi |
 | O-9 | Regola economica per la cura oltre il normale | Decider | Candidato: la coorte assume lavoro di crescita finché il grano in più, al prezzo atteso, supera il salario |
 | O-12 | Ricaduta immediata di chi esce dagli indigenti | Decider | Senza cancello del credito la frena solo P-69. Se le misure mostrano un ping-pong, un tempo minimo di permanenza come per la migrazione |
 | O-13 | Somma dei bisogni e piatto secondo la ricchezza (PD-15, PD-16) | Decider | Analisi e testo suggerito in PD-15, PD-16, DEC-099 |
 | O-14 | Produzione domestica (PD-17) | Decider | In questo lotto o nel successivo; analisi in PD-17 |
-| O-15 | Ruoli di FR-P-03 e conservazione nelle ricette (PD-14) | Decider | Testo suggerito in FR-P-03 e FR-P-03c; il primo chiude Z-07 |
+| O-15 | Ruoli di FR-P-03 e conservazione nelle ricette (PD-14) | Decider | Testo suggerito in FR-P-03 e FR-P-03c; il primo chiude Z-07. Con la farina, che non è cibo, FR-P-03c ricetta per ricetta non regge: Grain→Flour consuma valore alimentare e non ne produce, Flour→Bread ne produce senza consumarne. La regola va scritta lungo la catena, oppure la farina porta un valore alimentare che nessun bisogno accetta |
 | O-8 | Dati storici di riferimento | Utente | Rese, forma delle distribuzioni di ricchezza e valori nutrizionali citati in sessione non sono verificati; servono a tarare il contenuto statico |
 | O-11 | Colture e cibi oltre il grano | Utente | Contenuto statico (K-01, K-04, R-050); con PD-14 entrano come nuovi beni della classe cibo |
 
