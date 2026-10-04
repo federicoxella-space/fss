@@ -2570,3 +2570,80 @@ would argue for a brake that does not need a destination.
 **Not verified:** that attractiveness under FR-D-04 falls with the wage fast
 enough for B12b to act before hunger does; its weights over food, wage and
 safety are not set.
+
+### R-056 — A good's record says only whether it is durable, and processing creates no food along the chain
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), open item O-15
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in the proposal and
+enters `docs/` with it: `SIM-REQ` FR-P-03 and FR-P-03c; `SIM-DEC` DEC-098, the
+decision, rationale and cost.
+
+The user decided in PD-14 that FR-P-03's roles describe only behaviour in
+production and over time, and that urgency moves to the needs. That closes Z-07
+of the phase 4 note. The form of the roles was left to the decider, as was the
+rule that processing creates no food. Both are answered here inside PD-14 as the
+user decided it. Grain is food of grade 0, flour is an ingredient and not food,
+and values are carried per class. That is reserve 5 of `R-001`, and nothing in
+it moves.
+
+**The roles.** The proposal's text gives every good one of three roles:
+consumable, input, durable. PD-14 itself breaks that. Grain meets the food need,
+so it is consumable. Grain→Flour takes it, so it is an input. It is also a
+planting good. Of the three roles only one is a property the state needs to
+know from the record:
+
+- durables are held apart from goods (`SIM-STATE` §Cohort, `durables`);
+- they wear (FR-P-23);
+- they are seized after goods (FR-C-27);
+- the destitute own none (DEC-090).
+
+Consumable and input follow from the data that names a good. A need that
+accepts it makes it consumable, and a recipe that takes it makes it an input.
+Storing them in the record would be a second statement of the same fact, and
+the two could disagree. **So the record says whether a good is durable. A good
+that is not takes the consumable role where a need accepts it, the input role
+where a recipe takes it, or both, as grain does.** AC-09's table, which the
+user decided, reads correctly under this form. "A consumable takes the row of
+the most urgent need it can meet" puts grain under tier 0. A good no need
+accepts takes the input row.
+
+**The conservation rule.** Recipe by recipe the rule fails, as the proposal
+notes. Flour belongs to no food class, so Grain→Flour consumes food and yields
+none, and Flour→Bread yields food from none. The proposal's other way out, flour
+carrying a food value that no need accepts, is closed by PD-14 itself. A need on
+the food class accepts every subclass at or above its grade, and survival
+accepts grade 0. Flour with a food value would therefore be eaten, and the user
+decided it is not food. **So the rule runs along the chain.** Every good carries
+an embodied food value:
+
+- a good of the food class carries its value there;
+- another good that recipes produce carries the least food value any recipe
+  producing it consumes per unit, inputs counted at their own embodied value;
+- anything else carries zero.
+
+No recipe yields more food value than its inputs embody. Validation at load
+refuses a table that breaks this, or that passes food value around a cycle.
+
+- **The least**, because the guarantee has to hold on the path that consumes
+  least. If flour can also be made from something that embodies no food, then
+  bread from that flour would create food. The rule refuses it, and should.
+- **The food class only**, the one the tier 0 need names (FR-P-03b), not every
+  class. A rule per class would refuse brewing a drink from grain, which
+  converts between classes by design. What protects the famine is that no oven
+  makes food, and no stock of any other class carries that guarantee.
+
+**Cost.** A validation pass over the recipe graph at load, and an author can
+trip it by setting a food value one unit too high, three recipes away from the
+error. A recipe cycle that food value passes through refuses the load, even
+where the content would have been harmless.
+**Owed by the implementer:** nothing now. The rule binds the production subsystem
+and the validation at load, once in `docs/`.
+**Would overturn it:** content in which processing truly adds nutrition and the
+user wants it, which is the user's to decide as an exception; or a recipe cycle
+the content needs.
+**Not verified:** PD-14 does not say in whose units a good of a subclass carries
+its value: the subclass's, or its parent's. "Its value in the food class" reads
+both the same only if a subclass measures in its parent's units. The user should
+settle that in FR-P-03a, as a finding on a decision of their own. Nor was it
+checked that no recipe proposed in K-03 forms a cycle.

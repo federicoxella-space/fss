@@ -198,7 +198,7 @@ La domanda è limitata dalla valuta, che include quanto preso a prestito in fase
 
 ### PD-14 — Classi di beni, grado di lavorazione e valore nutrizionale
 
-**Stato:** Deciso. La regola di conservazione nelle ricette e la nuova forma dei ruoli di FR-P-03 sono al decider.
+**Stato:** Deciso. La regola di conservazione nelle ricette e la nuova forma dei ruoli di FR-P-03 sono al decider: risolte da R-056.
 
 - Una **classe** è un record di dati con un nome e un'eventuale classe madre: cibo, bevande, ingredienti, materie prime, e sottoclassi come "cereali" sotto "cibo". Si aggiungono, si modificano e si annidano senza codice, e viaggiano con `ruleVersion`.
 - Ogni **bene** dichiara le classi a cui appartiene, anche più di una, con un **valore** per unità in ciascuna: per le classi alimentari è il valore nutrizionale. Dichiara anche il **grado di lavorazione**: il grano grado 0, il pane grado 1. La farina è un ingrediente di grado 1, non un cibo.
@@ -335,11 +335,11 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 
 > ### DEC-098 — Needs are met by classes of goods, by grade
 >
-> Goods belong to classes, data records that may nest under a parent class. A good carries a value per unit in each class it belongs to, nutrition for food, and one processing grade. A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day, and any good of the class or its subclasses at or above the grade meets it. Tier is the urgency of the need, not a property of the good. **[DECIDER: O-15, forma della regola di conservazione]** In a food class no recipe yields more value than it consumes.
+> Goods belong to classes, data records that may nest under a parent class. A good carries a value per unit in each class it belongs to, nutrition for food, and one processing grade. A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day, and any good of the class or its subclasses at or above the grade meets it. Tier is the urgency of the need, not a property of the good. Processing creates no food: no recipe yields more food value than its inputs embody, a good outside the food class carrying the least food value consumed to make it. *(R-056)*
 >
-> **Rationale.** With needs defined per good, every new food would be one more need: everyone would have to eat bread and also potatoes. Classes make food a set of alternatives, and the minimum grade keeps urgency and processing on separate scales while letting them meet: survival can accept grain, a basic need can ask for bread. Grain becomes food, so a released seed reserve feeds the cohort that holds it. **[DECIDER: O-15]** Without the conservation rule, baking would create food, and a famine could be cured in the oven.
+> **Rationale.** With needs defined per good, every new food would be one more need: everyone would have to eat bread and also potatoes. Classes make food a set of alternatives, and the minimum grade keeps urgency and processing on separate scales while letting them meet: survival can accept grain, a basic need can ask for bread. Grain becomes food, so a released seed reserve feeds the cohort that holds it. Without the conservation rule, baking would create food, and a famine could be cured in the oven. The rule runs along the chain rather than recipe by recipe, because flour belongs to no food class: milling consumes food, baking yields it, and only the two together say whether food was made. *(R-056)*
 >
-> **Cost.** Demand becomes a choice among goods of a class. Static content grows: classes, memberships, values, grades and needs, all approved under R-050.
+> **Cost.** Demand becomes a choice among goods of a class. Static content grows: classes, memberships, values, grades and needs, all approved under R-050. A recipe table can fail to load for a food value set too high several recipes away from the error. *(Ultima frase: R-056)*
 
 > ### DEC-099 — The plate follows the purse
 >
@@ -380,23 +380,23 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 - **FR-P-01** — Sostituire con:
   > **FR-P-01** — A good is a data record: unit weight, value reference, perishability, role, the classes it belongs to with a value per unit in each, and its processing grade (FR-P-03a). Adding a good requires no code change.
 
-- **FR-P-03** — Sostituire con: **[DECIDER: testo suggerito]**
-  > **FR-P-03** — Every good occupies one of three roles, which describe its behaviour in production and over time:
+- **FR-P-03** — Sostituire con: *(R-056)*
+  > **FR-P-03** — Roles describe how a good behaves in production and over time:
   >
   > | Role | Behaviour |
   > |---|---|
-  > | Consumable | consumed to meet needs |
-  > | Input | consumed by production |
+  > | Consumable | consumed to meet the needs that accept it (FR-P-03b) |
+  > | Input | consumed by the recipes that take it (FR-P-02) |
   > | Durable | not consumed, decays slowly, raises productivity |
   >
-  > How urgently a good is wanted is not a property of the good but of the needs it meets (FR-P-03b).
+  > A good's record says whether it is durable. A good that is not takes the consumable role where a need accepts it and the input role where a recipe takes it, and may take both, as grain does. How urgently a good is wanted is not a property of the good but of the needs it meets (FR-P-03b).
 
 - Nuovi requisiti dopo FR-P-03:
   > **FR-P-03a** — A goods class is a data record with a name and an optional parent class. A good belongs to one or more classes and carries a value per unit in each, nutrition for food, and one processing grade. Classes and memberships are added or changed without code change.
 
   > **FR-P-03b** — A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day. Any good of the class or of its subclasses, at or above the minimum grade, meets it in proportion to its value. Tier 0 holds exactly one need, on the food class, and validation at load refuses a needs table that holds another.
 
-  > **FR-P-03c** — In a food class, no recipe yields more value than it consumes. *(Al decider)*
+  > **FR-P-03c** — Processing creates no food. Every good carries an embodied food value: a good of the food class, the class the tier 0 need names, carries its value there; another good that recipes produce carries the least food value that any recipe producing it consumes per unit, each input counted at its own embodied food value; any other good carries zero. No recipe yields more food value than its inputs embody, and validation at load refuses a recipe table that breaks this or that passes food value around a cycle. *(R-056)*
 
 - **FR-P-04** — Sostituire con: *(Decisione dell'utente: la farina entra subito, e la catena del pane passa da essa.)*
   > **FR-P-04** — Baseline goods set *(proposed, pending confirmation, with classes, values and grades under FR-P-03a)*: Grain, Flour, Bread, Ore, Timber, Tools, Wool, Cloth. Three chains: Grain→Flour→Bread, Ore+Timber→Tools, Wool→Cloth.
@@ -658,7 +658,7 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 | O-12 | Ricaduta immediata di chi esce dagli indigenti | Decider | Senza cancello del credito la frena solo P-69. Se le misure mostrano un ping-pong, un tempo minimo di permanenza come per la migrazione |
 | O-13 | Somma dei bisogni e piatto secondo la ricchezza (PD-15, PD-16) | Decider | Analisi e testo suggerito in PD-15, PD-16, DEC-099 |
 | O-14 | Produzione domestica (PD-17) | Decider | In questo lotto o nel successivo; analisi in PD-17 |
-| O-15 | Ruoli di FR-P-03 e conservazione nelle ricette (PD-14) | Decider | Testo suggerito in FR-P-03 e FR-P-03c; il primo chiude Z-07. Con la farina, che non è cibo, FR-P-03c ricetta per ricetta non regge: Grain→Flour consuma valore alimentare e non ne produce, Flour→Bread ne produce senza consumarne. La regola va scritta lungo la catena, oppure la farina porta un valore alimentare che nessun bisogno accetta |
+| O-15 | Ruoli di FR-P-03 e conservazione nelle ricette (PD-14) | Decider | **Chiuso da R-056.** Il record dice solo se il bene è durevole; consumabile e input derivano da bisogni e ricette, e il grano è entrambi. La conservazione corre lungo la catena: ogni bene porta il valore alimentare incorporato, il minimo che una ricetta consuma per produrlo. Resta all'utente in quali unità misura una sottoclasse (FR-P-03a) |
 | O-8 | Dati storici di riferimento | Utente | Rese, forma delle distribuzioni di ricchezza e valori nutrizionali citati in sessione non sono verificati; servono a tarare il contenuto statico |
 | O-11 | Colture e cibi oltre il grano | Utente | Contenuto statico (K-01, K-04, R-050); con PD-14 entrano come nuovi beni della classe cibo |
 
