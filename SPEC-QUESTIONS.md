@@ -374,3 +374,249 @@ property is checked. `docs/` leaves open:
 
 The first phase 4 point that adds a table is the first place the answer changes
 code, and the pins move there anyway (`R-034`, Cost).
+
+### SQ-009 — FR-K-15 still defines the dungeon check on goods with a tier
+
+**Raised:** 2026-10-05, reviewing `R-054` to `R-065` on `design/poverty-seed`.
+**Cites:** `docs/SIM-REQ.md:420` FR-K-15; `docs/SIM-REQ.md:774` AC-56;
+`docs/SIM-DEC.md` DEC-080; `docs/SIM-REQ.md:145` FR-P-03.
+**Blocks:** no. Dungeons are events-subsystem work, and `R-063` puts no
+dungeon-only material in phase 4. It must be answered before the point that
+writes load validation, since the check is defined twice.
+**Status:** open.
+
+FR-K-15 requires that "no tier 0 or tier 1 good depends, directly or
+transitively, on such a material". Goods no longer carry a tier: FR-P-03 and
+DEC-098 put it on needs, and the user rewrote AC-56 and DEC-080 to protect needs
+rather than goods (proposal revision 9, reserve 2 of `R-001`). FR-K-15 was not in
+the proposal and was not touched. The same load check now has two definitions,
+and FR-K-15's has no referent. The obvious reading is AC-56's wording, which is
+the user's decision. The implementer's own review of revision 8 missed this
+requirement.
+
+### SQ-010 — FR-P-03a says both "a value in each class" and "one value per class tree"
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:155` FR-P-03a; `docs/SIM-REQ.md:141` FR-P-01;
+`docs/SIM-DEC.md:186` DEC-015; `docs/SIM-DEC.md:238` DEC-098; `R-060`.
+**Blocks:** no. `R-063`'s content has no subclass, so no good meets the case. It
+must be answered before the point that writes the goods record and its
+validation.
+**Status:** open.
+
+FR-P-03a's second sentence says a good "belongs to one or more classes and
+carries a value per unit in each". `R-060` appended to the same requirement that
+"a good carries one value per class tree … and validation at load refuses a good
+with two values in one tree". A good in a class and its subclass must carry two
+values by the first sentence and is refused for it by the last. FR-P-01, DEC-015
+and DEC-098 repeat "a value in each".
+
+### SQ-011 — no phase of the update writes the hunger deficit
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:111` FR-D-03a; `docs/SIM-ECON.md:36` phase 1,
+`:41` phase 6, `:42` phase 7, `:47` phase 11, `:95` §Demand "Hunger";
+`docs/SIM-REQ.md:803` §18, Needs.
+**Blocks:** no. It must be answered before the needs subsystem's first point,
+which by `R-052` owns FR-D-03a.
+**Status:** open.
+
+FR-D-03a says unmet tier 0 need accumulates as a deficit. §18 places it under
+Needs, whose `SIM-ECON` phase is 6. Need left unmet is known only after market
+clearing in phase 7, and the deficit is read in phase 11 for mortality and in
+phase 6 for the seed reserve. No row of the update table says where the deficit
+grows or decays. Phase 1, where migrants join cohorts, does not cite FR-D-03a's
+count-weighted average either. The order matters: a deficit updated in phase 7
+reaches phase 6 one update late, and phase 11 in the same update.
+
+### SQ-012 — how much seed is released is not defined
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:181` FR-P-10d; `docs/SIM-DEC.md:562` DEC-092;
+`docs/SIM-LOOPS.md:86` B5c; `docs/SIM-REQ.md:111` FR-D-03a; P-66, P-70.
+**Blocks:** no. It must be answered before the point that builds the seed
+reserve.
+**Status:** open.
+
+FR-P-10d releases the reserve "only as far as needed to bring the deficit back
+to P-66"; DEC-092 and B5c say "to hold it there". Under FR-D-03a the deficit
+does not fall in proportion to food eaten: it grows by what is missing and
+decays by P-70 per update only when the need is fully met. Eating released seed
+can stop the growth but cannot bring back a deficit above P-66, so the quantity
+is either "enough to meet this update's tier 0 need" (hold) or undefined (bring
+back). The two texts also differ from each other.
+
+### SQ-013 — DEC-085 still ties array widths to `ruleVersion` and allows content patches
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-DEC.md:58` and `:60` DEC-085; `docs/SIM-DEC.md:396`
+DEC-100; `docs/SIM-STATE.md:26` `rulesData`; `R-065`.
+**Blocks:** no. It must be answered before the first phase 4 point that adds
+static data, the point `R-065` binds.
+**Status:** open.
+
+DEC-085's rationale says "widths come from static data versioned with
+`ruleVersion`", and its cost that "a patch that changes a width, a new good for
+instance, reshapes the arrays". Under DEC-100 `ruleVersion` is the logic's
+version, widths come from the rules file, and an existing world cannot take new
+content. `R-065` lists DEC-032, DEC-033 and DEC-089 as touched, not DEC-085.
+
+### SQ-014 — generation parameters and the rules file are two inputs, and NFR-01 names one
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:527` NFR-01; `docs/SIM-REQ.md:641` AC-02;
+`docs/SIM-REQ.md:517` FR-G-02; `docs/SIM-REQ.md:541` NFR-08;
+`docs/SIM-STATE.md:24` `generationParams`; DEC-100.
+**Blocks:** no. It must be answered before the point that builds the generator,
+the first of phase 4 (`R-052`).
+**Status:** open.
+
+NFR-01 and AC-02 now list the inputs as seed, rules file and commands. FR-G-02,
+NFR-08 and `SIM-STATE`'s `generationParams` keep generation parameters as a
+separate saved input. Values such as P-02, P-12, P-54 and the kingdom count of
+`R-063` either belong to the rules file, and then have two homes, or to
+`generationParams`, and then the determinism requirement omits an input.
+
+### SQ-015 — FR-A-05 sits in Phase 7, and phase 4 needs it first
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:507` FR-A-05; `docs/SIM-REQ.md:810` §18 "Outside
+Phase 4"; `R-063`, `R-064`, `R-065`.
+**Blocks:** no. It must be answered before the phase 4 plan is written, since
+`R-052` reads `Satisfies:` against §18.
+**Status:** open.
+
+§18 sends "§13, what the host observes and does" to Phase 7, and FR-A-05 is in
+§13. `R-063` and `R-064` place phase 4's content in the rules file, and `R-065`
+owes its format from the first phase 4 point that adds static data. FR-A-05 has
+no phase 4 subsystem in the table.
+
+### SQ-016 — `SIM-STATE` lists one carry, and `SIM-ECON` now says every row holds them
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-ECON.md:105-107` §Spoilage and integer rounding;
+`docs/SIM-STATE.md:59-75` §Cohort; `docs/SIM-REQ.md:177` FR-P-10b.
+**Blocks:** no. It must be answered before the first point that applies a rate
+to a cohort stock.
+**Status:** open.
+
+`SIM-ECON` says "the carry stays with its row and is cleared when the row's
+count reaches zero", and names spoilage, wear, decay, interest and transit loss.
+§Cohort lists only `transitionRemainder`: no spoilage carry per good, none for
+wear, decay or interest. The harvest, area reaped × yield × condition, leaves a
+fraction too. `SIM-STATE`'s rule is that anything influencing a future tick is
+listed, and a carry is such a thing.
+
+### SQ-017 — the yearly cap of FR-P-15 has no P-number and no state
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:193` FR-P-15; §16 opening paragraph;
+`docs/SIM-DEC.md:520` DEC-047; `docs/SIM-STATE.md` §Settlement.
+**Blocks:** no. It must be answered before the point that builds allocation
+adjustment.
+**Status:** open.
+
+FR-P-15 makes "P-19 and the yearly cap" the default for an activity whose record
+carries neither. The cap has no P-number, and §16 calls a driving constant
+without one a defect. Enforcing a yearly cap needs the movement already made
+this year per activity, which no state table holds.
+
+### SQ-018 — the advance's collateral and its lender are not where credit looks for them
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:298` FR-C-24; `:300` FR-C-25; `:304` FR-C-27;
+`docs/SIM-STATE.md:75` `advance`.
+**Blocks:** no. It must be answered before the labour and income subsystem's
+credit point.
+**Status:** open.
+
+FR-C-25 now collateralises an advance with the standing crop. FR-C-24 lists
+collateral as "goods, durables, buildings", so a cohort with only a crop cannot
+borrow by one requirement and can by the other. `advance` is a bare `int64`
+with no counterparty category, while `debt` and `credit` carry one (FR-C-23).
+FR-C-27 puts a write-off's loss "on the lender", and for an advance nothing says
+who that is or where the matching claim sits.
+
+### SQ-019 — `SIM-LOOPS`' gate check no longer matches its own tables
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-LOOPS.md:10-25` §Stocks; `:100` R12; `:152-155` §Gate
+check; `docs/SIM-REQ.md:790` §18, phase 1 gate.
+**Blocks:** no for code. It is a claim about the phase 1 gate, which the user
+conditioned this batch on keeping closed.
+**Status:** open.
+
+- "Every flow has a source and a sink: Met", but §Stocks has no row for the
+  standing crop (in by sowing; out by harvest and by loss when the window
+  closes). Goods omit sowing, emigrants and seizure among outflows; population
+  and currency omit emigrants in transit.
+- R12 has no "Tuned by" line, while "Brakes have a tuning parameter" reads Met.
+- The row "Met for R1, R2, R4, R5, R6, R7, R12" omits R9, R10 and R11, which
+  have brakes. This predates the batch.
+
+### SQ-020 — whether the consumer of §20 can ship and read the rules file
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md` §20 "Downstream constraints"; DEC-100; FR-A-05;
+`R-065` "Not verified"; reserve 4 of `R-001`.
+**Blocks:** no. It must be answered before the point that builds the rules file,
+since the format is what the consumer would ship.
+**Status:** open — **the user's**, not the decider's: §20 is reserve 4.
+
+`R-065` records as not verified "that the consumer of §20 can ship and read such
+a file", and names it among what would overturn the ruling. §20's constraints
+belong to a consumer this repository cannot see, so only the user can answer.
+
+### SQ-021 — `SIM-STATE` open item 1 closed with more than `R-063` decided
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-STATE.md:210`; `R-063` "Age bands".
+**Blocks:** no. It must be answered before the point that builds cohort rows.
+**Status:** open.
+
+`R-063` says "Three, closing `SIM-STATE` open item 1". The text in `docs/` says
+"three age bands, children, working age and elderly, of which only working age
+offers labour. A wider split is a format migration (NFR-08)". The names, the
+rule that only working age offers labour, and the remark on migration are in no
+ruling or proposal. The labour rule decides who sells labour under FR-C-05.
+
+### SQ-022 — stale counts and leftover wording after the batch
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** below, item by item.
+**Blocks:** no.
+**Status:** open.
+
+1. Phase counts: `docs/SIM-REQ.md:798` and `:821` "twelve phases",
+   `:573-574` "5 of 12 phases", `:825` and `docs/SIM-DEC.md:478` the
+   unmeasured phases, now that 8a exists.
+2. `docs/SIM-REQ.md:571-574`: P-17, P-17a, P-63 and P-64 labelled "9 cohorts"
+   and "27 cohorts", against the 12 and 36 rows of `R-063`.
+3. `docs/SIM-DEC.md:188` DEC-015 "start with seven goods"; P-09 is 8.
+4. `docs/SIM-DEC.md:600` DEC-052 "one damping constant", against DEC-096's rate
+   per activity.
+5. `docs/SIM-DEC.md:520` DEC-047's title "once per sowing", against FR-P-15
+   (finding 4 of `R-059`, X-3, still open).
+6. `docs/SIM-ECON.md:64` allocation adjustment "When: at sowing", while
+   non-agricultural activities adjust at settlement cadence.
+7. "Implements" column: phase 4 (`docs/SIM-ECON.md:39`) assigns open fields
+   without FR-P-10e; phase 7 (`:42`) uses the seed reserve and the wealth curve
+   without FR-P-10d and FR-J-22; FR-J-03's realignment runs in phase 12, which
+   §18's Production row does not list (finding 5 of `R-059`).
+8. `docs/SIM-DEC.md:562` DEC-092: a crop whose seed is not food "yields [it]
+   alongside its harvest", while FR-P-10 and FR-P-10b (`docs/SIM-REQ.md:173`,
+   `:177`) give a crop one yield.
+9. `docs/SIM-REQ.md:141` FR-P-01 still lists "role", while FR-P-03 says the
+   record says only whether a good is durable (`R-056`).
+10. `docs/SIM-STATE.md:26` `rulesData` is state, but it is described again under
+    §Static data, not state (`:161`).
+11. `docs/SIM-REQ.md:507` FR-A-05 refuses "a file no build could accept", which
+    admits a file only a later build accepts; DEC-089 refuses on what this build
+    reads.
+12. `docs/SIM-REQ.md:308` FR-C-29 and `docs/SIM-DEC.md:828` DEC-076 tie rent to
+    "the wealth axis", which the key has had since DEC-054.
+13. `docs/SIM-REQ.md:626` P-71 is cited by no requirement; FR-P-10d and DEC-092
+    name only P-67.
+14. `docs/SIM-REQ.md:269` FR-C-04 still says "a clearing pass per good", and
+    `SIM-ECON` §Demand "per cohort per good", while rationed demand now falls
+    from one good to another within a class (DEC-099).
