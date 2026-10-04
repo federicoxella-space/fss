@@ -2850,3 +2850,24 @@ compared word for word against the proposal. That rests on the script's exact
 copying. A grep of `docs/` finds no remaining "Subsistence", "Luxury", "need
 tier", `wealthSpread` or `creditLine`, but references to the old vocabulary in
 other words were not searched for.
+
+### R-060 — A subclass measures in its root's units, and a good carries one value per class tree
+
+**Date:** 2026-10-04   **Origin:** user, design session, on the finding of `R-056`
+**Verdict:** specified — the user's decision, reserve 5 of `R-001` (PD-14 is theirs)
+**docs/:** `SIM-REQ` FR-P-03a gains one sentence. Revision already today's.
+
+PD-14 let classes nest and gave a good a value per class, without saying in whose
+units a subclass counts. A need on a class accepts its subclasses "in proportion to
+its value" (FR-P-03b), and the conservation rule reads a good's value "in the food
+class" (FR-P-03c); both need one scale per tree. The alternative, units per class
+with a conversion factor to the parent, is more data that can be wrong and buys no
+behaviour the single scale lacks. Put to the user with that recommendation, the user
+approved it: a subclass measures in its parent's units, a good carries one value per
+class tree, and validation at load refuses two values in one tree.
+
+**Cost.** None now: the content approved by `R-063` has no subclass.
+**Owed by the implementer:** the check at load, with the validation of FR-P-03b.
+**Would overturn it:** a class whose subclasses are genuinely incommensurable, which
+should then be two trees, not one.
+**Not verified:** nothing; FR-P-03a to FR-P-03c were read.
