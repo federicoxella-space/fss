@@ -504,6 +504,8 @@ Distance enters through travel time and therefore through staleness, never throu
 
 **FR-A-04** — Travel is walked by default and abstracted on fast travel. Both paths run the same simulation.
 
+**FR-A-05** — The host supplies the rules file as bytes when it creates a world: the static content and the values of the parameters that drive the simulation (DEC-100). The core validates it and refuses, whole, a file no build could accept. A loaded world runs on the rules file its save carries.
+
 ---
 
 ## 14. World generation
@@ -522,7 +524,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 ## 15. Non-functional requirements
 
-**NFR-01 — Determinism.** Identical seed plus identical command sequence produces an identical state hash at every tick, on any Windows x64 build. The hash is a function of the state, computed in full when a check or the runner asks for it: the tick does not compute it, and the budget of NFR-05 does not include it.
+**NFR-01 — Determinism.** Identical seed, identical rules file (DEC-100) and identical command sequence produce an identical state hash at every tick, on any Windows x64 build. The hash is a function of the state, computed in full when a check or the runner asks for it: the tick does not compute it, and the budget of NFR-05 does not include it.
 
 **NFR-02 — Numeric representation.** All simulation state is integer or fixed-point. No floating point, no transcendental functions in the core. Floats exist only in the presentation layer.
 
@@ -536,21 +538,21 @@ Distance enters through travel time and therefore through staleness, never throu
 
 **NFR-07 — Memory.** Settlement state stays under 50 MB at target scale *(estimate)*.
 
-**NFR-08 — Save format.** A save is a full state snapshot plus generation seed and parameters, and the commands submitted and not yet applied. Save format carries a version number and a migration path from day one. A load refuses, whole, a save no build could have written (DEC-089).
+**NFR-08 — Save format.** A save is a full state snapshot plus generation seed and parameters, the rules file the world runs on, and the commands submitted and not yet applied. Save format carries a version number and a migration path from day one. A load refuses, whole, a save no build could have written (DEC-089).
 
-**NFR-09 — Rule versioning.** State records which rule version produced it. On first load after a patch, all deferred entities materialise under the old rules, then continue under the new ones.
+**NFR-09 — Rule versioning.** State records which rule version produced it: the version of the core's logic, and the rules file, identified by a digest the core computes (DEC-100). On first load after a patch, all deferred entities materialise under the old rules, then continue under the new ones.
 
 **NFR-10 — State layout.** Struct-of-arrays, indexed by `EntityId { int index; int generation; }`. No object references inside serialised state.
 
 **NFR-11 — Platform.** Windows x64. The core compiles against the target runtime profile declared in section 20, "Downstream constraints", and uses no language feature above the declared level.
 
-**NFR-12 — Tooling.** A command-line runner executes N ticks headless, dumps state hashes, writes chronicle and metric series to CSV, and runs parameter sweeps.
+**NFR-12 — Tooling.** A command-line runner executes N ticks headless, dumps state hashes, writes chronicle and metric series to CSV, and runs parameter sweeps. It also compiles the rules source, text kept in the repository, into the binary rules file, and checks the result by handing it to the core.
 
 ---
 
 ## 16. Parameters to fix
 
-Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run before any sweep. A value used before it is fixed carries the status **Provisional**: the implementer proposes it in the plan point that first needs it, the decider records it here with its P-number and the phase that replaces it, and the point cites the P-number. A constant in the core that drives the simulation and has no P-number is a defect. Static content — goods, occupations, recipes, crops, building types — is not a parameter and is not set this way: it is approved by the user before the plan that uses it is written.
+Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run before any sweep. A value used before it is fixed carries the status **Provisional**: the implementer proposes it in the plan point that first needs it, the decider records it here with its P-number and the phase that replaces it, and the point cites the P-number. A constant in the core that drives the simulation and has no P-number is a defect. The values of those parameters travel in the rules file (DEC-100), not in the core's code; this table is their record. Static content — goods, occupations, recipes, crops, building types — is not a parameter and is not set this way: it is approved by the user before the plan that uses it is written.
 
 | # | Parameter | Value | Status |
 |---|---|---|---|
@@ -636,7 +638,7 @@ Every criterion below runs headless in CI, with no editor and no game client, dr
 
 **AC-01 — Conservation.** Population, currency, and goods invariants hold at every tick of every run.
 
-**AC-02 — Determinism.** Same seed and commands produce the same state hash sequence across builds and machines.
+**AC-02 — Determinism.** Same seed, rules file and commands produce the same state hash sequence across builds and machines.
 
 **AC-03 — Save round trip.** save → load → save produces identical bytes.
 

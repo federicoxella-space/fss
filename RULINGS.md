@@ -88,6 +88,13 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   the table of `SIM-REQ` §18.
 - **`R-053`**, at the closing point of each phase 4 subsystem: `AC-01` and
   `AC-04` over what exists, against provisional bounds derived from `docs/`.
+- **`R-065`**, within the first phase 4 plan point that adds static data or a
+  simulation parameter: the rules file of DEC-100 — a binary format with a reader
+  per version, its compiler in the harness from a text source in the repository,
+  validation whole at creation and at load, the file held in World and carried by
+  the save, and the rule version extended by the core's digest of it. The content
+  of `R-063` and the curves of `R-064` go into it, and the check of `R-060` into its
+  validation.
 
 ## Escalated to the user
 
@@ -3016,3 +3023,78 @@ the user approves them, as static content under `R-050`.
 **Would overturn it:** two modifiers found always to want the same curves, which
 could then share a pair by data, with no change to the rule.
 **Not verified:** nothing; FR-P-07 to FR-P-11, DEC-036, DEC-037 and P-14 were read.
+
+### R-065 — Static content and simulation parameters are a rules file the host supplies: DEC-100; `R-004` revised
+
+**Date:** 2026-10-04   **Origin:** user, design session: "approvo C"
+**Verdict:** promoted as DEC-100 — the user's decision; it touches NFR-01 and AC-02,
+reserve 2 of `R-001`, and revises `R-004`
+**docs/:** `SIM-DEC` DEC-100 new, after DEC-089; DEC-032 title and decision, DEC-033
+and DEC-089 one clause each. `SIM-REQ` FR-A-05 new; NFR-01, NFR-08, NFR-09, NFR-12
+and AC-02; §16's opening paragraph. `SIM-STATE` §World gains `rulesData`, and
+`ruleVersion` is the logic's version; §Static data says where the data come from.
+Revisions already today's.
+
+The user objected to recipes living in the core, since every change is a rebuild.
+Three answers were put to the user: tables in the core's source; tables generated
+into the core from a text source; or a binary rules file the host reads and hands to
+the core. The decider recommended the third, and the user chose it.
+
+**Why.** A rebuild of the core costs seconds, so speed of editing is not the
+argument. The arguments are three:
+
+- **Sweeps.** Phase 6 sweeps run many worlds that differ only in content and
+  parameters, and with the data in the core each variant would be a build.
+- **Content patches.** Content can be patched without releasing logic.
+- **Authors.** Content can be written by people who do not touch the C#.
+
+The core still reads no file: the host hands over bytes, as it does for saves
+(DEC-034, D-090).
+
+**What it costs the specification**, each part applied above:
+
+1. **The data are input, like the seed.** NFR-01 and AC-02 name the rules file
+   beside the seed and the commands. Without that, two runs with different files
+   would break the criterion as written. This is reserve 2, and the user's
+   decision.
+2. **The world carries its rules file, and the save with it** (NFR-08, DEC-032).
+   A reported bug reproduces only with the exact file. DEC-033's resumption under
+   the old rules needs the old rules at hand. A loaded world runs on the file its
+   save carries. Moving an existing world to new content would need an id
+   mapping and a reshape of state, so it is refused until a requirement asks for
+   it.
+3. **`R-004` revised.** `R-004` held that "the rules are part of the build", so
+   that a new world's rule version is the build's and nothing the host chooses.
+   Half of the rules now come from the host. The rule version becomes the logic's
+   version, still the build's, together with a digest of the rules file computed
+   by the core from the bytes (NFR-09). `R-004`'s point survives: a host-declared
+   version was "the only one that can lie", and a digest the core computes cannot.
+4. **Binary, from text.** The source is text in the repository, readable and
+   reviewed where the user approves content. An offline tool in the harness
+   converts it to integers and fixed point, and checks the result by handing it
+   to the core (NFR-12). Parsing text in the core would put number formatting
+   and locale on a path that must be deterministic.
+5. **Validation is the only check** of content now that the compiler is not. It
+   already exists in pieces (FR-P-03b, FR-P-03c, AC-56, DEC-089). Under FR-A-05
+   it refuses a file whole.
+
+**Cost.**
+- A second versioned format.
+- A compiler in the harness.
+- A host that must ship and pass the file.
+- Validation that must be complete.
+- Existing code:
+  - `WorldState`'s constructor stamps `Simulation.CurrentRuleVersion` alone;
+  - `SaveFormat` writes no rules file;
+  - the pins of `R-034` and `R-036` move once `World` gains the field.
+
+**Owed by the implementer:** listed above under "Owed by the implementer". Cite
+`R-065`.
+**Would overturn it:** a consumer that cannot ship a data file beside the core,
+which would bring the tables back into the source (the second answer); or a need to
+move an existing world to new content, which would need the id mapping this ruling
+refuses.
+**Not verified:** that the consumer of §20 can ship and read such a file; that
+hashing the file's digest rather than its bytes is enough for the state hash. The
+file is immutable, so the digest stands for it, but the fold's injectivity
+(`D-069`) was not reconsidered for a 64-bit digest.

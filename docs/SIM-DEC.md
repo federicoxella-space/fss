@@ -369,9 +369,9 @@ A tick opens by applying, in submission order, every command waiting when it sta
 
 **Cost.** Snapshot handover needs a defined publication point, and the render layer always shows state that is at least one tick old.
 
-### DEC-032 — A save is a full state snapshot plus seed and generation parameters
+### DEC-032 — A save is a full state snapshot plus seed, generation parameters and rules file
 
-Format carries a version number and a migration path. It also carries the commands submitted and not yet applied, in submission order; they are input, not state, and stay outside the state hash.
+Format carries a version number and a migration path. It carries the rules file the world runs on (DEC-100). It also carries the commands submitted and not yet applied, in submission order; they are input, not state, and stay outside the state hash.
 
 **Rationale.** Load time stays constant instead of growing with campaign length. The seed and parameters travel with the save so any player-reported bug reproduces exactly. A save that dropped pending commands would not: the world reloaded would miss the player's last action.
 
@@ -379,7 +379,7 @@ Format carries a version number and a migration path. It also carries the comman
 
 ### DEC-033 — State records its rule version, and a patch materialises deferred entities
 
-On first load after an update, deferred entities resume under the rules that produced them, then continue under the new ones.
+On first load after an update, deferred entities resume under the rules that produced them, then continue under the new ones. An update is a new version of the core's logic: the rules file a world carries does not change with it (DEC-100).
 
 **Rationale.** Closed-form resumption means a deferred entity's past is recomputed rather than stored, so changing a formula would silently rewrite history the player already lived through. Materialising at the patch boundary freezes that history instead.
 
@@ -387,11 +387,19 @@ On first load after an update, deferred entities resume under the rules that pro
 
 ### DEC-089 — A load refuses what no build could have written
 
-A save is input from outside the core. Reading one checks every count against the bytes left before allocating for it; every field against the rules its writer keeps, the invariants of SIM-STATE that are claims about state among them; the format version against those this build reads, and the rule version against those this build can run or bring forward; and each pending command's form, a kind this build knows with fields inside what that kind declares. Any failure refuses the whole save, as one kind of error distinct from a caller's mistake, and returns no world.
+A save is input from outside the core. Reading one checks every count against the bytes left before allocating for it; every field against the rules its writer keeps, the invariants of SIM-STATE that are claims about state among them; the format version against those this build reads, and the rule version against those this build can run or bring forward, and the rules file it carries as it was checked when the world was created (DEC-100); and each pending command's form, a kind this build knows with fields inside what that kind declares. Any failure refuses the whole save, as one kind of error distinct from a caller's mistake, and returns no world.
 
 **Rationale.** A save crosses the host's disk and a player's hands. A world partly loaded, or holding a row no system could have written, fails ticks later where nothing points back at the save, and the bug report DEC-032 wants reproducible does not reproduce. A rule version later than the build's is refused because the state would claim rules it does not run (NFR-09); an earlier one is brought forward under DEC-033. A command's form needs no state to check, so a kind the build does not know is refused at the load rather than reaching a drain; whether a command fits the state of the tick it lands on stays the drain's to decide (DEC-086).
 
 **Cost.** Each writer's rule is stated twice, where it writes and where the load checks it, and a rule changed in one place only refuses valid saves or admits invalid ones. The invariants checked at load run in every build, not only where the per-tick asserts do. What the core does with a command the state refuses is not settled here.
+
+### DEC-100 — Static content and simulation parameters are a rules file the host supplies and the world carries
+
+Goods, classes, needs, recipes, buildings, mestieri, crops and curves, with the values of the parameters that drive the simulation, form a rules file in a versioned binary format. The host reads it and hands its bytes to the core when it creates a world; the core validates it whole and keeps it in the world, and a save carries it. A loaded world runs on the rules file its save carries, never on another the host offers. The rule version of NFR-09 is the version of the core's logic together with a digest of the rules file, computed by the core. The file is compiled offline from a text source kept in the repository; the core reads only the binary, in integers and fixed point.
+
+**Rationale.** Content and parameters change far more often than logic, and the sweeps of Phase 6 run many worlds that differ only in them; with the data compiled into the core every variant would be a build. A file the host hands over keeps the core away from files, as saves already do. Data that change a run are input, like the seed, so the world must carry them: a reported bug reproduces only with the exact file, and a patch can resume deferred entities under the old rules only if the old rules are at hand (DEC-033). The digest is computed by the core from the bytes, so no host can declare a version that did not produce the state. Text in the repository keeps the content readable and reviewable; parsing text in the core would bring number formatting and locale into a path that must be deterministic, so an offline tool converts it to integers once.
+
+**Cost.** A second versioned format, with a reader for every version, as saves have under NFR-08. The compiler no longer checks content: validation at creation and at load is the only check, and must be complete. An existing world cannot take new content: that would need a mapping from old ids to new and a migration of the state's shape, and it is refused until a requirement asks for it. The harness gains a compiler for the rules source, and the host must ship the file and pass it.
 
 ### DEC-034 — The core targets Windows x64 and knows nothing about its host
 

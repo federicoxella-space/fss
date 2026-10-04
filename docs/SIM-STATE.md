@@ -22,7 +22,8 @@ Input is not state. A command the host has submitted and the simulator has not y
 | tick | int64 | the only clock |
 | worldSeed | uint64 | also the RNG root |
 | generationParams | record | travels with the save so any report reproduces |
-| ruleVersion | int | drives materialisation on patch, DEC-033 |
+| ruleVersion | int | version of the core's logic; drives materialisation on patch, DEC-033 |
+| rulesData | byte[] | the rules file the world runs on, immutable; the hash folds its digest, DEC-100 |
 | currencyTotal | int64 | in smallest units, the invariant target |
 
 No RNG state. Randomness is `Hash(worldSeed, subject, tick, channel, index)`, under NFR-03 and DEC-081.
@@ -159,7 +160,7 @@ Sampled transients are not stored. They are enumerated on demand from the draw o
 
 ## Static data, not state
 
-Goods, recipes, mestieri, crops, climate curves, event class definitions, goods classes, needs table, wealth curves. Versioned with `ruleVersion`, never mutated at runtime.
+Goods, recipes, mestieri, crops, climate curves, event class definitions, goods classes, needs table, wealth curves, and the values of the parameters that drive the simulation. They never change during a run. They arrive in the rules file the host supplies (DEC-100), which World holds whole so that a save carries them.
 
 ---
 
