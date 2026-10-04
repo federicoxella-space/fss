@@ -2913,3 +2913,84 @@ approved leaving the document as it is.
 **Would overturn it:** OBS-2 being cut, which would leave FR-D-04a to be justified
 by OBS-4 explicitly.
 **Not verified:** nothing; the five "Served by" lines were read.
+
+### R-063 — The static content of Phase 4 is approved
+
+**Date:** 2026-10-04   **Origin:** user, design session: "approvo tutto"
+**Verdict:** resolved — the user's approval under `R-050`
+**docs/:** `SIM-REQ` FR-P-04 confirmed, §19's P-17 row at 12 and 36 rows; `SIM-STATE`
+§Cohort at 12 rows, open item 1 closed. Revisions already today's.
+
+`R-050` makes static content the user's, approved before the plan that uses it. The
+decider proposed it from the phase 4 note (K-01 to K-11) as amended by the proposal
+of `R-059`, and the user approved the whole. It is recorded here because it is
+data, not specification: under `R-065` it lives in the rules file, and `docs/`
+keeps only what a requirement states. **Every number in it is Provisional under
+`R-050`**: the implementer proposes it in the point that first needs it, and the
+decider numbers it in §16. The user approved structure, not values.
+
+**Goods, classes, grades.**
+
+| Good | Class | Grade | Behaviour |
+|---|---|---|---|
+| Grain | Food | 0 | consumable, input, planting good |
+| Flour | Ingredient | 1 | input |
+| Bread | Food | 2 | consumable |
+| Cloth | Clothing | 1 | consumable: the need is the rate of replacement |
+| Ore, Timber, Wool | Material | 0 | input |
+| Tools | Implement | 1 | durable |
+
+No subclass. Ingredient, Material and Implement are labels that no need reads. A
+grade counts processing steps, so bread is 2.
+
+**Needs.** Tier 0: Food, grade 0 or more, the survival minimum. Tier 1: Food, grade
+1 or more, the share above the minimum (`R-057`); Clothing, grade 1 or more. Tier 2:
+none in the baseline; the code path is tested with a test good.
+
+**Recipes and buildings.**
+
+| Recipe | Building | Durable | Crude variant |
+|---|---|---|---|
+| Grain → Flour | Mill, site water | independent | yes: a hand quern, no building, far slower |
+| Flour → Bread | Oven | independent | no |
+| → Ore | Mine, site ore | requires Tools | yes |
+| → Timber | none, site forest | improved by Tools | — |
+| Ore + Timber → Tools | Forge | requires Tools | yes |
+| → Wool | none; continuous, modulated by climate | independent | — |
+| Wool → Cloth | Loom | improved by Tools | — |
+
+The quern is content, not FR-P-21's obligation: without it every settlement with no
+running water would leave its tier 1 food need unmet for good, and fragility would
+mark the same places for ever.
+
+**Mestieri.** Eleven in the allocation vector: farmer, miller, baker, miner,
+woodcutter, smith, shepherd, weaver, caravanner, merchant, day labourer; and the
+destitute row outside it. Mean wealth at generation, descending: merchant, miller,
+smith, baker and weaver, farmer, shepherd, miner and woodcutter, caravanner, day
+labourer, destitute. Spread within a row: high for merchant and farmer, middling for
+the crafts, low for day labourer and destitute. The day labourer adjusts faster than
+P-19 and has no yearly cap.
+
+**Crops.** Grain alone, sown with itself; a harvest window of a few updates; care
+levels zero in the shipping configuration (DEC-094).
+
+**Age bands.** Three, closing `SIM-STATE` open item 1.
+
+**Generator (K-09), as rules.** Kingdoms counted by a Provisional parameter; five
+terrains, plain, hill, forest, mountain, water, each with a transport cost; sites by
+terrain, forest in forest, ore in hill and mountain, water along watercourses;
+initial stocks that cover each settlement's tier 0 for a season; the destitute row
+from the wealth curves (FR-G-01).
+
+**Deferred to their subsystem.** Event classes (K-10) and contracts, dungeons and rare
+materials (K-11): no dungeon-only material in Phase 4, so P-09 stays at 8. Climate
+curves are `R-064`.
+
+**Cost.** Twelve rows per settlement where `SIM-STATE` said eleven and phase 3
+measured nine: P-17, P-63 and P-64 are measured on twelve and thirty-six.
+**Owed by the implementer:** the content as above, in the rules file of `R-065`, with
+each value proposed as a P-number when first needed (`R-050`).
+**Would overturn it:** the user revising any item, which is theirs at any time before
+the plan that uses it.
+**Not verified:** that the conservation rule (FR-P-03c) admits the chain with the
+values the implementer will propose; nothing is numbered yet.

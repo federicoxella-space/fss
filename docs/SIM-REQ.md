@@ -158,7 +158,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-03c** — Processing creates no food. Every good carries an embodied food value: a good of the food class, the class the tier 0 need names, carries its value there; another good that recipes produce carries the least food value that any recipe producing it consumes per unit, each input counted at its own embodied food value; any other good carries zero. No recipe yields more food value than its inputs embody, and validation at load refuses a recipe table that breaks this or that passes food value around a cycle.
 
-**FR-P-04** — Baseline goods set *(proposed, pending confirmation, with classes, values and grades under FR-P-03a)*: Grain, Flour, Bread, Ore, Timber, Tools, Wool, Cloth. Three chains: Grain→Flour→Bread, Ore+Timber→Tools, Wool→Cloth.
+**FR-P-04** — Baseline goods set *(approved by the user; classes, values and grades under FR-P-03a)*: Grain, Flour, Bread, Ore, Timber, Tools, Wool, Cloth. Three chains: Grain→Flour→Bread, Ore+Timber→Tools, Wool→Cloth.
 
 **FR-P-05** — Weight-to-value ratio governs how far a good travels. Heavy cheap goods stay in their basin; light valuable goods cross kingdoms. This falls out of transport cost and needs no per-good code.
 
@@ -816,7 +816,7 @@ All remaining items depend on measurement and close in the phase named.
 | Item | Closes in | Procedure |
 |---|---|---|
 | P-11, trade damping `k` | Phase 6 | Sweep `k` against transport cost; accept on AC-09 and AC-04 |
-| P-17, settlement ceiling | Phase 4 | Measure the full twelve-phase settlement update, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach. P-63 and P-64 were measured on 9 and 27 rows and seven goods; the measurement counts the destitute and day-labourer rows, 11 per settlement in the shipping configuration and 33 in CI, eight goods, and the food markets the content fixes |
+| P-17, settlement ceiling | Phase 4 | Measure the full twelve-phase settlement update, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach. P-63 and P-64 were measured on 9 and 27 rows and seven goods; the measurement counts the destitute and day-labourer rows, 12 per settlement in the shipping configuration and 36 in CI, eight goods, and the food markets the content fixes |
 | P-18, prior history length | Phase 6 | Measure cost per simulated year, set against the acceptable wait |
 | AC-04 bounds | Phase 6 | Long runs across seeds, bounds set from observed envelopes, replacing the provisional bounds of Phase 4 |
 | AC-09 X and Y per good | Phase 6 | Shock injection per good, values recorded against the intent table |

@@ -53,7 +53,7 @@ Always simulated. Roughly 2,000 rows.
 
 ## Cohort
 
-Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the shipping configuration, three in CI. Roughly 11 rows per settlement at Phase 4, the destitute and day-labourer rows included.
+Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the shipping configuration, three in CI. 12 rows per settlement at Phase 4: eleven mestieri in the allocation vector and the destitute row.
 
 | Field | Type | Notes |
 |---|---|---|
@@ -206,7 +206,7 @@ A-13 is the one assert about the schedule rather than about state: a firing leav
 
 ## Open
 
-1. Confirm the age band count for cohorts, which multiplies cohort width.
+1. Closed: three age bands, children, working age and elderly, of which only working age offers labour. A wider split is a format migration (NFR-08).
 2. Decide whether `flowAccumulator` needs per-good history or a single rolling figure.
 3. Decide the chronicle retention policy. Entries accumulate over 60 years and nothing above discards them.
 4. Decide how the chronicle dates prior history. FR-G-03 runs it "before tick 0" and DEC-040 takes the result as tick 0, so entries written during it carry ticks that are negative once the run is relabelled, or later than the run's first tick if it is not.
