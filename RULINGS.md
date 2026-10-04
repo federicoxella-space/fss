@@ -2688,3 +2688,68 @@ before anyone is hungry, so fragility moves more often.
 which would argue for a smaller tier 1 share rather than for one ration.
 **Not verified:** how large the tier 1 share must be to give the margin
 `SIM-ECON` wants; that is the needs table's content, which has no numbers yet.
+
+### R-058 — The plate follows the purse: needs are bought at their cheapest, and a better grade comes after every need
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), PD-16 (open item O-13)
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in the proposal and
+enters `docs/` with it: `SIM-DEC` DEC-099, decision, rationale and cost;
+`SIM-REQ` FR-C-04, steps 2 and 4; `SIM-ECON` §Demand, the paragraph "Choice
+within a class".
+
+PD-16 has a cohort feed itself in four steps. It eats from its own holdings
+first, lowest grade first. It buys survival at the lowest price per unit of
+value. With what remains, it replaces units of a lower grade with a higher one,
+the share of members able to pay read from the wealth curve. The markets of a
+class clear in descending grade, and demand rationed out of one grade falls to
+the next within the update. **Adopted**, for what the proposal says it buys.
+Within one mestiere the poorer eat grain and the better-off bread, which makes
+OBS-3 visible at the table. Demand for grain gains elasticity. And reading the
+curve rather than the cohort's mean keeps a small price move from switching a
+whole cohort between goods. Three corrections, each needed for the rule to hold
+together with what `docs/` already says:
+
+1. **The better grade comes after every need, in spending and in rationing.**
+   The proposal spends what remains after survival on the better grade, which
+   would put a rich cohort's bread before a poorer cohort's tier 1 need.
+   `SIM-ECON` says that tiers are met in order and that rationing runs "within
+   a tier, never across tiers: nobody buys cloth while another cohort … cannot
+   buy bread and could pay for it". A better grade is a preference, not a
+   need. So it is bought from the currency left once tiers 0 and 1 are met,
+   before tier 2 takes its fraction. In a market it ranks after every demand
+   that meets a need: nobody eats better while another cannot eat and could
+   pay. Every need is bought at its cheapest, tier 1 as well as survival.
+2. **Rationed demand falls to any good that meets the same need, not only to
+   the grade below.** One pass in descending grade lets a cohort rationed out
+   of bread fall back to grain. It does not let a cohort rationed out of grain
+   buy bread left unsold in a market that has already cleared. That cohort
+   would starve beside the bread, and the cause would be the order of a loop,
+   not price or purse. So the rule is stated as its principle. Demand rationed
+   out of one good falls, within the update, to the other goods that meet the
+   same need, cheapest per unit of value first. The order in which a class's
+   markets clear is derived from grade, price and good id, and may take a
+   second pass over what supply remains. The implementer records it.
+3. **Alternation within a grade is a cost, written down.** All of a need's
+   demand goes to the cheapest good per unit of value. Two foods of one grade
+   at nearly equal prices then take turns: the one bought down becomes dearer,
+   and the next update buys the other. Stock bounds the swing, and with one food
+   per grade in the baseline content it cannot arise yet. Content that adds a
+   second food of a grade (O-11) is where it is measured.
+
+**Cost.** Every food is one more market to ration in the most expensive phase,
+so the number of foods is set after a measurement. The markets of a class
+acquire an order, and demand may cross them more than once in an update. In
+ordinary years the plate is mixed, and the needs table is tuned so that the
+total is plausible.
+**Owed by the implementer:** nothing now.
+**Would overturn it:** the measurement of phase 7 with the food markets the
+content fixes coming in over the budget of DEC-041, which would argue for
+dropping the upgrade first, since it is the part that serves only legibility;
+or alternation within a grade large enough to show in AC-04's soft bands, which
+would argue for splitting a need's demand across goods of a grade rather than
+giving it whole to the cheapest.
+**Not verified:** that the curve, read for currency left after needs rather than
+for wealth, gives a plausible share of upgraders. The proposal's own
+approximation in DEC-097, one shape for wealth and currency, is carried one step
+further here.

@@ -1,7 +1,7 @@
 # Proposta di decisioni — Povertà, cibo e raccolto
 
 **Documento:** PROPOSAL-POVERTY-SEED
-**Stato:** Revisione 9, da passare al decider. Le decisioni dell'utente sono marcate Deciso; tutto ciò che resta è affidato al decider, salvo il contenuto statico, che per R-050 resta all'utente. Nulla di quanto segue è ancora nella spec.
+**Stato:** Revisione 10. Il decider ha risolto O-5, O-6, O-15, PD-15 e PD-16 (R-054 … R-058); restano al decider O-7, O-9, O-12 e O-14 (PD-17). Le decisioni dell'utente sono marcate Deciso; tutto ciò che resta è affidato al decider, salvo il contenuto statico, che per R-050 resta all'utente. Nulla di quanto segue è ancora nella spec.
 **Data:** 2026-10-04
 **Base:** `main` @ `54f3180`, il cui SIM-REQ coincide con quello caricato il 2026-10-02. Riferimenti incrociati a `2026-10-02-fase-4-da-decidere.md` (K-xx, Z-xx).
 **Lingua:** motivazioni in italiano; i testi da inserire nella spec sono in inglese, come il corpus, pronti da trascrivere.
@@ -11,6 +11,7 @@
 - *7:* recepisce la revisione dell'implementatore (istruzioni non eseguibili e conflitti di contenuto) e i sei punti confermati: chi assume (FR-C-05, Z-06), riserva sulla terra assegnata, niente cancello del credito, freno del nuovo anello lavoro–povertà, curva di ricchezza anche nel razionamento (Z-09), wealth tendency (Z-20). Introduce le classi di beni con grado di lavorazione e valore nutrizionale (PD-14), e propone la somma dei bisogni (PD-15) e il piatto secondo la ricchezza (PD-16). La produzione domestica (orto, animali, raccolta) è lasciata al decider (PD-17).
 - *8:* l'utente affida al decider tutto ciò che resta: PD-15, PD-16, PD-17, la forma dei ruoli di FR-P-03, la regola di conservazione nelle ricette e i punti aperti non di contenuto. Il contenuto statico resta all'utente (R-050).
 - *9:* recepisce la seconda revisione dell'implementatore. Il tier esce dal record del bene anche in FR-P-01, DEC-015, AC-56 e DEC-080; AC-56 protegge i bisogni, non i beni (decisione dell'utente, riserva 2 di R-001). Il grado di lavorazione è uno per bene. AC-09 classifica i consumabili per il tier del bisogno più urgente che soddisfano, con una riga nuova per il tier 1 (decisione dell'utente, riserva 2). La farina entra tra i beni di base e P-09 passa a 8 (decisione dell'utente). Il tier 0 ha un solo bisogno, sul cibo, controllato al caricamento (FR-P-03b); il deficit di fame è in unità di nutrimento. La riserva di semina si calcola sull'allocazione corrente, non su quella della semina successiva. Il deficit di fame è per membro, e quando dei membri cambiano riga la riga che li riceve ne prende la media pesata. FR-C-04: i passi 5 e 6 restano. O-5 e O-6 si decidono nello stesso lotto, e la proposta entra in `docs/` solo con B12b scritto. Minori: posizione del paragrafo di X-8, A-16 sommato anche sulle colture, FR-P-03b sotto Needs in §18, aggiunta a OBS-3 autorizzata dall'utente.
+- *10:* il decider risolve O-5, O-6, O-15, PD-15 e PD-16 (R-054 … R-058) e ne deposita qui il testo. B12b è scritto; la proposta può entrare in `docs/`.
 
 ---
 
@@ -224,7 +225,7 @@ Due bisogni sulla stessa classe si sommano: per sopravvivere serve una quantità
 
 ### PD-16 — Il piatto segue la ricchezza
 
-**Stato:** Al decider.
+**Stato:** Deciso dal decider: R-058, con tre correzioni. Il miglioramento di grado viene dopo i bisogni di tier 0 e 1, sia nella spesa sia nel razionamento. La domanda razionata ripiega su qualunque bene che soddisfi lo stesso bisogno, non solo sul grado inferiore. L'alternanza fra cibi dello stesso grado è scritta come costo.
 
 - **Prima le proprie scorte**, dal grado più basso: il pane resta per il bisogno che lo richiede.
 - **Poi la sopravvivenza**, con il cibo più economico per unità di nutrimento.
@@ -258,7 +259,7 @@ Due bisogni sulla stessa classe si sommano: per sopravvivere serve una quantità
 
 ## Modifiche alla documentazione
 
-I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[DECIDER]** sono testo suggerito o segnaposto per una scelta del decider: PD-15, PD-16, O-5, O-6, la forma di FR-P-03, FR-P-03c e la regola di conservazione in DEC-098.
+I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[DECIDER]** erano testo suggerito o segnaposto per una scelta del decider: PD-15, PD-16, O-5, O-6, la forma di FR-P-03, FR-P-03c e la regola di conservazione in DEC-098. Sono state sostituite dal testo deciso in R-054 … R-058, marcato con il numero della ruling.
 
 ### SIM-DEC
 
@@ -343,11 +344,11 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 
 > ### DEC-099 — The plate follows the purse
 >
-> Needs add: each is a quantity of its own, and a unit consumed meets one need. *(R-057)* **[DECIDER: PD-16, testo suggerito]** A cohort eats from its own holdings first, lowest grade first; buys survival at the lowest price per unit of value; then, with what remains, replaces units of lower grade with units of higher grade as far as its budget allows. The share of members able to afford each grade is read from the wealth curve. The markets of a class clear in descending grade, and demand rationed out of one grade falls to the next within the update.
+> Needs add: each is a quantity of its own, and a unit consumed meets one need. *(R-057)* A cohort meets its needs tier by tier from its own holdings first, lowest grade first, so that a better good is kept for the need that asks for it, and buys what remains of each need at the lowest price per unit of value among the goods that meet it. With the currency left once tiers 0 and 1 are met, and before tier 2 takes its fraction, members replace units of a lower grade with units of a higher grade that meet the same need, as far as they can pay; the share of members able to pay for each grade is read from the wealth curve (DEC-097). In rationing, demand that meets a need comes before demand that only raises its grade. Demand rationed out of one good falls, within the update, to the other goods that meet the same need, cheapest per unit of value first. *(R-058)*
 >
-> **Rationale.** Adding needs keeps the survival minimum apart from the ordinary meal. An ordinary year eats the minimum and the tier 1 share, so a shortfall first takes the share, which is deferrable, and only then the minimum: a famine tightens belts before it kills, and stays a season. One ration made better by grade would leave no such margin, and every unit short would be hunger. *(R-057)* The plate then shows wealth: within one mestiere the poorer eat grain and the better-off bread, and in a famine bread leaves the poorer tables first.
+> **Rationale.** Adding needs keeps the survival minimum apart from the ordinary meal. An ordinary year eats the minimum and the tier 1 share, so a shortfall first takes the share, which is deferrable, and only then the minimum: a famine tightens belts before it kills, and stays a season. One ration made better by grade would leave no such margin, and every unit short would be hunger. *(R-057)* The plate then shows wealth: within one mestiere the poorer eat grain and the better-off bread, and in a famine bread leaves the poorer tables first. Reading the better grade through the wealth curve rather than the cohort's mean keeps a small price move from switching a whole cohort between goods. Ranking it after every need keeps the rationing rule of SIM-ECON: nobody eats better while another cannot eat and could pay. *(R-058)*
 >
-> **Cost.** Every food is one more market to ration in the most expensive phase, so the number of foods is set after a measurement. The markets of a class acquire an order. In ordinary years the plate is mixed, and the quantities of the needs table are tuned so that the total is plausible.
+> **Cost.** Every food is one more market to ration in the most expensive phase, so the number of foods is set after a measurement. The markets of a class acquire an order, derived from grade, price and good id, and demand falling between them may cross them more than once in an update. In ordinary years the plate is mixed, and the quantities of the needs table are tuned so that the total is plausible. A need's demand goes whole to its cheapest good, so two foods of one grade at nearly equal prices can take turns from one update to the next. *(R-058)*
 
 **Decisioni da modificare.**
 
@@ -451,9 +452,9 @@ I testi tra le righe `>` sono da inserire così come sono. Le parti marcate **[D
 
 - **FR-C-04** — Sostituire i passi 1–4 con quelli che seguono; i passi 5 e 6 restano invariati:
   > 1. Cohorts consume from their own holdings, the seed reserve excepted under FR-P-10d.
-  > 2. Unmet need becomes demand, capped by the cohort's currency, which includes what it borrowed this update. **[DECIDER: la scelta del bene dentro la classe segue DEC-099, se adottata]**
+  > 2. Unmet need becomes demand for the goods that meet it, chosen under DEC-099, capped by the cohort's currency, which includes what it borrowed this update. *(R-058)*
   > 3. Holdings above the cohort's own needs and its seed reserve become supply.
-  > 4. If supply is short, it is allocated in descending order of ability to pay, the currency per member; the share of a cohort able to pay is read from its wealth curve under FR-J-22.
+  > 4. If supply is short, it is allocated in descending order of ability to pay, the currency per member, demand that meets a need before demand that only raises its grade; the share of a cohort able to pay is read from its wealth curve under FR-J-22. Demand rationed out of one good falls to the other goods that meet the same need, within the update. *(R-058, dalla prima virgola dopo "member")*
 
 - **FR-C-05** — Sostituire con:
   > **FR-C-05** — Labour is traded like a good that cannot be stored: its price is set by the same bounded function of supply against demand, and it expires each update. Cohorts working land allocated to them or a standing crop, or owning buildings, hire labour from cohorts that do neither, and pay wages in currency. Where labour offered exceeds labour demanded, every cohort selling labour is hired in proportion to what it offers.
@@ -567,8 +568,8 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 
   Nel paragrafo **Hunger**, aggiungere: "The deficit is cohort state (FR-D-03a), and the seed reserve reads it (FR-P-10d)."
 
-  **[DECIDER: se DEC-099 è adottata]** aggiungere il paragrafo:
-  > **Choice within a class.** Needs on the same class add. Survival is bought at the lowest price per unit of value; what currency remains replaces units of lower grade with higher grade, the share of members able to afford each grade read from the wealth curve. A class's markets clear in descending grade, and demand rationed out of one grade falls to the next within the update.
+  Aggiungere il paragrafo: *(R-057, R-058)*
+  > **Choice within a class.** Needs add (FR-P-03b). A cohort meets them tier by tier from its own holdings, lowest grade first, and buys what remains of each at the lowest price per unit of value among the goods that meet it. With the currency left once tiers 0 and 1 are met, and before tier 2 takes its fraction, members replace units of a lower grade with units of a higher grade that meet the same need, the share of members able to pay for each grade read from the wealth curve. In rationing, demand that meets a need comes before demand that only raises a grade. Demand rationed out of one good falls, within the update, to the other goods that meet the same need, cheapest per unit of value first; the order in which a class's markets clear is derived from grade, price and good id.
 
 - **Spoilage and integer rounding** — Aggiungere alla regola generale:
   > The carry stays with its row and is cleared when the row's count reaches zero. Splits made within one update, such as gleaning shares or the destinations of the destitute, use largest remainders with ties by id and leave no carry.
@@ -656,7 +657,7 @@ P-19 resta come valore predefinito per le attività senza un tasso proprio.
 | O-7 | Criteri di accettazione | Decider | Candidati: una carestia con seme mangiato dura più di un anno; la ripresa rurale è più lenta di quella urbana; con P-67 = 0 il seme liberato non compare mai nell'offerta; un campo libero viene mietuto da chi è senza impiego; la quota dei braccianti sale durante la finestra di raccolto; dentro un mestiere i membri più poveri mangiano grado più basso dei più ricchi |
 | O-9 | Regola economica per la cura oltre il normale | Decider | Candidato: la coorte assume lavoro di crescita finché il grano in più, al prezzo atteso, supera il salario |
 | O-12 | Ricaduta immediata di chi esce dagli indigenti | Decider | Senza cancello del credito la frena solo P-69. Se le misure mostrano un ping-pong, un tempo minimo di permanenza come per la migrazione |
-| O-13 | Somma dei bisogni e piatto secondo la ricchezza (PD-15, PD-16) | Decider | Analisi e testo suggerito in PD-15, PD-16, DEC-099 |
+| O-13 | Somma dei bisogni e piatto secondo la ricchezza (PD-15, PD-16) | Decider | **Chiuso da R-057 e R-058.** Testo in DEC-099, FR-P-03b, FR-C-04 e SIM-ECON §Demand |
 | O-14 | Produzione domestica (PD-17) | Decider | In questo lotto o nel successivo; analisi in PD-17 |
 | O-15 | Ruoli di FR-P-03 e conservazione nelle ricette (PD-14) | Decider | **Chiuso da R-056.** Il record dice solo se il bene è durevole; consumabile e input derivano da bisogni e ricette, e il grano è entrambi. La conservazione corre lungo la catena: ogni bene porta il valore alimentare incorporato, il minimo che una ricetta consuma per produrlo. Resta all'utente in quali unità misura una sottoclasse (FR-P-03a) |
 | O-8 | Dati storici di riferimento | Utente | Rese, forma delle distribuzioni di ricchezza e valori nutrizionali citati in sessione non sono verificati; servono a tarare il contenuto statico |
