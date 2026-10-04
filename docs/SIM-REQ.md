@@ -166,7 +166,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-07** — Each settlement carries a `climateIndex`, a fixed-point value on 0–10000 assigned by the generator. The simulator consumes it without knowing what produced it.
 
-**FR-P-08** — Two authored 52-entry weekly curves, `cold` and `warm`, define climate modifiers across the year. A settlement's modifier for week *w* interpolates between them on its `climateIndex`, in integer arithmetic. Climate modifiers govern travel cost, mortality, livestock growth, timber yield, and available construction labour.
+**FR-P-08** — Each climate modifier has its own pair of authored 52-entry weekly curves, `cold` and `warm`. A settlement's modifier for week *w* interpolates between the pair on its `climateIndex`, in integer arithmetic. Climate modifiers govern travel cost, mortality, livestock growth, timber yield, and available construction labour.
 
 **FR-P-09** — Named climate bands (3–4) group `climateIndex` ranges for presentation only. No simulation rule reads a band.
 
@@ -563,7 +563,7 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-07 | Cadences | 1 / 7 / 28 / 364 | Decided |
 | P-08 | Calendar | 364 days, 13 × 28, week of 7 | Decided |
 | P-13 | Season length | 91 ticks, presentation only | Decided |
-| P-14 | Climate curve resolution | 52 weekly entries, 2 curves | Decided |
+| P-14 | Climate curve resolution | 52 weekly entries, 2 curves per modifier | Decided |
 | P-15 | Named climate bands | 3–4, presentation only | Decided |
 | P-16 | Harvest offset, coldest to warmest | 28 days | Decided |
 | P-17 | Settlement ceiling at P-01, 9 cohorts | ~7,000 | Measured subset, 2x allowance for unmeasured phases |

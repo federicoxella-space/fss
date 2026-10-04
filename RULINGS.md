@@ -2994,3 +2994,25 @@ each value proposed as a P-number when first needed (`R-050`).
 the plan that uses it.
 **Not verified:** that the conservation rule (FR-P-03c) admits the chain with the
 values the implementer will propose; nothing is numbered yet.
+
+### R-064 — Each climate modifier has its own pair of curves
+
+**Date:** 2026-10-04   **Origin:** user, design session (K-08 of the phase 4 note)
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-08 and §16 P-14; `SIM-DEC` DEC-037, title, decision,
+rationale and cost. Revisions already today's.
+
+FR-P-08 named two curves and five modifiers, and did not say whether the five share
+the pair. P-14's "2 curves" read as sharing. One pair cannot render a winter that
+stops building sites without raising mortality as well, so the five would move in
+lockstep, and the seasons of trade, construction and death could not differ. Put to
+the user with a pair per modifier, the user approved it. Only the curves a subsystem
+uses are written when it lands; the implementer prepares smooth starting curves and
+the user approves them, as static content under `R-050`.
+
+**Cost.** Five pairs to author and tune instead of one: 520 numbers.
+**Owed by the implementer:** the curves of each modifier in the rules file of
+`R-065`, written with the subsystem that first reads it.
+**Would overturn it:** two modifiers found always to want the same curves, which
+could then share a pair by data, with no change to the rule.
+**Not verified:** nothing; FR-P-07 to FR-P-11, DEC-036, DEC-037 and P-14 were read.

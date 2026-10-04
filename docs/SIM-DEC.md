@@ -429,13 +429,13 @@ The generator assigns each settlement a fixed-point `climateIndex` on 0–10000.
 
 **Cost.** Designers cannot author a rule that applies to "the northern band". Anything band-specific has to be expressed as a function of the index.
 
-### DEC-037 — Climate acts through two 52-entry weekly curves, interpolated
+### DEC-037 — Climate acts through pairs of 52-entry weekly curves, interpolated
 
-Authored `cold` and `warm` curves give a weekly modifier each; a settlement interpolates between them on its `climateIndex` in integer arithmetic. The modifiers govern travel cost, mortality, livestock growth, timber yield, and construction labour.
+Each modifier has an authored pair of curves, `cold` and `warm`, giving a weekly value each; a settlement interpolates between the pair on its `climateIndex` in integer arithmetic. The modifiers govern travel cost, mortality, livestock growth, timber yield, and construction labour.
 
-**Rationale.** Weekly resolution turns climate into a ramp rather than four jumps a year, so prices drift instead of stepping. Two curves plus interpolation cover the whole map in a few kilobytes and stay fully authorable without code.
+**Rationale.** Weekly resolution turns climate into a ramp rather than four jumps a year, so prices drift instead of stepping. Two curves plus interpolation cover the whole map in a few kilobytes and stay fully authorable without code. A pair per modifier, rather than one pair for all, lets a winter stop building sites without also raising mortality.
 
-**Cost.** Tuning happens across 104 authored numbers rather than a handful of constants, which needs a curve editor or a spreadsheet import before Phase 6.
+**Cost.** Tuning happens across 104 authored numbers per modifier, 520 for the five, rather than a handful of constants, which needs a curve editor or a spreadsheet import before Phase 6.
 
 ### DEC-038 — Crops are dated events, not continuous production
 
