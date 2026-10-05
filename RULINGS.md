@@ -97,7 +97,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-*None.* `R-031` was answered by `R-033`.
+- **`R-068`**, escalated 2026-10-05: the coder's denylist and the settings files,
+  and the identifier match of `git-guard`; a point added to the process plan.
 
 ---
 
@@ -2558,3 +2559,65 @@ plan, which puts `R-046` back where it was.
 exist. Item 2 of that branch's request, "Where it sits against `R-046`", is
 answered here but not marked there, since the file lives on the other branch.
 The marker is owed by the decider when the branches meet.
+
+### R-068 — The coder may not write the settings files that can switch its hooks off
+
+**Date:** 2026-10-05   **Origin:** D-111 (a finding noted, not acted on)
+**Verdict:** escalated — reserve 1 of `R-001`: what each role may write is
+`D-087`'s, and the design `R-028` ratified is the user's
+**docs/:** unchanged
+
+`D-111` notes that the coder's denylist does not hold `.claude/settings.json` or
+`CLAUDE.md`, and leaves it there on one premise: "A settings file can add hooks,
+not remove an agent's own." The premise does not hold as stated. Claude Code's
+documentation (hooks guide, "Configure hook location") gives a settings key,
+`disableAllHooks`, that turns hooks off, and says a settings file edited during a
+session is normally picked up by a file watcher in that session. Whether the key
+reaches hooks declared in an agent's frontmatter the documentation does not say.
+So one `Write` the coder is allowed today may disable `path-guard` and
+`git-guard` for every role, or may not; nothing in the repository knows which.
+
+The design gives the reason for its own last three entries: they "keep an agent
+from loosening its own constraint". A settings file is the same kind of file as
+`.claude/hooks/`, and the reason applies to it whether or not the key reaches
+frontmatter hooks: a settings file adds hooks, and a hook is a command run on
+every tool call of every role. The orchestrator's check after the coder, "no
+path of its denylist changed", inherits the gap, since it reads the same list.
+
+`CLAUDE.md` is a different case. The root file only imports `AGENTS.md`, and
+`core/Runtime/Systems/CLAUDE.md` holds a rule `R-019` changed as governance.
+They are standing instructions, as `AGENTS.md` is, and the design keeps
+`AGENTS.md` off the denylist on purpose: a process point may edit it, and the
+orchestrator stops if the diff touches it and the point does not name it.
+
+**A second finding, on `git-guard`.** `D-111` defines an identifier as `NFR-`,
+`FR-`, `DEC-`, `AC-`, `SQ-`, `A-`, `R-` or `D-` followed by a letter or digit.
+The script matches with `-notmatch`, which in PowerShell ignores case, so a
+subject reading "Tidy the a-priori notes" passes as carrying one; checked in
+this session. The guard stops mistakes, and this one lets a subject with no
+identifier through.
+
+**Recommendation.** One point added to the process plan under `D-014`, before
+point 7 so that the rewired orchestrator reads the final list:
+
+1. `.claude/settings.json` and `.claude/settings.local.json` join the coder's
+   denylist, in the design and in `path-guard`, with a self-test case each.
+2. Every `CLAUDE.md` is treated as `AGENTS.md` is: not denied, and the
+   orchestrator stops when a diff touches one the point does not name. Point 7
+   writes that check, so the point adds it to point 7's scope by naming it.
+3. `git-guard` matches the identifier case-sensitively, with a self-test case
+   for a lowercase `a-`.
+
+Point 1 is closed and frozen; none of this reopens it. The fault each change
+must catch is the case it adds.
+
+**Cost.** One more point in a plan of seven, and a design note amended by a
+point rather than by `R-028`. A coder can no longer fix a settings file a
+simulator point needs changed; the orchestrator does it, in a point that says so.
+**Owed by the implementer:** nothing until the user answers.
+**Would overturn it:** a probe at point 4 showing that `disableAllHooks` does not
+reach frontmatter hooks and that a settings file cannot otherwise weaken an
+agent's guard, which leaves item 1 resting on the design's general reason alone.
+**Not verified:** whether `disableAllHooks` reaches frontmatter hooks, which the
+documentation leaves open and this session did not probe; the guide was read
+through a subagent, not opened directly.
