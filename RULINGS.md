@@ -72,7 +72,11 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-046`**, as amended by **`R-066`**: the process plan holds the design's
   points 1 to 5, `plan-state` and the two read-only skills on it, and no
   simulator change; the first point of the phase 4 plan is run by the agents,
-  and its criterion carries the design's point 6 check and fault.
+  and its criterion carries the design's point 6 check and fault. **`R-067`**:
+  it stays there, and no earlier plan carries it.
+- **`R-067`**, in the cost measurement plan: each outcome line names the agents
+  dispatched and those that do not apply to a `bench/` diff, with the reason, and
+  none claims `R-046`'s check.
 - **`R-047`**, within the process plan point that rewires `/plan-next` and
   `reviewers.md`: the reviewers' brief quotes the `Fails when:` line and asks for
   missing faults. And every moment-one request carries the `Fails when:` lines.
@@ -2499,3 +2503,58 @@ the proposal calls deferrable, which leaves `R-045` owed on those two skills.
 **Not verified:** the user's words of 2026-10-05 for the four answers were not
 seen; this session has only the confirmation of the two departures. The "31
 points, one commit each" of point 3 was not re-measured.
+
+### R-067 — The agents' first real run stays at phase 4's first point; the measurement plan runs under them without proving them
+
+**Date:** 2026-10-05   **Origin:** review request 2026-10-05, the open question;
+D-110; D-109
+**Verdict:** resolved — the user's decision, reserve 1 of `R-001`
+**docs/:** unchanged
+
+`R-046` puts the design's point 6 check — the tester's test red then green, the
+named fault seen red, every agent dispatched seen to have run — in the criterion
+of "the first point of the phase 4 plan", the first plan a rewired `/plan-next`
+was then expected to run. The user has since placed the cost measurement plan
+(`D-109`, drafted on `design/poverty-seed`) between the process plan and phase 4,
+so its points are the first the rewired skill runs. The request asks whether its
+first point carries the check.
+
+**It cannot carry the check as `R-046` states it.** The measurement plan writes
+only `bench/`. The workflow is built on the core: the tester writes in
+`core/Tests/` only (the roles table of `.claude/design/2026-09-30-agent-workflow.md`),
+and `mutate` records and restores `core/Runtime/` and `harness/` (point 2 of the
+process plan's draft). In `bench/` there is no test for the tester to write first
+and no tree for `mutate` to guard. The check would fail because `bench/` does not
+fit the workflow, which says nothing about the workflow, or it would need the
+scripts widened, a change to the process plan for a plan that is not phase 4's.
+`R-046`'s own reason still points at phase 4: a real change is a simulator
+change, and phase 4's first point is the first change the workflow was designed
+for.
+
+Three answers were put to the user: the check stays with phase 4, and the
+measurement plan runs under the agents without claiming it; the check moves to
+the measurement plan, with the scripts extended to `bench/`; or the measurement
+plan runs before the rewiring, which reverses the order the user chose in
+`D-110`. The user chose the first: "Resta alla fase 4".
+
+**The rule.** `R-046` stands as written. The measurement plan runs under the
+rewired `/plan-next` as far as its roles apply to a `bench/` diff. Each outcome
+line names the agents dispatched and those that did not apply, with the reason,
+and no outcome counts as the proof `R-046` asks for, which stays in the criterion
+of phase 4's first point.
+
+**Cost.** Five points run under a workflow no one has yet seen run correctly, and
+their figures feed `SQ-023`'s ruling on the shape of state. What guards those
+figures is `D-109`'s checksum per cell, which does not depend on the agents.
+**Owed by the implementer:** in the cost measurement plan, each outcome line
+names the agents dispatched and those that do not apply to its diff, with the
+reason, and none claims `R-046`'s check. Cite `R-067`.
+**Would overturn it:** the workflow extended to `bench/`, which would make the
+measurement plan's first point eligible; phase 4 starting before the measurement
+plan, which puts `R-046` back where it was.
+**Not verified:** the measurement draft and `D-109` were read on
+`design/poverty-seed`, not on this branch. Whether the coder's denylist admits
+`bench/` was read from the draft of point 1, not from a script that does not yet
+exist. Item 2 of that branch's request, "Where it sits against `R-046`", is
+answered here but not marked there, since the file lives on the other branch.
+The marker is owed by the decider when the branches meet.

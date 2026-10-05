@@ -88,7 +88,8 @@ until the decider records them:**
 
 ## Open questions about the specification
 
-- **Non-blocking for this plan: the first real run.** The user placed this plan
+- ~~**Non-blocking for this plan: the first real run.**~~ **Answered by `R-067`:**
+  the check stays with phase 4's first point. The user placed this plan
   before the cost measurement plan drafted on `design/poverty-seed` (`D-109`),
   answering that request's question 2. `R-046` gives the first run of the agents
   to "the first point of the phase 4 plan"; with the measurement plan between the
