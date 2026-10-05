@@ -92,13 +92,14 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   the table of `SIM-REQ` §18.
 - **`R-053`**, at the closing point of each phase 4 subsystem: `AC-01` and
   `AC-04` over what exists, against provisional bounds derived from `docs/`.
+- **`R-070`**, before point 7 of the process plan runs: point 8 added to
+  `PLAN.md`, placed between points 6 and 7, carrying `R-068`'s three changes.
 
 ## Escalated to the user
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-- **`R-068`**, escalated 2026-10-05: the coder's denylist and the settings files,
-  and the identifier match of `git-guard`; a point added to the process plan.
+*None.* `R-068` was answered by `R-070`.
 
 ---
 
@@ -2673,3 +2674,66 @@ outcome line; that Claude Code runs the scripts from frontmatter is point 4's.
 That the commit `0ea4e42` and the outcome line are in Italian is consistent
 with the plan's own rule that points 1 to 4 close in the forms in use, and was
 not otherwise examined.
+
+### R-070 — `R-068` accepted: point 8 of the process plan closes the settings files and the identifier match, before point 7
+
+**Date:** 2026-10-06   **Origin:** user, on `R-068`
+**Verdict:** resolved — the user's decision, reserve 1 of `R-001`
+**docs/:** unchanged
+
+The user approved `R-068`'s recommendation and asked for it to be applied:
+"approvo R-068, applicalo". The changes are to the design of 2026-09-30, to
+`path-guard` and to `git-guard`, none of which a decider session writes. So
+applying it means owing a point, which the implementer adds to `PLAN.md` under
+`D-014` and runs as any other. This ruling records the user's approval that
+`D-014` requires.
+
+**Where the point goes.** `R-068` placed it "before point 7". `D-014` says a
+point added mid-plan runs last, so as not to renumber points already cited.
+Both hold if the point is **numbered 8 and placed in `PLAN.md` between points 6
+and 7**. No number moves. `/plan-next` runs "the first `## <n>.` section with no
+outcome line", so it runs 8 before 7. Running it last would not work. Point 7
+wires the agents in, so a point after it would be run by them, and its coder
+cannot write `.claude/hooks/`. It would also contradict the plan's premise that
+no point of it runs under the agents (`R-046`, `R-067`). This departs from
+`D-014`'s "runs last" for this point only, at the user's request. `D-014`'s
+reason, no renumbering, is kept whole. The plan's preamble, which calls point 7
+"the last", is not edited; point 8's own text says it runs before 7, citing this
+ruling.
+
+**What it does**, `R-068`'s three items, with one refinement to the second:
+
+1. `.claude/settings.json` and `.claude/settings.local.json` join "What the coder
+   may not write" in the design and `$CoderDenied` in `path-guard`, with a
+   self-test case each.
+2. In the design's "The hole that `Bash` leaves", the check reading
+   "`AGENTS.md` in the diff only if the point names it" covers every
+   `CLAUDE.md` as well. `R-068` had point 7's scope widened "by naming it".
+   That is not needed: point 7's frozen text already has the orchestrator "run
+   the checks of 'The hole that `Bash` leaves'", so point 7 builds the check
+   from the amended list, and its text stays as it is. The same holds for the
+   coder's denylist, which point 7's check after the coder reads from the
+   design.
+3. `git-guard` matches the identifier case-sensitively.
+
+**Its `Fails when:`**, the cases `R-068` named: the coder may write
+`.claude/settings.json`; a subject "Tidy the a-priori notes" passes with no
+identifier; the design's list has no line for `CLAUDE.md`. It declares
+`Core: no`.
+
+**Cost.** One more point. The preamble's "point 7, the last" is now inaccurate
+and stays so, since editing the plan's text above an added point is what
+`D-014` avoids. A reader of `PLAN.md` alone learns the order from point 8's own
+line.
+**Owed by the implementer:** before point 7 runs, point 8 is added to `PLAN.md`
+between points 6 and 7, with the content and `Fails when:` above, in a commit
+citing `R-068` and `R-070`, and is run in its turn. Cite `R-070`.
+**Would overturn it:** the user preferring point 8 after point 7, run by the
+orchestrator alone; or point 4's probe showing that no settings key reaches a
+frontmatter hook, which leaves item 1 on the design's general reason, as
+`R-068` said.
+**Not verified:** that `plan-state`, built at point 3, reads points in file
+order and not by number. Its frozen criterion was not checked for it, and if
+it sorts, point 8 would read as next only after 7. The user approved `R-068`
+before this ruling stated the `Fails when:` lines, so the user reads them here,
+as `R-047` asks of moment one, and has not yet done so.
