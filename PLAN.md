@@ -56,6 +56,16 @@ toccato. Registro `D-111`.
 - **Core:** no — the patch is reversed by the check itself; the diff touches no
   path under `core/`.
 
+*Esito:* 2026-10-06. Chiuso. Patch nota su `core/Runtime/Time/Calendar.cs`
+(`Month` diviso per `DaysPerMonth + 1`) applicata da `mutate`:
+`FRT05a_DateArithmeticIsIntegerDivision` rosso, exit 0, `Calendar.cs` identico
+byte per byte e hash di `core/Runtime,harness` invariato. `tree-state.ps1
+-SelfTest` 11 casi e `mutate.ps1 -SelfTest` 9 casi, exit 0. I due guasti del
+`Fails when:` visti rossi su copie: file non tracciati hashati per nome (2 casi
+rossi), `git apply -R` tolto (6 casi rossi). `git diff --name-only HEAD -- core/`
+vuoto: `Core: no` regge, revisori non eseguiti. Build e suite .NET non eseguite:
+nessun file C# toccato. Registro `D-112`.
+
 ## 3. `plan-state`
 
 - **Does:** `.claude/hooks/plan-state.ps1 [-Path <plan>] [-Draft]` reads a plan —

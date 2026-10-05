@@ -3049,3 +3049,58 @@ from an agent's frontmatter as written — point 4's live probe.
 and 2. **Would overturn it:** point 4's probe showing the role cannot be passed
 as an argument, or the decider reading "everything except the denylist" as
 including paths outside the repository.
+
+### D-112 · Point 2 · `mutate` and `tree-state`: what the design left open
+
+**Decided.**
+- **`mutate.ps1 -Patch <file> -Check <command>`.** The check is a command
+  string, run by `pwsh -NoProfile -Command` in the repository root, and a fault
+  is caught when it exits non-zero. The design says "runs the named check"
+  without a form; a command covers a `dotnet test --filter` and anything else
+  the tester names. The tester holds `Bash`, so running its string widens
+  nothing.
+- **Four exit codes**, where the design names one: 0 the check went red and the
+  tree is restored; 1 the check stayed green, the fault was not caught; 2
+  refused before anything was applied (missing argument, unreadable patch, a
+  patch that does not apply); 3 the tree did not return, which wins over the
+  others. Without 1 the tester would read a missed fault from the log alone.
+- **A patch touching any path outside `core/Runtime/` and `harness/` is
+  refused** (exit 2): the restore is proved only for what `tree-state` records,
+  so a fault elsewhere would be applied without proof that it went away.
+- **The patch is applied to the working tree**, not the index, so it is written
+  against the coder's uncommitted code; the reversal runs in a `finally`, so a
+  check that throws still has its patch reversed.
+- **`tree-state` hashes `git diff HEAD --binary`**, with `--no-ext-diff` and
+  `--no-textconv`. Without `--binary` a changed binary file prints "Binary files
+  differ" whatever its content, and the hash would not move; the self-test
+  carries the case. Status lines, the diff's SHA-256 and one line per untracked
+  file with its SHA-256 are joined and hashed once; ignored files, `bin/` and
+  `obj/` among them, are outside it.
+- **`tree-state -Path <pathspec>…` and `-Repo`.** `mutate` passes
+  `core/Runtime` and `harness`; the skills of points 6 and 7 call it with no
+  pathspec, the whole tree.
+- **`mutate.ps1 -SelfTest`**, which the criterion does not ask for: seven cases
+  in a throwaway repository and two through the entry point. It is what turns
+  red on the second fault of `Fails when:` without touching `core/`.
+
+**Check.** `tree-state.ps1 -SelfTest` 11 cases, `mutate.ps1 -SelfTest` 9 cases,
+both exit 0. The known patch — `Calendar.Month` dividing by `DaysPerMonth + 1` —
+through `mutate` with `dotnet test … --filter
+FullyQualifiedName~FRT05a_DateArithmeticIsIntegerDivision`: the test red at
+`CalendarTests.cs:91`, `mutate` exit 0, `Calendar.cs` byte-identical before and
+after (MD5) and the `core/Runtime,harness` hash unchanged. The two faults on
+copies, originals untouched: untracked files hashed by name only → 2 cases red
+("the untracked file edited", and the scoped one); `git apply -R` removed → 6
+cases red, the file left reading `wrong`.
+
+**Not verified.** A working file with mixed line endings: under
+`core.autocrlf=true` a patch made by `git diff` applied and reversed cleanly on a
+CRLF file, but the first self-test, writing mixed endings, did not apply — the
+self-test now writes uniform ones. A check that writes outside `core/Runtime/`
+and `harness/` is not seen by `mutate`; that is the orchestrator's check after
+the tester's second dispatch, in the design's "The hole that `Bash` leaves".
+
+**What `docs/` says:** nothing; process work. The design's "Enforcement" item 3.
+**Would overturn it:** the tester's brief at point 4 or 7 needing the check as a
+test name rather than a command, or a patch legitimately touching a path outside
+the two folders.
