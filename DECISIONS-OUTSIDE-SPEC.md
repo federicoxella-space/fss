@@ -3052,6 +3052,8 @@ including paths outside the repository.
 
 ### D-112 · Point 2 · `mutate` and `tree-state`: what the design left open
 
+**Ruling:** R-072 — ratified; the unread untracked file found at audit resolved by R-071, the rename that passes the filter by R-073.
+
 **Decided.**
 - **`mutate.ps1 -Patch <file> -Check <command>`.** The check is a command
   string, run by `pwsh -NoProfile -Command` in the repository root, and a fault

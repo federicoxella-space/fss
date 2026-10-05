@@ -2801,3 +2801,51 @@ tree not returned. Cite `R-070` and `R-071`.
 **Would overturn it:** none foreseen short of the user moving it to its own point.
 **Not verified:** a locked file, which was not produced; only the quoted name was.
 That `-z` output reaches PowerShell intact through a native call was not tried.
+
+### R-072 — `D-112` is ratified, save what `R-071` resolved
+
+**Date:** 2026-10-06   **Origin:** register audit, `D-112`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Point 2 of the process plan, `mutate` and `tree-state`. Process, so ratified or
+rejected, never promoted (`D-011`). The entry was read against the design's
+"Enforcement" item 3 and point 2's frozen text, and its claims against
+`5cd1db4`. Both self-tests were run in this session: `tree-state` 11 cases,
+`mutate` 9, exit 0 each.
+
+- **The check as a command string run by `pwsh`.** Stands. The design names no
+  form, and the tester already holds `Bash`, so the string runs nothing the
+  tester could not.
+- **Four exit codes.** Stands, with one consequence for later points. The design
+  asks only for non-zero when the tree did not return, and exit 1, a fault not
+  caught, is non-zero too: a caller that reads zero against non-zero would take
+  a missed fault for a tree left dirty. The tester's definition at point 4 and
+  its brief at point 7 read the four codes, not the sign.
+- **A patch outside `core/Runtime/` and `harness/` refused.** Right on the
+  merits: the restore is proved only where `tree-state` looks. Checked on a
+  throwaway repository: a path through `..` passes the filter, since `--numstat`
+  prints it as written, and is then refused by `git apply --check` ("invalid
+  path"), so `mutate` exits 2. A rename is not refused: `--numstat` prints only
+  its destination, so a patch moving `docs/a.txt` to `core/Runtime/a.txt`
+  passes, applies, and leaves `docs/a.txt` absent while the check runs; the
+  reverse put it back, and nothing proved it. That is `R-073`'s.
+- **The working tree, the reversal in `finally`.** Stands; the self-test's fault
+  is written against uncommitted code, as the coder's will be.
+- **`--binary`, `--no-ext-diff`, `--no-textconv`.** Stands; the binary case is in
+  the self-test and the two flags keep a user's configuration out of the hash.
+- **`-Path` and `-Repo`; the self-test of `mutate` beyond the criterion.** Stand.
+
+The untracked file the hash cannot read is `R-071`'s, and the rename `R-073`'s; both owe the fix in
+point 8. The outcome line in Italian is the plan's own rule for points 1 to 4.
+
+**The watermark is not advanced**, for `R-066`'s reason: `D-108` and `D-109` are
+not on this branch.
+
+**Cost.** None beyond `R-071` and `R-073`.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`; point 4's probe showing the tester cannot
+run `pwsh` from its `Bash`.
+**Not verified:** the known patch through `mutate` against the real suite was not
+rerun, to keep the decider's session off `core/Runtime/`; the two faults seen red
+were taken from the outcome line.
