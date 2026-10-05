@@ -2998,3 +2998,52 @@ are `R-045` to `R-049` and the design ratified by `R-028`.
 **Would overturn it:** the decider declining the departures from `R-046` and
 `R-028`, which brings the plan back to five points; the user's answer amending
 the draft, which the installing commit then reports.
+
+## 2026-10-05 — The agent workflow, built and wired
+
+The process plan installed in `6d6d098`, from the design of 2026-09-30. Each
+entry names the point it closes.
+
+### D-111 · Point 1 · `path-guard` and `git-guard`: what the design left open
+
+**Decided.**
+- **The role reaches `path-guard` as `-Role <name>`**, written in each agent's
+  frontmatter at point 4. An unknown or missing role is denied.
+- **A path outside the repository is denied to every role**, the coder
+  included. The design gives the coder "everything except the denylist", which
+  reads as everything in the repository; nothing in the roles writes elsewhere.
+- **Paths are resolved before matching**: relative to `CLAUDE_PROJECT_DIR`,
+  `..` collapsed, compared case-insensitively, because the file system is.
+  `core/Runtime/../../docs/x` and `DOCS/x` are both `docs/`.
+- **Insert-only also refuses an empty `old_string`**, which every `new_string`
+  begins with and which `Edit` uses to create a file.
+- **`git-guard` refuses more than the design lists**: a newline, a lone `&`,
+  `<` and `>` count as joining or redirecting; `git add` takes no option at all
+  and no glob or `:` pathspec; `--output` on the four read commands, which
+  writes a file; `git -C` and any first word other than `git`. Each follows
+  from "admits only", read as an allowlist.
+- **"Says in words that none applies"** is the phrase `no identifier applies`,
+  `no requirement applies` or `no decision applies` in the subject. An
+  identifier is `NFR-`, `FR-`, `DEC-`, `AC-`, `SQ-`, `A-`, `R-`, `D-` followed by
+  a letter or digit, as a word.
+- **`Plan-point` anywhere in the message counts**, case-insensitive: more than
+  one mention is refused, and one must be the line `Plan-point: <integer>`. A
+  body saying "closes no Plan-point" is refused, as the skill asks that the word
+  not be written at all.
+- **Deny is exit 2 with the reason on stderr**, the hook contract's blocking
+  form; no JSON output.
+
+**Noted, not acted on.** The coder's denylist does not hold
+`.claude/settings.json` or `CLAUDE.md`. A settings file can add hooks, not
+remove an agent's own. Not in the design's list, so not added.
+
+**Check.** Both self-tests exit 0 (32 and 43 cases, two of each through the
+script's real entry point with stdin and exit code; `git-guard`'s commit cases
+in a throwaway repository). The three faults of `Fails when:` seen red on
+copies, originals untouched. Not verified: that Claude Code invokes the scripts
+from an agent's frontmatter as written — point 4's live probe.
+
+**What `docs/` says:** nothing; process work. The design's "Enforcement" items 1
+and 2. **Would overturn it:** point 4's probe showing the role cannot be passed
+as an argument, or the decider reading "everything except the denylist" as
+including paths outside the repository.

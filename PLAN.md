@@ -28,6 +28,14 @@ English ones (`R-045`). Every point touches no path under `core/`.
   `git add a && rm b` passes.
 - **Core:** no — touches no path under `core/`.
 
+*Esito:* 2026-10-05. Chiuso. `path-guard.ps1 -SelfTest` 32 casi, `git-guard.ps1
+-SelfTest` 43 casi, entrambi exit 0. I tre guasti del `Fails when:` introdotti su
+copie e visti rossi: `docs/` tolto dalla denylist (5 casi rossi), il rifiuto delle
+opzioni di `git add` tolto (`-A`, `-u`, `--all` rossi), `&` tolto dai separatori
+(`git add a && rm b` rosso). `git diff --name-only HEAD -- core/` vuoto: `Core: no`
+regge, revisori non eseguiti. Build e suite .NET non eseguite: nessun file C#
+toccato. Registro `D-111`.
+
 ## 2. `mutate`, and `tree-state`
 
 - **Does:** `.claude/hooks/mutate.ps1`, as the design's "Enforcement" item 3
