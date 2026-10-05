@@ -2984,3 +2984,41 @@ review of the decider's work is filed; `AGENTS.md` sends objections to
 `SPEC-QUESTIONS.md`.
 **Would overturn it:** the user preferring the batch on `main`, or the decider
 wanting the low findings split one per entry.
+
+### D-109 · The draft of the cost measurement plan, at moment one
+
+**Ruling:** none yet. The draft is in `REVIEW-REQUEST.md`, for the user's answer
+under `R-048` and `R-049`.
+
+`SQ-023` owes a measurement before its ruling, and the user approved the sizes
+per settlement type and asked for the draft. Writing it forced these choices.
+
+**Decided.**
+- **`Kind: process`.** The points change no simulated world and nothing in
+  `core/`: they build a stand-in and measure it. A `Kind: simulator` plan must
+  name the acceptance criteria it moves, and this one moves none. The header
+  cites P-01, NFR-05, NFR-07 and `SQ-023` in its exit condition instead.
+- **A project of its own, `bench/`, kept after the plan.** Not in the harness,
+  which is the driver of §17's criteria (`R-039`) and runs in CI; timing in CI
+  is noise. Kept rather than thrown away because the stand-in behind P-63 and
+  P-64 was thrown away (`SQ-004`), and this plan's first point cannot know what
+  it contained.
+- **Calibration by tolerance, not by equality.** The cost at 9 rows within half
+  and twice P-63, the 27-to-9 ratio within a fifth of 4.8: wide, because the
+  old stand-in's five phases are unknown and the machine differs; narrow
+  enough that a ranking linear in the rows, about 3, fails.
+- **Checksums as the guard against a benchmark that measures nothing.** Every
+  layout computes the same outputs on the same world, so a faster layout that
+  skips work is caught by its checksum rather than praised for its speed.
+- **The sizes are measurement inputs, not constants**, and take no P-number
+  under `R-050`: they describe worlds to time, not the world the game runs.
+- **`64147ba` names D-109 but does not contain it**: as with `9250363`, the
+  edit and the commit were sent together and a hook refused the edit. The entry
+  follows in its own commit.
+
+**What `docs/` says:** §19 places P-17 and P-01's validity in Phase 4 on the
+real update; nothing on measuring before it. `R-046` names the next two plans,
+and this would be a third: raised in the request as blocking.
+**Would overturn it:** the decider placing the measurement inside phase 4's
+first point, which would make it `Kind: simulator`; or the user preferring the
+stand-in thrown away at the end.
