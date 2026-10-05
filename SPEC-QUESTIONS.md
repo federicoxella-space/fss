@@ -561,11 +561,31 @@ conditioned this batch on keeping closed.
 `R-065` "Not verified"; reserve 4 of `R-001`.
 **Blocks:** no. It must be answered before the point that builds the rules file,
 since the format is what the consumer would ship.
-**Status:** open — **the user's**, not the decider's: §20 is reserve 4.
+**Status:** open — **the user's**, not the decider's: §20 is reserve 4. Answered
+by the user on 2026-10-05, below; the decider turns the answer into a revision
+of `R-065`.
 
 `R-065` records as not verified "that the consumer of §20 can ship and read such
 a file", and names it among what would overturn the ruling. §20's constraints
 belong to a consumer this repository cannot see, so only the user can answer.
+
+**The user's answer, 2026-10-05: a hybrid.** The base rules are compiled into
+the core, as bytes generated from the same text source by the same compiler. An
+external rules file, where the game can read one, replaces them: content patches
+and modding where the platform allows, the base rules everywhere else. The rest
+of `R-065` stands: the core validates whatever bytes it receives, the digest
+names them, and the save carries the file the world runs on, which modding
+makes indispensable, since a modded save cannot be reproduced without the
+player's file. Raised with it, for the decider:
+
+- DEC-100 and FR-A-05 gain the default and the rule that it applies when the
+  host hands no file.
+- Validation must refuse any malformed file without failing, since players will
+  write them, and must cap the sizes a file may declare: goods, mestieri,
+  recipes. The caps are parameters for §16, set after the phase 4 measurement,
+  so that a mod cannot silently take the core past P-01.
+- AC-04's bounds are a claim about the shipped content, not about modded
+  content; a sentence should say so.
 
 ### SQ-021 — `SIM-STATE` open item 1 closed with more than `R-063` decided
 
@@ -680,6 +700,13 @@ state format is fixed. The figures above are the implementer's arithmetic. The
 user also gives an order of magnitude, as content, for the clearings and rows of
 a village against a city.
 
+**The user's answer on who decides a good's market, 2026-10-05.** The author,
+good by good: each good in the content declares either a market of its own or
+that it is a variant of a named class, and validation checks only that a
+variant's class has a market. The eight goods of `R-063` all have a market of
+their own. The order of magnitude of clearings per place is answered through
+`SQ-024`'s market places.
+
 ### SQ-024 — markets held by market places: five settlement types, and villages that trade at the nearest market
 
 **Raised:** 2026-10-05, by the user, following `SQ-023`.
@@ -745,3 +772,29 @@ within P-01. Not measured.
    FR-M-09) join market places; degree caps (P-06) and the settlement mix (P-12)
    for five types instead of three; the generator (FR-G-01) places types and
    markets.
+
+**The user's answers on the open points, 2026-10-05.**
+
+- **Point 1, the groups of goods per market: deferred**, to be discussed with
+  the user. The implementer's draft (food and staples from the borgo,
+  manufactures from the cittadina, metals and tools and livestock from the
+  city, luxuries at the metropolis) is neither approved nor rejected.
+- **Within a type, population decides the number of markets.**
+- **Point 2, population per type**, on a scale about half of Europe around
+  1300:
+
+  | Type | Population | Markets |
+  |---|---|---|
+  | Village | up to ~250 | 0 |
+  | Borgo | 250 – 1,000 | 1 |
+  | Cittadina | 1,000 – 5,000 | 1 below ~2,500, 2 above |
+  | City | 5,000 – 25,000 | 2, 3 or 4, in three bands |
+  | Metropolis | above 25,000 | 3, 4 or 5 |
+
+  A settlement rises at a threshold and falls only below about 80% of it. The
+  80% becomes a P-number; the thresholds are Provisional under `R-050`.
+- **P-12, the mix at tick 0:** 2 metropolises, 8 cities, 30 cittadine, 60
+  borghi, 1,900 villages, about 100 market places. Types then follow
+  population, so P-12 describes the generated world only.
+- **The generator places borghi where villages are dense**, so that no village
+  starts too far from its food market.
