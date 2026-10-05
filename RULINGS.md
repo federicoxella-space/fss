@@ -2737,3 +2737,7 @@ order and not by number. Its frozen criterion was not checked for it, and if
 it sorts, point 8 would read as next only after 7. The user approved `R-068`
 before this ruling stated the `Fails when:` lines, so the user reads them here,
 as `R-047` asks of moment one, and has not yet done so.
+
+**`Fails when:` read by the user, 2026-10-06:** "approvo le condizioni di
+fallimento di R-070". The three lines stand as stated above, and point 8 carries
+them verbatim.
