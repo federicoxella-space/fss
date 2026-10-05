@@ -69,10 +69,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-045`**, within the process plan point that writes `D-089`'s language
   rule: the five outcome markers become English in `AGENTS.md` and in the three
   plan skills, which write the English form and recognise both.
-- **`R-046`**, in the two plans that follow: the process plan holds the design's
-  points 1 to 5 and no simulator change; the first point of the phase 4 plan is
-  run by the agents, and its criterion carries the design's point 6 check and
-  fault.
+- **`R-046`**, as amended by **`R-066`**: the process plan holds the design's
+  points 1 to 5, `plan-state` and the two read-only skills on it, and no
+  simulator change; the first point of the phase 4 plan is run by the agents,
+  and its criterion carries the design's point 6 check and fault.
 - **`R-047`**, within the process plan point that rewires `/plan-next` and
   `reviewers.md`: the reviewers' brief quotes the `Fails when:` line and asks for
   missing faults. And every moment-one request carries the `Fails when:` lines.
@@ -2434,3 +2434,68 @@ which would say the phase 4 gate proved little.
 **Not verified:** that every variable in `AC-04`'s table has a structural bound in
 `docs/`. Migration flow, urban share, legitimacy and infection prevalence were
 not checked for one; prices, stocks and population were.
+
+### R-066 — The process plan's seven points and its changes to the design are the user's: `R-046` and `R-028` amended
+
+**Date:** 2026-10-05   **Origin:** D-110
+**Verdict:** resolved — the user's decision, reserve 1 of `R-001`; the rest of
+`D-110` ratified
+**docs/:** unchanged
+
+`D-110` records the user's answers to the proposal of 2026-10-02
+(`.claude/design/2026-10-02-integrazione-piano-processo.md`) and passes to the
+decider the two that depart from rulings. Asked in this session whether both
+are the user's, the user answered: "Confermo". Governance, reserve 1 of `R-001`:
+recorded here, not ruled.
+
+- **Seven points against `R-046`'s five.** `R-046` owed "the process plan holds
+  the design's points 1 to 5 and no simulator change". Its reason was the second
+  half: each plan of one kind, and the design's point 6, a simulator change, out
+  of a process plan. The two points added — 3, `plan-state`, and 6, `/plan-explain`
+  and `/plan-status` read through it — are process work and touch no path under
+  `core/`, so that half stands. The first half is amended: the design's points 1
+  to 5, plus `plan-state` and the two skills on it.
+- **Changes to the design `R-028` ratified.** Its "deliberately not built"
+  excluded any change to `/decide`, `/plan-explain` or `/plan-status`; the last
+  two now change, and `/decide` stays excluded. The proposal's fifth question,
+  the archive of `RULINGS.md`, is rightly left out of the plan: it is a change to
+  `/decide`, and reserve 1 whatever a plan says (`R-028`). The tree check around
+  read-only agents extends from `/plan-next` to both skills. `tree-state` and
+  `plan-state` live in `.claude/hooks/`, which the coder's denylist already
+  covers; the proposal's reason is the right one, that a script an agent can
+  edit is no constraint on it.
+
+**The rest of `D-110` is ratified**, each checked against the draft in
+`REVIEW-REQUEST.md`:
+
+- **The rewiring last.** Point 7 rewires `/plan-next`, so every point of the plan
+  runs under today's procedure and `R-046`'s first real run stays outside it. The
+  proposal's one order constraint holds: points 3 and 5 precede 6 and 7.
+- **`plan-state -Draft`** reads the fenced block under `## Draft plan`, and the
+  request uses that heading, so point 6's check runs on a real draft.
+- **The branch** follows `R-048`: the request on `design/process-plan`, the plan
+  installed on `agent-workflow`, cut from `main` after the answer.
+- **The word cap of point 7** is flagged in the request as unanswered and put to
+  the user in its item 1. Checked: `/plan-next` is 2,755 words today.
+- **The number.** `D-108` and `D-109` are on `design/poverty-seed`, so `D-110` is
+  the next free across branches. This ruling is `R-066` for the same reason:
+  `R-054` to `R-065` are on `design/poverty-seed`. An identifier is never reused,
+  and two branches issuing the same one would collide at the merge.
+- **The request replacing the moment-three request**, and the conflict it will
+  meet when `design/poverty-seed` merges: rightly noted.
+
+**The watermark is not advanced.** `D-108` and `D-109` sit between it and
+`D-110` and are not on this branch; moving it to `D-110` would record them as
+audited. `D-110` carries its own marker, and the audit that reaches `D-108` and
+`D-109` after the merge passes over it.
+
+**Cost.** The process plan is two points longer, and builds a workflow that is
+not the one the design note describes: the note is not amended, so a reader of
+it alone sees the old scope, and `R-028` now reads with this ruling beside it.
+**Owed by the implementer:** `R-046`'s first action, as amended above. Cite
+`R-046` and `R-066`.
+**Would overturn it:** the user's answer at moment one dropping point 6, the one
+the proposal calls deferrable, which leaves `R-045` owed on those two skills.
+**Not verified:** the user's words of 2026-10-05 for the four answers were not
+seen; this session has only the confirmation of the two departures. The "31
+points, one commit each" of point 3 was not re-measured.

@@ -2949,7 +2949,8 @@ already.
 
 ### D-110 · The draft of the process plan, at moment one
 
-**Ruling:** none yet. The draft is in `REVIEW-REQUEST.md`, for the user's answer
+**Ruling:** R-066 — resolved: the two departures are the user's, the rest
+ratified. The draft is in `REVIEW-REQUEST.md`, for the user's answer
 under `R-048` and `R-049`.
 
 The proposal of 2026-10-02 (`.claude/design/2026-10-02-integrazione-piano-processo.md`)
