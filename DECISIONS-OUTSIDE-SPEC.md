@@ -3006,6 +3006,8 @@ entry names the point it closes.
 
 ### D-111 · Point 1 · `path-guard` and `git-guard`: what the design left open
 
+**Ruling:** R-069 — ratified; the settings-file note and the identifier match escalated by R-068.
+
 **Decided.**
 - **The role reaches `path-guard` as `-Role <name>`**, written in each agent's
   frontmatter at point 4. An unknown or missing role is denied.

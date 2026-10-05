@@ -2621,3 +2621,55 @@ agent's guard, which leaves item 1 resting on the design's general reason alone.
 **Not verified:** whether `disableAllHooks` reaches frontmatter hooks, which the
 documentation leaves open and this session did not probe; the guide was read
 through a subagent, not opened directly.
+
+### R-069 — `D-111` is ratified, save what `R-068` escalated
+
+**Date:** 2026-10-05   **Origin:** register audit, `D-111`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Point 1 of the process plan, the first two guards. Process, so ratified or
+rejected, never promoted (`D-011`). The entry was read against the design's
+"Enforcement" items 1 and 2 and "What the coder may not write", and its claims
+against `0ea4e42`. Both self-tests were run in this session: `path-guard` 32
+cases, `git-guard` 43, exit 0 each.
+
+- **The role as `-Role`, an unknown role denied.** Stands; it is the only way a
+  single script can be keyed by role, and point 4's probe is where it is shown
+  to work. Denying the unknown is the allowlist reading the design implies.
+- **Outside the repository, denied to every role.** Stands, and answers the
+  entry's own "would overturn it": "everything except the denylist" is read
+  inside the repository. Nothing in the roles writes elsewhere, and a coder
+  writing outside the tree escapes every check the orchestrator runs on it.
+- **Paths resolved before matching, case-insensitively.** Checked: the cases for
+  `DOCS\`, `..` and a sibling folder named `repo-other` are in the self-test,
+  and a trailing dot (`docs.\x`) resolves to `docs\x` under .NET's own
+  normalisation. 8.3 short names do not arise on this volume.
+- **Insert-only refuses an empty `old_string`.** Right on the merits: every
+  string begins with the empty one, so without it insert-only admits a
+  rewrite of any file the documenter holds.
+- **`git-guard` refusing more than the design lists**, and `Plan-point` counted
+  anywhere in the message. Each follows from "admits only" read as an allowlist,
+  and from the skill's rule that only a closing commit carries the word.
+- **Exit 2 with the reason on stderr.** The hook contract's blocking form.
+- **The phrase "no identifier applies"** as the words that say none applies.
+  Stands. The identifier half is `R-068`'s second finding: the script matches it
+  without regard to case, which the entry's definition does not.
+
+The note on `.claude/settings.json` and `CLAUDE.md` is `R-068`'s first finding.
+
+**The watermark is not advanced**, for `R-066`'s reason: `D-108` and `D-109` lie
+between it and this entry and are not on this branch. `D-110` and `D-111` carry
+their markers, and the audit that reaches `D-108` after the merge passes over
+both.
+
+**Cost.** None beyond `R-068`.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` or
+the design as it stood when written; point 4's probe showing the role cannot be
+passed as an argument.
+**Not verified:** the faults of `Fails when:` seen red were taken from the
+outcome line; that Claude Code runs the scripts from frontmatter is point 4's.
+That the commit `0ea4e42` and the outcome line are in Italian is consistent
+with the plan's own rule that points 1 to 4 close in the forms in use, and was
+not otherwise examined.
