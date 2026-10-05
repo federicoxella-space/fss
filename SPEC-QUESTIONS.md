@@ -620,3 +620,62 @@ ruling or proposal. The labour rule decides who sells labour under FR-C-05.
 14. `docs/SIM-REQ.md:269` FR-C-04 still says "a clearing pass per good", and
     `SIM-ECON` §Demand "per cohort per good", while rationed demand now falls
     from one good to another within a class (DEC-099).
+
+### SQ-023 — the user wants hundreds of goods and tens of mestieri, and the state is dense per good
+
+**Raised:** 2026-10-05, by the user, in the review of the rules file (`SQ-020`)
+and of P-01.
+**Cites:** `docs/SIM-REQ.md:559` P-01; `:535` NFR-05; `:539` NFR-07;
+`:571-574` P-17, P-17a, P-63, P-64; `:628` P-09; `:631` P-12;
+`docs/SIM-STATE.md:64` `goods int[]` "one per good"; `docs/SIM-REQ.md:53`
+FR-W-08; `:217` FR-J-02; `docs/SIM-DEC.md:612` DEC-054; `docs/SIM-REQ.md:155`
+FR-P-03a; `docs/SIM-DEC.md:238` DEC-098; `docs/SIM-REQ.md:269` FR-C-04;
+`docs/SIM-ECON.md:42` phase 7; `docs/SIM-REQ.md:670` AC-09; `:682` AC-10.
+**Blocks:** **yes, the phase 4 plan.** Its first points fix the shape of state,
+the save format and the hash. Dense per-good arrays written there would need a
+format migration to become sparse (NFR-08).
+**Status:** open — the direction is the user's; the requirements are the
+decider's; AC-09 and AC-10 are reserve 2 of `R-001`.
+
+**What the user wants.** A catalogue of hundreds of goods and tens of mestieri.
+`R-063` approved 8 goods for phase 4 as starting content; the question is what
+the architecture must carry, not what phase 4 ships.
+
+**Why it does not fit as written.** An estimate by extrapolation from P-63 and
+DEC-054, **not measured**: at 300 goods and about 41 cohort rows, market,
+production and spoilage grow about ×40 with goods, and rationing ×8 to ×12 with
+rows, since its cost grows with the square of the row count. A settlement update
+would cost some 3–5 ms, and a simulated day at 2,000 settlements about one
+second, a hundred times P-01. Memory fails first: one integer per good per
+cohort, 2,000 × 41 × 300 × 4 bytes, is about 100 MB of holdings, twice that with
+a carry per good, against NFR-07's 50 MB.
+
+**The user's answers.**
+
+1. **Goods and mestieri live in the world, not everywhere.** A village holds a
+   few goods and a few mestieri; a city many. The reading is **state sparse per
+   settlement**: a settlement holds rows only for the mestieri present and
+   holdings only for the goods present, so cost follows what is local, not the
+   catalogue.
+2. **Whether a good has its own market depends on the good.** Important goods
+   (grain, iron, wool) clear on a market of their own, with their own price.
+   Minor goods are variants of their class: they share the class's clearing,
+   and their price differs by quality, not by market. The number of clearings
+   stays in the tens while the goods run to hundreds.
+
+**What it touches.**
+
+| Where | Change |
+|---|---|
+| `SIM-STATE` §Cohort | `goods int[]` "one per good", and every carry per good, become sparse per settlement |
+| FR-W-08, FR-J-02, DEC-054 | Rows exist for the mestieri present in a settlement, not for the whole vector |
+| FR-P-03a, DEC-098 | A good says whether it clears on its own market or as a variant of its class; how a variant is priced and how demand splits among variants |
+| FR-C-04, `SIM-ECON` phase 7 | The pass is per clearing, a principal good or a class, not per good (`SQ-022` item 14) |
+| AC-09, AC-10 | Shock response and "every good reaches scarcity" are read per clearing, not per good; reserve 2, the user's |
+| P-09, P-17, P-63, P-64, NFR-07 | P-09 becomes the catalogue's size; the budget is measured against local goods and rows |
+
+**What is owed before the ruling.** A measurement, not an estimate: the cost of
+one settlement update as local goods, clearings and rows vary, taken before the
+state format is fixed. The figures above are the implementer's arithmetic. The
+user also gives an order of magnitude, as content, for the clearings and rows of
+a village against a city.
