@@ -2946,3 +2946,54 @@ main". The design note ties archival to the plan's close, not to the merge, and
 **Would overturn it:** the decider rejecting the gate record's place in the
 archive rather than in `RULINGS.md`, or a candidate found to be in `docs/`
 already.
+
+### D-110 · The draft of the process plan, at moment one
+
+**Ruling:** none yet. The draft is in `REVIEW-REQUEST.md`, for the user's answer
+under `R-048` and `R-049`.
+
+The proposal of 2026-10-02 (`.claude/design/2026-10-02-integrazione-piano-processo.md`)
+asked the user five questions and three approvals before the draft could be
+written. On 2026-10-05 the user answered four, each with the recommendation:
+this plan before the cost measurement plan of `D-109`; seven points; the two
+scripts in `.claude/hooks/`; `/plan-explain` reading a draft from a fixed heading
+of `REVIEW-REQUEST.md`. The fifth, the archive of `RULINGS.md`, stays out of the
+plan as a change to `/decide`.
+
+**The user's, departing from rulings — for the decider to record.**
+- **Seven points against `R-046`'s "the design's points 1 to 5".** The five are
+  kept; `plan-state` and the skills on it are added. Neither is a simulator
+  change.
+- **Changes to the design ratified by `R-028`:** `/plan-explain` and
+  `/plan-status` change, which it excluded; the tree check covers their agents
+  too; two scripts that are not hooks live in `.claude/hooks/`.
+- **The order of the next plans:** this one, then the cost measurement plan,
+  then phase 4. This answers question 2 of the request drafted on
+  `design/poverty-seed`, and leaves `R-046`'s first real run to the decider: the
+  measurement plan's points are now the first a rewired `/plan-next` runs.
+
+**Decided while writing the draft.**
+- **The rewiring of `/plan-next` is the last point**, 7, swapped with the
+  proposal's 7. Written last, no point of this plan runs under the agents, and
+  `R-046`'s first real run stays outside it; the proposal's order constrained
+  only that `plan-state` and the English markers come before both skill points,
+  which still holds.
+- **`plan-state -Draft`** reads the fenced block under `## Draft plan` in
+  `REVIEW-REQUEST.md`, and this request uses that heading, so point 6 can be
+  checked on it.
+- **The branch:** the request on `design/process-plan`, cut from `main`; after
+  the answer it merges into `main` without squash, and the plan is installed on
+  `agent-workflow`, cut from `main`, as `R-048` requires.
+- **The word cap of point 7** is the proposal's recommendation, put in the draft
+  without an explicit answer, and marked so in the request.
+- **The number is `D-110`**: `D-108` and `D-109` exist on `design/poverty-seed`
+  and not on `main`.
+- **This request replaces the moment-three request on `main`**, as the request
+  on `design/poverty-seed` does. When that branch merges, `REVIEW-REQUEST.md`
+  conflicts, and whichever request is still unanswered must survive the merge.
+
+**What `docs/` says:** nothing; the plan touches no file in `docs/`. The rules
+are `R-045` to `R-049` and the design ratified by `R-028`.
+**Would overturn it:** the decider declining the departures from `R-046` and
+`R-028`, which brings the plan back to five points; the user's answer amending
+the draft, which the installing commit then reports.
