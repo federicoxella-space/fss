@@ -679,3 +679,69 @@ one settlement update as local goods, clearings and rows vary, taken before the
 state format is fixed. The figures above are the implementer's arithmetic. The
 user also gives an order of magnitude, as content, for the clearings and rows of
 a village against a city.
+
+### SQ-024 — markets held by market places: five settlement types, and villages that trade at the nearest market
+
+**Raised:** 2026-10-05, by the user, following `SQ-023`.
+**Cites:** `docs/SIM-ECON.md:34-50` the update table, phase 7 above all;
+`docs/SIM-REQ.md:338` FR-M-01; `:348` FR-M-03; `:370` FR-M-08; `:372` FR-M-09;
+`:564` P-06; `:631` P-12; `docs/SIM-STATE.md:39` settlement `type`;
+`docs/SIM-REQ.md:113` FR-D-04; `:125` FR-D-09; `:482` FR-I-05; `:513` FR-G-01.
+**Blocks:** **yes, the phase 4 plan**, with `SQ-023`: where prices form and
+where rationing runs is the shape of the market subsystem and of its state.
+**Status:** open — the direction and the content are the user's; the rules are
+the decider's.
+
+**What the user proposes.** Prices form at market places, not in every
+settlement. Settlement types become five, each with a number of markets:
+
+| Type | Markets |
+|---|---|
+| Village | 0 — its people trade at the market of a larger settlement |
+| Borgo | 1 |
+| Cittadina | 1–2 |
+| City | 2–4 |
+| Metropolis | 3–5 |
+
+**The user's answers to the implementer's questions.**
+
+1. **Markets are specialised by goods.** Each market trades a group of goods
+   (grain and food, livestock, cloth, metals…). A settlement's markets say which
+   groups it trades, and within a settlement a good has one price. Higher-order
+   goods are therefore found only in larger places.
+2. **A village trades at the nearest market, dynamically.** Nearest by transport
+   cost, and recomputed when places rise or fall. Since markets are
+   specialised, the reading is **per group of goods**: a village may sell grain
+   at the borgo next door and buy tools in a distant city.
+3. **Type follows population.** A settlement rises or falls a type across
+   thresholds; a borgo that declines loses its market, and its villages move to
+   another.
+
+**Why it matters beyond realism.** Phase 7, the dominant cost of the update,
+would run only where there are markets, about 80 places under today's P-12
+rather than 2,000, and in each only for the groups it trades. With `SQ-023`'s
+sparse state it is the most concrete route found so far to hundreds of goods
+within P-01. Not measured.
+
+**Open, for the decider unless marked the user's.**
+
+1. **The groups of goods each market trades, and the order in which a place
+   gains them** as it rises a type. Static content: **the user's**.
+2. **The population thresholds** of each type, with hysteresis and the cadence
+   at which type is reassessed. Parameters for §16; the user gives an order of
+   magnitude as content.
+3. **Village to market.** In which phase of the update a village's surplus and
+   demand reach its market and what it bought comes back; at what transport cost
+   and delay; and what happens to a village whose market, for a group, is out of
+   reach.
+4. **What stays local.** Presumably labour, own consumption (phase 6) and credit
+   stay in the village, and the price comes from its market. The destitute row,
+   the seed reserve and rationing by ability to pay must each be placed.
+5. **Assignment.** The hysteresis that keeps a village from flapping between two
+   near-equal markets, the cadence of reassignment, ties by id. Whether it is
+   state or derived each time.
+6. **The rest of the model.** Migration attractiveness (FR-D-04) and price
+   knowledge (FR-I-05) read the market's price; trade links (FR-M-03, FR-M-08,
+   FR-M-09) join market places; degree caps (P-06) and the settlement mix (P-12)
+   for five types instead of three; the generator (FR-G-01) places types and
+   markets.
