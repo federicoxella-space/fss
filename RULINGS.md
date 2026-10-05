@@ -96,6 +96,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   `PLAN.md`, placed between points 6 and 7, carrying `R-068`'s three changes.
   **`R-071`**: and a fourth, `tree-state` reading untracked names unquoted and
   printing no hash when a file cannot be read, with its `Fails when:` line.
+  **`R-073`**: and a fifth, `mutate` refusing a patch whose rename or copy
+  source lies outside `core/Runtime/` and `harness/`, with its `Fails when:`.
 
 ## Escalated to the user
 
@@ -2849,3 +2851,44 @@ run `pwsh` from its `Bash`.
 **Not verified:** the known patch through `mutate` against the real suite was not
 rerun, to keep the decider's session off `core/Runtime/`; the two faults seen red
 were taken from the outcome line.
+
+### R-073 — `mutate` lets a rename out of the guarded folders through: a fifth item for point 8
+
+**Date:** 2026-10-06   **Origin:** D-112 (found at audit)
+**Verdict:** resolved — the user's approval under `D-014`
+**docs/:** unchanged
+
+`D-112` decides that "a patch touching any path outside `core/Runtime/` and
+`harness/` is refused", because the restore is proved only for what `tree-state`
+records. The filter reads `git apply --numstat`, which prints one path per file:
+for a rename, the destination only. Checked in this session on a throwaway
+repository: a patch renaming `docs/a.txt` to `core/Runtime/a.txt` passes
+`--numstat` and `--check`, applies, and removes `docs/a.txt` for as long as the
+check runs. The reverse put it back. Nothing proved that it did, because
+`tree-state` looks only at the two folders, and that proof is the reason the
+filter exists. A copy reads its source and writes nothing outside, so it is
+harmless today, but a filter that reads both sides of each entry covers it at no
+extra cost.
+
+The risk is small. The tester holds `Bash` and can reach any file without a
+patch, and the guard stops mistakes, not an agent set on getting round it (the
+design's "The hole that `Bash` leaves"). But the rule as `D-112` wrote it does
+not hold, and the next reader of the entry would rely on it. Put to the user
+with the fix in point 8 or the limit recorded, the user chose the fix, beside
+`R-071`'s item, for the same reasons.
+
+**The fifth item.** `mutate` refuses, with exit 2, a patch in which either side
+of any entry, a rename's or copy's source included, lies outside `core/Runtime/`
+and `harness/`. A self-test case.
+
+**Its `Fails when:`**, read by the user in the question that chose it, under
+`R-047`: a patch that renames `docs/a.txt` to `core/Runtime/a.txt` is applied.
+
+**Cost.** One more item in point 8. The tester cannot move a file into the guarded
+folders by a patch; it never needs to, since a fault is a change to code that
+exists.
+**Owed by the implementer:** point 8, as `R-070` and `R-071` owe it, carries
+this fifth item and its `Fails when:` line. Cite `R-070` and `R-073`.
+**Would overturn it:** none foreseen short of the user moving it to its own point.
+**Not verified:** how `git apply --numstat -z` prints a rename, which is one way
+to read both sides; the implementer's choice, and its self-test is the check.
