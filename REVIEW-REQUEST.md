@@ -282,8 +282,10 @@ English ones (`R-045`). Every point touches no path under `core/`.
 
 ## What I need from you
 
-1. **The draft**, approved, amended, or rejected — in particular the seven
+1. **Answered by the user, 2026-10-05: "approvo la bozza del piano di
+   processo"** — approved as written, the word cap of point 7 included.
+   ~~**The draft**, approved, amended, or rejected — in particular the seven
    `Fails when:` lines, the word cap of point 7, and the move of the rewiring to
-   the last point.
+   the last point.~~
 2. **Nothing else blocks.** The question on the first real run is the decider's,
    and can wait for the measurement plan.
