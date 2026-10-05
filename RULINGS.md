@@ -94,6 +94,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   `AC-04` over what exists, against provisional bounds derived from `docs/`.
 - **`R-070`**, before point 7 of the process plan runs: point 8 added to
   `PLAN.md`, placed between points 6 and 7, carrying `R-068`'s three changes.
+  **`R-071`**: and a fourth, `tree-state` reading untracked names unquoted and
+  printing no hash when a file cannot be read, with its `Fails when:` line.
 
 ## Escalated to the user
 
@@ -2741,3 +2743,61 @@ as `R-047` asks of moment one, and has not yet done so.
 **`Fails when:` read by the user, 2026-10-06:** "approvo le condizioni di
 fallimento di R-070". The three lines stand as stated above, and point 8 carries
 them verbatim.
+
+### R-071 — `tree-state` misses edits to an untracked file whose name git quotes: a fourth item for point 8
+
+**Date:** 2026-10-06   **Origin:** D-112 (found at audit)
+**Verdict:** resolved — the user's approval under `D-014`
+**docs/:** unchanged
+
+Point 2's `Fails when:` names, first, "an edit to a file that is already
+untracked leaves the hash unchanged". `tree-state` commits that fault for one
+class of file. It lists untracked files with `git ls-files --others`, which under
+`core.quotePath`, on by default and unset here, prints a name holding a
+non-ASCII byte in C quotes: `"citt\303\240.txt"`. `Join-Path` makes that a path
+to nothing, `Get-FileHash` fails with a non-terminating error, the line for the
+file carries an empty hash, and the script prints a hash all the same. Checked in
+this session on a throwaway repository: `città.txt` untracked, edited between two
+calls, the same hash printed twice, an error on stderr each time, nothing that
+stops a caller.
+
+The second half is the wider defect. Whatever the cause — a quoted name, a file
+locked by a running build, a permission — a file `tree-state` cannot read
+leaves its hash where it was, and the script still answers. A check that cannot
+look should say so, not report that nothing moved. `mutate` is not exposed
+through its own refusal: `git apply --numstat` quotes the same names, a quoted
+path does not begin with `core/Runtime/`, and the patch is refused. It is exposed
+through the hash it compares, and so are the skills of points 6 and 7, which call
+`tree-state` on the whole tree.
+
+The point stays closed. Its check was met, the self-test's untracked file is
+ASCII, and the outcome line is not rewritten; the defect is in code the check did
+not reach. In practice the names under `core/Runtime/` and `harness/` are ASCII,
+and the repository's are; that is why this is not urgent, and why it is not
+nothing either, since an Italian-speaking repository is where a name like
+`città.txt` turns up.
+
+Put to the user with three answers — a fourth item in point 8, a point 9 placed
+before point 6, or the limit accepted and recorded — the user chose the first.
+Point 8 is owed by `R-070`, is not yet in `PLAN.md`, and runs before point 7,
+the first after which an agent runs under `tree-state`. It is the same kind of
+change, a guard closed after an audit found a way past it.
+
+**The fourth item.** `tree-state` reads untracked names unquoted — `-z`, or
+`core.quotePath` off for its own calls — and, when any file it must hash cannot
+be read, exits non-zero and prints no hash. A self-test case each.
+
+**Its `Fails when:`**, read by the user in the question that chose it, under
+`R-047`: an edit to an untracked file named `città.txt` leaves the hash
+unchanged; a file that cannot be read still yields a hash.
+
+**Cost.** Point 8 grows by one item and one line. A caller of `tree-state` must
+treat a non-zero exit as "unknown", which `mutate` does not yet do: it compares
+two strings, and an empty `$before` against an empty `$after` would read as
+"returned". Point 8 makes `mutate` stop with exit 3 when either call fails.
+**Owed by the implementer:** point 8, as `R-070` owes it, carries this fourth
+item and its `Fails when:` line, and `mutate` treats a failed `tree-state` as a
+tree not returned. Cite `R-070` and `R-071`.
+**Would overturn it:** none foreseen short of the user moving it to its own point.
+**Not verified:** a locked file, which was not produced; only the quoted name was.
+That `-z` output reaches PowerShell intact through a native call was not tried.
