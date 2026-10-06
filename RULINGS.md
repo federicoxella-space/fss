@@ -98,6 +98,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   printing no hash when a file cannot be read, with its `Fails when:` line.
   **`R-073`**: and a fifth, `mutate` refusing a patch whose rename or copy
   source lies outside `core/Runtime/` and `harness/`, with its `Fails when:`.
+  **`R-074`**: and a sixth, `plan-state` reading "after the failure" by position
+  in the file, not by number, with its `Fails when:`.
 
 ## Escalated to the user
 
@@ -2892,3 +2894,50 @@ this fifth item and its `Fails when:` line. Cite `R-070` and `R-073`.
 **Would overturn it:** none foreseen short of the user moving it to its own point.
 **Not verified:** how `git apply --numstat -z` prints a rename, which is one way
 to read both sides; the implementer's choice, and its self-test is the check.
+
+### R-074 — `plan-state` reads "after the failure" by number, not by position: a sixth item for point 8
+
+**Date:** 2026-10-06   **Origin:** D-113 (found at audit)
+**Verdict:** resolved — the user's approval under `D-014`
+**docs/:** unchanged
+
+`D-113` decides that "`stopped` needs an open point after the failure, as
+`/plan-next` words it". `/plan-next` step 1 says "with points still open after
+it", and its next point is "the first `## <n>.` section with no outcome line":
+both read the plan in file order. `plan-state` reads the next point the same
+way, taking the first open point in the list it built from the file. That
+answers `R-070`'s "Not verified": point 8, placed between 6 and 7, is reported
+next after 6. But the test for `stopped` compares numbers: an open point counts
+only if its number is greater than the failed one's.
+
+The two orders agree in every plan so far, since `D-014` appends an added point
+at the end. `R-070` made the one plan where they part: point 8 before point 7.
+Checked in this session on a fixture in the scratchpad, points 6, 8 and 7 in
+that order, 6 closed, 8 `FAILED`, 7 open: the script prints `state: running`,
+`next: 7`, `stoppedAt: null`. That is the third fault of point 3's
+`Fails when:`, "a plan stopped at a `FAILED` point is reported as running",
+committed for the case the fixtures did not hold. After point 6, `/plan-explain`
+and `/plan-status` read that state; after point 7, `/plan-next` does too.
+
+The point stays closed, as `R-071` left point 2: its check was met, and the
+outcome line is not rewritten. Put to the user with the fix in point 8 or the
+limit recorded, the user chose the fix.
+
+**The sixth item.** `plan-state` decides `stopped` by position in the file: a
+failed point with an open point anywhere after it in the plan is `stopped`,
+whatever the numbers. A self-test fixture whose points are numbered out of file
+order.
+
+**Its `Fails when:`**, read by the user in the question that chose it, under
+`R-047`: a plan whose point 8, placed before point 7, has failed is reported
+`running` with next point 7.
+
+**Cost.** One more item in point 8. Until it lands, a failure of point 8 is
+misreported by the two skills that point 6 puts on `plan-state`; the outcome
+line `FAILED` is still there for a human to read.
+**Owed by the implementer:** point 8, as `R-070` owes it, carries this sixth
+item and its `Fails when:` line. Cite `R-070` and `R-074`.
+**Would overturn it:** none foreseen short of the user moving it to its own point.
+**Not verified:** whether any other rule of `plan-state` mixes number and
+position; the script was read whole for it and none was found, but only the
+`stopped` case was probed.
