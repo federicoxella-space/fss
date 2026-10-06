@@ -36,10 +36,10 @@ Runs at settlement cadence, every 7 ticks, on the staggered bucket of FR-T-06. E
 | 1 | Arrivals | Goods in transit landing this tick enter stock, with transit loss applied. Migrants join cohorts, their hunger deficit averaged into the row's. Chronicle entries arrive and age. | FR-C-11, FR-D-04, FR-D-03a, FR-I-02 |
 | 2 | Prices | Compute local price per good from current stock. Compute the wage from labour supply against expected demand. | FR-M-01, FR-C-05 |
 | 3 | Borrowing | Cohorts short of currency for inputs or needs borrow against collateral. Interest rate set. Advances against future output issued here. | FR-C-22 to FR-C-26 |
-| 4 | Labour | Labour market clears. Workers are assigned to activities up to building capacity, and to every crop stage active in this update; where labour is in excess, sellers are hired in proportion to what they offer. Labour still unhired is assigned to open fields (FR-P-10e); the rest is unemployment. Wages are paid. | FR-C-05, FR-P-17 |
+| 4 | Labour | Labour market clears. Workers are assigned to activities up to building capacity, and to every crop stage active in this update; where labour is in excess, sellers are hired in proportion to what they offer. Labour still unhired is assigned to open fields (FR-P-10e); the rest is unemployment. Wages are paid. | FR-C-05, FR-P-17, FR-P-10e |
 | 5 | Production | Recipes execute on inputs held. Crude variants run where durables are missing. Durables wear, buildings decay. Dated crop events fire if due. Sowing consumes the planting good. Harvest reaps what labour allows from the area still standing, open fields included. Recipes never draw on a seed reserve. | FR-P-02, FR-P-10, FR-P-10a, FR-P-10b, FR-P-10c, FR-P-10e, FR-P-12, FR-P-20 to FR-P-23 |
 | 6 | Own consumption | Each cohort meets its needs from its own holdings, by tier, lowest grade first, leaving its seed reserve untouched unless its hunger deficit exceeds P-66, and then drawing on it only for the tier 0 need left unmet. | FR-C-03, FR-P-10d |
-| 7 | Market clearing | Unmet need becomes demand, capped by currency, which includes what phase 3 lent. Surplus, the seed reserve excluded, becomes supply. Short supply is allocated by ability to pay, the share of a cohort able to pay read from its wealth curve. Currency moves buyer to seller. Last, each cohort's hunger deficit grows by the tier 0 need still unmet, or decays if it was met. | FR-C-04, FR-D-03a |
+| 7 | Market clearing | Unmet need becomes demand, capped by currency, which includes what phase 3 lent. Surplus, the seed reserve excluded, becomes supply. Short supply is allocated by ability to pay, the share of a cohort able to pay read from its wealth curve. Currency moves buyer to seller. Last, each cohort's hunger deficit grows by the tier 0 need still unmet, or decays if it was met. | FR-C-04, FR-P-10d, FR-J-22, FR-D-03a |
 | 8 | Repayment | Debts falling due are repaid. Default seizes goods, then durables, then buildings. Residual is written off. Default marks are set and aged. | FR-C-27, FR-C-28 |
 | 8a | Destitution | Cohort members whose wealth falls below the threshold enter the destitute row. Destitute members above the exit threshold leave for their destinations: for agricultural activities only in an update holding a crop's sowing date. | FR-J-19, FR-J-20, FR-D-03a |
 | 9 | Spoilage | Perishability applied to all held goods, with remainder carry. | FR-P-13 |
@@ -61,7 +61,7 @@ These run inside phase 5 or phase 12 when their date falls in the current update
 |---|---|---|
 | Sowing | crop sowing date, shifted by climate | Commits land, labour, and the planting good to a crop for the season |
 | Harvest | crop harvest date, shifted by climate | Opens the harvest window; each update reaps what harvest labour allows |
-| Allocation adjustment | at sowing | Moves the allocation vector a damped step toward the best expected return; each activity moves at its own rate (FR-P-15); occupational shares are realigned in phase 12, after the destitute leave in phase 8a |
+| Allocation adjustment | at sowing for a crop's activity, at settlement cadence for the others (FR-P-15) | Moves the allocation vector a damped step toward the best expected return; each activity moves at its own rate (FR-P-15); occupational shares are realigned in phase 12, after the destitute leave in phase 8a |
 | Taxation | annual | Settlement collects from cohort currency, retains a share, sends the rest as a convoy |
 | Construction | continuous | Consumes timber and labour; completed buildings raise capacity |
 
@@ -79,7 +79,7 @@ A need is defined per goods class, minimum grade and tier, per person per day (F
 
 Tiers belong to needs, not goods.
 
-**Quantity demanded at market**, per cohort per good:
+**Quantity demanded at market**, per cohort per need, placed on the goods that meet it under "Choice within a class" below:
 
 ```
 need        = perCapitaNeed(class, grade, tier) × count

@@ -4237,3 +4237,63 @@ how births and deaths are written.
 
 **Not verified:** nothing further; FR-D-01 to FR-D-03, FR-D-13 and FR-C-05 were
 read.
+
+### R-090 — The fourteen leftovers of the batch are corrected; two are decided on the way
+
+**Date:** 2026-10-06   **Origin:** SQ-022
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-01, FR-P-10d, FR-C-04, FR-C-29, FR-A-05, §16 P-17,
+P-17a, P-63, P-64, §18 Phase 4, §19 P-17 and P-01; `SIM-DEC` DEC-015, DEC-047
+title, DEC-052, DEC-076, DEC-092, DEC-041's cost (P-17's figure); `SIM-ECON`
+phases 4 and 7, the allocation step, §Demand; `SIM-STATE` §Static data.
+Revisions already today's.
+
+Item by item, as the entry numbers them.
+
+1. **Phase counts.** The update has phases 1 to 12 and 8a; §18 and §19 now say
+   "all its phases". The measured figures keep "5 of 12": that was the update
+   they were taken on, and DEC-041's cost line now says so. §19's unmeasured
+   phases are eight since 8a.
+2. **9 and 27 cohorts.** The four rows record measurements, and are relabelled
+   "measured on 9 rows" and "27 rows" rather than restated at 12 and 36: §19
+   already says the real measurement counts 12 and 36.
+3. **DEC-015** starts with "the goods of P-09", which cannot go stale again.
+4. **DEC-052**: one mechanism, damped at each activity's rate (DEC-096).
+5. **DEC-047's title**: "at each activity's adjustment".
+6. **The allocation step** adjusts at sowing for a crop's activity and at
+   settlement cadence for the others, as FR-P-15 says.
+7. **Implements.** Phase 4 cites FR-P-10e, phase 7 FR-P-10d and FR-J-22, and
+   §18's Production row lists phase 12 for FR-J-03's realignment.
+8. **A crop yields one good — decided.** DEC-092 let a crop whose seed is not food
+   yield its seed "alongside its harvest"; FR-P-10 and FR-P-10b give a crop one
+   yield. One yield wins: the content of `R-063` has one crop sown with its own
+   harvest, and a co-yield would add a second output to the crop record, the
+   harvest, the carry of `R-084` and the conservation of FR-P-03c for a case no
+   content holds. A crop whose seed is not its harvest names a planting good
+   obtained as any good is, by a recipe or by trade.
+9. **FR-P-01 and DEC-015** say "whether it is durable", not "role" (`R-056`).
+10. **`rulesData`.** §Static data says the content is not state and the bytes
+    are, as World's `rulesData`, immutable.
+11. **FR-A-05** refuses a file "this build cannot read or whose content fails
+    its validation", which is what DEC-089 asks of a save, and no longer admits
+    a file only a later build could read.
+12. **Rent — decided.** FR-C-29 said rent "reopens when the wealth axis is
+    added", and DEC-054 added it long ago, so read literally rent was already
+    in scope. It is not: no requirement, phase or content carries it, and
+    `SIM-ECON`'s "does not cover" item 1 still treats rent as a future change.
+    The condition was a pointer to what would carry rent, written before the
+    axis existed. Both texts now say that: the wealth axis is what would carry
+    rent and tenancy if they enter the model. Bringing them in is a scope
+    decision that belongs with the user and a phase, not with a wording fix.
+13. **P-71** is cited by FR-P-10d and DEC-092 as the CI share of the release.
+14. **"Per good".** FR-C-04 keeps a pass per good, in DEC-099's order within a
+    need; §Demand's quantity is per cohort per need. Whether the pass is per good
+    or per clearing is `SQ-023`'s, after the measurement.
+
+**Cost.** None to code.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** for item 8, content needing a crop with two outputs; for
+item 12, the user bringing rent into scope.
+**Not verified:** that every other mention of the old counts is gone; `docs/`
+was grepped for "twelve", "seven goods", "once per sowing", "role" in a good's
+record and "no build could", and what remains is historical and says so.

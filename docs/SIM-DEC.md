@@ -183,9 +183,9 @@ An entity's state at tick T is computed directly, not by replaying T ticks. Attr
 
 ### DEC-015 — A good is a data record and a recipe is a data record
 
-Unit weight, reference value, perishability, role, classes, at most one per class tree, with a value in each, processing grade. Recipes carry inputs, output, labour, building. No good and no recipe requires code.
+Unit weight, reference value, perishability, whether durable, classes, at most one per class tree, with a value in each, processing grade. Recipes carry inputs, output, labour, building. No good and no recipe requires code.
 
-**Rationale.** The plan is to start with seven goods and grow. That only works if growth costs data entry rather than branches.
+**Rationale.** The plan is to start with the goods of P-09 and grow. That only works if growth costs data entry rather than branches.
 
 **Cost.** Goods with genuinely unique mechanics need a general mechanism added to the schema rather than a special case, which is more work up front for the first such good.
 
@@ -475,7 +475,7 @@ World creation runs the simulator for P-18 years with no hot agents, then takes 
 
 **Rationale.** At the shipping configuration the simulator uses roughly 40% of the budget, which leaves room to add subsystems while keeping the failure close enough that an unexpected doubling of cost trips the test on the day it appears. A looser budget stays silent for years; a tighter one fires on legitimate work until someone raises it, which removes the signal either way.
 
-**Cost.** The figure rests on a measurement covering five of the twelve phases of a settlement update, carried with a factor of two allowance for the rest. The allowance is a judgement, and Phase 4 will replace it with the real number.
+**Cost.** The figure rests on a measurement covering five phases of a settlement update, of the twelve it had when the figure was taken, carried with a factor of two allowance for the rest. The allowance is a judgement, and Phase 4 will replace it with the real number.
 
 ### DEC-042 — Cohorts hold currency and own what they produce
 
@@ -517,7 +517,7 @@ Currency enters only by an explicit minting event and leaves only by an explicit
 
 **Cost.** Kingdom spending has to have somewhere to go from the first version, which means garrisons, works, and holdings become simulation objects earlier than they otherwise would.
 
-### DEC-047 — Allocation adjusts partially, once per sowing
+### DEC-047 — Allocation adjusts partially, at each activity's adjustment
 
 The settlement moves its land and labour allocation toward the highest expected return by a damped rate, capped per year. An activity may carry its own rate and cap (DEC-096).
 
@@ -559,7 +559,7 @@ A settlement's annual remittance becomes an entity moving over the trade graph, 
 
 ### DEC-092 — Sowing consumes a planting good, protected until desperation when it is food
 
-A crop record names its planting good and the amount needed per unit of land. For grain the planting good is the harvest itself; a crop whose seed is not food names a separate good it yields alongside its harvest. Sowing consumes the planting good from the sowing cohort's holdings. The seed reserve is derived, not stored: the amount per unit of land times the land the current allocation vector gives the cohort's crop, and nothing but sowing draws on it. When the planting good is food, the reserve is released once the cohort's hunger deficit exceeds P-66, only as far as needed to meet the tier 0 need the cohort's other holdings leave unmet in that update, which holds the deficit there, and only to own consumption; P-67 is the share that may reach the market, zero in the shipping configuration.
+A crop record names its planting good and the amount needed per unit of land. For grain the planting good is the harvest itself; a crop whose seed is not its harvest names a planting good obtained as any other good is, by a recipe or by trade. Sowing consumes the planting good from the sowing cohort's holdings. The seed reserve is derived, not stored: the amount per unit of land times the land the current allocation vector gives the cohort's crop, and nothing but sowing draws on it. When the planting good is food, the reserve is released once the cohort's hunger deficit exceeds P-66, only as far as needed to meet the tier 0 need the cohort's other holdings leave unmet in that update, which holds the deficit there, and only to own consumption; P-67 is the share that may reach the market, zero in the shipping configuration; P-71 is the same share in CI, where the path is exercised.
 
 **Rationale.** Without seed a lost harvest costs one year, since the next sowing is whole regardless. Eating seed borrows against next year at the crop's yield ratio, and the choice is distributive: keeping seed pushes the famine onto those who buy, eating it drags it onto those who grow over several years. A threshold produces both. Imported grain is also seed, so trade becomes the way out of a famine that outlasts a year. Bounding the reserve by allocated land keeps it from exceeding what the next sowing can use.
 
@@ -597,7 +597,7 @@ When the cohort that sowed a crop is empty, the crop stands as an open field unt
 
 Activity, building, productivity, placement, wealth tendency, social rank. Cohorts are partitioned by it. Occupational shares move under the same damped allocation vector that moves land and labour.
 
-**Rationale.** Occupations follow the rule that already governs goods and recipes, so the list grows by data entry. Reusing the allocation vector means a weaver's wage rising and a field switching from wool to grain are the same mechanism with one damping constant, rather than two systems that can disagree.
+**Rationale.** Occupations follow the rule that already governs goods and recipes, so the list grows by data entry. Reusing the allocation vector means a weaver's wage rising and a field switching from wool to grain are the same mechanism, damped at each activity's rate (DEC-096), rather than two systems that can disagree.
 
 **Cost.** Any occupation with genuinely unique behaviour needs a general field added to the record rather than a special case.
 
@@ -825,7 +825,7 @@ The rate is the bounded price function applied to credit supply against demand, 
 
 Goods, then durables, then buildings. No person is taken. Land remains a settlement attribute.
 
-**Rationale.** Stopping short of bonded labour keeps a defaulted cohort economically alive and able to sell its labour, so ruin is recoverable. Leaving land unowned protects the settlement-level land per capita that brakes the migration spiral, and keeps rent and tenancy out until the wealth axis exists to carry them.
+**Rationale.** Stopping short of bonded labour keeps a defaulted cohort economically alive and able to sell its labour, so ruin is recoverable. Leaving land unowned protects the settlement-level land per capita that brakes the migration spiral, and keeps rent and tenancy out; the wealth axis of DEC-054 is what would carry them if they enter.
 
 **Cost.** No rent, no great estates. A peasant is dispossessed only by losing what working the land needs: seed, durables, buildings (DEC-090, DEC-092). Rent and tenancy stay outside the model until the cohort key gains its second axis.
 

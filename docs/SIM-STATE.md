@@ -166,7 +166,7 @@ Sampled transients are not stored. They are enumerated on demand from the draw o
 
 ## Static data, not state
 
-Goods, recipes, mestieri, crops, climate curves, event class definitions, goods classes, needs table, wealth curves, and the values of the parameters that drive the simulation. They never change during a run. They arrive in the rules file the host supplies, or in the base rules compiled into the core when it supplies none (DEC-100), and World holds the bytes whole so that a save carries them.
+Goods, recipes, mestieri, crops, climate curves, event class definitions, goods classes, needs table, wealth curves, and the values of the parameters that drive the simulation. They never change during a run. They arrive in the rules file the host supplies, or in the base rules compiled into the core when it supplies none (DEC-100), and World holds the bytes whole so that a save carries them. The content is not state; the bytes that carry it are, as World's `rulesData`, immutable for the life of the world.
 
 ---
 

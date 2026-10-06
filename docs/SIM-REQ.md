@@ -138,7 +138,7 @@ dayOfMonth = dayOfYear % 28
 
 ## 6. Goods and production
 
-**FR-P-01** — A good is a data record: unit weight, value reference, perishability, role, the classes it belongs to, at most one in each class tree, with a value per unit in each, and its processing grade (FR-P-03a). Adding a good requires no code change.
+**FR-P-01** — A good is a data record: unit weight, value reference, perishability, whether it is durable (FR-P-03), the classes it belongs to, at most one in each class tree, with a value per unit in each, and its processing grade (FR-P-03a). Adding a good requires no code change.
 
 **FR-P-02** — A recipe is a data record: inputs, output, labour required, building required. Adding a recipe requires no code change.
 
@@ -178,7 +178,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-10c** — A standing crop carries a condition on 0–20000, set to 10000 at sowing. Growth labour below normal care lowers it towards 0; growth labour between normal and full care raises it towards 20000. Exogenous events striking a standing crop multiply it. Both care levels are zero in the shipping configuration; CI runs a configuration where they are not.
 
-**FR-P-10d** — A cohort's seed reserve is the planting good needed per unit of land times the land the current allocation vector gives its crop. Only sowing draws on it: own consumption, market supply, recipe inputs and emigrants (FR-D-04a) leave it untouched. When the planting good is food and the cohort's hunger deficit exceeds P-66, the reserve is released to own consumption only as far as needed to meet the update's tier 0 need that the cohort's other holdings leave unmet. That holds the deficit near P-66: the need met, the deficit decays (FR-D-03a), and once it is at or below P-66 the reserve closes again. The deficit read is the one written at the end of the previous update. A share P-67 of what is released may become supply.
+**FR-P-10d** — A cohort's seed reserve is the planting good needed per unit of land times the land the current allocation vector gives its crop. Only sowing draws on it: own consumption, market supply, recipe inputs and emigrants (FR-D-04a) leave it untouched. When the planting good is food and the cohort's hunger deficit exceeds P-66, the reserve is released to own consumption only as far as needed to meet the update's tier 0 need that the cohort's other holdings leave unmet. That holds the deficit near P-66: the need met, the deficit decays (FR-D-03a), and once it is at or below P-66 the reserve closes again. The deficit read is the one written at the end of the previous update. A share of what is released may become supply: P-67 in the shipping configuration, P-71 in CI, where the path is exercised.
 
 **FR-P-10e** — A standing crop whose cohort is empty is an open field until its harvest window closes. Labour left unhired once the labour market of FR-C-05 clears is assigned to it and reaps it under FR-P-10b, and each cohort keeps the harvest in proportion to the labour it supplied. An advance against it is written off under FR-C-27.
 
@@ -266,7 +266,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-C-03** — Consumption order is fixed: a cohort meets its needs from its own holdings first, lowest grade first, then buys the remainder at market.
 
-**FR-C-04** — Each settlement update runs a clearing pass per good:
+**FR-C-04** — Each settlement update runs a clearing pass per good, the goods that meet one need taken in the order of DEC-099:
 
 1. Cohorts consume from their own holdings, the seed reserve excepted under FR-P-10d.
 2. Unmet need becomes demand for the goods that meet it, chosen under DEC-099, capped by the cohort's currency, which includes what it borrowed this update.
@@ -305,7 +305,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-C-28** — A cohort or agent that has defaulted carries a mark for P-57 ticks, raising its risk premium.
 
-**FR-C-29** — Land is not owned by cohorts. It remains a settlement attribute, and rent and tenancy are out of scope. This reopens when the wealth axis is added to the cohort key.
+**FR-C-29** — Land is not owned by cohorts. It remains a settlement attribute, and rent and tenancy are out of scope. The wealth axis of DEC-054 is what would carry them if they enter the model.
 
 **FR-C-30** — Selling labour under FR-C-05 is always available as an alternative to borrowing, and is the only route open to a cohort with no collateral.
 
@@ -504,7 +504,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 **FR-A-04** — Travel is walked by default and abstracted on fast travel. Both paths run the same simulation.
 
-**FR-A-05** — The host may supply a rules file as bytes when it creates a world: the static content and the values of the parameters that drive the simulation (DEC-100). When it supplies none, the world runs on the base rules compiled into the core from the same source. The core validates either and refuses, whole, a file no build could accept, and one that declares more goods, mestieri or recipes than P-74, P-75 and P-76 allow. A refusal is a result returned to the host, never a failure of the core: players write rules files. A loaded world runs on the rules file its save carries.
+**FR-A-05** — The host may supply a rules file as bytes when it creates a world: the static content and the values of the parameters that drive the simulation (DEC-100). When it supplies none, the world runs on the base rules compiled into the core from the same source. The core validates either and refuses, whole, a file this build cannot read or whose content fails its validation, and one that declares more goods, mestieri or recipes than P-74, P-75 and P-76 allow. A refusal is a result returned to the host, never a failure of the core: players write rules files. A loaded world runs on the rules file its save carries.
 
 ---
 
@@ -568,10 +568,10 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-14 | Climate curve resolution | 52 weekly entries, 2 curves per modifier | Decided |
 | P-15 | Named climate bands | 3–4, presentation only | Decided |
 | P-16 | Harvest offset, coldest to warmest | 28 days | Decided |
-| P-17 | Settlement ceiling at P-01, 9 cohorts | ~7,000 | Measured subset, 2x allowance for unmeasured phases |
-| P-17a | Settlement ceiling at P-01, 27 cohorts | ~1,500 | Measured subset, same allowance |
-| P-63 | Cost per settlement update, 9 cohorts | 3.3 us | Measured, 5 of 12 phases |
-| P-64 | Cost per settlement update, 27 cohorts | 15.8 us | Measured, 5 of 12 phases |
+| P-17 | Settlement ceiling at P-01, measured on 9 rows | ~7,000 | Measured subset, 2x allowance for unmeasured phases |
+| P-17a | Settlement ceiling at P-01, measured on 27 rows | ~1,500 | Measured subset, same allowance |
+| P-63 | Cost per settlement update, measured on 9 rows | 3.3 us | Measured, 5 of 12 phases |
+| P-64 | Cost per settlement update, measured on 27 rows | 15.8 us | Measured, 5 of 12 phases |
 | P-18 | Prior history length | TBD in Phase 6 | Open |
 | P-19 | Allocation adjustment rate | TBD by sweep | Open |
 | P-20 | Base tax rate | 10% of surplus | Proposed |
@@ -799,11 +799,11 @@ Each phase has an exit gate. No phase starts before the previous gate is green.
 | 6 | Tuning: sweeps, CSV output, charts | P-11, P-18, AC-04 bounds and AC-09 values recorded |
 | 7 | Host integration | Command queue and snapshot API only |
 
-**Phase 4 in full.** Phase 4 builds the whole settlement update of SIM-ECON, all twelve phases and its dated steps, and the generator it runs on. Each subsystem covers:
+**Phase 4 in full.** Phase 4 builds the whole settlement update of SIM-ECON, all its phases, 1 to 12 and 8a, and its dated steps, and the generator it runs on. Each subsystem covers:
 
 | Subsystem | SIM-ECON phases and steps | Requirements |
 |---|---|---|
-| Production | 5, 9; sowing, harvest, allocation adjustment, construction | FR-P, save FR-P-03b; FR-J-01 to FR-J-03, FR-J-21, FR-J-22; FR-C-01, FR-C-02, FR-C-06. Before it, the rules file and the generator: FR-A-05; FR-G-01, FR-G-01a, FR-G-02, with the buried stock of FR-J-14 and FR-J-15 |
+| Production | 5, 9, 12 for realignment; sowing, harvest, allocation adjustment, construction | FR-P, save FR-P-03b; FR-J-01 to FR-J-03, FR-J-21, FR-J-22; FR-C-01, FR-C-02, FR-C-06. Before it, the rules file and the generator: FR-A-05; FR-G-01, FR-G-01a, FR-G-02, with the buried stock of FR-J-14 and FR-J-15 |
 | Needs | 6; the end of 7 for the hunger deficit | FR-C-03, FR-P-03b, FR-D-03a; SIM-ECON §Demand, tiers and the hunger deficit |
 | Market | 1 for goods, 2 for prices, 7, 10 | FR-M-01 to FR-M-07; FR-C-04, FR-C-10, FR-C-11; FR-C-12 to FR-C-18, FR-C-21; FR-J-04, FR-J-05; FR-I-05 to FR-I-06a |
 | Labour and income | 2 for the wage, 3, 4, 8, 8a; taxation | FR-C-05, FR-J-19, FR-J-20, FR-C-07 to FR-C-09, FR-C-19, FR-C-20, FR-C-22 to FR-C-30; FR-X-01, FR-X-06, FR-X-07 for the convoy |
@@ -822,11 +822,11 @@ All remaining items depend on measurement and close in the phase named.
 | Item | Closes in | Procedure |
 |---|---|---|
 | P-11, trade damping `k` | Phase 6 | Sweep `k` against transport cost; accept on AC-09 and AC-04 |
-| P-17, settlement ceiling | Phase 4 | Measure the full twelve-phase settlement update, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach. P-63 and P-64 were measured on 9 and 27 rows and seven goods; the measurement counts the destitute and day-labourer rows, 12 per settlement in the shipping configuration and 36 in CI, eight goods, and the food markets the content fixes |
+| P-17, settlement ceiling | Phase 4 | Measure the full settlement update, all its phases, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach. P-63 and P-64 were measured on 9 and 27 rows and seven goods; the measurement counts the destitute and day-labourer rows, 12 per settlement in the shipping configuration and 36 in CI, eight goods, and the food markets the content fixes |
 | P-18, prior history length | Phase 6 | Measure cost per simulated year, set against the acceptable wait |
 | AC-04 bounds | Phase 6 | Long runs across seeds, bounds set from observed envelopes, replacing the provisional bounds of Phase 4 |
 | AC-09 X and Y per good | Phase 6 | Shock injection per good, values recorded against the intent table |
-| P-01 validity | Phase 4 | Confirm the per-entity cost against a real settlement update. The measured subset is in P-63 and P-64; what is unconfirmed is the factor of two carried for the seven unmeasured phases |
+| P-01 validity | Phase 4 | Confirm the per-entity cost against a real settlement update. The measured subset is in P-63 and P-64; what is unconfirmed is the factor of two carried for the phases left unmeasured, eight since phase 8a |
 
 ---
 

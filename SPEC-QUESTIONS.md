@@ -606,7 +606,7 @@ ruling or proposal. The labour rule decides who sells labour under FR-C-05.
 **Raised:** 2026-10-05, as SQ-009.
 **Cites:** below, item by item.
 **Blocks:** no.
-**Status:** open.
+**Status:** **closed 2026-10-06 by R-090.**
 
 1. Phase counts: `docs/SIM-REQ.md:798` and `:821` "twelve phases",
    `:573-574` "5 of 12 phases", `:825` and `docs/SIM-DEC.md:478` the
