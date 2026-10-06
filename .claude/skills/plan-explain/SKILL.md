@@ -36,22 +36,25 @@ the retelling is an objection that did not happen.
    to write one — the plan is the conversation where a human decides what the
    work is.
 
-3. **Find the next point:** the first `## <n>.` section with no `*Esito:*` line.
+3. **Find the next point:** the first `## <n>.` section with no `*Outcome:*` line.
    The outcome line is what closes a point; nothing else counts, and a point
-   whose work looks done but carries no outcome line is open.
+   whose work looks done but carries no outcome line is open. Its markers are
+   read in both forms (`AGENTS.md`, "Language"): `*Esito:*`, `FALLITO`, *Chiuso
+   con riserva* and *Riserva sciolta*, from plans written before the rule, mean
+   what their English forms mean.
 
 4. **If every point has one**, say the plan is finished: the branch is ready to
    close, `PLAN.md` is archived to `.claude/plans/`, and the promotion pass is
-   due over its register entries. Then stop. A point *Chiuso con riserva* is
-   closed but the plan is not finished while its reserve is open — no *Riserva
-   sciolta* line under it: name the human action it waits on (`R-011`).
+   due over its register entries. Then stop. A point *Closed with reserve* is
+   closed but the plan is not finished while its reserve is open — no *Reserve
+   discharged* line under it: name the human action it waits on (`R-011`).
 
    **If the plan header carries an `**Abandoned:**` declaration**, say so with
    its reason and stop. Do not present the next open point: it was not reached,
    it was given up, and offering it would invite the work to resume by
    accident.
 
-   **If a closed point's outcome line says `FALLITO` and points remain open**,
+   **If a closed point's outcome line says `FAILED` and points remain open**,
    say the plan stopped at that failure, quote what failed, and stop. The point
    after a failure is not the next point — the plan is not running. Whether to
    retry, change the point, or abandon the plan is a human's decision.

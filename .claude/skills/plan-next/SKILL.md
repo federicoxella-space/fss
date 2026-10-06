@@ -12,7 +12,10 @@ The rules this serves are in `AGENTS.md`; the reasoning is in
 
 ## Before starting
 
-Read `PLAN.md` at the repository root.
+Read `PLAN.md` at the repository root. Outcome lines are written with the
+English markers of `AGENTS.md`, "Language", and read in both forms: `*Esito:*`,
+`FALLITO`, *Chiuso con riserva*, *Riserva sciolta* and *criterio difettoso*,
+from plans written before the rule, mean what their English forms mean.
 
 - **Absent:** refuse. Work here starts from a written plan, and writing it is the
   conversation where a human decides what the work is. Do not offer to write
@@ -21,16 +24,16 @@ Read `PLAN.md` at the repository root.
   invocation of this skill; say so and do the work directly.
 - **Abandoned** — the header carries an `**Abandoned:**` declaration: refuse.
   The plan stopped on purpose and only a human restarts it.
-- **A point closed as failed** — an outcome line saying `FALLITO`, with points
+- **A point closed as failed** — an outcome line saying `FAILED`, with points
   still open after it: refuse. The plan stopped at that failure and has not been
   restarted. Report which point failed and what it says.
 - **Every point closed:** do not invent more. Say the plan is finished, check
   the exit condition, and say that the plan is ready to be archived to
   `.claude/plans/` and the promotion pass run over its register entries. If a
-  point is *Chiuso con riserva* with no *Riserva sciolta* line under it, the
+  point is *Closed with reserve* with no *Reserve discharged* line under it, the
   plan is not finished: name the reserve and the human action it waits on.
 - **Otherwise:** the point to run is the first `## <n>.` section with no
-  `*Esito:*` line. Points run in plan order, including a point added later than
+  `*Outcome:*` line. Points run in plan order, including a point added later than
   the ones after it — running them out of order contradicts the rule all three
   skills share.
 
@@ -184,7 +187,7 @@ seeing it happen.
 |---|---|
 | Nothing | Append. |
 | The point's own text — its statement, citations, check, `Core:` | **Stop, do not append.** The work was done against a criterion that no longer exists. Report that the work is finished and unrecorded, and let the human choose: re-verify against the new text, or discard. |
-| The point already carries an `*Esito:*` line | **Stop.** Someone else closed it. Nothing here is safe to assume. |
+| The point already carries an `*Outcome:*` line | **Stop.** Someone else closed it. Nothing here is safe to assume. |
 | The point is gone, or the plan was replaced | **Stop.** |
 | Other points, or a point added after this one | Append, and say so in the report. Their text is not this point's contract. |
 
@@ -194,7 +197,7 @@ Then, in this order:
    naming the plan point. It holds the choices the specification does not make,
    and the findings that were **rejected**, with the reason. A rejection nobody
    can audit is most of the value thrown away.
-2. The `*Esito:*` line appended to the point in `PLAN.md`: the date, what the
+2. The `*Outcome:*` line appended to the point in `PLAN.md`: the date, what the
    check produced, the register reference, and the outcome of the review —
    including "not run, `Core: no`".
 
@@ -212,23 +215,23 @@ as written (`R-005`):
 - **Correct code passes it, but it proves less than the point asks** — it
   under-covers the "Does", its words diverge from it, or it cannot fail for the
   reason it exists. Close the point on the criterion as frozen, with the missing
-  check written beside it. The outcome line says *criterio difettoso* and names
+  check written beside it. The outcome line says *criterion defective* and names
   the register entry; the plan continues. The decider rules on the entry at its
   next audit, and whatever follows lands under "Owed by the implementer" in
   `RULINGS.md`, never in `PLAN.md`.
 - **Correct code cannot pass it**, or passing it would build the wrong thing.
-  That is a failure: close the point as below, with *criterio sbagliato* as the
+  That is a failure: close the point as below, with *criterion wrong* as the
   reason.
 
 **A clause that only a human can discharge closes the point with a reserve**
 (`R-011`). The work is done and verified, and what is missing is an action this
 skill may not take — a push, so that CI runs; a pull request; a confirmation
-from outside the repository. The outcome line reads `*Esito:* <date>. Chiuso con
-riserva — <the clause> attende <the human action>.`, and the plan continues.
+from outside the repository. The outcome line reads `*Outcome:* <date>. Closed
+with reserve — <the clause> awaits <the human action>.`, and the plan continues.
 Not for anything you could do yourself: a reserve is not a way to defer work.
 
 When the human acts, the check the clause names is run and a line is added
-under the outcome line, never in place of it: `*Riserva sciolta:* <date> — <what
+under the outcome line, never in place of it: `*Reserve discharged:* <date> — <what
 was done, what the check produced>.` It is committed on its own or with the next
 point, and never carries a `Plan-point:` trailer. A reserve still open keeps the
 exit condition unmet, whatever the point count says.
@@ -260,7 +263,7 @@ stop and ask rather than deciding for them what their edit belongs to.
 The check does not pass, the work turns out impossible, or a citation sent the
 point back. Close it as **failed** rather than leaving it open:
 
-- Outcome line: `*Esito:* <date>. FALLITO — <what was attempted, what the check
+- Outcome line: `*Outcome:* <date>. FAILED — <what was attempted, what the check
   did>.` Register entry as for any point; a road already walked is worth more
   written down than a road not taken.
 - Commit with `Plan-point: <n>`. A point closed as failed is closed.

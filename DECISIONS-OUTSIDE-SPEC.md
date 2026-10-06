@@ -3332,6 +3332,95 @@ Nothing above it rewritten, no number moved.
 finding a `Closed by:` that a correct point 8 cannot pass, or that passes
 without catching a `Fails when:` fault, under `R-005`.
 
+### D-116 · Point 5 · `AGENTS.md`'s three rule sets and the English markers: what the point left open
+
+**Permission for `AGENTS.md` (`R-010`).** Granted by the user, Federico Xella,
+in answering the process plan's moment-one request (the plan installed in
+`6d6d098`), for point 5 as its text states it: the three rule sets of the
+design's "The rules this adds to `AGENTS.md`", `R-048`'s rule in "Criteria are
+frozen when written", and the five markers (`R-045`). The applied diff edits
+that bullet and adds three sections, and touches nothing else in the file. The
+three skills are named in the point's text, which is the permission the
+self-governance rule it writes asks for.
+
+**Decided.**
+- **Placement.** Three sections after "Rules the build cannot catch":
+  "Comments and simplicity", "Language", "Review and self-governance". The
+  design names the rule sets, not where they go.
+- **The table is the design's**, with its "Applied in" column. C10 reads "no
+  finding: it records the code's practice", the second of the two options
+  `R-028` gave.
+- **`R-048` in four sentences** appended to the "Criteria are frozen" bullet,
+  carrying the ruling's three elements: the draft in the request, the installing
+  commit that cites the answer and says whether it matches the draft as amended,
+  and no live `PLAN.md` on `main`. The point's summary names the first two; the
+  ruling's "Owed" line names all three.
+- **The language rule says when it took effect** — point 5 of this plan —
+  instead of the design's "points 7 to 9 of the phase 3 plan", written when the
+  rule was meant for that plan.
+- **Markers.** `R-045`'s table goes into "Language". Each skill carries one
+  sentence recognising the Italian forms: `/plan-next` lists five,
+  `/plan-explain` and `/plan-status` four, since neither reads *criterio
+  difettoso*. *criterio sbagliato*, a reason phrase in `/plan-next` that `R-045`
+  does not list, becomes *criterion wrong* under the language rule; no skill
+  matches on it, so nothing recognises it.
+- **A consequence for the points left.** From this commit every point that
+  touches code passes the code-reviewer. Point 8 changes PowerShell scripts, so
+  it owes one, although `/plan-next` does not dispatch the code-reviewer until
+  point 7: the orchestrator dispatches it by hand.
+- **`/plan-next` grows from 2,755 to 2,793 words.** Point 7's "no longer than
+  the 2,755 words it has today" is 38 words harder. Not trimmed here: cutting
+  unrelated prose to meet a later point's cap is that point's work.
+- **The fixtures are not committed**, as point 4's check was not (`R-093`): the
+  point names no place for them. Violation: the summary of
+  `Calendar.DayOfMonth` changed to "Day within the month, 0..27: four whole
+  weeks (FR-T-04)", and the line `// public static int DayOfMonth(long tick) =>
+  (int)(tick % DaysPerYear) % 28;` added under it. Clean: the same summary
+  citing `FR-T-02`, and no added line. `FR-T-04` is cadence; `FR-T-02` holds the
+  four-week month.
+
+**Check.**
+- The code-reviewer, briefed that the diff is a fixture with no criterion: on
+  the violation, `Calendar.cs:76` C1 and `Calendar.cs:78` C5; on the clean diff,
+  "no findings". `tree-state` unchanged across the dispatches.
+- The grep, as a script: whitespace normalised, each skill's recognising
+  sentence cut out, no Italian marker left in any of the three; exit 0.
+- **Fault 1**, "Comments and simplicity" cut from `AGENTS.md`: the
+  code-reviewer, same fixture, still reports both defects, the citation under
+  "Commits" and the commented line under "Close every task", naming neither C1
+  nor C5. Restored; `tree-state` back to its value before the dispatches.
+- **Fault 2**, `*Esito:*` cut from `/plan-status`'s recognising sentence: the
+  criterion's grep stays green; the check beside it, below, goes red with exit
+  1. Restored.
+
+**Criterion defective (`R-005`, case 1), twice.** Correct code passes both
+halves; neither half fails for its fault as written.
+- "Reports both", read as finding the two defects, stays green with the section
+  removed: the reviewer finds a wrong citation and a commented line without C1
+  and C5. It turns red only read as naming them by their identifiers, the
+  reading this check applied. On this fixture the section changes the rule a
+  finding names, not whether the defect is found.
+- The grep cannot fail for the second fault: a skill that stops recognising
+  `*Esito:*` holds fewer Italian markers, not more. **The check beside it:**
+  each skill's recognising sentence names every Italian form that skill reads —
+  five for `/plan-next`, four for the other two.
+
+**Review.** `git diff --name-only HEAD -- core/` empty: `Core: no` holds, the
+revisioners not run. No code-reviewer of the point: it touches no code, only
+`AGENTS.md` and three skills (the design's "What skips what").
+
+**What `docs/` says:** nothing; process work. `D-089`, `R-045`, `R-048`,
+`R-010` and the design.
+**Would overturn it:** the decider reading "reports both" as finding the
+defects, which leaves the first fault green and the section unproved by any
+check; the user wanting `R-048`'s rule outside the "Criteria are frozen" bullet.
+**Not verified:** whether the table's citations say what the rules say —
+`R-028` left C1, C2, C4, C6 to C9 and S1 unread, and so does this point, which
+checked only that `D-007`, `D-060`, `D-067`, `D-080`, `D-085` and `DEC-083`
+exist. That the code-reviewer repeats its results: one dispatch each. Whether
+it took `AGENTS.md` from disk or from the context it was given; the fault run,
+naming no C rule, suggests disk.
+
 ## 2026-10-06 — Merge of `design/poverty-seed` into `agent-workflow`
 
 Nothing decided here. The two branches number disjointly, by design (`R-066`), so

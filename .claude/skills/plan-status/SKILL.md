@@ -45,11 +45,14 @@ words.
    reason. Everything below it is the record of a development that stopped, and
    a summary read without knowing that misleads on every line.
 
-3. **Split the points.** A point is closed when it carries an `*Esito:*` line,
+3. **Split the points.** A point is closed when it carries an `*Outcome:*` line,
    and open otherwise. Nothing else counts — not how finished the work looks,
-   not what the commits suggest.
+   not what the commits suggest. The markers are read in both forms (`AGENTS.md`,
+   "Language"): `*Esito:*`, `FALLITO`, *Chiuso con riserva* and *Riserva
+   sciolta*, from plans written before the rule, mean what their English forms
+   mean.
 
-   A closed point whose outcome line says `FALLITO` is **closed as failed**, and
+   A closed point whose outcome line says `FAILED` is **closed as failed**, and
    is reported apart from the others. Folding it in with the successes would let
    a plan read as complete while one of its points says the thing could not be
    done.
@@ -57,9 +60,9 @@ words.
    If a point failed and points remain open, the plan is **stopped**, not in
    progress: say so, and say that restarting it is a human's decision.
 
-   A closed point whose outcome line says *Chiuso con riserva* is closed, and
+   A closed point whose outcome line says *Closed with reserve* is closed, and
    reported apart as well, with the clause and the human action it waits on —
-   unless a *Riserva sciolta* line under it says the action was taken (`R-011`).
+   unless a *Reserve discharged* line under it says the action was taken (`R-011`).
 
 4. **For each closed point, resolve its commit within the plan's own range.**
 

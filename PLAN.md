@@ -148,6 +148,19 @@ eseguiti. Build e suite .NET non eseguite: nessun file C# toccato. Registro
   longer recognises `*Esito:*`, so the archived plans read as open.
 - **Core:** no — touches no path under `core/`.
 
+*Outcome:* 2026-10-07. Closed, *criterion defective* (`R-005`, case 1) —
+`D-116`. The code-reviewer on the fixture with one C1 and one C5 violation
+reports both, by identifier; on the clean fixture, no findings; `tree-state`
+unchanged across the dispatches. The grep, as a script: no Italian marker in the
+three skills outside their recognising sentence, exit 0. Faults: the section cut
+from `AGENTS.md`, the code-reviewer still finds both defects but names neither
+C1 nor C5, red only on the reading by identifier; `*Esito:*` cut from
+`/plan-status`'s recognising sentence, the criterion's grep stays green and the
+check beside it — each recognising sentence names every Italian form its skill
+reads — goes red. Both restored. `git diff --name-only HEAD -- core/` empty:
+`Core: no` holds, revisioners not run; no code-reviewer of the point, no code
+touched. Build and .NET suites not run: no C# file touched.
+
 ## 6. `/plan-explain` and `/plan-status` on `plan-state`
 
 - **Does:** both skills take the plan's state from `plan-state` and keep only what
