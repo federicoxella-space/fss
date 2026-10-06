@@ -92,6 +92,13 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   the table of `SIM-REQ` §18.
 - **`R-053`**, at the closing point of each phase 4 subsystem: `AC-01` and
   `AC-04` over what exists, against provisional bounds derived from `docs/`.
+- **`R-065`**, within the first phase 4 plan point that adds static data or a
+  simulation parameter: the rules file of DEC-100 — a binary format with a reader
+  per version, its compiler in the harness from a text source in the repository,
+  validation whole at creation and at load, the file held in World and carried by
+  the save, and the rule version extended by the core's digest of it. The content
+  of `R-063` and the curves of `R-064` go into it, and the check of `R-060` into its
+  validation.
 - **`R-070`**, before point 7 of the process plan runs: point 8 added to
   `PLAN.md`, placed between points 6 and 7, carrying `R-068`'s three changes.
   **`R-071`**: and a fourth, `tree-state` reading untracked names unquoted and
@@ -2446,6 +2453,663 @@ which would say the phase 4 gate proved little.
 **Not verified:** that every variable in `AC-04`'s table has a structural bound in
 `docs/`. Migration flow, urban share, legitimacy and infection prevalence were
 not checked for one; prices, stocks and population were.
+
+### R-054 — Emigrants take their share of what can be carried, and travel as a scheduled transient
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), open item O-5
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in
+`.claude/design/2026-10-04-proposal-poverty-seed.md` and enters `docs/` with the
+proposal, which the user holds until B12b is written: `SIM-REQ` FR-D-04a, FR-P-10d,
+§16 P-72, §18 Mobility; `SIM-STATE` §Transient; `SIM-ECON` phase 11.
+
+Nothing in `docs/` says what a migrant takes with them. Three texts say they
+take something. FR-J-18 and DEC-068 make buried stock of "what its people could
+not carry", which presumes both that people carry and that carrying has a limit.
+FR-P-22 has resettling cohorts carry durables. The proposal's seed reserve
+(PD-4) passes the emigrant's seed to this rule. And phase 1 of `SIM-ECON` lands
+migrants who left in an earlier update, so between one settlement's phase 11
+and another's phase 1 they exist nowhere in `SIM-STATE`. Any currency among
+them breaks A-02 unless it is transient contents.
+
+**The rule.** Members leaving a row take its mean share per member: all of its
+currency, and of its goods and durables outside the seed reserve as much as P-72
+weight per member allows. They take the highest value per unit of weight first,
+ties by good id. Buildings never move. What they leave stays with the row.
+
+- **The mean**, because the row cannot say which of its members leave: the
+  wealth curve has no memory. The mean is also the one share that leaves the
+  per-member currency of those who stay unchanged. Under any other share,
+  emigration would make the stayers richer or poorer.
+- **A weight limit**, because without one FR-J-18 is empty: the last to leave
+  would carry everything movable, and abandonment would make no hoard. The
+  limit gives the hoard its content and follows DEC-016: cloth and tools
+  travel, grain stays.
+- **Currency has no weight here.** A cohort holds no denominations (FR-C-13), and
+  weight applies to none of its coin (FR-C-18). Emigrants are a fraction of a
+  cohort.
+- **The seed reserve stays**, as it does for every use but sowing. It is
+  computed on the land the vector allocates, and land does not leave.
+
+**The candidate is rejected.** The proposal's candidate was to convert goods to
+currency at the local price, within demand. That is a sale outside phase 7: a
+second clearing pass in phase 11, against demand that phase 7 has already met.
+It would run the most expensive part of the update twice. It is also the forced
+sale that `SIM-ECON` lists as not covered (item 1), and it would reopen choice
+two. And it buys nothing. Holdings above a cohort's own needs are already supply
+in phase 7 of every update, so what an emigrant would sell has already been
+offered.
+
+**On the road** emigrants are a scheduled transient of kind *migrants*. Each
+carries a count, the key of the row it left, the hunger deficit of FR-D-03a, its
+currency as one integer and its goods. A-02 counts that currency among transient
+contents, and A-04 those goods among goods in transit. Which row they join on
+arrival is not decided here: Z-14 of the phase 4 note.
+
+**Cost.** A transient kind with fields the others lack. A row that loses most of
+its members keeps the heavy goods the leavers could not carry, so in goods it
+holds more per head than before. One more parameter. FR-P-22 is left unsettled:
+either the resettlers' endowment is what they carry, or P-54 makes durables
+from nothing. This ruling does not choose.
+**Owed by the implementer:** nothing now. The text binds the mobility subsystem
+once it is in `docs/`.
+**Would overturn it:** the user wanting emigrants to sell up before leaving, which
+would first need a rule for who buys; or a sweep finding P-72 small enough to make
+migration irrelevant to goods, in which case the limit is not worth its field.
+**Not verified:** that a transient with these extra fields fits the shapes of
+DEC-085; that no other text in `docs/` assumes migrants arrive with nothing. Only
+§5, §6, §7, `SIM-ECON` and `SIM-STATE` were read for it.
+
+### R-055 — The destitute emigrate first, and on the road they are the displaced population of FR-M-13
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), open item O-6
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in the proposal and
+enters `docs/` with it: `SIM-REQ` FR-D-04a, first sentence, and FR-M-13; `SIM-ECON`
+phase 11; `SIM-LOOPS` B12b, the paragraph under R12, and R4.
+
+The proposal makes B12b, "the destitute emigrate", the brake that holds R12, and
+leaves it two questions: what emigrants carry, which is `R-054`, and whether the
+destitute who leave are the "displaced population" of FR-M-13, which is O-6.
+B12b needs a third answer that neither question names: **who emigrates**.
+Nothing in `docs/` says which rows emigrants come from. Drawn in proportion to
+count, the destitute would leave only at their share of the population. B12b
+would then be no stronger than emigration in general, and R12 would keep its
+pressure.
+
+**Emigrants are drawn from the destitute row first**, and from the other rows
+in proportion to their counts for the rest. On the merits: the destitute own no
+buildings, durables or seed (DEC-090), so leaving costs them nothing they hold,
+and the landless poor were who moved. It also weakens R1. When those who leave
+were selling labour nobody fully bought, output falls less than when farmers
+go.
+
+**O-6: yes.** FR-M-13 names "famine refugees" first. FR-I-03a says what a
+refugee is: "Refugees from a famine are first-hand sources about it." They are
+migrants who flee hunger. `SIM-OBS` OBS-2 has them "arriving and saying what
+they fled". The destitute row is where members go when they can no longer feed
+themselves at the local price (DEC-090), so its emigrants are those refugees.
+Emigrants from the other rows leave with their property for a better wage, and
+are not displaced. **Each destitute emigrant raises the danger of the link it
+travels by P-40**, which is P-40's own unit: "per unit of displaced
+population". Danger falls only through contracts and garrisons, not by decay,
+so a flow of refugees builds a stock that outlasts them. R4 gains the source it
+lacked: poverty, the destitute row, sends displaced people, its emigrants, onto
+the links.
+
+**The alternative is rejected.** It would make the destitute row itself, in
+place, the displaced population. "Displaced" means moved. That reading would
+give danger a source in every poor settlement whether or not anyone travels, a
+mechanism FR-M-13 does not contain.
+
+**The coupling is named, not hidden.** B12b brakes R12 by exporting it to R4,
+whose brakes B4a and B4b already stand. That is DEC-064's intent: the world
+makes its threats from its own failures. **B12b is not unconditional, and the
+text says so.** It acts only where a neighbour is more attractive by more than
+the hysteresis band (FR-D-09). In a region poor throughout, nobody leaves. R12
+then stops at the lower clamp of the wage (DEC-045), which bounds it without
+braking it, and at hunger, R5. The proposal's sentence "B12b is the brake that
+holds" is replaced by one that says when it holds. This is a statement about a
+loop, not a change to the gate of `SIM-LOOPS`. R12 has two named balancing
+loops, and the gate asks for one.
+
+"Failed migration" and soldiers disbanded at the end of a war, the other two
+sources FR-M-13 names, are not touched.
+
+**Cost.** Refugees take the roads towards more attractive places, usually
+towards towns, so a famine can raise danger on the route that would relieve it.
+That is R4 working, and P-40 is tuned against P-41 for it. The destitute arrive
+somewhere. If they join the destination's destitute row (Z-14 decides), they
+carry R12's pressure there, bounded by the inbound cap of FR-D-10.
+**Owed by the implementer:** nothing now.
+**Would overturn it:** a sweep in which refugee danger cuts relief routes faster
+than famine ends, which would argue for danger from refugees on arrival rather
+than in transit; or regions where R12 settles at the wage clamp for years, which
+would argue for a brake that does not need a destination.
+**Not verified:** that attractiveness under FR-D-04 falls with the wage fast
+enough for B12b to act before hunger does; its weights over food, wage and
+safety are not set.
+
+### R-056 — A good's record says only whether it is durable, and processing creates no food along the chain
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), open item O-15
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in the proposal and
+enters `docs/` with it: `SIM-REQ` FR-P-03 and FR-P-03c; `SIM-DEC` DEC-098, the
+decision, rationale and cost.
+
+The user decided in PD-14 that FR-P-03's roles describe only behaviour in
+production and over time, and that urgency moves to the needs. That closes Z-07
+of the phase 4 note. The form of the roles was left to the decider, as was the
+rule that processing creates no food. Both are answered here inside PD-14 as the
+user decided it. Grain is food of grade 0, flour is an ingredient and not food,
+and values are carried per class. That is reserve 5 of `R-001`, and nothing in
+it moves.
+
+**The roles.** The proposal's text gives every good one of three roles:
+consumable, input, durable. PD-14 itself breaks that. Grain meets the food need,
+so it is consumable. Grain→Flour takes it, so it is an input. It is also a
+planting good. Of the three roles only one is a property the state needs to
+know from the record:
+
+- durables are held apart from goods (`SIM-STATE` §Cohort, `durables`);
+- they wear (FR-P-23);
+- they are seized after goods (FR-C-27);
+- the destitute own none (DEC-090).
+
+Consumable and input follow from the data that names a good. A need that
+accepts it makes it consumable, and a recipe that takes it makes it an input.
+Storing them in the record would be a second statement of the same fact, and
+the two could disagree. **So the record says whether a good is durable. A good
+that is not takes the consumable role where a need accepts it, the input role
+where a recipe takes it, or both, as grain does.** AC-09's table, which the
+user decided, reads correctly under this form. "A consumable takes the row of
+the most urgent need it can meet" puts grain under tier 0. A good no need
+accepts takes the input row.
+
+**The conservation rule.** Recipe by recipe the rule fails, as the proposal
+notes. Flour belongs to no food class, so Grain→Flour consumes food and yields
+none, and Flour→Bread yields food from none. The proposal's other way out, flour
+carrying a food value that no need accepts, is closed by PD-14 itself. A need on
+the food class accepts every subclass at or above its grade, and survival
+accepts grade 0. Flour with a food value would therefore be eaten, and the user
+decided it is not food. **So the rule runs along the chain.** Every good carries
+an embodied food value:
+
+- a good of the food class carries its value there;
+- another good that recipes produce carries the least food value any recipe
+  producing it consumes per unit, inputs counted at their own embodied value;
+- anything else carries zero.
+
+No recipe yields more food value than its inputs embody. Validation at load
+refuses a table that breaks this, or that passes food value around a cycle.
+
+- **The least**, because the guarantee has to hold on the path that consumes
+  least. If flour can also be made from something that embodies no food, then
+  bread from that flour would create food. The rule refuses it, and should.
+- **The food class only**, the one the tier 0 need names (FR-P-03b), not every
+  class. A rule per class would refuse brewing a drink from grain, which
+  converts between classes by design. What protects the famine is that no oven
+  makes food, and no stock of any other class carries that guarantee.
+
+**Cost.** A validation pass over the recipe graph at load, and an author can
+trip it by setting a food value one unit too high, three recipes away from the
+error. A recipe cycle that food value passes through refuses the load, even
+where the content would have been harmless.
+**Owed by the implementer:** nothing now. The rule binds the production subsystem
+and the validation at load, once in `docs/`.
+**Would overturn it:** content in which processing truly adds nutrition and the
+user wants it, which is the user's to decide as an exception; or a recipe cycle
+the content needs.
+**Not verified:** PD-14 does not say in whose units a good of a subclass carries
+its value: the subclass's, or its parent's. "Its value in the food class" reads
+both the same only if a subclass measures in its parent's units. The user should
+settle that in FR-P-03a, as a finding on a decision of their own. Nor was it
+checked that no recipe proposed in K-03 forms a cycle.
+
+### R-057 — Needs add: each is a quantity of its own, and a unit consumed meets one need
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), PD-15 (open item O-13)
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in the proposal and
+enters `docs/` with it: `SIM-REQ` FR-P-03b, one sentence; `SIM-DEC` DEC-099, its
+first sentence and the first half of its rationale.
+
+PD-15 proposes that two needs on the same class add. Survival asks for a
+quantity of food of any grade, and tier 1 asks for a further quantity of grade
+at least 1. The alternative is one ration whose grade the tier 1 need raises.
+
+**PD-15 is adopted, for a reason other than the one it gives.** The proposal
+argues that under one ration, whoever loses purchasing power "goes straight
+from eating well to dying". That does not follow. Tier 1 is deferrable, so a
+cohort priced out of bread eats grain, meets its survival need, and only its
+discontent rises, under either option. **The two options differ in quantity,
+not in grade.** With one ration, an ordinary year's consumption equals the
+survival minimum, so every unit short is hunger. With needs that add, an
+ordinary year eats the minimum plus the tier 1 share. A shortfall then takes
+first the share, which is deferrable, and only after it the minimum. That
+margin is what `SIM-ECON` asks for when it makes a famine "a season rather than
+a tick". It also gives DEC-044's severity a scale before mortality:
+discontent, which feeds fragility (FR-E-03), and then hunger.
+
+**Stated generally.** Each need is a quantity of its own, and a unit consumed
+meets one need only. That covers two needs on one class and needs on a class
+and its subclass alike. Otherwise one loaf could count once for survival and
+again for the tier 1 share.
+
+**Cost.** An ordinary year's demand for food is the minimum plus the tier 1
+share. Production, the generator's initial stocks (K-09) and the import bound of
+FR-D-14 are all sized on that larger figure, and the needs table's quantities
+are tuned so that the total is plausible. In every lean year discontent rises
+before anyone is hungry, so fragility moves more often.
+**Owed by the implementer:** nothing now.
+**Would overturn it:** a sweep in which the margin makes famine too rare to see,
+which would argue for a smaller tier 1 share rather than for one ration.
+**Not verified:** how large the tier 1 share must be to give the margin
+`SIM-ECON` wants; that is the needs table's content, which has no numbers yet.
+
+### R-058 — The plate follows the purse: needs are bought at their cheapest, and a better grade comes after every need
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), PD-16 (open item O-13)
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in the proposal and
+enters `docs/` with it: `SIM-DEC` DEC-099, decision, rationale and cost;
+`SIM-REQ` FR-C-04, steps 2 and 4; `SIM-ECON` §Demand, the paragraph "Choice
+within a class".
+
+PD-16 has a cohort feed itself in four steps. It eats from its own holdings
+first, lowest grade first. It buys survival at the lowest price per unit of
+value. With what remains, it replaces units of a lower grade with a higher one,
+the share of members able to pay read from the wealth curve. The markets of a
+class clear in descending grade, and demand rationed out of one grade falls to
+the next within the update. **Adopted**, for what the proposal says it buys.
+Within one mestiere the poorer eat grain and the better-off bread, which makes
+OBS-3 visible at the table. Demand for grain gains elasticity. And reading the
+curve rather than the cohort's mean keeps a small price move from switching a
+whole cohort between goods. Three corrections, each needed for the rule to hold
+together with what `docs/` already says:
+
+1. **The better grade comes after every need, in spending and in rationing.**
+   The proposal spends what remains after survival on the better grade, which
+   would put a rich cohort's bread before a poorer cohort's tier 1 need.
+   `SIM-ECON` says that tiers are met in order and that rationing runs "within
+   a tier, never across tiers: nobody buys cloth while another cohort … cannot
+   buy bread and could pay for it". A better grade is a preference, not a
+   need. So it is bought from the currency left once tiers 0 and 1 are met,
+   before tier 2 takes its fraction. In a market it ranks after every demand
+   that meets a need: nobody eats better while another cannot eat and could
+   pay. Every need is bought at its cheapest, tier 1 as well as survival.
+2. **Rationed demand falls to any good that meets the same need, not only to
+   the grade below.** One pass in descending grade lets a cohort rationed out
+   of bread fall back to grain. It does not let a cohort rationed out of grain
+   buy bread left unsold in a market that has already cleared. That cohort
+   would starve beside the bread, and the cause would be the order of a loop,
+   not price or purse. So the rule is stated as its principle. Demand rationed
+   out of one good falls, within the update, to the other goods that meet the
+   same need, cheapest per unit of value first. The order in which a class's
+   markets clear is derived from grade, price and good id, and may take a
+   second pass over what supply remains. The implementer records it.
+3. **Alternation within a grade is a cost, written down.** All of a need's
+   demand goes to the cheapest good per unit of value. Two foods of one grade
+   at nearly equal prices then take turns: the one bought down becomes dearer,
+   and the next update buys the other. Stock bounds the swing, and with one food
+   per grade in the baseline content it cannot arise yet. Content that adds a
+   second food of a grade (O-11) is where it is measured.
+
+**Cost.** Every food is one more market to ration in the most expensive phase,
+so the number of foods is set after a measurement. The markets of a class
+acquire an order, and demand may cross them more than once in an update. In
+ordinary years the plate is mixed, and the needs table is tuned so that the
+total is plausible.
+**Owed by the implementer:** nothing now.
+**Would overturn it:** the measurement of phase 7 with the food markets the
+content fixes coming in over the budget of DEC-041, which would argue for
+dropping the upgrade first, since it is the part that serves only legibility;
+or alternation within a grade large enough to show in AC-04's soft bands, which
+would argue for splitting a need's demand across goods of a grade rather than
+giving it whole to the cheapest.
+**Not verified:** that the curve, read for currency left after needs rather than
+for wealth, gives a plausible share of upgraders. The proposal's own
+approximation in DEC-097, one shape for wealth and currency, is carried one step
+further here.
+
+### R-059 — The poverty and seed proposal enters `docs/`
+
+**Date:** 2026-10-04   **Origin:** user: "sì, trascrivi la proposta in docs/"
+**Verdict:** specified
+**docs/:** all six documents, each revision bumped to today.
+- `SIM-DEC`: DEC-090 to DEC-099 new; DEC-015, DEC-038, DEC-043, DEC-047, DEC-076
+  and DEC-080 edited.
+- `SIM-REQ`:
+  - §5: FR-D-03a and FR-D-04a.
+  - §6: FR-P-01, FR-P-03, FR-P-04, FR-P-10, FR-P-15, FR-J-01 and FR-J-03; new
+    FR-P-03a to FR-P-03c, FR-P-10a to FR-P-10e and FR-J-19 to FR-J-22.
+  - §7: FR-C-03 to FR-C-05 and FR-C-25.
+  - §8: FR-M-13.
+  - §14: FR-G-01.
+  - §16: P-66 to P-72, and P-09 at 8.
+  - §17: AC-09 and AC-56.
+  - §18: the Phase 4 table.
+  - §19: P-17.
+- `SIM-ECON`: phases 4 to 7, 11 and 12; new phase 8a; the paragraph on phase 7
+  moved below the table; dated steps, §Demand, spoilage, and items 2 and 5 of
+  what the sequence does not cover.
+- `SIM-STATE`: §Cohort, §Transient, static data, A-16 and A-17.
+- `SIM-LOOPS`: B2, R4, R5, R7, new R12, the standalone loops, the gate check,
+  and open item 4.
+- `SIM-OBS`: OBS-3, "Served by".
+
+The proposal of 2026-10-04, revision 10, records the decisions the user took in
+the design sessions of revisions 2 to 9. It also holds the text `R-054` to
+`R-058` decided for what the user left to the decider. The user conditioned its
+entry on B12b being written, so that the gate of `SIM-LOOPS` would not reopen.
+`R-055` wrote it, and the user then asked for the transcription. **This ruling
+decides nothing new. It transcribes.**
+
+**How.** A script read each quoted block of the proposal and replaced or
+inserted it at the place the proposal names. It refused any target that was not
+found exactly once. It stripped the ruling markers, and refused any block still
+holding a `[DECIDER]` placeholder. The diff was then read against the proposal,
+document by document.
+
+**What the proposal reserved to the user, and is applied here on the user's
+authority.** The new AC-09 table and AC-56's wording are reserve 2 of `R-001`,
+decided by the user in revision 9. The addition to OBS-3's "Served by" is
+reserve 3, authorised by the user in the same revision. P-09 at 8, with flour,
+is the user's. The decider applied these and did not decide them.
+
+**Where the text differs from the proposal.** Each is form, not content:
+
+- DEC-098's cost said "approved under R-050". `docs/` does not cite rulings, and
+  that rule is already stated in §16, so the cost now reads "approved by the
+  user as static content under SIM-REQ section 16, \"Parameters to fix\"", in
+  the form of `R-013`.
+- Four instructions in the proposal are prose in Italian, not text to insert:
+  - FR-J-01's two additions;
+  - P-17's re-measurement in §19;
+  - DEC-047's sentence;
+  - the R4 lines.
+
+  Each was written in English as the proposal describes it. The P-17 row now
+  says the measurement counts 11 and 33 rows, eight goods and the food markets.
+  P-63 and P-64 stay as measured, with the row stating what they were measured
+  on.
+- §18: Production's "FR-P" now reads "FR-P, save FR-P-03b", since the proposal
+  places FR-P-03b under Needs. Otherwise one requirement would sit under two
+  subsystems.
+- P-72's description drops the ruling number from the parameter's name.
+- "Choice within a class" goes after the Hunger paragraph of §Demand. The
+  proposal gave no place.
+
+**Findings left open.** Each one is the user's or a later point's, not this
+ruling's:
+
+1. PD-14 does not say in whose units a subclass carries its value (`R-056`).
+2. FR-P-22's endowment is either what resettlers carry or durables made from
+   nothing (`R-054`).
+3. OBS-2 and OBS-4 could cite FR-D-04a. That would be reserve 3, and it is not
+   done.
+4. DEC-047's title, "once per sowing", still contradicts FR-P-15's settlement
+   cadence for other activities (X-3, Z-05).
+5. `SIM-ECON` phase 6 implements FR-P-10d, which §18 places under Production.
+   The point that builds the seed reserve must record which subsystem releases
+   it (`R-052`).
+6. FR-P-04's list and all the static content of §16 are still awaiting the
+   user's approval (`R-050`).
+
+**Cost.** Phase 4's scope grows by the destitute and day-labourer rows, the crop
+stages and the goods classes. P-17, P-63 and P-64 must be measured again. The
+static content to approve before the plan grows with them.
+**Owed by the implementer:** nothing new beyond `docs/` as it now stands. The
+phase 4 plan reads its `Satisfies:` against the amended §18 table (`R-052`).
+**Would overturn it:** a passage of `docs/` found to differ from the proposal
+beyond the differences listed above.
+**Not verified:** the diff was read whole, but the transcribed passages were not
+compared word for word against the proposal. That rests on the script's exact
+copying. A grep of `docs/` finds no remaining "Subsistence", "Luxury", "need
+tier", `wealthSpread` or `creditLine`, but references to the old vocabulary in
+other words were not searched for.
+
+### R-060 — A subclass measures in its root's units, and a good carries one value per class tree
+
+**Date:** 2026-10-04   **Origin:** user, design session, on the finding of `R-056`
+**Verdict:** specified — the user's decision, reserve 5 of `R-001` (PD-14 is theirs)
+**docs/:** `SIM-REQ` FR-P-03a gains one sentence. Revision already today's.
+
+PD-14 let classes nest and gave a good a value per class, without saying in whose
+units a subclass counts. A need on a class accepts its subclasses "in proportion to
+its value" (FR-P-03b), and the conservation rule reads a good's value "in the food
+class" (FR-P-03c); both need one scale per tree. The alternative, units per class
+with a conversion factor to the parent, is more data that can be wrong and buys no
+behaviour the single scale lacks. Put to the user with that recommendation, the user
+approved it: a subclass measures in its parent's units, a good carries one value per
+class tree, and validation at load refuses two values in one tree.
+
+**Cost.** None now: the content approved by `R-063` has no subclass.
+**Owed by the implementer:** the check at load, with the validation of FR-P-03b.
+**Would overturn it:** a class whose subclasses are genuinely incommensurable, which
+should then be two trees, not one.
+**Not verified:** nothing; FR-P-03a to FR-P-03c were read.
+
+### R-061 — Resettlement creates no goods: the endowment is the generator's, resettlers bring what they carried
+
+**Date:** 2026-10-04   **Origin:** user, design session, on the finding of `R-054`
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-22 reworded; §16 P-54 renamed. Revision already today's.
+
+FR-P-22 gave founders and resettlers alike an endowment of durables. Since `R-054`,
+emigrants carry their durables (FR-D-04a), so an endowment at resettlement on top
+of that would create durables from nothing, and emigrating to an empty settlement
+would become a way to mint tools. What FR-P-22 protected against, a cohort that
+cannot work for lack of tools, is already handled by the crude variants of FR-P-21
+and DEC-073; and tools, light and valuable, are what FR-D-04a loads first. Put to
+the user with that recommendation, the user approved it: the generator's founders
+carry P-54, resettlers bring what they carried, and resettlement creates nothing.
+
+**Cost.** A resettled village restarts slower than one founded by the generator.
+B9, the brake on abandonment, runs on land per capita and is not weakened.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** a sweep in which resettled villages never recover their
+tools, which would argue for cheaper crude variants rather than for minting.
+**Not verified:** that no other text gives resettlers goods; FR-D-07, DEC-067,
+DEC-070 and FR-J-18 were read and do not.
+
+### R-062 — OBS-2 and OBS-4 already cover FR-D-04a; `SIM-OBS` is not changed
+
+**Date:** 2026-10-04   **Origin:** user, design session, on the finding of `R-059`
+**Verdict:** resolved — the user's decision, reserve 3 of `R-001`
+**docs/:** unchanged
+
+`R-059` left open whether OBS-2 and OBS-4 should cite FR-D-04a. Neither needs to.
+OBS-2's "Served by" reads "FR-D-01 to FR-D-11", a range FR-D-04a and FR-D-03a fall
+inside; OBS-4's reads "FR-M-12 to FR-M-14", and the refugee sentence lives in
+FR-M-13. `SIM-OBS` lists the requirements that lose their justification if the
+entry is cut, and FR-D-04a would keep its own through OBS-2 if OBS-4 went. The user
+approved leaving the document as it is.
+
+**Cost.** None.
+**Owed by the implementer:** nothing.
+**Would overturn it:** OBS-2 being cut, which would leave FR-D-04a to be justified
+by OBS-4 explicitly.
+**Not verified:** nothing; the five "Served by" lines were read.
+
+### R-063 — The static content of Phase 4 is approved
+
+**Date:** 2026-10-04   **Origin:** user, design session: "approvo tutto"
+**Verdict:** resolved — the user's approval under `R-050`
+**docs/:** `SIM-REQ` FR-P-04 confirmed, §19's P-17 row at 12 and 36 rows; `SIM-STATE`
+§Cohort at 12 rows, open item 1 closed. Revisions already today's.
+
+`R-050` makes static content the user's, approved before the plan that uses it. The
+decider proposed it from the phase 4 note (K-01 to K-11) as amended by the proposal
+of `R-059`, and the user approved the whole. It is recorded here because it is
+data, not specification: under `R-065` it lives in the rules file, and `docs/`
+keeps only what a requirement states. **Every number in it is Provisional under
+`R-050`**: the implementer proposes it in the point that first needs it, and the
+decider numbers it in §16. The user approved structure, not values.
+
+**Goods, classes, grades.**
+
+| Good | Class | Grade | Behaviour |
+|---|---|---|---|
+| Grain | Food | 0 | consumable, input, planting good |
+| Flour | Ingredient | 1 | input |
+| Bread | Food | 2 | consumable |
+| Cloth | Clothing | 1 | consumable: the need is the rate of replacement |
+| Ore, Timber, Wool | Material | 0 | input |
+| Tools | Implement | 1 | durable |
+
+No subclass. Ingredient, Material and Implement are labels that no need reads. A
+grade counts processing steps, so bread is 2.
+
+**Needs.** Tier 0: Food, grade 0 or more, the survival minimum. Tier 1: Food, grade
+1 or more, the share above the minimum (`R-057`); Clothing, grade 1 or more. Tier 2:
+none in the baseline; the code path is tested with a test good.
+
+**Recipes and buildings.**
+
+| Recipe | Building | Durable | Crude variant |
+|---|---|---|---|
+| Grain → Flour | Mill, site water | independent | yes: a hand quern, no building, far slower |
+| Flour → Bread | Oven | independent | no |
+| → Ore | Mine, site ore | requires Tools | yes |
+| → Timber | none, site forest | improved by Tools | — |
+| Ore + Timber → Tools | Forge | requires Tools | yes |
+| → Wool | none; continuous, modulated by climate | independent | — |
+| Wool → Cloth | Loom | improved by Tools | — |
+
+The quern is content, not FR-P-21's obligation: without it every settlement with no
+running water would leave its tier 1 food need unmet for good, and fragility would
+mark the same places for ever.
+
+**Mestieri.** Eleven in the allocation vector: farmer, miller, baker, miner,
+woodcutter, smith, shepherd, weaver, caravanner, merchant, day labourer; and the
+destitute row outside it. Mean wealth at generation, descending: merchant, miller,
+smith, baker and weaver, farmer, shepherd, miner and woodcutter, caravanner, day
+labourer, destitute. Spread within a row: high for merchant and farmer, middling for
+the crafts, low for day labourer and destitute. The day labourer adjusts faster than
+P-19 and has no yearly cap.
+
+**Crops.** Grain alone, sown with itself; a harvest window of a few updates; care
+levels zero in the shipping configuration (DEC-094).
+
+**Age bands.** Three, closing `SIM-STATE` open item 1.
+
+**Generator (K-09), as rules.** Kingdoms counted by a Provisional parameter; five
+terrains, plain, hill, forest, mountain, water, each with a transport cost; sites by
+terrain, forest in forest, ore in hill and mountain, water along watercourses;
+initial stocks that cover each settlement's tier 0 for a season; the destitute row
+from the wealth curves (FR-G-01).
+
+**Deferred to their subsystem.** Event classes (K-10) and contracts, dungeons and rare
+materials (K-11): no dungeon-only material in Phase 4, so P-09 stays at 8. Climate
+curves are `R-064`.
+
+**Cost.** Twelve rows per settlement where `SIM-STATE` said eleven and phase 3
+measured nine: P-17, P-63 and P-64 are measured on twelve and thirty-six.
+**Owed by the implementer:** the content as above, in the rules file of `R-065`, with
+each value proposed as a P-number when first needed (`R-050`).
+**Would overturn it:** the user revising any item, which is theirs at any time before
+the plan that uses it.
+**Not verified:** that the conservation rule (FR-P-03c) admits the chain with the
+values the implementer will propose; nothing is numbered yet.
+
+### R-064 — Each climate modifier has its own pair of curves
+
+**Date:** 2026-10-04   **Origin:** user, design session (K-08 of the phase 4 note)
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-08 and §16 P-14; `SIM-DEC` DEC-037, title, decision,
+rationale and cost. Revisions already today's.
+
+FR-P-08 named two curves and five modifiers, and did not say whether the five share
+the pair. P-14's "2 curves" read as sharing. One pair cannot render a winter that
+stops building sites without raising mortality as well, so the five would move in
+lockstep, and the seasons of trade, construction and death could not differ. Put to
+the user with a pair per modifier, the user approved it. Only the curves a subsystem
+uses are written when it lands; the implementer prepares smooth starting curves and
+the user approves them, as static content under `R-050`.
+
+**Cost.** Five pairs to author and tune instead of one: 520 numbers.
+**Owed by the implementer:** the curves of each modifier in the rules file of
+`R-065`, written with the subsystem that first reads it.
+**Would overturn it:** two modifiers found always to want the same curves, which
+could then share a pair by data, with no change to the rule.
+**Not verified:** nothing; FR-P-07 to FR-P-11, DEC-036, DEC-037 and P-14 were read.
+
+### R-065 — Static content and simulation parameters are a rules file the host supplies: DEC-100; `R-004` revised
+
+**Date:** 2026-10-04   **Origin:** user, design session: "approvo C"
+**Verdict:** promoted as DEC-100 — the user's decision; it touches NFR-01 and AC-02,
+reserve 2 of `R-001`, and revises `R-004`
+**docs/:** `SIM-DEC` DEC-100 new, after DEC-089; DEC-032 title and decision, DEC-033
+and DEC-089 one clause each. `SIM-REQ` FR-A-05 new; NFR-01, NFR-08, NFR-09, NFR-12
+and AC-02; §16's opening paragraph. `SIM-STATE` §World gains `rulesData`, and
+`ruleVersion` is the logic's version; §Static data says where the data come from.
+Revisions already today's.
+
+The user objected to recipes living in the core, since every change is a rebuild.
+Three answers were put to the user: tables in the core's source; tables generated
+into the core from a text source; or a binary rules file the host reads and hands to
+the core. The decider recommended the third, and the user chose it.
+
+**Why.** A rebuild of the core costs seconds, so speed of editing is not the
+argument. The arguments are three:
+
+- **Sweeps.** Phase 6 sweeps run many worlds that differ only in content and
+  parameters, and with the data in the core each variant would be a build.
+- **Content patches.** Content can be patched without releasing logic.
+- **Authors.** Content can be written by people who do not touch the C#.
+
+The core still reads no file: the host hands over bytes, as it does for saves
+(DEC-034, D-090).
+
+**What it costs the specification**, each part applied above:
+
+1. **The data are input, like the seed.** NFR-01 and AC-02 name the rules file
+   beside the seed and the commands. Without that, two runs with different files
+   would break the criterion as written. This is reserve 2, and the user's
+   decision.
+2. **The world carries its rules file, and the save with it** (NFR-08, DEC-032).
+   A reported bug reproduces only with the exact file. DEC-033's resumption under
+   the old rules needs the old rules at hand. A loaded world runs on the file its
+   save carries. Moving an existing world to new content would need an id
+   mapping and a reshape of state, so it is refused until a requirement asks for
+   it.
+3. **`R-004` revised.** `R-004` held that "the rules are part of the build", so
+   that a new world's rule version is the build's and nothing the host chooses.
+   Half of the rules now come from the host. The rule version becomes the logic's
+   version, still the build's, together with a digest of the rules file computed
+   by the core from the bytes (NFR-09). `R-004`'s point survives: a host-declared
+   version was "the only one that can lie", and a digest the core computes cannot.
+4. **Binary, from text.** The source is text in the repository, readable and
+   reviewed where the user approves content. An offline tool in the harness
+   converts it to integers and fixed point, and checks the result by handing it
+   to the core (NFR-12). Parsing text in the core would put number formatting
+   and locale on a path that must be deterministic.
+5. **Validation is the only check** of content now that the compiler is not. It
+   already exists in pieces (FR-P-03b, FR-P-03c, AC-56, DEC-089). Under FR-A-05
+   it refuses a file whole.
+
+**Cost.**
+- A second versioned format.
+- A compiler in the harness.
+- A host that must ship and pass the file.
+- Validation that must be complete.
+- Existing code:
+  - `WorldState`'s constructor stamps `Simulation.CurrentRuleVersion` alone;
+  - `SaveFormat` writes no rules file;
+  - the pins of `R-034` and `R-036` move once `World` gains the field.
+
+**Owed by the implementer:** listed above under "Owed by the implementer". Cite
+`R-065`.
+**Would overturn it:** a consumer that cannot ship a data file beside the core,
+which would bring the tables back into the source (the second answer); or a need to
+move an existing world to new content, which would need the id mapping this ruling
+refuses.
+**Not verified:** that the consumer of §20 can ship and read such a file; that
+hashing the file's digest rather than its bytes is enough for the state hash. The
+file is immutable, so the digest stands for it, but the fold's injectivity
+(`D-069`) was not reconsidered for a 64-bit digest.
 
 ### R-066 — The process plan's seven points and its changes to the design are the user's: `R-046` and `R-028` amended
 

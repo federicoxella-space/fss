@@ -2947,6 +2947,82 @@ main". The design note ties archival to the plan's close, not to the merge, and
 archive rather than in `RULINGS.md`, or a candidate found to be in `docs/`
 already.
 
+### D-108 · Review of the poverty and seed proposal, and of the batch it became
+
+**Ruling:** none yet. The proposal entered `docs/` through `R-054` to `R-065`; the
+findings on the result are `SQ-009` to `SQ-022`.
+
+The user asked for three things in turn: review the proposal before transcription,
+bring it and the phase 4 note into the repository and resolve the review's points,
+and check the decider's result. No code changed, and nothing in `docs/` was edited
+by this session.
+
+**Decided.**
+- **A branch, `design/poverty-seed`**, rather than commits on `main`: the
+  session's standing rule is to branch before committing on the default branch.
+  The decider's rulings landed on the same branch, so it carries the whole batch
+  and is merged without squashing like any other.
+- **The proposal's place and name** are
+  `.claude/design/2026-10-04-proposal-poverty-seed.md`, dated as the other design
+  notes are. The user's file in Downloads is the origin; revisions 9 and 10 exist
+  only here.
+- **Revision 9 was written by this session from the user's answers**, each put as
+  a choice with a recommendation; every one is marked as the user's in the
+  proposal. Two changes needed no answer and were made as form: the
+  conservation sentence of DEC-098 marked for the decider like FR-P-03c, and
+  FR-C-04's steps 5 and 6 stated as kept.
+- **Twenty-two findings became fourteen entries**: each medium finding its own,
+  the low ones gathered in `SQ-019` and `SQ-022`. Every entry says "Blocks: no"
+  and names the phase 4 point that must not start before it is answered, since
+  no plan exists yet to stop. `SQ-020` is marked the user's, under reserve 4.
+- **`9250363` names D-108 but does not contain it**: a hook refused the edit
+  after the commit had been prepared, and the entry follows in its own commit
+  rather than by amending.
+
+**What `docs/` says:** nothing on where a design proposal lives or how a
+review of the decider's work is filed; `AGENTS.md` sends objections to
+`SPEC-QUESTIONS.md`.
+**Would overturn it:** the user preferring the batch on `main`, or the decider
+wanting the low findings split one per entry.
+
+### D-109 · The draft of the cost measurement plan, at moment one
+
+**Ruling:** none yet. The draft is in `REVIEW-REQUEST.md`, for the user's answer
+under `R-048` and `R-049`.
+
+`SQ-023` owes a measurement before its ruling, and the user approved the sizes
+per settlement type and asked for the draft. Writing it forced these choices.
+
+**Decided.**
+- **`Kind: process`.** The points change no simulated world and nothing in
+  `core/`: they build a stand-in and measure it. A `Kind: simulator` plan must
+  name the acceptance criteria it moves, and this one moves none. The header
+  cites P-01, NFR-05, NFR-07 and `SQ-023` in its exit condition instead.
+- **A project of its own, `bench/`, kept after the plan.** Not in the harness,
+  which is the driver of §17's criteria (`R-039`) and runs in CI; timing in CI
+  is noise. Kept rather than thrown away because the stand-in behind P-63 and
+  P-64 was thrown away (`SQ-004`), and this plan's first point cannot know what
+  it contained.
+- **Calibration by tolerance, not by equality.** The cost at 9 rows within half
+  and twice P-63, the 27-to-9 ratio within a fifth of 4.8: wide, because the
+  old stand-in's five phases are unknown and the machine differs; narrow
+  enough that a ranking linear in the rows, about 3, fails.
+- **Checksums as the guard against a benchmark that measures nothing.** Every
+  layout computes the same outputs on the same world, so a faster layout that
+  skips work is caught by its checksum rather than praised for its speed.
+- **The sizes are measurement inputs, not constants**, and take no P-number
+  under `R-050`: they describe worlds to time, not the world the game runs.
+- **`64147ba` names D-109 but does not contain it**: as with `9250363`, the
+  edit and the commit were sent together and a hook refused the edit. The entry
+  follows in its own commit.
+
+**What `docs/` says:** §19 places P-17 and P-01's validity in Phase 4 on the
+real update; nothing on measuring before it. `R-046` names the next two plans,
+and this would be a third: raised in the request as blocking.
+**Would overturn it:** the decider placing the measurement inside phase 4's
+first point, which would make it `Kind: simulator`; or the user preferring the
+stand-in thrown away at the end.
+
 ### D-110 · The draft of the process plan, at moment one
 
 **Ruling:** R-066 — resolved: the two departures are the user's, the rest
@@ -3170,3 +3246,17 @@ nested fence: the first closing fence ends the draft.
 `/plan-status` step 4.
 **Would overturn it:** a skill at point 6 or 7 needing a field in another shape,
 or the user ruling that an abandoned plan still reports its next point.
+
+## 2026-10-06 — Merge of `design/poverty-seed` into `agent-workflow`
+
+Nothing decided here. The two branches number disjointly, by design (`R-066`), so
+`RULINGS.md` and this file were resolved by keeping both sides in numeric order:
+`R-065` before `R-070` in "Owed by the implementer", `R-054`–`R-065` before
+`R-066`, `D-108`–`D-109` before `D-110`.
+
+`REVIEW-REQUEST.md` holds one current request and each branch had its own. The
+user, Federico Xella, chose on 2026-10-06 to keep the cost measurement plan's,
+still open; the process plan's, already answered, stays in git. The file is
+taken from `design/poverty-seed` unchanged. Its line "Replaces the moment-three
+request of 2026-10-01" does not name the process plan request it now also
+replaces: left as written, since the request is not mine to compose.

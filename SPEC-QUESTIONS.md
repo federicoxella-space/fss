@@ -374,3 +374,427 @@ property is checked. `docs/` leaves open:
 
 The first phase 4 point that adds a table is the first place the answer changes
 code, and the pins move there anyway (`R-034`, Cost).
+
+### SQ-009 — FR-K-15 still defines the dungeon check on goods with a tier
+
+**Raised:** 2026-10-05, reviewing `R-054` to `R-065` on `design/poverty-seed`.
+**Cites:** `docs/SIM-REQ.md:420` FR-K-15; `docs/SIM-REQ.md:774` AC-56;
+`docs/SIM-DEC.md` DEC-080; `docs/SIM-REQ.md:145` FR-P-03.
+**Blocks:** no. Dungeons are events-subsystem work, and `R-063` puts no
+dungeon-only material in phase 4. It must be answered before the point that
+writes load validation, since the check is defined twice.
+**Status:** open.
+
+FR-K-15 requires that "no tier 0 or tier 1 good depends, directly or
+transitively, on such a material". Goods no longer carry a tier: FR-P-03 and
+DEC-098 put it on needs, and the user rewrote AC-56 and DEC-080 to protect needs
+rather than goods (proposal revision 9, reserve 2 of `R-001`). FR-K-15 was not in
+the proposal and was not touched. The same load check now has two definitions,
+and FR-K-15's has no referent. The obvious reading is AC-56's wording, which is
+the user's decision. The implementer's own review of revision 8 missed this
+requirement.
+
+### SQ-010 — FR-P-03a says both "a value in each class" and "one value per class tree"
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:155` FR-P-03a; `docs/SIM-REQ.md:141` FR-P-01;
+`docs/SIM-DEC.md:186` DEC-015; `docs/SIM-DEC.md:238` DEC-098; `R-060`.
+**Blocks:** no. `R-063`'s content has no subclass, so no good meets the case. It
+must be answered before the point that writes the goods record and its
+validation.
+**Status:** open.
+
+FR-P-03a's second sentence says a good "belongs to one or more classes and
+carries a value per unit in each". `R-060` appended to the same requirement that
+"a good carries one value per class tree … and validation at load refuses a good
+with two values in one tree". A good in a class and its subclass must carry two
+values by the first sentence and is refused for it by the last. FR-P-01, DEC-015
+and DEC-098 repeat "a value in each".
+
+### SQ-011 — no phase of the update writes the hunger deficit
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:111` FR-D-03a; `docs/SIM-ECON.md:36` phase 1,
+`:41` phase 6, `:42` phase 7, `:47` phase 11, `:95` §Demand "Hunger";
+`docs/SIM-REQ.md:803` §18, Needs.
+**Blocks:** no. It must be answered before the needs subsystem's first point,
+which by `R-052` owns FR-D-03a.
+**Status:** open.
+
+FR-D-03a says unmet tier 0 need accumulates as a deficit. §18 places it under
+Needs, whose `SIM-ECON` phase is 6. Need left unmet is known only after market
+clearing in phase 7, and the deficit is read in phase 11 for mortality and in
+phase 6 for the seed reserve. No row of the update table says where the deficit
+grows or decays. Phase 1, where migrants join cohorts, does not cite FR-D-03a's
+count-weighted average either. The order matters: a deficit updated in phase 7
+reaches phase 6 one update late, and phase 11 in the same update.
+
+### SQ-012 — how much seed is released is not defined
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:181` FR-P-10d; `docs/SIM-DEC.md:562` DEC-092;
+`docs/SIM-LOOPS.md:86` B5c; `docs/SIM-REQ.md:111` FR-D-03a; P-66, P-70.
+**Blocks:** no. It must be answered before the point that builds the seed
+reserve.
+**Status:** open.
+
+FR-P-10d releases the reserve "only as far as needed to bring the deficit back
+to P-66"; DEC-092 and B5c say "to hold it there". Under FR-D-03a the deficit
+does not fall in proportion to food eaten: it grows by what is missing and
+decays by P-70 per update only when the need is fully met. Eating released seed
+can stop the growth but cannot bring back a deficit above P-66, so the quantity
+is either "enough to meet this update's tier 0 need" (hold) or undefined (bring
+back). The two texts also differ from each other.
+
+### SQ-013 — DEC-085 still ties array widths to `ruleVersion` and allows content patches
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-DEC.md:58` and `:60` DEC-085; `docs/SIM-DEC.md:396`
+DEC-100; `docs/SIM-STATE.md:26` `rulesData`; `R-065`.
+**Blocks:** no. It must be answered before the first phase 4 point that adds
+static data, the point `R-065` binds.
+**Status:** open.
+
+DEC-085's rationale says "widths come from static data versioned with
+`ruleVersion`", and its cost that "a patch that changes a width, a new good for
+instance, reshapes the arrays". Under DEC-100 `ruleVersion` is the logic's
+version, widths come from the rules file, and an existing world cannot take new
+content. `R-065` lists DEC-032, DEC-033 and DEC-089 as touched, not DEC-085.
+
+### SQ-014 — generation parameters and the rules file are two inputs, and NFR-01 names one
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:527` NFR-01; `docs/SIM-REQ.md:641` AC-02;
+`docs/SIM-REQ.md:517` FR-G-02; `docs/SIM-REQ.md:541` NFR-08;
+`docs/SIM-STATE.md:24` `generationParams`; DEC-100.
+**Blocks:** no. It must be answered before the point that builds the generator,
+the first of phase 4 (`R-052`).
+**Status:** open.
+
+NFR-01 and AC-02 now list the inputs as seed, rules file and commands. FR-G-02,
+NFR-08 and `SIM-STATE`'s `generationParams` keep generation parameters as a
+separate saved input. Values such as P-02, P-12, P-54 and the kingdom count of
+`R-063` either belong to the rules file, and then have two homes, or to
+`generationParams`, and then the determinism requirement omits an input.
+
+### SQ-015 — FR-A-05 sits in Phase 7, and phase 4 needs it first
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:507` FR-A-05; `docs/SIM-REQ.md:810` §18 "Outside
+Phase 4"; `R-063`, `R-064`, `R-065`.
+**Blocks:** no. It must be answered before the phase 4 plan is written, since
+`R-052` reads `Satisfies:` against §18.
+**Status:** open.
+
+§18 sends "§13, what the host observes and does" to Phase 7, and FR-A-05 is in
+§13. `R-063` and `R-064` place phase 4's content in the rules file, and `R-065`
+owes its format from the first phase 4 point that adds static data. FR-A-05 has
+no phase 4 subsystem in the table.
+
+### SQ-016 — `SIM-STATE` lists one carry, and `SIM-ECON` now says every row holds them
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-ECON.md:105-107` §Spoilage and integer rounding;
+`docs/SIM-STATE.md:59-75` §Cohort; `docs/SIM-REQ.md:177` FR-P-10b.
+**Blocks:** no. It must be answered before the first point that applies a rate
+to a cohort stock.
+**Status:** open.
+
+`SIM-ECON` says "the carry stays with its row and is cleared when the row's
+count reaches zero", and names spoilage, wear, decay, interest and transit loss.
+§Cohort lists only `transitionRemainder`: no spoilage carry per good, none for
+wear, decay or interest. The harvest, area reaped × yield × condition, leaves a
+fraction too. `SIM-STATE`'s rule is that anything influencing a future tick is
+listed, and a carry is such a thing.
+
+### SQ-017 — the yearly cap of FR-P-15 has no P-number and no state
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:193` FR-P-15; §16 opening paragraph;
+`docs/SIM-DEC.md:520` DEC-047; `docs/SIM-STATE.md` §Settlement.
+**Blocks:** no. It must be answered before the point that builds allocation
+adjustment.
+**Status:** open.
+
+FR-P-15 makes "P-19 and the yearly cap" the default for an activity whose record
+carries neither. The cap has no P-number, and §16 calls a driving constant
+without one a defect. Enforcing a yearly cap needs the movement already made
+this year per activity, which no state table holds.
+
+### SQ-018 — the advance's collateral and its lender are not where credit looks for them
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md:298` FR-C-24; `:300` FR-C-25; `:304` FR-C-27;
+`docs/SIM-STATE.md:75` `advance`.
+**Blocks:** no. It must be answered before the labour and income subsystem's
+credit point.
+**Status:** open.
+
+FR-C-25 now collateralises an advance with the standing crop. FR-C-24 lists
+collateral as "goods, durables, buildings", so a cohort with only a crop cannot
+borrow by one requirement and can by the other. `advance` is a bare `int64`
+with no counterparty category, while `debt` and `credit` carry one (FR-C-23).
+FR-C-27 puts a write-off's loss "on the lender", and for an advance nothing says
+who that is or where the matching claim sits.
+
+### SQ-019 — `SIM-LOOPS`' gate check no longer matches its own tables
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-LOOPS.md:10-25` §Stocks; `:100` R12; `:152-155` §Gate
+check; `docs/SIM-REQ.md:790` §18, phase 1 gate.
+**Blocks:** no for code. It is a claim about the phase 1 gate, which the user
+conditioned this batch on keeping closed.
+**Status:** open.
+
+- "Every flow has a source and a sink: Met", but §Stocks has no row for the
+  standing crop (in by sowing; out by harvest and by loss when the window
+  closes). Goods omit sowing, emigrants and seizure among outflows; population
+  and currency omit emigrants in transit.
+- R12 has no "Tuned by" line, while "Brakes have a tuning parameter" reads Met.
+- The row "Met for R1, R2, R4, R5, R6, R7, R12" omits R9, R10 and R11, which
+  have brakes. This predates the batch.
+
+### SQ-020 — whether the consumer of §20 can ship and read the rules file
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-REQ.md` §20 "Downstream constraints"; DEC-100; FR-A-05;
+`R-065` "Not verified"; reserve 4 of `R-001`.
+**Blocks:** no. It must be answered before the point that builds the rules file,
+since the format is what the consumer would ship.
+**Status:** open — **the user's**, not the decider's: §20 is reserve 4. Answered
+by the user on 2026-10-05, below; the decider turns the answer into a revision
+of `R-065`.
+
+`R-065` records as not verified "that the consumer of §20 can ship and read such
+a file", and names it among what would overturn the ruling. §20's constraints
+belong to a consumer this repository cannot see, so only the user can answer.
+
+**The user's answer, 2026-10-05: a hybrid.** The base rules are compiled into
+the core, as bytes generated from the same text source by the same compiler. An
+external rules file, where the game can read one, replaces them: content patches
+and modding where the platform allows, the base rules everywhere else. The rest
+of `R-065` stands: the core validates whatever bytes it receives, the digest
+names them, and the save carries the file the world runs on, which modding
+makes indispensable, since a modded save cannot be reproduced without the
+player's file. Raised with it, for the decider:
+
+- DEC-100 and FR-A-05 gain the default and the rule that it applies when the
+  host hands no file.
+- Validation must refuse any malformed file without failing, since players will
+  write them, and must cap the sizes a file may declare: goods, mestieri,
+  recipes. The caps are parameters for §16, set after the phase 4 measurement,
+  so that a mod cannot silently take the core past P-01.
+- AC-04's bounds are a claim about the shipped content, not about modded
+  content; a sentence should say so.
+
+### SQ-021 — `SIM-STATE` open item 1 closed with more than `R-063` decided
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** `docs/SIM-STATE.md:210`; `R-063` "Age bands".
+**Blocks:** no. It must be answered before the point that builds cohort rows.
+**Status:** open.
+
+`R-063` says "Three, closing `SIM-STATE` open item 1". The text in `docs/` says
+"three age bands, children, working age and elderly, of which only working age
+offers labour. A wider split is a format migration (NFR-08)". The names, the
+rule that only working age offers labour, and the remark on migration are in no
+ruling or proposal. The labour rule decides who sells labour under FR-C-05.
+
+### SQ-022 — stale counts and leftover wording after the batch
+
+**Raised:** 2026-10-05, as SQ-009.
+**Cites:** below, item by item.
+**Blocks:** no.
+**Status:** open.
+
+1. Phase counts: `docs/SIM-REQ.md:798` and `:821` "twelve phases",
+   `:573-574` "5 of 12 phases", `:825` and `docs/SIM-DEC.md:478` the
+   unmeasured phases, now that 8a exists.
+2. `docs/SIM-REQ.md:571-574`: P-17, P-17a, P-63 and P-64 labelled "9 cohorts"
+   and "27 cohorts", against the 12 and 36 rows of `R-063`.
+3. `docs/SIM-DEC.md:188` DEC-015 "start with seven goods"; P-09 is 8.
+4. `docs/SIM-DEC.md:600` DEC-052 "one damping constant", against DEC-096's rate
+   per activity.
+5. `docs/SIM-DEC.md:520` DEC-047's title "once per sowing", against FR-P-15
+   (finding 4 of `R-059`, X-3, still open).
+6. `docs/SIM-ECON.md:64` allocation adjustment "When: at sowing", while
+   non-agricultural activities adjust at settlement cadence.
+7. "Implements" column: phase 4 (`docs/SIM-ECON.md:39`) assigns open fields
+   without FR-P-10e; phase 7 (`:42`) uses the seed reserve and the wealth curve
+   without FR-P-10d and FR-J-22; FR-J-03's realignment runs in phase 12, which
+   §18's Production row does not list (finding 5 of `R-059`).
+8. `docs/SIM-DEC.md:562` DEC-092: a crop whose seed is not food "yields [it]
+   alongside its harvest", while FR-P-10 and FR-P-10b (`docs/SIM-REQ.md:173`,
+   `:177`) give a crop one yield.
+9. `docs/SIM-REQ.md:141` FR-P-01 still lists "role", while FR-P-03 says the
+   record says only whether a good is durable (`R-056`).
+10. `docs/SIM-STATE.md:26` `rulesData` is state, but it is described again under
+    §Static data, not state (`:161`).
+11. `docs/SIM-REQ.md:507` FR-A-05 refuses "a file no build could accept", which
+    admits a file only a later build accepts; DEC-089 refuses on what this build
+    reads.
+12. `docs/SIM-REQ.md:308` FR-C-29 and `docs/SIM-DEC.md:828` DEC-076 tie rent to
+    "the wealth axis", which the key has had since DEC-054.
+13. `docs/SIM-REQ.md:626` P-71 is cited by no requirement; FR-P-10d and DEC-092
+    name only P-67.
+14. `docs/SIM-REQ.md:269` FR-C-04 still says "a clearing pass per good", and
+    `SIM-ECON` §Demand "per cohort per good", while rationed demand now falls
+    from one good to another within a class (DEC-099).
+
+### SQ-023 — the user wants hundreds of goods and tens of mestieri, and the state is dense per good
+
+**Raised:** 2026-10-05, by the user, in the review of the rules file (`SQ-020`)
+and of P-01.
+**Cites:** `docs/SIM-REQ.md:559` P-01; `:535` NFR-05; `:539` NFR-07;
+`:571-574` P-17, P-17a, P-63, P-64; `:628` P-09; `:631` P-12;
+`docs/SIM-STATE.md:64` `goods int[]` "one per good"; `docs/SIM-REQ.md:53`
+FR-W-08; `:217` FR-J-02; `docs/SIM-DEC.md:612` DEC-054; `docs/SIM-REQ.md:155`
+FR-P-03a; `docs/SIM-DEC.md:238` DEC-098; `docs/SIM-REQ.md:269` FR-C-04;
+`docs/SIM-ECON.md:42` phase 7; `docs/SIM-REQ.md:670` AC-09; `:682` AC-10.
+**Blocks:** **yes, the phase 4 plan.** Its first points fix the shape of state,
+the save format and the hash. Dense per-good arrays written there would need a
+format migration to become sparse (NFR-08).
+**Status:** open — the direction is the user's; the requirements are the
+decider's; AC-09 and AC-10 are reserve 2 of `R-001`.
+
+**What the user wants.** A catalogue of hundreds of goods and tens of mestieri.
+`R-063` approved 8 goods for phase 4 as starting content; the question is what
+the architecture must carry, not what phase 4 ships.
+
+**Why it does not fit as written.** An estimate by extrapolation from P-63 and
+DEC-054, **not measured**: at 300 goods and about 41 cohort rows, market,
+production and spoilage grow about ×40 with goods, and rationing ×8 to ×12 with
+rows, since its cost grows with the square of the row count. A settlement update
+would cost some 3–5 ms, and a simulated day at 2,000 settlements about one
+second, a hundred times P-01. Memory fails first: one integer per good per
+cohort, 2,000 × 41 × 300 × 4 bytes, is about 100 MB of holdings, twice that with
+a carry per good, against NFR-07's 50 MB.
+
+**The user's answers.**
+
+1. **Goods and mestieri live in the world, not everywhere.** A village holds a
+   few goods and a few mestieri; a city many. The reading is **state sparse per
+   settlement**: a settlement holds rows only for the mestieri present and
+   holdings only for the goods present, so cost follows what is local, not the
+   catalogue.
+2. **Whether a good has its own market depends on the good.** Important goods
+   (grain, iron, wool) clear on a market of their own, with their own price.
+   Minor goods are variants of their class: they share the class's clearing,
+   and their price differs by quality, not by market. The number of clearings
+   stays in the tens while the goods run to hundreds.
+
+**What it touches.**
+
+| Where | Change |
+|---|---|
+| `SIM-STATE` §Cohort | `goods int[]` "one per good", and every carry per good, become sparse per settlement |
+| FR-W-08, FR-J-02, DEC-054 | Rows exist for the mestieri present in a settlement, not for the whole vector |
+| FR-P-03a, DEC-098 | A good says whether it clears on its own market or as a variant of its class; how a variant is priced and how demand splits among variants |
+| FR-C-04, `SIM-ECON` phase 7 | The pass is per clearing, a principal good or a class, not per good (`SQ-022` item 14) |
+| AC-09, AC-10 | Shock response and "every good reaches scarcity" are read per clearing, not per good; reserve 2, the user's |
+| P-09, P-17, P-63, P-64, NFR-07 | P-09 becomes the catalogue's size; the budget is measured against local goods and rows |
+
+**What is owed before the ruling.** A measurement, not an estimate: the cost of
+one settlement update as local goods, clearings and rows vary, taken before the
+state format is fixed. The figures above are the implementer's arithmetic. The
+user also gives an order of magnitude, as content, for the clearings and rows of
+a village against a city.
+
+**The user's answer on who decides a good's market, 2026-10-05.** The author,
+good by good: each good in the content declares either a market of its own or
+that it is a variant of a named class, and validation checks only that a
+variant's class has a market. The eight goods of `R-063` all have a market of
+their own. The order of magnitude of clearings per place is answered through
+`SQ-024`'s market places.
+
+### SQ-024 — markets held by market places: five settlement types, and villages that trade at the nearest market
+
+**Raised:** 2026-10-05, by the user, following `SQ-023`.
+**Cites:** `docs/SIM-ECON.md:34-50` the update table, phase 7 above all;
+`docs/SIM-REQ.md:338` FR-M-01; `:348` FR-M-03; `:370` FR-M-08; `:372` FR-M-09;
+`:564` P-06; `:631` P-12; `docs/SIM-STATE.md:39` settlement `type`;
+`docs/SIM-REQ.md:113` FR-D-04; `:125` FR-D-09; `:482` FR-I-05; `:513` FR-G-01.
+**Blocks:** **yes, the phase 4 plan**, with `SQ-023`: where prices form and
+where rationing runs is the shape of the market subsystem and of its state.
+**Status:** open — the direction and the content are the user's; the rules are
+the decider's.
+
+**What the user proposes.** Prices form at market places, not in every
+settlement. Settlement types become five, each with a number of markets:
+
+| Type | Markets |
+|---|---|
+| Village | 0 — its people trade at the market of a larger settlement |
+| Borgo | 1 |
+| Cittadina | 1–2 |
+| City | 2–4 |
+| Metropolis | 3–5 |
+
+**The user's answers to the implementer's questions.**
+
+1. **Markets are specialised by goods.** Each market trades a group of goods
+   (grain and food, livestock, cloth, metals…). A settlement's markets say which
+   groups it trades, and within a settlement a good has one price. Higher-order
+   goods are therefore found only in larger places.
+2. **A village trades at the nearest market, dynamically.** Nearest by transport
+   cost, and recomputed when places rise or fall. Since markets are
+   specialised, the reading is **per group of goods**: a village may sell grain
+   at the borgo next door and buy tools in a distant city.
+3. **Type follows population.** A settlement rises or falls a type across
+   thresholds; a borgo that declines loses its market, and its villages move to
+   another.
+
+**Why it matters beyond realism.** Phase 7, the dominant cost of the update,
+would run only where there are markets, about 80 places under today's P-12
+rather than 2,000, and in each only for the groups it trades. With `SQ-023`'s
+sparse state it is the most concrete route found so far to hundreds of goods
+within P-01. Not measured.
+
+**Open, for the decider unless marked the user's.**
+
+1. **The groups of goods each market trades, and the order in which a place
+   gains them** as it rises a type. Static content: **the user's**.
+2. **The population thresholds** of each type, with hysteresis and the cadence
+   at which type is reassessed. Parameters for §16; the user gives an order of
+   magnitude as content.
+3. **Village to market.** In which phase of the update a village's surplus and
+   demand reach its market and what it bought comes back; at what transport cost
+   and delay; and what happens to a village whose market, for a group, is out of
+   reach.
+4. **What stays local.** Presumably labour, own consumption (phase 6) and credit
+   stay in the village, and the price comes from its market. The destitute row,
+   the seed reserve and rationing by ability to pay must each be placed.
+5. **Assignment.** The hysteresis that keeps a village from flapping between two
+   near-equal markets, the cadence of reassignment, ties by id. Whether it is
+   state or derived each time.
+6. **The rest of the model.** Migration attractiveness (FR-D-04) and price
+   knowledge (FR-I-05) read the market's price; trade links (FR-M-03, FR-M-08,
+   FR-M-09) join market places; degree caps (P-06) and the settlement mix (P-12)
+   for five types instead of three; the generator (FR-G-01) places types and
+   markets.
+
+**The user's answers on the open points, 2026-10-05.**
+
+- **Point 1, the groups of goods per market: deferred**, to be discussed with
+  the user. The implementer's draft (food and staples from the borgo,
+  manufactures from the cittadina, metals and tools and livestock from the
+  city, luxuries at the metropolis) is neither approved nor rejected.
+- **Within a type, population decides the number of markets.**
+- **Point 2, population per type**, on a scale about half of Europe around
+  1300:
+
+  | Type | Population | Markets |
+  |---|---|---|
+  | Village | up to ~250 | 0 |
+  | Borgo | 250 – 1,000 | 1 |
+  | Cittadina | 1,000 – 5,000 | 1 below ~2,500, 2 above |
+  | City | 5,000 – 25,000 | 2, 3 or 4, in three bands |
+  | Metropolis | above 25,000 | 3, 4 or 5 |
+
+  A settlement rises at a threshold and falls only below about 80% of it. The
+  80% becomes a P-number; the thresholds are Provisional under `R-050`.
+- **P-12, the mix at tick 0:** 2 metropolises, 8 cities, 30 cittadine, 60
+  borghi, 1,900 villages, about 100 market places. Types then follow
+  population, so P-12 describes the generated world only.
+- **The generator places borghi where villages are dense**, so that no village
+  starts too far from its food market.

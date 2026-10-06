@@ -2,7 +2,7 @@
 
 **Document:** SIM-LOOPS
 **Status:** Draft
-**Revision:** 2026-09-19
+**Revision:** 2026-10-04
 **Gate:** No flow without a source and a sink. Every reinforcing loop has a named balancing loop.
 
 ---
@@ -39,7 +39,7 @@ Village loses people → output falls → attractiveness falls → loses more pe
 
 ### R2 — Cobweb allocation
 High price at sowing → everyone plants it → glut at harvest → price collapses → nobody plants it → shortage.
-**B2 — Partial adjustment.** Allocation moves a capped fraction per year toward the best return.
+**B2 — Partial adjustment.** Allocation moves a capped fraction per year toward the best return, for activities that carry no rate of their own. Day labour carries its own and is held by its wage instead.
 *FR-P-15, FR-P-16. Tuned by P-19.*
 
 ### R3 — Urban growth
@@ -52,9 +52,10 @@ City attracts migrants → labour rises → production rises → wages rise → 
 
 ### R4 — Poverty, banditry, isolation
 Poverty → displaced people → danger on links → haulage wages rise → trade stops → poverty deepens.
+Poverty is the destitute row (FR-J-19). The displaced people are those of it who emigrate (FR-D-04a, B12b), and each raises danger on the link it takes.
 **B4a — Contracts.** Danger raises contract issuance → adventurers suppress it.
 **B4b — Garrison spending.** Kingdom treasury funds order on its roads.
-*FR-J-16, FR-C-08, FR-M-13, FR-M-14. Tuned by P-40 and P-41.*
+*FR-J-16, FR-C-08, FR-M-13, FR-M-14, FR-D-04a. Tuned by P-40 and P-41.*
 
 ### R9 — Abandonment
 Settlement empties → ruins appear → danger rises on nearby links → trade avoids the area → neighbours weaken → more abandonment.
@@ -81,7 +82,10 @@ Lender collects interest → borrower loses capital → borrower produces less �
 Hunger → deaths → labour lost → output falls → deeper hunger.
 **B5a — Fewer mouths.** Population loss reduces demand against the same stock.
 **B5b — Land per capita**, as B1.
-*FR-D-03, FR-D-05.*
+Hunger → seed eaten → less land sown → smaller harvest → deeper hunger, for years.
+**B5c — Seed protection.** The reserve is untouched until the hunger deficit exceeds P-66, and is released only to hold it there.
+**B5d — Imported seed.** Grain imported over the trade graph is also seed.
+*FR-D-03, FR-D-05, FR-P-10a, FR-P-10d. Tuned by P-66 against the onset of hunger mortality.*
 
 ### R6 — Link churn
 Route becomes profitable → promoted to a link → flow rises → differential collapses → link dissolves → differential returns.
@@ -90,8 +94,16 @@ Route becomes profitable → promoted to a link → flow rises → differential 
 
 ### R7 — Rationing by ability to pay
 The poor cannot buy → they weaken and leave → labour falls → prices rise → more cannot buy.
-**B7 — Own production first.** Producers eat before selling, so the loop cannot reach the people who grow the food.
+**B7 — Own production first.** Producers eat before selling, so the loop reaches the people who grow the food only once they eat their seed reserve (B5c).
 *FR-C-03, DEC-043.*
+
+### R12 — Destitute labour
+More destitute → more labour offered → lower wage → more members below the threshold → more destitute.
+**B12a — Day labour leaves.** A lower wage drives the day-labourer share down under its own rate, and labour offered falls.
+**B12b — The destitute emigrate.** Emigration draws on the destitute row first, so those a falling wage pushes below the threshold are the first to leave, and the labour they offered leaves with them. They leave as refugees and raise danger on the links they take, which feeds R4.
+*FR-J-19, FR-J-21, FR-C-05, FR-D-04a, FR-M-13, DEC-090, DEC-096.*
+
+B12a fails once the day-labourer share is near zero. B12b acts only where a neighbour is more attractive by more than the hysteresis band of FR-D-09. In a region poor throughout nobody leaves, and the loop stops at the lower clamp of the wage (DEC-045), which bounds it without braking it, and at hunger (R5).
 
 ### R8 — Treasure age
 Rich hoards → adventurer income high → share of the mestiere grows → hoards deplete faster → income falls.
@@ -110,6 +122,7 @@ This one is balancing on its own, but it terminates: the stock does not return.
 | Wage against labour supply | scarce labour raises the wage, which draws labour in | FR-C-05 |
 | Contagion against susceptibles | infection runs out of people to infect | FR-E-05 |
 | Tax against legitimacy | pressure raises fragility, which limits what can be taken | FR-C-09 |
+| Day labour against wage | a high wage draws day labourers, which lowers it | FR-J-21, FR-C-05 |
 
 ---
 
@@ -137,7 +150,7 @@ The return path from kingdom treasury to cohorts is the one that can be forgotte
 | Requirement of the gate | Status |
 |---|---|
 | Every flow has a source and a sink | Met, with land declared as a fixed stock |
-| Every reinforcing loop has a named balancing loop | Met for R1, R2, R4, R5, R6, R7 |
+| Every reinforcing loop has a named balancing loop | Met for R1, R2, R4, R5, R6, R7, R12 |
 | Brakes are implemented by a requirement, not assumed | Met |
 | Brakes have a tuning parameter | Met, several still Open |
 | R3 | Braked by B3a and B3b. Neither runs through price, which is what makes them hold. Verify in Phase 4 that the ceiling binds before starvation does |
@@ -149,3 +162,4 @@ The return path from kingdom treasury to cohorts is the one that can be forgotte
 1. Confirm that B3 alone holds urban growth, or add a second brake.
 2. Decide whether land can be cleared, which would give it an inflow.
 3. Confirm that no loop crosses between subsystems in a way this document misses. The candidate is contagion against trade volume, which suppresses its own transmission.
+4. Full care under DEC-094 raises yield per unit of land up to twice. B1 and B3a assume it fixed; recheck both before care is enabled.
