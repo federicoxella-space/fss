@@ -179,6 +179,19 @@ touched. Build and .NET suites not run: no C# file touched.
   stopped at `FAILED` as in progress.
 - **Core:** no — touches no path under `core/`.
 
+*Outcome:* 2026-10-07. Closed. Each skill, run by a `Plan` agent on
+`failed-then-open.md`, reports the plan stopped at point 2, as `plan-state`
+does; `/plan-status` on the archived phase 3 plan reports ten points with the
+ten commits the old step 4 returns; `/plan-explain` on the process plan's
+moment-one request, read with `-Draft` from `main`, names point 1. `tree-state`
+unchanged across the dispatches. Faults: the next point defined in
+`/plan-explain`'s own words, the grep red; `/plan-status` made to call an open
+point "in progress", green while the skill still handed the state to the script,
+red ("STATE: in progress") once it no longer did. Both restored. `git diff
+--name-only HEAD -- core/` empty: `Core: no` holds, revisioners not run; no
+code-reviewer, no code touched. Build and .NET suites not run: no C# file
+touched. Register `D-117`.
+
 ## 8. The settings files, the identifier match, and four guards closed after audit
 
 *Added 2026-10-07 under `D-014`, owed by `R-070`: no point renumbered, no

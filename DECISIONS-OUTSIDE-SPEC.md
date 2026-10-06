@@ -3421,6 +3421,93 @@ exist. That the code-reviewer repeats its results: one dispatch each. Whether
 it took `AGENTS.md` from disk or from the context it was given; the fault run,
 naming no C rule, suggests disk.
 
+### D-117 · Point 6 · `/plan-explain` and `/plan-status` on `plan-state`: what the point left open
+
+**Permission for `.claude/skills/` (`D-087`).** Granted by the user, Federico
+Xella, in answering the process plan's moment-one request (the plan installed
+in `6d6d098`), for point 6 as its text states it: both skills are named in it.
+The diff touches those two files and nothing else under `.claude/`.
+
+**Decided.**
+- **"This request's draft" is the process plan's own moment-one request**, the
+  one `D-110` wrote under `## Draft plan` so that this check could run on it. It
+  is `REVIEW-REQUEST.md` on `main` (`03782dc`), read from there into a scratch
+  file. The file on `agent-workflow` holds the cost measurement plan's request,
+  merged in from `design/poverty-seed`, whose heading is `## The draft plan`.
+- **The session runs `plan-state`, not the agent**, and puts the JSON in the
+  agent's brief: the script is the state, the agent reads the plan for what
+  needs judgement. `-Draft` and `-Path` are named in both skills; `/plan-status`
+  gains `-Path` so that an archived plan can be reported, which the check needs.
+- **A `tree-state` difference stops the skill** before the agent's report is
+  relayed: it says so, shows `git status --short`, and leaves the undoing to the
+  human. The point says to call it; what follows a difference is not stated.
+- **"Guarantee" goes, and so does its sibling** in `/plan-explain`, "an agent
+  without the tools cannot break it": both claim what `Bash` contradicts. Both
+  skills now say the tools make a write unlikely and `tree-state` notices one.
+- **The recognising sentence stays** in each skill, reworded to say the script
+  and the skill both read the Italian forms, so `D-116`'s check beside its
+  criterion still holds: four forms each.
+- **`/plan-status` step 4 keeps one sentence defining the range**, because
+  `plan-state.ps1` cites "the range of `/plan-status` step 4" twice; dropping the
+  definition would leave those comments pointing at nothing (C1). The `git log`
+  commands go: the script runs them.
+- **`/plan-explain`'s steps renumber**, 8 to 5: steps 1 to 4 become one step
+  acting on `state`. Point 6's own text says "`/plan-explain` step 7", which is
+  now step 4; the plan is frozen and keeps the old number.
+- **The `description`s** are trigger lists; `/plan-explain` gains the draft as a
+  trigger, `/plan-status` an archived plan.
+- **The design's "deliberately not built"** lists any change to these two
+  skills; `R-046` as amended by `R-066` put them in this plan, and the ruling
+  governs.
+
+**Check.** `tree-state` taken before the dispatches and after the last restore:
+the same hash, `5c01938…`. Four `Plan` agents, one per run:
+- `/plan-explain` on `failed-then-open.md`: "STATE: stopped", at point 2, its
+  outcome line quoted, point 3 not presented.
+- `/plan-status` on the same fixture: "STATE: stopped", point 2 reported apart.
+- `/plan-status` on `2026-09-20-fase-3-kernel.md`: ten points, `71f9c5e`,
+  `62e97a5`, `e9a556d`, `f8dc4d3`, `3d7fb31`, `b745b62`, `7e2bdd0`, `c6f786f`,
+  `f1e825b`, `2ec9fad` — the same ten the old skill's step 4 returns, run by hand
+  before any edit.
+- `/plan-explain` with `-Draft` on the process plan's request: "NEXT: 1 —
+  `path-guard` and `git-guard`".
+- A script greps both skills: no "first `## <n>.` section with no", both call
+  `plan-state.ps1` and `tree-state.ps1`, neither says "guarantee"; exit 0.
+
+**Faults.**
+- The sentence defining the next point in its own words put back into
+  `/plan-explain`: the grep red, exit 1. Restored.
+- `/plan-status` made to call a plan with an open point "in progress", first by
+  replacing step 3's `stopped` paragraph only: **green** — the agent reported
+  "stopped", following the script's `state`, which the skill still said decides.
+  Then also with the sentence handing the state to the script replaced by one
+  handing it to step 3: red, "STATE: in progress", point 3 named as worked on.
+  Restored.
+
+**Review.** `git diff --name-only HEAD -- core/` empty: `Core: no` holds, the
+revisioners not run. No code-reviewer: the diff is two skills, no code.
+
+**Findings for the decider.**
+- **`plan-state -Draft` cannot read the cost measurement plan's request**:
+  `## The draft plan` is not `## Draft plan`, and the script reports `exists:
+  false`. `R-048` names no heading; `D-110` chose this one, and `plan-state`
+  matches it exactly. When that plan comes to `/plan-explain` or the rewired
+  `/plan-next`, the draft will read as absent.
+- **The agents' runs are one dispatch each**, and the first fault shows the
+  check is as strong as the sentence the agent obeys: a skill that half
+  reinstates its own state rules still reports what the JSON says.
+
+**What `docs/` says:** nothing; process work. `R-045`, `R-046`, `R-066`,
+`R-048`, `D-087`, the design.
+**Would overturn it:** the decider reading "this request" as the request on the
+plan's branch, which `plan-state` cannot read as the point requires; the user
+wanting the agent, not the session, to run `plan-state`.
+**Not verified:** the skills invoked through `/plan-explain` and `/plan-status`
+themselves: each run here was a `Plan` agent briefed with the skill's path, the
+JSON and the plan, as the skills say to brief it. The `-Draft` default path,
+`REVIEW-REQUEST.md` on this branch, was not exercised beyond the `exists: false`
+above.
+
 ## 2026-10-06 — Merge of `design/poverty-seed` into `agent-workflow`
 
 Nothing decided here. The two branches number disjointly, by design (`R-066`), so
