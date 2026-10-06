@@ -4009,3 +4009,39 @@ with no separate carry, a change to the type of `goods`.
 **Not verified:** whether the advance of FR-C-25 accrues interest, which would
 need a carry of its own; FR-C-25 was not read for it. That interest whole units
 reach the lender's credit is `SQ-018`'s territory and is not stated here.
+
+### R-085 — The yearly cap is P-73, applied per adjustment, and needs no state
+
+**Date:** 2026-10-06   **Origin:** SQ-017
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-15 and §16, P-73 new; `SIM-DEC` DEC-096. Revisions
+already today's.
+
+FR-P-15 and DEC-096 made "P-19 and the yearly cap" the default for an activity
+whose record carries neither. The cap had no P-number, which §16 calls a defect,
+and enforcing a cap on the year's movement needed the movement already made this
+year per activity, which no table held, nor anything that reset it.
+
+**The number.** P-73, the default yearly cap, Open and set by sweep, as P-19 is.
+
+**The state.** Two answers: a field per settlement and activity holding the
+year's movement, with a reset at the year's start; or the cap applied at each
+adjustment, divided by the number of adjustments the activity makes in a year —
+one per sowing for a crop, 52 at settlement cadence. The second bounds the year's
+total exactly as the first does, since no year holds more adjustments than the
+divisor counts, and it needs no field, no reset and no dated step. What it gives
+up is the freedom to spend a whole year's cap in one step after a shock. That
+freedom is what FR-P-16 prohibits in spirit — a partial, damped adjustment — so
+losing it costs nothing the specification wants. For a crop, adjusted once a
+year, the two are identical.
+
+**Cost.** For non-agricultural activities the response to a shock is spread
+over the year rather than taken at once; a sweep of P-73 sees that as a slower
+response than the same number would give under the first answer.
+**Owed by the implementer:** nothing beyond `docs/`; P-73 cited by the point that
+builds allocation adjustment (`R-050`).
+**Would overturn it:** a requirement that an activity respond to a shock within
+the year by more than an even share of its cap; the day labourer, which needs
+that, already carries no cap.
+**Not verified:** nothing; FR-P-14 to FR-P-16, FR-J-21, DEC-047, DEC-096 and
+§16 were read.

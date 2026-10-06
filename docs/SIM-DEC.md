@@ -787,7 +787,7 @@ Destitute members above the entry threshold by P-69 leave at the next adjustment
 
 ### DEC-096 — Day labour is a chosen mestiere that follows the wage at its own rate
 
-Day labourer is an ordinary service mestiere inside the allocation vector, with no building, whose expected return is the wage. An activity's record may carry its own adjustment rate and cap, P-19 and the yearly cap of FR-P-15 applying where it carries none; day labour carries a faster rate and no yearly cap. Where labour offered exceeds labour demanded, every cohort selling labour is hired in proportion to what it offers.
+Day labourer is an ordinary service mestiere inside the allocation vector, with no building, whose expected return is the wage. An activity's record may carry its own adjustment rate and cap, P-19 and P-73, the default yearly cap of FR-P-15, applying where it carries none; day labour carries a faster rate and no yearly cap. Where labour offered exceeds labour demanded, every cohort selling labour is hired in proportion to what it offers.
 
 **Rationale.** The cobweb comes from the delay between sowing and harvest. Day labour is paid in the update it is hired, so it needs none of the damping crops need, and with that damping its share could not follow a harvest lasting a few weeks. A rate in the record avoids an exception wired to one mestiere. Proportional hiring favours neither those who labour by choice nor the destitute.
 

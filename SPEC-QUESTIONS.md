@@ -514,7 +514,7 @@ listed, and a carry is such a thing.
 `docs/SIM-DEC.md:520` DEC-047; `docs/SIM-STATE.md` §Settlement.
 **Blocks:** no. It must be answered before the point that builds allocation
 adjustment.
-**Status:** open.
+**Status:** **closed 2026-10-06 by R-085.**
 
 FR-P-15 makes "P-19 and the yearly cap" the default for an activity whose record
 carries neither. The cap has no P-number, and §16 calls a driving constant

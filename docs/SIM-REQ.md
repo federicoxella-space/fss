@@ -190,7 +190,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-14** — Each settlement holds an allocation vector in fixed point over its available activities, summing to one, covering land and labour.
 
-**FR-P-15** — At each crop's sowing date the settlement computes expected return per activity as expected yield × current price − input cost − wage cost, then moves the allocation toward the highest by the activity's adjustment rate, capped per year by the activity's cap. An activity whose record carries neither uses P-19 and the yearly cap. Non-agricultural activities adjust the same way at settlement cadence; the expected return of day labour is the wage.
+**FR-P-15** — At each crop's sowing date the settlement computes expected return per activity as expected yield × current price − input cost − wage cost, then moves the allocation toward the highest by the activity's adjustment rate, capped per year by the activity's cap. The yearly cap is applied at each adjustment, divided by the number of adjustments the activity makes in a year: one per sowing for a crop, 52 at settlement cadence. No state records the movement already made in a year. An activity whose record carries neither uses P-19 and P-73. Non-agricultural activities adjust the same way at settlement cadence; the expected return of day labour is the wage.
 
 **FR-P-16** — The adjustment is partial and damped. Full adjustment to last year's prices produces a diverging cobweb oscillation and is prohibited.
 
@@ -625,6 +625,7 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-70 | Hunger deficit decay per update when the tier 0 need is met | TBD by sweep | Open |
 | P-71 | Share of released planting good that may become supply, CI | TBD | Open |
 | P-72 | Weight an emigrant carries, per member, FR-D-04a | TBD by sweep | Open |
+| P-73 | Allocation adjustment cap per year, default, FR-P-15 | TBD by sweep | Open |
 | P-09 | Goods count | 8 | Decided |
 | P-10 | Price bounds | 0.25× to 4× reference | Decided |
 | P-11 | Trade damping `k` | TBD by sweep | Open |
