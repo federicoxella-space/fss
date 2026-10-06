@@ -3757,3 +3757,49 @@ cannot; that is two trees, as `R-060`'s overturning already says.
 **Would overturn it:** as for `R-060`.
 **Not verified:** nothing; FR-P-01, FR-P-03a to FR-P-03c, DEC-015 and DEC-098 were
 read, and `docs/` grepped for "a value in each" and "value per unit in each".
+
+### R-079 — The hunger deficit is written once per update, at the end of phase 7
+
+**Date:** 2026-10-06   **Origin:** SQ-011
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-D-03a gains one sentence, §18's Needs row names the
+write; `SIM-ECON` phases 1, 7, 8a and 12 cite FR-D-03a, phase 7 says what it writes,
+§Demand "Hunger" says when it is written and who reads it. `SIM-ECON` revision
+bumped; `SIM-REQ`'s already today's.
+
+FR-D-03a defines the deficit and how it moves between rows, and no row of the
+update table wrote it. Three places read it: phase 6 for the seed reserve
+(FR-P-10d), phase 11 for mortality (FR-D-03), and FR-D-04a carries it with
+emigrants.
+
+**At the end of phase 7**, because that is the first moment the update's food is
+known. Tier 0 is met in phase 6 from own holdings and in phase 7 by purchase; a
+deficit written after phase 6 would count as hunger what the market was about to
+feed, and one written in phase 11 would need the unmet need carried from 7 to 11
+as a value outside state. Written at 7, mortality in phase 11 reads this update's
+hunger, and the seed reserve in phase 6 reads the deficit as it stood after the
+last update's market, one update behind. That lag is the right one: the reserve
+is released when hunger has already accumulated, which is what P-66's threshold
+means, and it cannot read a market that has not run.
+
+**Before the market subsystem exists.** `R-051` builds needs before the market,
+and `R-052` places FR-D-03a under needs. The rule is stated on phases, not on
+subsystems, so it holds unchanged: while phase 7 does nothing, the tier 0 need
+still unmet after phase 6 is what the end of phase 7 reads. The needs subsystem
+builds the write in that slot, and the market lands before it. §18's Needs row
+now names the write so `R-052`'s check reads it as needs' own.
+
+**Movements between rows.** FR-D-03a's weighted average applies wherever members
+change row: phase 1, where migrants join; phase 8a, where members enter and
+leave the destitute row; and phase 12, where FR-J-03 realigns the share of
+population in each mestiere to the vector. All three now cite it. Phase 11's emigrants carry the deficit
+by FR-D-04a, which already says so.
+
+**Cost.** None to code. Phase 7 gains a pass over rows after clearing, one
+comparison and one write each.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** a sweep in which the one-update lag of the seed reserve
+lets hunger kill before the reserve opens, which would argue for phase 6
+reading this update's shortfall after own consumption as well.
+**Not verified:** nothing; every row of the update table was read for a
+movement of members, and FR-J-03, FR-J-19, FR-J-20 and FR-D-04a were read.

@@ -419,7 +419,7 @@ and DEC-098 repeat "a value in each".
 `docs/SIM-REQ.md:803` §18, Needs.
 **Blocks:** no. It must be answered before the needs subsystem's first point,
 which by `R-052` owns FR-D-03a.
-**Status:** open.
+**Status:** **closed 2026-10-06 by R-079.**
 
 FR-D-03a says unmet tier 0 need accumulates as a deficit. §18 places it under
 Needs, whose `SIM-ECON` phase is 6. Need left unmet is known only after market

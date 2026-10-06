@@ -2,7 +2,7 @@
 
 **Document:** SIM-ECON
 **Status:** Draft
-**Revision:** 2026-10-04
+**Revision:** 2026-10-06
 **Companion:** SIM-REQ, SIM-DEC, SIM-STATE
 
 ---
@@ -33,19 +33,19 @@ Runs at settlement cadence, every 7 ticks, on the staggered bucket of FR-T-06. E
 
 | # | Phase | Does | Implements |
 |---|---|---|---|
-| 1 | Arrivals | Goods in transit landing this tick enter stock, with transit loss applied. Migrants join cohorts. Chronicle entries arrive and age. | FR-C-11, FR-D-04, FR-I-02 |
+| 1 | Arrivals | Goods in transit landing this tick enter stock, with transit loss applied. Migrants join cohorts, their hunger deficit averaged into the row's. Chronicle entries arrive and age. | FR-C-11, FR-D-04, FR-D-03a, FR-I-02 |
 | 2 | Prices | Compute local price per good from current stock. Compute the wage from labour supply against expected demand. | FR-M-01, FR-C-05 |
 | 3 | Borrowing | Cohorts short of currency for inputs or needs borrow against collateral. Interest rate set. Advances against future output issued here. | FR-C-22 to FR-C-26 |
 | 4 | Labour | Labour market clears. Workers are assigned to activities up to building capacity, and to every crop stage active in this update; where labour is in excess, sellers are hired in proportion to what they offer. Labour still unhired is assigned to open fields (FR-P-10e); the rest is unemployment. Wages are paid. | FR-C-05, FR-P-17 |
 | 5 | Production | Recipes execute on inputs held. Crude variants run where durables are missing. Durables wear, buildings decay. Dated crop events fire if due. Sowing consumes the planting good. Harvest reaps what labour allows from the area still standing, open fields included. Recipes never draw on a seed reserve. | FR-P-02, FR-P-10, FR-P-10a, FR-P-10b, FR-P-10c, FR-P-10e, FR-P-12, FR-P-20 to FR-P-23 |
 | 6 | Own consumption | Each cohort meets its needs from its own holdings, by tier, lowest grade first, leaving its seed reserve untouched unless its hunger deficit exceeds P-66. | FR-C-03, FR-P-10d |
-| 7 | Market clearing | Unmet need becomes demand, capped by currency, which includes what phase 3 lent. Surplus, the seed reserve excluded, becomes supply. Short supply is allocated by ability to pay, the share of a cohort able to pay read from its wealth curve. Currency moves buyer to seller. | FR-C-04 |
+| 7 | Market clearing | Unmet need becomes demand, capped by currency, which includes what phase 3 lent. Surplus, the seed reserve excluded, becomes supply. Short supply is allocated by ability to pay, the share of a cohort able to pay read from its wealth curve. Currency moves buyer to seller. Last, each cohort's hunger deficit grows by the tier 0 need still unmet, or decays if it was met. | FR-C-04, FR-D-03a |
 | 8 | Repayment | Debts falling due are repaid. Default seizes goods, then durables, then buildings. Residual is written off. Default marks are set and aged. | FR-C-27, FR-C-28 |
-| 8a | Destitution | Cohort members whose wealth falls below the threshold enter the destitute row. Destitute members above the exit threshold leave for their destinations: for agricultural activities only in an update holding a crop's sowing date. | FR-J-19, FR-J-20 |
+| 8a | Destitution | Cohort members whose wealth falls below the threshold enter the destitute row. Destitute members above the exit threshold leave for their destinations: for agricultural activities only in an update holding a crop's sowing date. | FR-J-19, FR-J-20, FR-D-03a |
 | 9 | Spoilage | Perishability applied to all held goods, with remainder carry. | FR-P-13 |
 | 10 | Export | Outbound flow computed per link from the price differential, capped by surplus stock and by haulage capacity. Goods leave and enter transit. | FR-M-03, FR-M-03a, FR-J-04 |
 | 11 | Demography | Births, deaths including hunger and crowding mortality, migration decisions under the hysteresis band. Emigrants are drawn from the destitute row first and leave with their share under FR-D-04a, as migrants in transit; destitute emigrants raise danger on the link they take (FR-M-13). | FR-D-01 to FR-D-13, FR-M-13 |
-| 12 | Bookkeeping | Fragility metrics updated. Chronicle entries emitted. Knowledge table refreshed for neighbours and aged for rumours. `changeCapacity` recomputed. Mestiere shares are realigned to the allocation vector for the activities that adjusted in this update. | FR-E-03, FR-I-01, FR-I-05, FR-C-16, FR-J-03 |
+| 12 | Bookkeeping | Fragility metrics updated. Chronicle entries emitted. Knowledge table refreshed for neighbours and aged for rumours. `changeCapacity` recomputed. Mestiere shares are realigned to the allocation vector for the activities that adjusted in this update, members carrying their hunger deficit. | FR-E-03, FR-I-01, FR-I-05, FR-C-16, FR-J-03, FR-D-03a |
 
 Phase 7 dominates the cost of the update and is the only part of it that grows with the square of the cohort count, because short supply is allocated in order of ability to pay. The ordering key must be computed once per cohort per good and then sorted, never recomputed inside the comparison: doing the division in the comparison turns a sort of a few dozen entries into a few thousand integer divisions per settlement update. This is the first thing to optimise and the thing that decides whether the wealth axis of DEC-054 fits the budget.
 
@@ -92,7 +92,7 @@ Tiers are satisfied in order: a cohort spends on tier 0 before tier 1 before tie
 
 **Rationing.** When supply is short, allocation runs by descending ability to pay within a tier, never across tiers, and the share of a cohort able to pay is read from its wealth curve: nobody buys cloth while another cohort in the same settlement cannot buy bread and could pay for it.
 
-**Hunger.** Unmet tier 0 accumulates as a deficit rather than killing instantly. The deficit drives mortality in phase 11 and decays when feeding resumes. This is what makes a famine a season rather than a tick. The deficit is cohort state (FR-D-03a), and the seed reserve reads it (FR-P-10d).
+**Hunger.** Unmet tier 0 accumulates as a deficit rather than killing instantly. The deficit is updated at the end of phase 7, once all the food of the update is known; it drives mortality in phase 11 of the same update, is read by the seed reserve in phase 6 of the next, and decays when feeding resumes. This is what makes a famine a season rather than a tick. The deficit is cohort state (FR-D-03a), and the seed reserve reads it (FR-P-10d).
 
 **Choice within a class.** Needs add (FR-P-03b). A cohort meets them tier by tier from its own holdings, lowest grade first, and buys what remains of each at the lowest price per unit of value among the goods that meet it. With the currency left once tiers 0 and 1 are met, and before tier 2 takes its fraction, members replace units of a lower grade with units of a higher grade that meet the same need, the share of members able to pay for each grade read from the wealth curve. In rationing, demand that meets a need comes before demand that only raises a grade. Demand rationed out of one good falls, within the update, to the other goods that meet the same need, cheapest per unit of value first; the order in which a class's markets clear is derived from grade, price and good id.
 

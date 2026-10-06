@@ -108,7 +108,7 @@ dayOfMonth = dayOfYear % 28
 
 **FR-D-03** — Death rate is per age band and responds to hunger, disease, and violence.
 
-**FR-D-03a** — Unmet tier 0 need accumulates as a hunger deficit per member of each cohort, in units of nutrition, and decays by P-70 per update when the need is met. When members move from one row to another, the receiving row's deficit becomes the average of its own and that of the row they leave, weighted by count; the row they leave keeps its own. The death rate's response to hunger in FR-D-03 reads this deficit.
+**FR-D-03a** — Unmet tier 0 need accumulates as a hunger deficit per member of each cohort, in units of nutrition, and decays by P-70 per update when the need is met. It is updated once per update, after market clearing, from the tier 0 need still unmet once own consumption and the market have run (SIM-ECON phase 7). When members move from one row to another, the receiving row's deficit becomes the average of its own and that of the row they leave, weighted by count; the row they leave keeps its own. The death rate's response to hunger in FR-D-03 reads this deficit.
 
 **FR-D-04** — Migration moves people along trade links toward higher attractiveness, where attractiveness combines food per capita, real wage, and safety. Migration per tick is capped.
 
@@ -800,7 +800,7 @@ Each phase has an exit gate. No phase starts before the previous gate is green.
 | Subsystem | SIM-ECON phases and steps | Requirements |
 |---|---|---|
 | Production | 5, 9; sowing, harvest, allocation adjustment, construction | FR-P, save FR-P-03b; FR-J-01 to FR-J-03, FR-J-21, FR-J-22; FR-C-01, FR-C-02, FR-C-06. Before it, the generator: FR-G-01, FR-G-01a, FR-G-02, with the buried stock of FR-J-14 and FR-J-15 |
-| Needs | 6 | FR-C-03, FR-P-03b, FR-D-03a; SIM-ECON §Demand, tiers and the hunger deficit |
+| Needs | 6; the end of 7 for the hunger deficit | FR-C-03, FR-P-03b, FR-D-03a; SIM-ECON §Demand, tiers and the hunger deficit |
 | Market | 1 for goods, 2 for prices, 7, 10 | FR-M-01 to FR-M-07; FR-C-04, FR-C-10, FR-C-11; FR-C-12 to FR-C-18, FR-C-21; FR-J-04, FR-J-05; FR-I-05 to FR-I-06a |
 | Labour and income | 2 for the wage, 3, 4, 8, 8a; taxation | FR-C-05, FR-J-19, FR-J-20, FR-C-07 to FR-C-09, FR-C-19, FR-C-20, FR-C-22 to FR-C-30; FR-X-01, FR-X-06, FR-X-07 for the convoy |
 | Demography | 11 for births and deaths | FR-D-01 to FR-D-03, FR-D-13 |
