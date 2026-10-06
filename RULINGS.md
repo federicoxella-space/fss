@@ -116,6 +116,9 @@ Rulings with verdict `escalated` or `pending`, until the user answers.
 
 - **`R-082`**, `SQ-014`: generation parameters named beside the seed in NFR-01
   and AC-02, and defined in FR-G-02 as what a host chooses per world. Reserve 2.
+- **`R-089`**, `SQ-021`: the base rules' age bands — three, named, only working
+  age offering labour — are static content and await the user's approval
+  under `R-050`.
 
 ---
 
@@ -4182,3 +4185,55 @@ file but must not accept mods, which would need a way to refuse a valid file.
 **Not verified:** how the base rules reach the core as bytes — a generated source
 file, an embedded resource — which `BannedSymbols.txt` and §20 constrain and the
 implementer chooses.
+
+### R-089 — Age bands are content, each marking whether it works; the base values await the user
+
+**Date:** 2026-10-06   **Origin:** SQ-021
+**Verdict:** specified; the base values escalated — static content is the
+user's under `R-050`
+**docs/:** `SIM-STATE` §Cohort `ageDistribution`, open item 1, and open item 6
+new; `SIM-REQ`
+FR-C-05 gains one sentence. Revisions already today's.
+
+`R-063` approved "Age bands. Three, closing `SIM-STATE` open item 1." The text
+that `R-059`'s transcription put into `docs/` said more: the names children,
+working age and elderly, that only working age offers labour, and that a wider
+split is a format migration. No ruling decided the second and third, and the
+finder is right that the labour rule is not a label: it decides who sells labour
+under FR-C-05, and so the dependency ratio of every settlement.
+
+**The structure is specified here.** Age bands are content, as `R-063` made them,
+and each band carries whether its members offer labour. FR-C-05 now says labour
+offered is the members of the bands so marked. Stating it per band keeps the
+rule in the rules file with the bands themselves: a content author who splits
+working age in two, or lets the elderly work, changes data, not code, which is
+what DEC-100 is for.
+
+**The remark on migration was wrong** after `R-081`. A band count set by content
+is a width the content sets, fixed for the life of a world; a wider split is new
+content, not a migration of an existing world's format. The item now says so.
+
+**The base values are not the decider's.** Three bands named children, working
+age and elderly, with working age alone offering labour, is a plausible base and
+the one the text already held, and the decider recommends it: it gives the
+model a dependency ratio, which is how age structure reaches the economy, and
+leaves child and elderly work to content that wants it. But values in the rules
+file are static content, approved by the user before the plan that uses them
+(`R-050`). They stand in `docs/` as the base, marked under "Escalated to the
+user" until approved.
+
+**Cost.** One flag per band in the rules file. A world where nobody but working
+age works feels a demographic shock in its labour supply a generation later,
+which is the point of a dependency ratio and a tuning question for Phase 6.
+**Owed by the implementer:** nothing beyond `docs/` once the user approves; the
+point that builds cohort rows reads the flags.
+**Would overturn it:** the user approving other values, which changes content
+only.
+**A gap found beside it.** Nothing in `docs/` says how members move from one
+band to the next; a grep for ageing finds only the knowledge table's. It is
+recorded as `SIM-STATE` open item 6, due with the demography subsystem, rather
+than decided here: the rate per band is a parameter and its shape follows from
+how births and deaths are written.
+
+**Not verified:** nothing further; FR-D-01 to FR-D-03, FR-D-13 and FR-C-05 were
+read.

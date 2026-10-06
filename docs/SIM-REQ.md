@@ -275,7 +275,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 5. Currency moves from buyers to sellers within the settlement.
 6. Price is recomputed from the resulting settlement stock for the next update.
 
-**FR-C-05** — Labour is traded like a good that cannot be stored: its price is set by the same bounded function of supply against demand, and it expires each update. Cohorts working land allocated to them or a standing crop, or owning buildings, hire labour from cohorts that do neither, and pay wages in currency. Where labour offered exceeds labour demanded, every cohort selling labour is hired in proportion to what it offers.
+**FR-C-05** — Labour is traded like a good that cannot be stored: its price is set by the same bounded function of supply against demand, and it expires each update. Cohorts working land allocated to them or a standing crop, or owning buildings, hire labour from cohorts that do neither, and pay wages in currency. A cohort's labour offered is its members in the age bands the rules file marks as working. Where labour offered exceeds labour demanded, every cohort selling labour is hired in proportion to what it offers.
 
 **FR-C-06** — Currency is conserved. It enters only by an explicit minting event and leaves only by an explicit destruction event. Taxation, wages, purchases, and trade move currency, never create or destroy it.
 

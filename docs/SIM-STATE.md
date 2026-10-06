@@ -59,7 +59,7 @@ Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the s
 | Field | Type | Notes |
 |---|---|---|
 | count | int | |
-| ageDistribution | int[] | bands |
+| ageDistribution | int[] | per age band of the rules file |
 | currency | int64 | single integer in smallest units |
 | goods | int[] | one per good |
 | goodsCarry | fixed[] | laid out as goods: the fraction of a unit each holding carries, in [0, 1). Production, harvest and spoilage add to it or take from it, and a whole unit moves to or from goods when reached |
@@ -213,8 +213,9 @@ A-13 is the one assert about the schedule rather than about state: a firing leav
 
 ## Open
 
-1. Closed: three age bands, children, working age and elderly, of which only working age offers labour. A wider split is a format migration (NFR-08).
+1. Closed: age bands are content in the rules file, each saying whether its members offer labour. The base rules hold three, children, working age and elderly, and only working age offers labour. Their number is a width the content sets, fixed for the life of a world (DEC-085).
 2. Decide whether `flowAccumulator` needs per-good history or a single rolling figure.
 3. Decide the chronicle retention policy. Entries accumulate over 60 years and nothing above discards them.
 4. Decide how the chronicle dates prior history. FR-G-03 runs it "before tick 0" and DEC-040 takes the result as tick 0, so entries written during it carry ticks that are negative once the run is relabelled, or later than the run's first tick if it is not.
 5. Decide how an `EntityId` names its table, before a second table issues them. The chronicle's `entities` may mix settlements, kingdoms and agents, and an index plus a generation does not say which; DEC-083's "two distinct entities are distinct keys" holds across tables only if their indices share one space.
+6. Decide how members move from one age band to the next: a rate per band, which under the rule of §Cohort needs a carry. Falls due with the demography subsystem, whose births enter the first band and whose deaths read every band (FR-D-03).
