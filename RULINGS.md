@@ -3803,3 +3803,45 @@ lets hunger kill before the reserve opens, which would argue for phase 6
 reading this update's shortfall after own consumption as well.
 **Not verified:** nothing; every row of the update table was read for a
 movement of members, and FR-J-03, FR-J-19, FR-J-20 and FR-D-04a were read.
+
+### R-080 — The seed reserve releases this update's unmet survival need, which holds the deficit at P-66
+
+**Date:** 2026-10-06   **Origin:** SQ-012
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-10d; `SIM-DEC` DEC-092; `SIM-LOOPS` B5c; `SIM-ECON`
+phase 6. `SIM-LOOPS` revision bumped; the others already today's.
+
+FR-P-10d released the reserve "as far as needed to bring the deficit back to
+P-66"; DEC-092 and B5c said "to hold it there". The finder is right that under
+FR-D-03a the first has no quantity. The deficit grows by what is missing and
+decays by P-70 only in an update whose need is met in full. No amount eaten in one
+update brings a deficit above P-66 back to it; the most food can do is meet the
+need, and then decay does the rest at its own rate.
+
+**The quantity is the update's tier 0 need left unmet by the cohort's other
+holdings**, converted to the planting good by its nutrition and capped by the
+reserve. Released so, the need is met, the deficit decays by P-70, and once it
+is at or below P-66 the reserve closes until hunger grows again. The deficit
+therefore stays near P-66, which is what DEC-092 and B5c said and what B5c needs
+to be a brake: seed is protected until desperation, then spent only to stop
+desperation from deepening. "Bring back" is dropped; it described the effect over
+several updates as if it were the quantity of one.
+
+The deficit read in phase 6 is the one `R-079` writes at the end of phase 7,
+one update behind; FR-P-10d says so, so the implementer does not look for a
+fresher one that does not exist.
+
+Releasing more — enough to make the deficit decay faster, or the whole reserve —
+would spend next year's harvest to shorten this year's hunger by a margin P-70
+already sets, and would weaken B5c without a sweep asking for it.
+
+**Cost.** None to code. Phase 6 computes the unmet tier 0 need before it touches
+the reserve, which it computes anyway to meet needs from holdings.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** a sweep in which a deficit held at P-66 still kills at a
+rate the famine tuning cannot accept, which would argue for a lower P-66, not for
+a larger release.
+**Not verified:** how P-67's share of the release, zero in the shipping
+configuration, interacts with a release sized to the need: a non-zero share
+leaves part of the need unmet by construction. That is the forced sale DEC-092's
+cost names, and P-71's citation is `SQ-022`'s item 13.

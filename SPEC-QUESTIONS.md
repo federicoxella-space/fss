@@ -436,7 +436,7 @@ reaches phase 6 one update late, and phase 11 in the same update.
 `docs/SIM-LOOPS.md:86` B5c; `docs/SIM-REQ.md:111` FR-D-03a; P-66, P-70.
 **Blocks:** no. It must be answered before the point that builds the seed
 reserve.
-**Status:** open.
+**Status:** **closed 2026-10-06 by R-080.**
 
 FR-P-10d releases the reserve "only as far as needed to bring the deficit back
 to P-66"; DEC-092 and B5c say "to hold it there". Under FR-D-03a the deficit

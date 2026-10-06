@@ -2,7 +2,7 @@
 
 **Document:** SIM-LOOPS
 **Status:** Draft
-**Revision:** 2026-10-04
+**Revision:** 2026-10-06
 **Gate:** No flow without a source and a sink. Every reinforcing loop has a named balancing loop.
 
 ---
@@ -83,7 +83,7 @@ Hunger → deaths → labour lost → output falls → deeper hunger.
 **B5a — Fewer mouths.** Population loss reduces demand against the same stock.
 **B5b — Land per capita**, as B1.
 Hunger → seed eaten → less land sown → smaller harvest → deeper hunger, for years.
-**B5c — Seed protection.** The reserve is untouched until the hunger deficit exceeds P-66, and is released only to hold it there.
+**B5c — Seed protection.** The reserve is untouched until the hunger deficit exceeds P-66, and is released only as far as the tier 0 need left unmet requires, which holds it there.
 **B5d — Imported seed.** Grain imported over the trade graph is also seed.
 *FR-D-03, FR-D-05, FR-P-10a, FR-P-10d. Tuned by P-66 against the onset of hunger mortality.*
 
