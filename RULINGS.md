@@ -4461,3 +4461,7 @@ and its `Fails when:` line, and names `.claude/agents/coder.md`. Cite `R-070` an
 `R-094`.
 **Would overturn it:** the user preferring the pointer to the list.
 **Not verified:** nothing; `coder.md` was grepped and names no settings file today.
+
+**`Fails when:` read by the user, 2026-10-07:** "approvo la condizione di
+fallimento di R-094". The line stands as stated above, and point 8 carries it
+verbatim.
