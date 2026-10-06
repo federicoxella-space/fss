@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-114 — audited by `R-093`. The next audit starts at the
+**Register watermark:** D-115 — audited by `R-095`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -114,6 +114,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   in the file, not by number, with its `Fails when:`.
   **`R-094`**: and a seventh, `.claude/agents/coder.md`'s list of the paths it
   may not write gaining the two settings files, with its `Fails when:`.
+  Point 8 added in `02293d6`, checked by `R-095`; it runs before point 7.
+- **`R-095`**, within point 8: a self-test case of `mutate` in which a call to
+  `tree-state` fails and `mutate` exits 3, and its fault — `mutate` ignoring the
+  failure — seen red, beside the frozen `Closed by:` under `R-005`'s case 1.
 
 ## Escalated to the user
 
@@ -4465,3 +4469,51 @@ and its `Fails when:` line, and names `.claude/agents/coder.md`. Cite `R-070` an
 **`Fails when:` read by the user, 2026-10-07:** "approvo la condizione di
 fallimento di R-094". The line stands as stated above, and point 8 carries it
 verbatim.
+
+### R-095 — `D-115` is ratified; point 8 owes a self-test of `mutate`'s exit 3 beside its criterion
+
+**Date:** 2026-10-07   **Origin:** register audit, `D-115`
+**Verdict:** ratified; one action owed
+**docs/:** unchanged
+
+Point 8 as written into `PLAN.md` by `02293d6`, owed by `R-070`. Process, so
+ratified or rejected, never promoted (`D-011`). The point was read against
+`R-068`, `R-070`, `R-071`, `R-073`, `R-074` and `R-094`, and the commit's diff
+read whole: it appends point 8 between points 6 and 7 and the entry, and
+changes nothing above.
+
+- **The seven items** are the rulings' own, in their order, each citing its
+  ruling. Item 3 restoring `R-068`'s self-test case for a lowercase `a-`, and item
+  4 carrying `R-071`'s `mutate` exit 3 from its cost paragraph, are both what the
+  rulings owe.
+- **The `Fails when:` lines** are verbatim, the eight faults the user read.
+- **The placement.** `plan-state` reports the points in file order, 8 before 7,
+  and `next: 5`; `R-070`'s reading holds.
+- **`Closed by:` is the implementer's.** No ruling stated one, and a criterion
+  written by the point's author is the rule, not an exception. Each named fault
+  turns it red: the five self-tests carry the cases of items 1 and 3 to 6, and the
+  greps catch items 2 and 7.
+
+**One gap, under `R-005`'s case 1.** Item 4 asks `mutate` to stop with exit 3 when
+either call to `tree-state` fails. That is the half of `R-071` that matters: a
+`tree-state` that refuses to hash is only safe if its caller does not read two
+empty answers as "returned". No `Fails when:` names it, and the `Closed by:` asks
+`mutate`'s self-test for "the cases of items 1 and 3 to 6" without saying that
+item 4 gives `mutate` one. A `mutate` that ignores the failure passes the point as
+written. The criterion is frozen and is not rewritten; correct code passes it, so
+the point is not `FAILED`. The case goes beside it.
+
+**Cost.** One more self-test case in `mutate`, and one more fault introduced.
+**Owed by the implementer:** within point 8, a self-test case of `mutate` in which
+a call to `tree-state` fails and `mutate` exits 3, with the fault of `mutate`
+ignoring the failure seen red; the outcome line names it as the check beside the
+criterion. Cite `R-095`.
+**Would overturn it:** reading "the cases of items 1 and 3 to 6" as already
+including `mutate`'s exit 3, which the implementer may show by the case being
+there; the action is then met by the point itself.
+**Not verified:** the live probe of point 4's reserve. The coder's `command:` line
+was run by hand, through `bash` with `CLAUDE_PROJECT_DIR` set to the Windows path
+and Windows paths in the JSON: `docs/probe.md` and `core/Tests/` denied with exit
+2, `core/Runtime/`, `harness/` and `.claude/settings.json` allowed, the last as
+point 8 expects to change. Whether Claude Code fires the hook for a subagent is
+still unproven.

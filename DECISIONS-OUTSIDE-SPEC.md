@@ -3308,6 +3308,7 @@ does not expand, which changes every `command:` line; the decider reading "move"
 as leaving `reviewers.md` without even the pointer.
 
 ### D-115 · Point 8, added mid-plan — owed by `R-070`, `R-071`, `R-073`, `R-074` and `R-094`
+**Ruling:** R-095 — ratified; a self-test of `mutate`'s exit 3 owed beside the criterion
 
 `R-070` owes point 8 before point 7 runs, placed between points 6 and 7, and
 the four rulings after it each add an item. The user approved every item and
