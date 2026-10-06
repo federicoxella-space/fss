@@ -45,6 +45,9 @@ The sixth is the reason the file exists. Everything above it is discoverable
 from the repository by someone willing to look; what was *not* done leaves no
 trace, and only the author knows it.
 
+A request at moment one carries the draft whole in one fenced block under
+`## Draft plan`, which `plan-state -Draft` reads (`R-096`).
+
 ---
 
 # Current request — 2026-10-05 — moment one, the cost measurement plan
@@ -84,7 +87,7 @@ is audited; the watermark stands at `D-107`.
 - **`SQ-009` to `SQ-022`, non-blocking**, for the decider; `SQ-020` answered by
   the user.
 
-## The draft plan
+## Draft plan
 
 ```markdown
 # Plan — the cost of a settlement update, measured on a stand-in

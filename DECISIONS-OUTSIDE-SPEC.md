@@ -3525,3 +3525,10 @@ still open; the process plan's, already answered, stays in git. The file is
 taken from `design/poverty-seed` unchanged. Its line "Replaces the moment-three
 request of 2026-10-01" does not name the process plan request it now also
 replaces: left as written, since the request is not mine to compose.
+
+## 2026-10-07 — `R-096` applied to the current request
+
+Nothing decided beyond placing `R-096`'s sentence after the six parts and their
+closing paragraph, so that "The sixth is the reason" still follows the list it
+counts. Before: `plan-state -Draft` printed `exists: false` (`R-096`); after:
+the five points of the draft.
