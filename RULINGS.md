@@ -4088,3 +4088,44 @@ or a guild rather than a cohort, which would need a lender outside the cohort
 table and a claim held there.
 **Not verified:** how FR-C-27's write-off distributes a loss among lenders that
 share a category; FR-C-23 to FR-C-30 were read and none says.
+
+### R-087 — `SIM-LOOPS`' tables and gate check are brought back to agreement
+
+**Date:** 2026-10-06   **Origin:** SQ-019
+**Verdict:** specified
+**docs/:** `SIM-LOOPS` §Stocks: Population, Goods, Currency and Debt rows, and a
+Standing crop row; B2's and R12's tuning lines; two rows of §Gate check.
+Revision already today's.
+
+The finder is right on each count. The poverty and seed batch added flows the
+stock table did not show, R12 arrived with no tuning line, and the gate check
+counted loops by a list older than three of them. The user conditioned the batch
+on the phase 1 gate staying closed, so a status reading "Met" over tables that
+do not support it is the claim to fix, not to leave.
+
+- **§Stocks.** The standing crop is a stock: sowing puts the planting good into
+  it, harvest takes it out, and so does loss before harvest or when the window
+  closes (FR-P-10a, FR-P-10b, FR-P-10e, FR-C-25). Goods gain sowing, seizure and
+  emigrants among outflows, and arriving migrants and seizure received among
+  inflows; goods in transit are held by transients. Population and currency
+  gain migrants in transit (FR-D-04a). Debt gains advances (`R-086`). Every row
+  has a source and a sink, so the first row of the check stays "Met".
+- **Tuning.** B2 is tuned by P-73 as well since `R-085`. R12's brakes are tuned
+  by P-68 and P-69, which set who enters and leaves the destitute row, by the day
+  labourer's own rate for B12a and by P-46 for B12b. B7 has no parameter: it is
+  the order of phases 6 and 7, and there is nothing to tune. The check now says
+  so instead of reading "Met" over it.
+- **The count.** R9, R10 and R11 have named brakes and were missing from the
+  list; R3 has its own row; R8 balances itself and terminates, as its section
+  says.
+
+Nothing changes in what the gate asks. Every status still reads "Met"; one now
+names the brake it does not apply to.
+
+**Cost.** None.
+**Owed by the implementer:** nothing.
+**Would overturn it:** a reading of "brakes have a tuning parameter" as a
+requirement on every brake, which would make B7 a defect; that would be a change
+to the gate, reserve 2, and the user's.
+**Not verified:** that no other flow of `docs/` is missing from §Stocks; the
+batch's flows were checked, the older ones were taken as they stood.

@@ -544,7 +544,7 @@ who that is or where the matching claim sits.
 check; `docs/SIM-REQ.md:790` §18, phase 1 gate.
 **Blocks:** no for code. It is a claim about the phase 1 gate, which the user
 conditioned this batch on keeping closed.
-**Status:** open.
+**Status:** **closed 2026-10-06 by R-087.**
 
 - "Every flow has a source and a sink: Met", but §Stocks has no row for the
   standing crop (in by sowing; out by harvest and by loss when the window

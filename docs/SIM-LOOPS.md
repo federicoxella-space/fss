@@ -11,10 +11,11 @@
 
 | Stock | Held by | Flows in | Flows out |
 |---|---|---|---|
-| Population | cohort | births, immigration | deaths, emigration |
-| Goods | cohort | production, harvest, purchase, inbound trade | consumption, sale, outbound trade, spoilage, transit loss |
-| Currency | cohort, treasury, transient | sale, wage, contract payment, recovery, kingdom spending, borrowing | purchase, wage paid, tax, changer fee, repayment, interest |
-| Debt | cohort, agent | borrowing, accrued interest | repayment, seizure, write-off |
+| Population | cohort, migrants in transit | births, immigration | deaths, emigration |
+| Goods | cohort, transient | production, harvest, purchase, inbound trade, migrants arriving, seizure received | consumption, sowing, sale, outbound trade, spoilage, transit loss, emigrants leaving, seizure |
+| Standing crop | cohort | sowing | harvest, loss before harvest or when the harvest window closes |
+| Currency | cohort, treasury, transient | sale, wage, contract payment, recovery, kingdom spending, borrowing, migrants arriving | purchase, wage paid, tax, changer fee, repayment, interest, emigrants leaving |
+| Debt | cohort, agent | borrowing, advances, accrued interest | repayment, seizure, write-off |
 | Land | settlement | none | none, fixed by the generator |
 | Buildings | cohort | construction | decay, destruction by events |
 | Durables | cohort | production, trade | wear, destruction by events |
@@ -40,7 +41,7 @@ Village loses people → output falls → attractiveness falls → loses more pe
 ### R2 — Cobweb allocation
 High price at sowing → everyone plants it → glut at harvest → price collapses → nobody plants it → shortage.
 **B2 — Partial adjustment.** Allocation moves a capped fraction per year toward the best return, for activities that carry no rate of their own. Day labour carries its own and is held by its wage instead.
-*FR-P-15, FR-P-16. Tuned by P-19.*
+*FR-P-15, FR-P-16. Tuned by P-19 and P-73.*
 
 ### R3 — Urban growth
 City attracts migrants → labour rises → production rises → wages rise → attracts more migrants.
@@ -101,7 +102,7 @@ The poor cannot buy → they weaken and leave → labour falls → prices rise �
 More destitute → more labour offered → lower wage → more members below the threshold → more destitute.
 **B12a — Day labour leaves.** A lower wage drives the day-labourer share down under its own rate, and labour offered falls.
 **B12b — The destitute emigrate.** Emigration draws on the destitute row first, so those a falling wage pushes below the threshold are the first to leave, and the labour they offered leaves with them. They leave as refugees and raise danger on the links they take, which feeds R4.
-*FR-J-19, FR-J-21, FR-C-05, FR-D-04a, FR-M-13, DEC-090, DEC-096.*
+*FR-J-19, FR-J-21, FR-C-05, FR-D-04a, FR-M-13, DEC-090, DEC-096. Tuned by P-68 and P-69, which set who enters and leaves the row; B12a by the day labourer's own rate under FR-J-21, B12b by P-46.*
 
 B12a fails once the day-labourer share is near zero. B12b acts only where a neighbour is more attractive by more than the hysteresis band of FR-D-09. In a region poor throughout nobody leaves, and the loop stops at the lower clamp of the wage (DEC-045), which bounds it without braking it, and at hunger (R5).
 
@@ -150,9 +151,9 @@ The return path from kingdom treasury to cohorts is the one that can be forgotte
 | Requirement of the gate | Status |
 |---|---|
 | Every flow has a source and a sink | Met, with land declared as a fixed stock |
-| Every reinforcing loop has a named balancing loop | Met for R1, R2, R4, R5, R6, R7, R12 |
+| Every reinforcing loop has a named balancing loop | Met for R1, R2, R4 to R7, R9 to R12; R3 below; R8 balances itself and terminates |
 | Brakes are implemented by a requirement, not assumed | Met |
-| Brakes have a tuning parameter | Met, several still Open |
+| Brakes have a tuning parameter | Met, several still Open, save B7, an order of phases with nothing to tune |
 | R3 | Braked by B3a and B3b. Neither runs through price, which is what makes them hold. Verify in Phase 4 that the ceiling binds before starvation does |
 
 ---
