@@ -3845,3 +3845,34 @@ a larger release.
 configuration, interacts with a release sized to the need: a non-zero share
 leaves part of the need unmet by construction. That is the forced sale DEC-092's
 cost names, and P-71's citation is `SQ-022`'s item 13.
+
+### R-081 — DEC-085's widths come from the logic or from the rules file, and content widths never change within a world
+
+**Date:** 2026-10-06   **Origin:** SQ-013
+**Verdict:** specified
+**docs/:** `SIM-DEC` DEC-085, rationale and cost. Revision already today's.
+
+DEC-085 predates DEC-100. Its rationale said widths come from "static data
+versioned with `ruleVersion`", and its cost that a patch adding a good reshapes
+the arrays. Under DEC-100 `ruleVersion` is the logic's version, static data come
+from the rules file the world carries, and an existing world cannot take new
+content. `R-065` listed the entries it touched and missed this one; it is the
+use site of a rule updated and its definition left behind, the failure of
+`SQ-003`.
+
+The fix separates what DEC-100 separated. **A width the logic sets** — the
+four denominations — changes with the logic and reshapes its arrays inside
+NFR-08's migration, as DEC-085 said. **A width the content sets** — one stock per
+good — is fixed for the life of the world, because the world's rules file is.
+DEC-085's decision is untouched: values in contiguous arrays, nothing nested.
+
+`SQ-023` may make per-good state sparse per settlement. If it does, the width of
+the sparse field is a capacity or a pool under DEC-085's own second sentence, and
+this ruling does not anticipate which.
+
+**Cost.** None to code.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** a requirement to move an existing world to new content,
+which DEC-100 refuses until one exists.
+**Not verified:** nothing; DEC-085, DEC-100, DEC-033 and `SIM-STATE` §World were
+read, and `docs/` grepped for `ruleVersion`.

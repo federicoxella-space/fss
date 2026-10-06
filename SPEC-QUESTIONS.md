@@ -453,7 +453,7 @@ back). The two texts also differ from each other.
 DEC-100; `docs/SIM-STATE.md:26` `rulesData`; `R-065`.
 **Blocks:** no. It must be answered before the first phase 4 point that adds
 static data, the point `R-065` binds.
-**Status:** open.
+**Status:** **closed 2026-10-06 by R-081.**
 
 DEC-085's rationale says "widths come from static data versioned with
 `ruleVersion`", and its cost that "a patch that changes a width, a new good for
