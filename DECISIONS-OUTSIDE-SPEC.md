@@ -3334,6 +3334,8 @@ without catching a `Fails when:` fault, under `R-005`.
 
 ### D-116 · Point 5 · `AGENTS.md`'s three rule sets and the English markers: what the point left open
 
+**Ruling:** R-097 — ratified.
+
 **Permission for `AGENTS.md` (`R-010`).** Granted by the user, Federico Xella,
 in answering the process plan's moment-one request (the plan installed in
 `6d6d098`), for point 5 as its text states it: the three rule sets of the
@@ -3423,7 +3425,7 @@ naming no C rule, suggests disk.
 
 ### D-117 · Point 6 · `/plan-explain` and `/plan-status` on `plan-state`: what the point left open
 
-**Ruling:** R-096 — its first finding resolved: the request conforms to `## Draft plan`.
+**Ruling:** R-096 — its first finding resolved: the request conforms to `## Draft plan`. R-097 — ratified.
 
 **Permission for `.claude/skills/` (`D-087`).** Granted by the user, Federico
 Xella, in answering the process plan's moment-one request (the plan installed

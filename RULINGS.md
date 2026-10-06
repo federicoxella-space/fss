@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-115 — audited by `R-095`. The next audit starts at the
+**Register watermark:** D-117 — audited by `R-097`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -66,9 +66,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   one full state hash is measured against the cost of the tick, on the world the
   checks of `AC-02` run, and recorded in the register with the size chosen for
   those checks.
-- **`R-045`**, within the process plan point that writes `D-089`'s language
+- ~~**`R-045`**, within the process plan point that writes `D-089`'s language
   rule: the five outcome markers become English in `AGENTS.md` and in the three
-  plan skills, which write the English form and recognise both.
+  plan skills, which write the English form and recognise both.~~ **Done in
+  `58d8557`**, checked by `R-097`.
 - **`R-046`**, as amended by **`R-066`**: the process plan holds the design's
   points 1 to 5, `plan-state` and the two read-only skills on it, and no
   simulator change; the first point of the phase 4 plan is run by the agents,
@@ -82,9 +83,11 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   missing faults. And every moment-one request carries the `Fails when:` lines.
   The code-reviewer's half is done in `1ed624a`, checked by `R-093`; the brief's
   is point 7's.
-- **`R-048`**, from the next plan: the draft goes in the moment-one request, and
+- ~~**`R-048`**, from the next plan: the draft goes in the moment-one request, and
   `PLAN.md` is installed on its branch after the user's answer, in a commit that
-  cites it; the process plan point that edits `AGENTS.md` writes the rule.
+  cites it; the process plan point that edits `AGENTS.md` writes the rule.~~
+  **Done in `6d6d098` and `58d8557`**, checked by `R-097`: the rule now binds from
+  `AGENTS.md`.
 - **`R-049`**, within the process plan point that rewires `/plan-next`: step 1
   refuses a plan's first point until the user has answered its moment-one
   request; until then the ruling binds as written.
@@ -4570,3 +4573,57 @@ both at it.
 **Not verified:** that nothing outside `.claude/` reads `## The draft plan`; the
 skills and hooks were grepped for "Draft plan", and only `plan-state` and
 `/plan-explain` name it, both as `## Draft plan`.
+
+### R-097 — `D-116` and `D-117` are ratified; the watermark reaches `D-117`
+
+**Date:** 2026-10-07   **Origin:** register audit, `D-116` and `D-117`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Points 5 and 6 of the process plan. Process, so ratified or rejected, never
+promoted (`D-011`). Each entry was read against its point's frozen text and the
+rulings it applies, and its claims against `58d8557` and `e8f7590`.
+
+- **`D-116`, point 5.** Stands. Checked: the permission for `AGENTS.md` is
+  recorded as `R-010` requires, and the diff of `AGENTS.md` changes the "Criteria
+  are frozen" bullet and adds the three sections, nothing else; the markers
+  `FAILED` and *with reserve* replace the Italian ones there. A grep of
+  `AGENTS.md` and the three skills finds the Italian markers only in "Language"'s
+  table and in each skill's recognising sentence, five forms in `/plan-next`,
+  four in the other two. `/plan-next` is 2,793 words, as the entry says.
+  - **The first defect is `R-005`'s case 1, and the reading by identifier is
+    the right one.** The section's effect on a reviewer is that its findings
+    name the rule they apply; on a fixture whose defects other parts of
+    `AGENTS.md` already reach, that is the only effect a check can see. So the
+    entry's "would overturn it" does not arise.
+  - **The second is case 1 too**, and the check beside it is the right one: a
+    grep for markers present cannot see a marker gone.
+  - **Point 8 owes a code-reviewer** dispatched by hand, as the entry says: it
+    changes PowerShell scripts, and "Review and self-governance" applies from
+    `58d8557`.
+  - **The 38 words** are point 7's to recover, as the entry says.
+- **`D-117`, point 6.** Stands. Checked: `e8f7590` touches the two skills, the
+  register and `PLAN.md`. Reading "this request's draft" as the process plan's
+  own request, from `main`, is the only reading under which the point could be
+  checked as written, since the request on this branch cannot be read by
+  `plan-state` (`R-096`).
+  - **The session running `plan-state`, a `tree-state` difference stopping the
+    skill, "guarantee" dropped with its sibling, the range sentence kept for
+    C1.** Stand.
+  - **The second fault green on the first injection, red on the second.** Not
+    a defect of the criterion: the first change did not produce the fault
+    named, since the agent still reported "stopped"; the second did, and the
+    check caught it.
+  - **The two findings.** The first is `R-096`'s. The second, a check as strong
+    as the sentence the agent obeys, is a property of every agent-run check
+    and is accepted as such.
+
+`R-045` and `R-048` are marked done under "Owed by the implementer".
+
+**Cost.** None beyond `R-096`.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` or
+the design as it stood when written.
+**Not verified:** the agents' runs and the faults seen red were taken from the
+entries; the code-reviewer's dispatch on the fixtures was not repeated. The
+citations of C1, C2, C4 and C6 to C9 and S1 remain unread, as `R-028` left them.
