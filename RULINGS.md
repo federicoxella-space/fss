@@ -4045,3 +4045,46 @@ the year by more than an even share of its cap; the day labourer, which needs
 that, already carries no cap.
 **Not verified:** nothing; FR-P-14 to FR-P-16, FR-J-21, DEC-047, DEC-096 and
 §16 were read.
+
+### R-086 — An advance is a loan like any other: the crop is collateral, the lender holds the claim, interest runs
+
+**Date:** 2026-10-06   **Origin:** SQ-018
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-C-24 and FR-C-25; `SIM-STATE` §Cohort, `advance` and
+`interestCarry`. Revisions already today's.
+
+FR-C-25 calls an advance "a loan collateralised by that output", and then
+departs from what every other loan has. FR-C-24 lists collateral as goods,
+durables and buildings, so a cohort holding only a standing crop could not take
+the advance FR-C-25 offers it. `advance` was a bare `int64`, while FR-C-23 gives
+debt and credit a counterparty category. And FR-C-27 puts a write-off's loss "on
+the lender" with nothing saying who that is.
+
+The answer is in FR-C-25's own first sentence: it is a loan. FR-C-22 says a loan
+transfers currency that exists, so someone's currency fell when the advance was
+paid, and their claim has to be somewhere or a write-off has nothing to fall on
+and a repayment has nowhere to go. The lender's credit stock is where FR-C-23 puts
+every claim a cohort holds. So:
+
+- **FR-C-24 lists the standing crop**, for an advance only. It does not become
+  collateral for ordinary debt: FR-C-25 binds it to the crop's own output, and
+  pledging a crop twice would need a rule for which claim it serves first.
+- **`advance` carries the counterparty's category**, as debt does, and the
+  lender holds the matching claim in its `credit`. A write-off falls on it by the
+  same path as any loan's under FR-C-27, whatever that path turns out to be.
+- **It bears interest under FR-C-26.** A loan with no price for time would make
+  the advance the cheapest credit in the world for anyone with a crop.
+  `interestCarry` widens to two, one for debt and one for the advance, under
+  `R-084`'s rule; the two balances are kept apart, so their fractions are.
+
+How a write-off held by category reaches a particular lender's credit is not this
+entry's question. It is FR-C-27's for every loan, and the credit point decides it.
+
+**Cost.** None to code. The credit point builds the advance as a second balance
+on the machinery of the first.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** content in which the advance is paid by the settlement
+or a guild rather than a cohort, which would need a lender outside the cohort
+table and a claim held there.
+**Not verified:** how FR-C-27's write-off distributes a loss among lenders that
+share a category; FR-C-23 to FR-C-30 were read and none says.

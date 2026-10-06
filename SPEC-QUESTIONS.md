@@ -528,7 +528,7 @@ this year per activity, which no state table holds.
 `docs/SIM-STATE.md:75` `advance`.
 **Blocks:** no. It must be answered before the labour and income subsystem's
 credit point.
-**Status:** open.
+**Status:** **closed 2026-10-06 by R-086.**
 
 FR-C-25 now collateralises an advance with the standing crop. FR-C-24 lists
 collateral as "goods, durables, buildings", so a cohort with only a crop cannot

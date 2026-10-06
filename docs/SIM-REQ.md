@@ -295,9 +295,9 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-C-23** — Cohorts hold a debt stock and a credit stock, each carrying the counterparty's category rather than its identity. Agents hold explicit debt edges with amount, term, rate, and collateral.
 
-**FR-C-24** — Borrowing capacity is bounded by collateral: goods, durables, buildings. A cohort with none cannot borrow. Credit therefore does not reach the poorest, and the rationing order of FR-C-04 stands: a starving cohort with nothing to pledge is not rescued by lending.
+**FR-C-24** — Borrowing capacity is bounded by collateral: goods, durables, buildings, and for an advance under FR-C-25 the standing crop. A cohort with none cannot borrow. Credit therefore does not reach the poorest, and the rationing order of FR-C-04 stands: a starving cohort with nothing to pledge is not rescued by lending.
 
-**FR-C-25** — Payment advanced against future output is a loan collateralised by that output: the cohort's standing crop under FR-P-10b. It is held as its own balance, apart from the cohort's other debt. A crop lost before harvest, or left to an open field under FR-P-10e, leaves the advance to be written off under FR-C-27.
+**FR-C-25** — Payment advanced against future output is a loan collateralised by that output: the cohort's standing crop under FR-P-10b. It is held as its own balance, apart from the cohort's other debt, carrying the counterparty's category as debt does; the lender holds the claim in its credit stock (FR-C-23), and it bears interest under FR-C-26 like any loan. A crop lost before harvest, or left to an open field under FR-P-10e, leaves the advance to be written off under FR-C-27.
 
 **FR-C-26** — The interest rate is the bounded price function applied to credit supply against credit demand, plus a risk premium derived from the debtor's collateral ratio. It is clamped like every other price (P-55).
 

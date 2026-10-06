@@ -67,7 +67,7 @@ Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the s
 | buildingsCarry | fixed[] | per building type: decay at P-51 not yet a whole building |
 | durables | int[] | per durable good, with accumulated wear, the carry of P-53 |
 | debt | int64 plus category | owed, counterparty category only |
-| interestCarry | fixed | interest on debt not yet a whole smallest unit |
+| interestCarry | fixed[2] | interest on debt and on advance not yet a whole smallest unit, one each |
 | credit | int64 plus category | owed to this cohort |
 | defaultMark | int | ticks remaining |
 | hungerDeficit | fixed | per member, FR-D-03a; read by mortality and by the seed reserve; averaged by count when members arrive |
@@ -75,7 +75,7 @@ Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the s
 | sownLand | int[] | per crop; set at sowing, FR-P-10a |
 | landInField | int[] | per crop; falls through the harvest window, FR-P-10b |
 | condition | fixed[] | per crop, 0–20000, FR-P-10c |
-| advance | int64 | owed against the standing crop, FR-C-25; not included in debt |
+| advance | int64 plus category | owed against the standing crop, FR-C-25; not included in debt; the lender's claim is in its credit |
 
 Every rate applied to an integer field of a row keeps its fraction in a carry beside the field, in the field's layout, cleared when the row's count reaches zero (SIM-ECON, "Spoilage and integer rounding"). The carries above are those the update names; a rate added later brings its carry into this table.
 
