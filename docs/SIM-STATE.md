@@ -2,7 +2,7 @@
 
 **Document:** SIM-STATE
 **Status:** Draft
-**Revision:** 2026-10-06
+**Revision:** 2026-10-07
 **Gate:** The assert list is executable.
 
 ---
@@ -21,7 +21,7 @@ Input is not state. A command the host has submitted and the simulator has not y
 |---|---|---|
 | tick | int64 | the only clock |
 | worldSeed | uint64 | also the RNG root |
-| generationParams | record | travels with the save so any report reproduces |
+| generationParams | record | the values the host chose for this world, FR-G-02; travels with the save so any report reproduces |
 | ruleVersion | int | version of the core's logic; drives materialisation on patch, DEC-033 |
 | rulesData | byte[] | the rules file the world runs on, immutable; the hash folds its digest, DEC-100 |
 | currencyTotal | int64 | in smallest units, the invariant target |

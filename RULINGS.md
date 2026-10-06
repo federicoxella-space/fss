@@ -114,8 +114,6 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-- **`R-082`**, `SQ-014`: generation parameters named beside the seed in NFR-01
-  and AC-02, and defined in FR-G-02 as what a host chooses per world. Reserve 2.
 - **`R-089`**, `SQ-021`: the base rules' age bands — three, named, only working
   age offering labour — are static content and await the user's approval
   under `R-050`.
@@ -4297,3 +4295,37 @@ item 12, the user bringing rent into scope.
 **Not verified:** that every other mention of the old counts is gone; `docs/`
 was grepped for "twelve", "seven goods", "once per sowing", "role" in a good's
 record and "no build could", and what remains is historical and says so.
+
+### R-091 — `R-082` accepted: generation parameters are a second input, named in NFR-01 and AC-02
+
+**Date:** 2026-10-07   **Origin:** user, on `R-082`
+**Verdict:** specified — the user's decision, reserve 2 of `R-001`
+**docs/:** `SIM-REQ` NFR-01, AC-02, FR-G-02, §16 P-54's description; `SIM-STATE`
+§World `generationParams`. Both revisions bumped.
+
+The user approved `R-082`'s recommendation and asked for it to be applied:
+"approvo R-082 e R-089, applicali". Answer B, as `R-082` wrote it.
+
+- **NFR-01 and AC-02** name the seed and generation parameters together, beside
+  the rules file and the commands. The criterion now lists every input a run is
+  given, so correct code can pass it when a host chooses a world's size.
+- **FR-G-02** defines generation parameters as the values a host may choose for
+  each world: settlement count (P-02), settlement mix (P-12), kingdom count.
+  Every other value the generator reads is content in the rules file. The
+  kingdom count has no P-number yet; `R-063` left it Provisional, and the
+  generator's point proposes one under `R-050`.
+- **P-54**, the founders' endowment, is described as rules content read by the
+  generator, which is the home FR-G-02 now gives it.
+- **`generationParams`** in `SIM-STATE` says what it holds.
+
+The rule version of NFR-09 keeps meaning what DEC-100 made it mean: two worlds of
+different size on the same content and logic run under the same rule version.
+
+**Cost.** As `R-082`: the host passes a second input at creation, which it
+already had to store. The pins of `R-034` and `R-036` do not move: phase 3's
+worlds have no generation parameter beyond the one `D-062` kept.
+**Owed by the implementer:** nothing beyond `docs/`; the generator's point reads
+FR-G-02 as it now stands.
+**Would overturn it:** as `R-082`: a per-world choice of a rules-file value.
+**Not verified:** as `R-082`: whether prior history reads a generation parameter
+after tick 0.

@@ -2,7 +2,7 @@
 
 **Document:** SIM-REQ
 **Status:** Draft 1
-**Revision:** 2026-10-06
+**Revision:** 2026-10-07
 **Scope:** Headless simulation core, runnable outside the game
 
 ---
@@ -514,7 +514,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 **FR-G-01a** — The generator assigns each settlement a `climateIndex` varying continuously across the map, plus the land area available to it.
 
-**FR-G-02** — The generator seed and all generation parameters are stored in the save file.
+**FR-G-02** — The generator seed and all generation parameters are stored in the save file. Generation parameters are the values a host may choose for each world when creating it: the settlement count (P-02), the settlement mix (P-12) and the kingdom count. Every other value the generator reads is content, in the rules file (DEC-100).
 
 **FR-G-03** — World creation generates prior history by running the simulator itself, at full fidelity and with no hot agents, for P-18 years before tick 0. The resulting state is the initial state. No separate coarse rule set exists.
 
@@ -524,7 +524,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 ## 15. Non-functional requirements
 
-**NFR-01 — Determinism.** Identical seed, identical rules file (DEC-100) and identical command sequence produce an identical state hash at every tick, on any Windows x64 build. The hash is a function of the state, computed in full when a check or the runner asks for it: the tick does not compute it, and the budget of NFR-05 does not include it.
+**NFR-01 — Determinism.** Identical seed and generation parameters (FR-G-02), identical rules file (DEC-100) and identical command sequence produce an identical state hash at every tick, on any Windows x64 build. The hash is a function of the state, computed in full when a check or the runner asks for it: the tick does not compute it, and the budget of NFR-05 does not include it.
 
 **NFR-02 — Numeric representation.** All simulation state is integer or fixed-point. No floating point, no transcendental functions in the core. Floats exist only in the presentation layer.
 
@@ -608,7 +608,7 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-51 | Building decay rate | TBD by sweep | Open |
 | P-52 | Crude recipe yield ratio | TBD by sweep | Open |
 | P-53 | Durable wear rate per unit of output | TBD by sweep | Open |
-| P-54 | Founding endowment of durables, generator | TBD | Open |
+| P-54 | Founding endowment of durables, rules content read by the generator | TBD | Open |
 | P-55 | Interest rate bounds | TBD by sweep | Open |
 | P-56 | Collateral ratio required to borrow | TBD by sweep | Open |
 | P-57 | Default mark duration | TBD | Open |
@@ -642,7 +642,7 @@ Every criterion below runs headless in CI, with no editor and no game client, dr
 
 **AC-01 — Conservation.** Population, currency, and goods invariants hold at every tick of every run.
 
-**AC-02 — Determinism.** Same seed, rules file and commands produce the same state hash sequence across builds and machines.
+**AC-02 — Determinism.** Same seed and generation parameters, rules file and commands produce the same state hash sequence across builds and machines.
 
 **AC-03 — Save round trip.** save → load → save produces identical bytes.
 

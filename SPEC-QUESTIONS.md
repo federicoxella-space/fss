@@ -469,7 +469,7 @@ content. `R-065` lists DEC-032, DEC-033 and DEC-089 as touched, not DEC-085.
 `docs/SIM-STATE.md:24` `generationParams`; DEC-100.
 **Blocks:** no. It must be answered before the point that builds the generator,
 the first of phase 4 (`R-052`).
-**Status:** open.
+**Status:** **closed 2026-10-07 by R-091.**
 
 NFR-01 and AC-02 now list the inputs as seed, rules file and commands. FR-G-02,
 NFR-08 and `SIM-STATE`'s `generationParams` keep generation parameters as a
