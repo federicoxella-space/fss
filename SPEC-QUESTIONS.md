@@ -593,7 +593,7 @@ player's file. Raised with it, for the decider:
 **Raised:** 2026-10-05, as SQ-009.
 **Cites:** `docs/SIM-STATE.md:210`; `R-063` "Age bands".
 **Blocks:** no. It must be answered before the point that builds cohort rows.
-**Status:** **closed 2026-10-06 by R-089**; the base values await the user.
+**Status:** **closed 2026-10-06 by R-089**; the base values approved by the user, R-092.
 
 `R-063` says "Three, closing `SIM-STATE` open item 1". The text in `docs/` says
 "three age bands, children, working age and elderly, of which only working age

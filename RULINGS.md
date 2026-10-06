@@ -100,7 +100,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   of `R-063` and the curves of `R-064` go into it, and the check of `R-060` into its
   validation. **`R-088`**: and the base rules compiled into the core by the same
   compiler, used when the host hands no file; validation that returns a refusal
-  and never fails, with the caps P-74 to P-76.
+  and never fails, with the caps P-74 to P-76. **`R-092`**: and the three age
+  bands with their labour flags, from the point that builds cohort rows.
 - **`R-070`**, before point 7 of the process plan runs: point 8 added to
   `PLAN.md`, placed between points 6 and 7, carrying `R-068`'s three changes.
   **`R-071`**: and a fourth, `tree-state` reading untracked names unquoted and
@@ -114,9 +115,7 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-- **`R-089`**, `SQ-021`: the base rules' age bands — three, named, only working
-  age offering labour — are static content and await the user's approval
-  under `R-050`.
+*None.* `R-082` was answered by `R-091`, `R-089` by `R-092`.
 
 ---
 
@@ -4329,3 +4328,23 @@ FR-G-02 as it now stands.
 **Would overturn it:** as `R-082`: a per-world choice of a rules-file value.
 **Not verified:** as `R-082`: whether prior history reads a generation parameter
 after tick 0.
+
+### R-092 — `R-089` accepted: the base rules hold three age bands, and only working age offers labour
+
+**Date:** 2026-10-07   **Origin:** user, on `R-089`
+**Verdict:** resolved — the user's approval of static content under `R-050`
+**docs/:** unchanged; `SIM-STATE` open item 1 already states the values.
+
+The user approved `R-089`'s recommendation: "approvo R-082 e R-089, applicali".
+The base rules hold three age bands, children, working age and elderly, and only
+working age offers labour. `SIM-STATE` open item 1 carried these values since
+`R-089`, marked as awaiting approval only here; they now stand as approved
+content, beside the rest of `R-063`. As every number of `R-063`, the bands are
+structure, and the rates that move members between them are open item 6.
+
+**Cost.** None beyond `R-089`'s.
+**Owed by the implementer:** the point that builds cohort rows writes the three
+bands and their labour flags into the rules file of `R-065`, as it writes the
+rest of `R-063`. Cite `R-089` and `R-092`.
+**Would overturn it:** the user revising the content before that point.
+**Not verified:** nothing.
