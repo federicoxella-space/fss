@@ -3249,6 +3249,63 @@ nested fence: the first closing fence ends the draft.
 **Would overturn it:** a skill at point 6 or 7 needing a field in another shape,
 or the user ruling that an abandoned plan still reports its next point.
 
+### D-114 · Point 4 · The six agent definitions: what the design left open
+
+**Decided.**
+- **The hook command** is `pwsh -NoProfile -File
+  "$CLAUDE_PROJECT_DIR/.claude/hooks/<script>.ps1"`, with `-Role <name>` for
+  `path-guard` and nothing for `git-guard`, which has one role. Matcher
+  `Edit|Write` for the coder, the tester and the documenter, `Bash` for the
+  committer. The documenter's matcher holds `Write` although it lacks the tool,
+  so a tool list widened by mistake still meets the guard.
+- **No hook on the two reviewers.** They hold neither `Edit` nor `Write`, so
+  `path-guard` has nothing to see; what `Bash` leaves open is the orchestrator's
+  check, as the design says.
+- **The `code-reviewer` points at `AGENTS.md` read whole**, its rules the build
+  cannot catch first, rather than at "Comments and simplicity": that section is
+  point 5's, and a pointer to it now would name text that does not exist (C1).
+- **The five rules leave `reviewers.md`**, which keeps a pointer to
+  `revisioner.md` and one sentence: a brief to an agent of another type carries
+  them, copied from there. Until point 7 `/plan-next` dispatches `Plan` or
+  `Explore`, which do not read `revisioner.md`; without the sentence a review
+  run before then would lose the rules. Rules 1 to 4 moved verbatim; rule 5 lost
+  its own heading, "This one matters most" opening it instead, and "State it
+  explicitly in both briefs", which the body now does itself.
+- **The bodies say what each role does with its brief** — the table's
+  "Receives" and "Returns" as instructions, the tester's two dispatches, the
+  documenter's STOP cases from `/plan-next` step 6, the committer's comparison of
+  the staged set with the list it was given. Nothing in them adds a step the
+  design does not have.
+- **The frontmatter check is a script outside the repository**, run from the
+  session's scratchpad: per file the name, model, effort and tools as a set
+  against the roles table, the description's "Dispatched by /plan-next only",
+  the hook's matcher and command, no hook on a reviewer, six files, no `Edit` or
+  `Write` on a reviewer, and the two greps of the code-reviewer's body. Not
+  committed: the point names no place for it, and the design wants hooks in
+  `.claude/hooks/`, which it is not.
+
+**Check.** The frontmatter check exits 0. The fault of `Fails when:`, `Edit`
+added to the tools of `code-reviewer` and then of `revisioner`, turns it red
+twice (tool set, and the reviewer rule), restored after each. Each frontmatter
+`command:` line, run through `bash` with `CLAUDE_PROJECT_DIR` set and a sample
+JSON: coder denied `docs/probe.md`, `core/Tests/`, `PLAN.md` and allowed
+`core/Runtime/`; tester allowed only `core/Tests/`; documenter denied a `Write`
+everywhere; committer denied `git add -A`.
+
+**Not verified — the reserve.** The live probe. Agent definitions are read when a
+session starts, and this one started before they existed: `subagent_type:
+coder` is "not found". A fresh headless `claude -p` failed to authenticate. So
+whether Claude Code fires a frontmatter hook for a subagent, whether the shell
+expands `$CLAUDE_PROJECT_DIR`, and whether `effort` is honoured all remain as
+the design's "Not verified" left them. Nor was `disableAllHooks` probed
+(`R-068`).
+
+**What `docs/` says:** nothing; process work. The design's roles table,
+"Enforcement" and "Where the rules live", and `R-047` for the code-reviewer.
+**Would overturn it:** the probe showing the hook does not fire or the variable
+does not expand, which changes every `command:` line; the decider reading "move"
+as leaving `reviewers.md` without even the pointer.
+
 ## 2026-10-06 — Merge of `design/poverty-seed` into `agent-workflow`
 
 Nothing decided here. The two branches number disjointly, by design (`R-066`), so

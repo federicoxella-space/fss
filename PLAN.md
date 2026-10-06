@@ -117,6 +117,20 @@ nessun file C# toccato. Registro `D-113`.
 - **Fails when:** a reviewer lists `Edit`.
 - **Core:** no — touches no path under `core/`.
 
+*Esito:* 2026-10-07. Chiuso con riserva — la probe dal vivo (il coder chiamato a
+scrivere `docs/probe.md` è bloccato) attende una sessione avviata dopo questo
+commit, in cui l'utente o l'orchestratore dispaccia `coder`: questa sessione non
+vede le definizioni (`coder` "not found") e `claude -p` non si autentica. Il
+frontmatter dei sei file confrontato con la tabella dei ruoli da uno script,
+exit 0; il guasto del `Fails when:`, `Edit` aggiunto a `code-reviewer` e poi a
+`revisioner`, visto rosso due volte e ripristinato. Le due grep sul corpo del
+`code-reviewer` trovano `Fails when` e la domanda sui guasti mancanti; il corpo
+dice che la riga è citata nel brief, perché varia per punto. Ogni `command:` del
+frontmatter eseguito a mano con JSON d'esempio nega e ammette come atteso.
+`git diff --name-only HEAD -- core/` vuoto: `Core: no` regge, revisori non
+eseguiti. Build e suite .NET non eseguite: nessun file C# toccato. Registro
+`D-114`.
+
 ## 5. `AGENTS.md`: the three rule sets, and the English markers
 
 - **Does:** edits `AGENTS.md`, adding the three rule sets of the design's "The

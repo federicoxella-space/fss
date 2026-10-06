@@ -38,30 +38,11 @@ they are the only ones who used to be given everything except the criterion. A
 check that passes for a reason the criterion did not ask for is a finding. A
 check marked weak that turns out to be verifiable properly is a finding too.
 
-## The four shared rules
+## The five shared rules
 
-Put these in both briefs, in these words or closer:
-
-1. **Read the specification before judging the code.** `docs/` predates the code
-   and outranks it. A finding that contradicts `docs/` is a finding against the
-   code, and a finding that ignores `docs/` is noise.
-2. **Build it and run the tests.** `dotnet build core/Sim.Core.csproj -c
-   Release`, then the suite in Release and in Debug. A review that only reads
-   prose misses what only execution shows.
-3. **Verify the numerical claims you find in comments.** Orders of magnitude,
-   probability bounds, "cannot overflow", "uniform", "terminates". This
-   repository has had a comment that was confidently wrong, and reading it was
-   not enough to tell.
-4. **Do not edit anything. Report.** The author applies what you find.
-
-## And the fifth, which matters most
-
-**Finding nothing is a valid result, and will be reported as such.**
-
-State it explicitly in both briefs. A review agent exists to find something, so
-it tends to find something; and an author with a section to fill tends to promote
-the weakest finding to fill it. Both failures produce a review that reads as
-thorough and is worthless. If the point is sound, say the point is sound.
+They live in `.claude/agents/revisioner.md`, the body every `revisioner`
+receives, so that each rule has one home. A brief to an agent of another type
+carries them, copied from there.
 
 ## The briefed reviewer
 
