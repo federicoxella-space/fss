@@ -112,7 +112,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-*None.* `R-068` was answered by `R-070`.
+- **`R-082`**, `SQ-014`: generation parameters named beside the seed in NFR-01
+  and AC-02, and defined in FR-G-02 as what a host chooses per world. Reserve 2.
 
 ---
 
@@ -3876,3 +3877,52 @@ this ruling does not anticipate which.
 which DEC-100 refuses until one exists.
 **Not verified:** nothing; DEC-085, DEC-100, DEC-033 and `SIM-STATE` §World were
 read, and `docs/` grepped for `ruleVersion`.
+
+### R-082 — Generation parameters are a second input beside the seed, and only what a host chooses per world
+
+**Date:** 2026-10-06   **Origin:** SQ-014
+**Verdict:** escalated — reserve 2 of `R-001`: the answer edits NFR-01 and AC-02
+**docs/:** unchanged
+
+Since `R-065`, NFR-01 and AC-02 name three inputs: seed, rules file, commands.
+FR-G-02, NFR-08, DEC-032 and `SIM-STATE`'s `generationParams` keep a fourth, the
+generation parameters, saved beside the seed. Two runs with the same seed, rules
+file and commands but a different settlement count differ from tick 0, so AC-02
+as written fails for any code the moment a host may choose a parameter. And no
+text says which values are generation parameters and which belong to the rules
+file: P-02, P-12, P-54 and the kingdom count of `R-063` could sit in either.
+
+**Two answers.**
+
+- **A. Generation parameters go into the rules file.** One input fewer, and
+  NFR-01 and AC-02 stay as they are. But the rules file is what NFR-09's digest
+  identifies as the rules: a world of 500 settlements and one of 2,000 would run
+  under different rule versions with the same content and logic, and a sweep
+  over world size would be a sweep over rule versions. The rules file describes
+  how the world behaves; the size of the map is not a rule.
+- **B. They stay a separate input, and the determinism texts name them.**
+  NFR-01 and AC-02 read "the same seed and generation parameters, rules file and
+  commands". FR-G-02 says what they are: the values a host may choose per world
+  when creating it — settlement count (P-02), settlement mix (P-12), kingdom
+  count. Every other value the generator reads, how sites follow terrain, the
+  founders' endowment (P-54), initial stocks, is content and lives in the rules
+  file. Each value then has one home, and the test of which is whether a player
+  could pick it on a new-game screen.
+
+**Recommendation: B.** It keeps NFR-09's rule version meaning what DEC-100 made
+it mean, and it is the only answer that needs no change to what the save already
+carries. The cost is the wording of NFR-01 and AC-02, which is why it is not
+ruled here: adding an input to the premise of a determinism criterion is the
+same kind of change `R-065` put to the user as reserve 2.
+
+**Cost.** Under B: NFR-01 and AC-02 gain three words; FR-G-02 gains a sentence;
+P-54 moves from "generator" to rules content in its description. The host gains
+a second thing to pass at creation, which it already had to store.
+**Owed by the implementer:** nothing until the user answers. The question
+binds the generator's point (`R-052`), the first of phase 4.
+**Would overturn it:** a host that must vary a rules-file value per world —
+a difficulty setting that changes P-66, say — which would argue for a
+per-world overlay of parameters, a third shape neither answer has.
+**Not verified:** whether DEC-040's prior history reads any generation
+parameter after tick 0; FR-W-10 fixes the settlement count, and nothing else was
+checked.
