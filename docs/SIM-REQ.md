@@ -504,7 +504,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 **FR-A-04** — Travel is walked by default and abstracted on fast travel. Both paths run the same simulation.
 
-**FR-A-05** — The host supplies the rules file as bytes when it creates a world: the static content and the values of the parameters that drive the simulation (DEC-100). The core validates it and refuses, whole, a file no build could accept. A loaded world runs on the rules file its save carries.
+**FR-A-05** — The host may supply a rules file as bytes when it creates a world: the static content and the values of the parameters that drive the simulation (DEC-100). When it supplies none, the world runs on the base rules compiled into the core from the same source. The core validates either and refuses, whole, a file no build could accept, and one that declares more goods, mestieri or recipes than P-74, P-75 and P-76 allow. A refusal is a result returned to the host, never a failure of the core: players write rules files. A loaded world runs on the rules file its save carries.
 
 ---
 
@@ -626,6 +626,9 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-71 | Share of released planting good that may become supply, CI | TBD | Open |
 | P-72 | Weight an emigrant carries, per member, FR-D-04a | TBD by sweep | Open |
 | P-73 | Allocation adjustment cap per year, default, FR-P-15 | TBD by sweep | Open |
+| P-74 | Most goods a rules file may declare, FR-A-05 | TBD | Open; set after the Phase 4 measurement of P-17, so that no rules file takes the core past P-01 |
+| P-75 | Most mestieri a rules file may declare, FR-A-05 | TBD | Open; as P-74 |
+| P-76 | Most recipes a rules file may declare, FR-A-05 | TBD | Open; as P-74 |
 | P-09 | Goods count | 8 | Decided |
 | P-10 | Price bounds | 0.25× to 4× reference | Decided |
 | P-11 | Trade damping `k` | TBD by sweep | Open |
@@ -658,7 +661,7 @@ Every criterion below runs headless in CI, with no editor and no game client, dr
 | Kingdom legitimacy | minimum |
 | Infection prevalence | maximum |
 
-Each carries a hard bound that fails the test and a soft band that raises a warning. Values are set in Phase 6. Until then each hard bound is Provisional (§16) and derived from a bound the specification already states — no stock below zero, prices within P-10, a settlement's population within what FR-D-14 lets it import — and the test that no variable grows without bound runs beside it, its method stated by the point that writes it. Soft bands start in Phase 6. M is P-65.
+Each carries a hard bound that fails the test and a soft band that raises a warning. Values are set in Phase 6. Until then each hard bound is Provisional (§16) and derived from a bound the specification already states — no stock below zero, prices within P-10, a settlement's population within what FR-D-14 lets it import — and the test that no variable grows without bound runs beside it, its method stated by the point that writes it. Soft bands start in Phase 6. M is P-65. AC-04 runs on the base rules of FR-A-05 and makes no claim about a world running on another rules file.
 
 **AC-05 — Wake equivalence.** An entity simulated continuously for N ticks and the same entity deferred and resumed at tick N reach the same state within declared tolerance.
 

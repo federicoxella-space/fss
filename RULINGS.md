@@ -98,7 +98,9 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   validation whole at creation and at load, the file held in World and carried by
   the save, and the rule version extended by the core's digest of it. The content
   of `R-063` and the curves of `R-064` go into it, and the check of `R-060` into its
-  validation.
+  validation. **`R-088`**: and the base rules compiled into the core by the same
+  compiler, used when the host hands no file; validation that returns a refusal
+  and never fails, with the caps P-74 to P-76.
 - **`R-070`**, before point 7 of the process plan runs: point 8 added to
   `PLAN.md`, placed between points 6 and 7, carrying `R-068`'s three changes.
   **`R-071`**: and a fourth, `tree-state` reading untracked names unquoted and
@@ -4129,3 +4131,54 @@ requirement on every brake, which would make B7 a defect; that would be a change
 to the gate, reserve 2, and the user's.
 **Not verified:** that no other flow of `docs/` is missing from §Stocks; the
 batch's flows were checked, the older ones were taken as they stood.
+
+### R-088 — `R-065` revised by the user's answer to `SQ-020`: base rules in the core, a file replaces them, validation never fails
+
+**Date:** 2026-10-06   **Origin:** SQ-020, the user's answer of 2026-10-05
+**Verdict:** specified — the user's decision on §20, reserve 4 of `R-001`; the
+sentence on AC-04 is the user's, reserve 2
+**docs/:** `SIM-DEC` DEC-100, title, decision, rationale and cost; `SIM-REQ`
+FR-A-05, AC-04 one sentence, §16 P-74 to P-76 new; `SIM-STATE` §Static data.
+Revisions already today's.
+
+`R-065` left unverified whether the consumer of §20 can ship and read a rules
+file. Only the user could answer, and did: a hybrid. The base rules are compiled
+into the core, as bytes written by the same compiler from the same text source;
+an external file, where the game can read one, replaces them. The rest of
+`R-065` stands, and the user named three consequences for the decider to write.
+This ruling transcribes them; it decides only their wording and the numbers.
+
+- **The default.** FR-A-05 and DEC-100 say a world runs on the base rules when
+  the host hands no file, and that a file replaces them whole. Both go through
+  the same validation, digest and save, so a world on the base rules is no
+  different in kind from one on a file; `R-004`'s point, as `R-065` kept it,
+  survives — the core computes the digest of whatever bytes it runs on.
+- **Validation that never fails.** Players will write files. A malformed one is
+  refused by a result the host receives, never by an exception or a crash of the
+  core. That is a property of the validator, stated in FR-A-05, and the reason
+  the cost line of DEC-100 now says validation must hold against files the
+  repository's compiler did not write.
+- **Caps.** A file may not declare more goods, mestieri or recipes than P-74,
+  P-75 and P-76, Open, set after the Phase 4 measurement of P-17, so that no file
+  takes the core past P-01 without anyone noticing. Three numbers, not one,
+  because the three grow different costs: goods widen holdings, mestieri add rows,
+  recipes add production work.
+- **AC-04.** Its bounds are a claim about the base rules; it says it makes no
+  claim about a world on another file. The user asked for this sentence. It
+  narrows the domain of an acceptance criterion, which is reserve 2, and is
+  applied as theirs.
+
+`SQ-023` bears on the caps: if state becomes sparse per settlement, the cost that
+P-74 guards is the goods present in a place, not the catalogue, and the cap may be
+looser. That is for the ruling on `SQ-023`, after the measurement.
+
+**Cost.** The base rules are a build output: the build regenerates them when the
+source changes, and a check that the bytes in the core match the source is a
+natural test for the point that builds them. Three more parameters.
+**Owed by the implementer:** `R-065`'s action, widened as noted under "Owed by
+the implementer". Cite `R-065` and `R-088`.
+**Would overturn it:** the user revising the hybrid; a platform that can read a
+file but must not accept mods, which would need a way to refuse a valid file.
+**Not verified:** how the base rules reach the core as bytes — a generated source
+file, an embedded resource — which `BannedSymbols.txt` and §20 constrain and the
+implementer chooses.

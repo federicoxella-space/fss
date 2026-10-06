@@ -564,6 +564,7 @@ since the format is what the consumer would ship.
 **Status:** open — **the user's**, not the decider's: §20 is reserve 4. Answered
 by the user on 2026-10-05, below; the decider turns the answer into a revision
 of `R-065`.
+**Status:** **closed 2026-10-06 by R-088.**
 
 `R-065` records as not verified "that the consumer of §20 can ship and read such
 a file", and names it among what would overturn the ruling. §20's constraints
