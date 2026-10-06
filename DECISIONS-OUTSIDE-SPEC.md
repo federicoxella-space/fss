@@ -3106,3 +3106,65 @@ the tester's second dispatch, in the design's "The hole that `Bash` leaves".
 **Would overturn it:** the tester's brief at point 4 or 7 needing the check as a
 test name rather than a command, or a patch legitimately touching a path outside
 the two folders.
+
+### D-113 · Point 3 · `plan-state`: what the point left open
+
+**Decided.**
+- **The JSON shape.** One object: `path`, `exists`, `kind`, `abandoned`,
+  `points` — each with `number`, `title`, `status`, `check`, `core`,
+  `coreReason`, `serves`, and `commits` for a closed point — then `state`
+  (`none`, `running`, `stopped`, `finished`, `abandoned`), `next`, `stoppedAt`,
+  `reservesOpen`, `range`, `warning`, `decider` (`count`, `first`, `last`). The
+  point lists what the skills read today and the design note says it is not a
+  schema; these names are mine. Non-ASCII is escaped, so the console code page
+  cannot garble a title.
+- **An abandoned plan reports `state: abandoned` and no next point**, whatever
+  its points say. The point names the declaration as a field and the state as
+  next point, stopped or finished; a plan abandoned with open points would
+  otherwise report a next point that `/plan-next` must refuse.
+- **`stopped` needs an open point after the failure**, as `/plan-next` words it.
+  A plan whose last point failed reports `finished`, with the point `failed`.
+- **A reserve open does not change `state`.** All points closed with a reserve
+  open reports `finished` and lists the point in `reservesOpen`; the skills, not
+  the script, say the exit condition is unmet (`R-011`).
+- **A marker counts only right after the date sentence**: `FALLITO`/`FAILED`,
+  *Chiuso con riserva*/*Closed with reserve*. Point 12 of the twelve-gaps plan
+  names `FALLITO` in prose ("Closed rather than `FALLITO`") and is closed; a
+  match anywhere in the paragraph would report it failed. A discharge is any
+  line of the section opening with *Riserva sciolta:*/*Reserve discharged:*.
+- **The check marker is a `- **Check: …**` bullet; failing that, a `Check: weak`
+  or `Check: shallow` inside the `Closed by` bullet.** Point 7 of this plan
+  declares its marker the second way. Prose elsewhere in the point — the title of
+  point 13 of the twelve-gaps plan names both markers — is not read.
+- **`Core:` with no line is `null`, not `yes`.** The default is the skills'
+  rule to apply; the script reports what is written. A reason is any text after
+  `yes`/`no` once punctuation and dashes are stripped.
+- **Commits are resolved only for `PLAN.md` at the root and for a plan added
+  under `.claude/plans/`**, with the range of `/plan-status` step 4. A fixture or
+  a draft has no range in history; `range` is `null` and no point carries
+  `commits`.
+- **The `main` warning covers both readings of "sits on main"**: `main`'s tree
+  holds `PLAN.md`, or the current branch is `main` and `PLAN.md` is in the
+  working tree.
+- **"No plan" is a path that does not exist**, not a fixture file; the other
+  eight cases are files. The draft fixture carries a `## 1.` heading outside the
+  fenced block, which must not be read as a point.
+- **The 31-points check is part of `-SelfTest`**, run on this repository's
+  history. A rewrite of that history turns the self-test red, which is the
+  intended reading: the lookup it proves would be broken too.
+
+**Check.** `plan-state.ps1 -SelfTest` 58 cases, exit 0: the nine fixture cases,
+31 archived points each resolved to one commit, the total, the entry point. The
+three faults of `Fails when:` on a copy, original untouched: `*Outcome:*` not
+recognised → 4 cases red; trailer grep unanchored → 2 red (twelve-gaps point 1
+finds 5 commits, phase 3 point 1 finds 2); the `stopped` branch disabled → 2 red.
+
+**Not verified.** Calling the script from an agent's `Bash` rather than this
+session's. Headings inside a fenced block of a plan would be read as headings:
+none of the six plans holds a fence today (grep). A draft whose fence holds a
+nested fence: the first closing fence ends the draft.
+
+**What `docs/` says:** nothing; process work. The point's own text and
+`/plan-status` step 4.
+**Would overturn it:** a skill at point 6 or 7 needing a field in another shape,
+or the user ruling that an abandoned plan still reports its next point.

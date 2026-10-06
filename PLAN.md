@@ -93,6 +93,15 @@ nessun file C# toccato. Registro `D-112`.
   stopped at a `FAILED` point is reported as running.
 - **Core:** no — touches no path under `core/`.
 
+*Esito:* 2026-10-06. Chiuso. `plan-state.ps1 -SelfTest` 58 casi, exit 0: le
+nove fixture, i 31 punti dei cinque piani archiviati risolti a un commit
+ciascuno, il totale, l'entry point. I tre guasti del `Fails when:` visti rossi su
+copie: `*Outcome:*` non riconosciuto (4 casi rossi), trailer non ancorato (2
+rossi: punto 1 delle dodici lacune trova 5 commit, punto 1 della fase 3 ne trova
+2), ramo `stopped` disattivato (2 rossi). `git diff --name-only HEAD -- core/`
+vuoto: `Core: no` regge, revisori non eseguiti. Build e suite .NET non eseguite:
+nessun file C# toccato. Registro `D-113`.
+
 ## 4. The six definitions in `.claude/agents/`
 
 - **Does:** `tester`, `coder`, `code-reviewer`, `revisioner`, `documenter` and
