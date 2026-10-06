@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-113 — audited by `R-076`. The next audit starts at the
+**Register watermark:** D-114 — audited by `R-093`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -80,6 +80,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-047`**, within the process plan point that rewires `/plan-next` and
   `reviewers.md`: the reviewers' brief quotes the `Fails when:` line and asks for
   missing faults. And every moment-one request carries the `Fails when:` lines.
+  The code-reviewer's half is done in `1ed624a`, checked by `R-093`; the brief's
+  is point 7's.
 - **`R-048`**, from the next plan: the draft goes in the moment-one request, and
   `PLAN.md` is installed on its branch after the user's answer, in a commit that
   cites it; the process plan point that edits `AGENTS.md` writes the rule.
@@ -115,7 +117,11 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-*None.* `R-082` was answered by `R-091`, `R-089` by `R-092`.
+- **`R-093`**, its one recommendation: point 8 names `.claude/agents/coder.md`,
+  whose body restates the denylist point 8 widens. Point 8's content is the
+  user's (`R-070`).
+
+`R-082` was answered by `R-091`, `R-089` by `R-092`.
 
 ---
 
@@ -4348,3 +4354,77 @@ bands and their labour flags into the rules file of `R-065`, as it writes the
 rest of `R-063`. Cite `R-089` and `R-092`.
 **Would overturn it:** the user revising the content before that point.
 **Not verified:** nothing.
+
+### R-093 — `D-114` is ratified; the watermark reaches `D-114`
+
+**Date:** 2026-10-07   **Origin:** register audit, `D-114`
+**Verdict:** ratified; one recommendation escalated — reserve 1 of `R-001`: point
+8's content is the user's (`R-070`)
+**docs/:** unchanged
+
+Point 4 of the process plan, the six agent definitions. Process, so ratified or
+rejected, never promoted (`D-011`). The entry was read against point 4's frozen
+text and the design's "The roles", "What the coder may not write",
+"Enforcement", "The tester, in two dispatches" and "Where the rules live", and
+its claims against `1ed624a`, the six files and the diff of `reviewers.md` read
+whole.
+
+- **The frontmatter.** Checked by hand against the roles table, since the
+  entry's script was not committed: model, effort and tools agree for all six,
+  each `description` says "Dispatched by /plan-next only", no reviewer holds
+  `Edit` or `Write`, and the three `path-guard` roles and the committer's
+  `git-guard` carry the matchers and commands the entry states.
+- **No hook on the reviewers; `Write` in the documenter's matcher.** Stand. A
+  hook on `Edit|Write` sees nothing an agent without those tools can do, and
+  what `Bash` leaves is the orchestrator's check, as the design says. The extra
+  matcher costs nothing and guards a tool list widened by mistake.
+- **The code-reviewer reads `AGENTS.md` whole.** Stands. Point 5 writes the
+  section the design points at, and point 5's own check runs the code-reviewer
+  against C1 and C5, so reading the whole file reaches the section the day it
+  exists. Its body asks which fault the check would miss, the code-reviewer's
+  half of `R-047`, now marked under "Owed by the implementer".
+- **The five rules moved, a pointer left in `reviewers.md`.** Stands. Rules 1 to
+  4 are verbatim and rule 5 loses only its heading. Until point 7, `/plan-next`
+  dispatches agent types that do not read `revisioner.md`, so the sentence
+  telling the brief to copy them keeps the rules reaching a reviewer. No other
+  file names the old headings; grepped.
+- **The bodies add no step.** Checked against the design: the empty
+  implementation in the tester's second dispatch is the design's (`D-065`,
+  `D-070`); the documenter's STOP cases are `/plan-next` step 6's; the
+  committer's comparison of the staged set is "Enforcement" item 2.
+- **The check left outside the repository.** Accepted, as a cost. `AGENTS.md`
+  asks a point for a runnable check, and this one ran once and went with the
+  session's scratchpad; a later edit to an agent file meets no check. The
+  comparison is six frontmatter blocks against six rows, and this audit redid it
+  in minutes, so a script is not worth a home that the design reserves for
+  hooks. The first real run, `R-046`, is the check that matters.
+
+**The reserve of point 4.** This session started after `1ed624a` and lists the six
+types among its agents, with the tool sets above: the definitions load in a fresh
+session, which is half of what the reserve waited for. Whether the coder's hook
+fires on a write to `docs/probe.md` was not probed here: the probe is the
+implementer's, under `R-011`, and the definitions say they are dispatched by
+`/plan-next` only. The reserve stays open until the implementer runs it and
+writes the *Riserva sciolta* line.
+
+**A finding, escalated.** `coder.md` restates its denylist in prose, a third copy
+beside the design and `path-guard`. Point 8 (`R-070`) adds the two settings
+files to the other two copies and does not name this one, so after point 8 the
+coder's own instructions would list less than its hook denies. The hook is what
+enforces, so nothing is breached; but the body is what the coder reads.
+**Recommendation:** point 8 also names `.claude/agents/coder.md` and adds the
+settings files to its list. The content of point 8 was approved by the user item
+by item (`R-070`, `R-071`, `R-073`, `R-074`), so a seventh change is theirs to
+approve; until then point 8 carries the six.
+
+**The watermark advances to `D-114`.**
+
+**Cost.** None beyond the check that cannot be rerun.
+**Owed by the implementer:** nothing new; the code-reviewer's half of `R-047` is
+marked done.
+**Would overturn it:** as for `R-008`; the probe showing the hook does not fire
+or `$CLAUDE_PROJECT_DIR` does not expand, which the entry names and which would
+change every `command:` line.
+**Not verified:** that the hooks fire for a subagent, that `effort` is honoured,
+and `disableAllHooks` (`R-068`); none was probed. The `command:` lines were not
+rerun.

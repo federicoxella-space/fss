@@ -3250,6 +3250,7 @@ nested fence: the first closing fence ends the draft.
 or the user ruling that an abandoned plan still reports its next point.
 
 ### D-114 · Point 4 · The six agent definitions: what the design left open
+**Ruling:** R-093 — ratified; a recommendation on point 8 escalated to the user
 
 **Decided.**
 - **The hook command** is `pwsh -NoProfile -File
