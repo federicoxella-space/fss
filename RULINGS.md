@@ -112,16 +112,14 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   source lies outside `core/Runtime/` and `harness/`, with its `Fails when:`.
   **`R-074`**: and a sixth, `plan-state` reading "after the failure" by position
   in the file, not by number, with its `Fails when:`.
+  **`R-094`**: and a seventh, `.claude/agents/coder.md`'s list of the paths it
+  may not write gaining the two settings files, with its `Fails when:`.
 
 ## Escalated to the user
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-- **`R-093`**, its one recommendation: point 8 names `.claude/agents/coder.md`,
-  whose body restates the denylist point 8 widens. Point 8's content is the
-  user's (`R-070`).
-
-`R-082` was answered by `R-091`, `R-089` by `R-092`.
+*None.* `R-082` was answered by `R-091`, `R-089` by `R-092`, `R-093` by `R-094`.
 
 ---
 
@@ -4428,3 +4426,38 @@ change every `command:` line.
 **Not verified:** that the hooks fire for a subagent, that `effort` is honoured,
 and `disableAllHooks` (`R-068`); none was probed. The `command:` lines were not
 rerun.
+
+### R-094 — `R-093` accepted: point 8 also updates `coder.md`'s list, a seventh item
+
+**Date:** 2026-10-07   **Origin:** user, on `R-093`
+**Verdict:** resolved — the user's decision, reserve 1 of `R-001`
+**docs/:** unchanged
+
+The user approved `R-093`'s recommendation and asked for it to be applied:
+"approvo la raccomandazione di R-093, applicala". The change is to
+`.claude/agents/coder.md`, which a decider session does not write, so applying it
+means owing it to point 8, as `R-071`, `R-073` and `R-074` did. This ruling
+records the user's approval that `D-014` requires for the addition.
+
+**The seventh item.** `.claude/agents/coder.md`, where its body lists the paths
+the coder may not write, adds `.claude/settings.json` and
+`.claude/settings.local.json`, so that its prose matches the denylist point 8
+gives the design and `path-guard`. Point 8 names the file in its own text: the
+design reserves `.claude/agents/` to the orchestrator "in a point that names
+them", and point 8 is run by the orchestrator, before point 7 (`R-070`).
+
+The alternative, replacing the list with a pointer to `path-guard`, would leave
+one home for the rule, as the design prefers. It was not what the user approved,
+and a coder that reads its limits in its own instructions is told them before the
+hook refuses it; the list stays, kept in step.
+
+**Its `Fails when:`**, proposed here and not yet read by the user (`R-047`):
+after point 8, `coder.md` names no settings file while `path-guard` denies them.
+
+**Cost.** One more item in point 8, and three copies of the denylist to keep in
+step instead of two, until a point decides the body should point rather than list.
+**Owed by the implementer:** point 8, as `R-070` owes it, carries this seventh item
+and its `Fails when:` line, and names `.claude/agents/coder.md`. Cite `R-070` and
+`R-094`.
+**Would overturn it:** the user preferring the pointer to the list.
+**Not verified:** nothing; `coder.md` was grepped and names no settings file today.
