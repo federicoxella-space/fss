@@ -498,7 +498,7 @@ no phase 4 subsystem in the table.
 `docs/SIM-STATE.md:59-75` §Cohort; `docs/SIM-REQ.md:177` FR-P-10b.
 **Blocks:** no. It must be answered before the first point that applies a rate
 to a cohort stock.
-**Status:** open.
+**Status:** **closed 2026-10-06 by R-084.**
 
 `SIM-ECON` says "the carry stays with its row and is cleared when the row's
 count reaches zero", and names spoilage, wear, decay, interest and transit loss.

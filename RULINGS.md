@@ -3953,3 +3953,59 @@ digest, and the harness's compiler.
 **Owed by the implementer:** nothing beyond `docs/`. `R-065` stands.
 **Would overturn it:** none foreseen.
 **Not verified:** nothing; §13, §18 and `R-052`, `R-063` to `R-065` were read.
+
+### R-084 — `SIM-STATE` lists every carry: one per good for holdings, one per building type, one for interest, one per good on each link
+
+**Date:** 2026-10-06   **Origin:** SQ-016
+**Verdict:** specified
+**docs/:** `SIM-STATE` §Cohort gains `goodsCarry`, `buildingsCarry`,
+`interestCarry` and a paragraph stating the rule, `durables` names its wear as
+the carry; §Trade link gains `lossCarry`. `SIM-ECON` "Spoilage and integer
+rounding" says where transit loss carries. `SIM-STATE` revision bumped,
+`SIM-ECON`'s already today's.
+
+`SIM-ECON` makes the remainder accumulator a rule of the codebase and names five
+rates it applies to; `AGENTS.md` repeats it as the first rule the build cannot
+catch. `SIM-STATE` §Rule says anything that influences a future tick is listed,
+and §Cohort listed one carry, the destitution share's. Every other carry would
+have been a field the implementer added outside the inventory, which is the
+determinism hole §Serialisation notes names, and which this file's reader could
+not check for.
+
+**One carry per good for holdings, not one per rate.** Production and harvest add
+fractions to a stock, spoilage takes them away, and all three act on the same
+holding. A carry is the fraction of a unit the holding has beyond its integer
+count, in [0, 1); each rate adds to it or takes from it, and a whole unit moves
+between carry and stock when reached. Separate carries per rate on one stock
+would each be right and together would let a stock hold two fractions of the same
+unit. One carry per holding conserves the good exactly, which is what A-04 asks.
+It is laid out as `goods` is, so whatever `SQ-023` decides for the layout of
+holdings, the carry follows.
+
+**The others.** Building decay at P-51 acts on a count per building type, so a
+carry per building type. Wear at P-53 already had its place: `durables` carries
+"accumulated wear", which is the carry, and now says so. Interest acts on one
+debt per row, so one carry. **Transit loss is the case `SIM-ECON`'s "stays with
+its row" did not fit**: a shipment lands once, so a carry on the transient
+vanishes with it and a small shipment never loses anything. It is held on the
+link, per good, as `flowAccumulator` already is, and cleared when the link is
+evicted.
+
+**The rule stated once.** A paragraph under §Cohort's table says every rate on an
+integer field of a row keeps a carry beside it, in its layout, and that a rate
+added later brings its carry into the table. The list is what the update names
+today; taxation on cohort currency and any rate a later phase adds are bound by
+the paragraph and enter the table with the point that builds them.
+
+**Cost.** Four fields, two of them as wide as the goods or the building types: the
+holdings' carry doubles the per-good state of a cohort, which is the figure
+`SQ-023` already counts ("twice that with a carry per good"). Every carry is
+hashed and saved.
+**Owed by the implementer:** nothing beyond `docs/`; each carry lands with the
+point that first applies its rate.
+**Would overturn it:** `SQ-023`'s measurement showing the per-good carry too
+costly at the catalogue's size, which would argue for holdings in fixed point
+with no separate carry, a change to the type of `goods`.
+**Not verified:** whether the advance of FR-C-25 accrues interest, which would
+need a carry of its own; FR-C-25 was not read for it. That interest whole units
+reach the lender's credit is `SQ-018`'s territory and is not stated here.

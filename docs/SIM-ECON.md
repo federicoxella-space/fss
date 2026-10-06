@@ -104,7 +104,7 @@ Perishability is a fraction per good per update, applied to everything held: coh
 
 **The integer trap.** A 2% rate on a stock of 10 units is 0.2, which truncates to zero. Small stocks would never spoil and would become immortal, while large stocks decay normally. The fix is a **remainder accumulator per cohort per good**: the fractional part carries to the next update and is applied when it reaches a whole unit. Deterministic, conserving, and it removes the size threshold.
 
-The same accumulator pattern applies anywhere a rate multiplies a small integer: durable wear, building decay, interest on small debts, transit loss. It is a general rule of the codebase, not a spoilage detail. The carry stays with its row and is cleared when the row's count reaches zero. Splits made within one update, such as gleaning shares or the destinations of the destitute, use largest remainders with ties by id and leave no carry.
+The same accumulator pattern applies anywhere a rate multiplies a small integer: durable wear, building decay, interest on small debts, transit loss. It is a general rule of the codebase, not a spoilage detail. The carry stays with its row and is cleared when the row's count reaches zero. Transit loss is the exception in place, not in kind: a shipment lands once, so its carry is held by the link it travels and cleared when the link is evicted. SIM-STATE lists every carry. Splits made within one update, such as gleaning shares or the destinations of the destitute, use largest remainders with ties by id and leave no carry.
 
 ---
 
