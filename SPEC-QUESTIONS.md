@@ -484,7 +484,7 @@ separate saved input. Values such as P-02, P-12, P-54 and the kingdom count of
 Phase 4"; `R-063`, `R-064`, `R-065`.
 **Blocks:** no. It must be answered before the phase 4 plan is written, since
 `R-052` reads `Satisfies:` against §18.
-**Status:** open.
+**Status:** **closed 2026-10-06 by R-083.**
 
 §18 sends "§13, what the host observes and does" to Phase 7, and FR-A-05 is in
 §13. `R-063` and `R-064` place phase 4's content in the rules file, and `R-065`

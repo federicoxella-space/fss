@@ -3926,3 +3926,30 @@ per-world overlay of parameters, a third shape neither answer has.
 **Not verified:** whether DEC-040's prior history reads any generation
 parameter after tick 0; FR-W-10 fixes the settlement count, and nothing else was
 checked.
+
+### R-083 — FR-A-05 opens Phase 4, with the generator
+
+**Date:** 2026-10-06   **Origin:** SQ-015
+**Verdict:** specified
+**docs/:** `SIM-REQ` §18, "Delivery phases": the Phase 4 table's Production row
+and the line on what lies outside Phase 4. Revision already today's.
+
+`R-052` sent "§13, what the host observes and does" to Phase 7, and `R-065` later
+put FR-A-05, the rules file, in §13. `R-063` and `R-064` place every piece of phase
+4's content in that file, and `R-065` owes its format from the first phase 4 point
+that adds static data. So the requirement the first point must serve sat in a
+phase three later, and `R-052`'s check of `Satisfies:` against §18 would have
+flagged the point that does what `R-065` requires.
+
+FR-A-05 is not host behaviour in the sense `R-052` meant. It is how content enters
+a world, and no world exists without it: the generator reads terrains,
+mestieri and recipes before it writes a row. It goes where the generator goes,
+before production, and the line on Phase 7 names the exception. What the host
+does with the file — ship it, read it from disk, offer a mod — stays the host's
+and Phase 7's; Phase 4 builds the core's half, the format, validation and the
+digest, and the harness's compiler.
+
+**Cost.** None to code; Phase 4 already owed the work under `R-065`.
+**Owed by the implementer:** nothing beyond `docs/`. `R-065` stands.
+**Would overturn it:** none foreseen.
+**Not verified:** nothing; §13, §18 and `R-052`, `R-063` to `R-065` were read.

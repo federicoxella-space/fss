@@ -799,7 +799,7 @@ Each phase has an exit gate. No phase starts before the previous gate is green.
 
 | Subsystem | SIM-ECON phases and steps | Requirements |
 |---|---|---|
-| Production | 5, 9; sowing, harvest, allocation adjustment, construction | FR-P, save FR-P-03b; FR-J-01 to FR-J-03, FR-J-21, FR-J-22; FR-C-01, FR-C-02, FR-C-06. Before it, the generator: FR-G-01, FR-G-01a, FR-G-02, with the buried stock of FR-J-14 and FR-J-15 |
+| Production | 5, 9; sowing, harvest, allocation adjustment, construction | FR-P, save FR-P-03b; FR-J-01 to FR-J-03, FR-J-21, FR-J-22; FR-C-01, FR-C-02, FR-C-06. Before it, the rules file and the generator: FR-A-05; FR-G-01, FR-G-01a, FR-G-02, with the buried stock of FR-J-14 and FR-J-15 |
 | Needs | 6; the end of 7 for the hunger deficit | FR-C-03, FR-P-03b, FR-D-03a; SIM-ECON §Demand, tiers and the hunger deficit |
 | Market | 1 for goods, 2 for prices, 7, 10 | FR-M-01 to FR-M-07; FR-C-04, FR-C-10, FR-C-11; FR-C-12 to FR-C-18, FR-C-21; FR-J-04, FR-J-05; FR-I-05 to FR-I-06a |
 | Labour and income | 2 for the wage, 3, 4, 8, 8a; taxation | FR-C-05, FR-J-19, FR-J-20, FR-C-07 to FR-C-09, FR-C-19, FR-C-20, FR-C-22 to FR-C-30; FR-X-01, FR-X-06, FR-X-07 for the convoy |
@@ -807,7 +807,7 @@ Each phase has an exit gate. No phase starts before the previous gate is green.
 | Mobility | 1 for migrants, 11 for migration | FR-D-04, FR-D-04a, FR-D-05, FR-D-07 to FR-D-12, FR-D-14; FR-M-08 to FR-M-15; FR-J-06 to FR-J-10; FR-X-02, FR-X-03 |
 | Events | 12 | FR-E-01 to FR-E-07; FR-K-01 to FR-K-16; FR-J-11 to FR-J-13, FR-J-16 to FR-J-18; FR-I-01 to FR-I-04 |
 
-The gate holds per subsystem: when a subsystem closes, AC-01 and AC-04 are green over the invariants and the monitored variables that exist by then, and stay green as later subsystems land. Outside Phase 4: FR-D-06, agents, in Phase 5; FR-G-03 and FR-G-04, prior history, in Phase 6 with P-18; FR-X-04, FR-X-05 and §13, what the host observes and does, in Phase 7.
+The gate holds per subsystem: when a subsystem closes, AC-01 and AC-04 are green over the invariants and the monitored variables that exist by then, and stay green as later subsystems land. Outside Phase 4: FR-D-06, agents, in Phase 5; FR-G-03 and FR-G-04, prior history, in Phase 6 with P-18; FR-X-04, FR-X-05 and §13, what the host observes and does, in Phase 7, save FR-A-05, which Phase 4 needs first.
 
 ---
 
