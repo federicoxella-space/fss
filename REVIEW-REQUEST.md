@@ -195,8 +195,11 @@ machine, the runtime and the clock's resolution are printed with the results.
 
 ## What I need from you
 
-1. **The draft**, approved, amended, or rejected. In particular the five
-   `Fails when:` lines, and the calibration tolerances of point 1.
+1. **Answered by the user, 2026-10-07: "approvo il draft così com'è"** —
+   approved as written, the five `Fails when:` lines and the calibration
+   tolerances of point 1 included.
+   ~~**The draft**, approved, amended, or rejected. In particular the five
+   `Fails when:` lines, and the calibration tolerances of point 1.~~
 2. ~~**Where it sits against `R-046`** — or that the decider answers it first.~~
    **Answered by `R-067`:** the check stays with phase 4's first point; this plan
    runs under the agents without claiming it.
