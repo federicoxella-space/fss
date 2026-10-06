@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-107 — audited by `R-044`. The next audit starts at the
+**Register watermark:** D-113 — audited by `R-076`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -3652,3 +3652,47 @@ in another shape, as the entry says.
 **Not verified:** the three faults seen red were taken from the outcome line.
 Calling the script from an agent's `Bash` is point 4's probe. Headings inside a
 fence of a plan, which the entry records, were not probed.
+
+### R-076 — `D-108` and `D-109` are ratified; the watermark reaches `D-113`
+
+**Date:** 2026-10-06   **Origin:** register audit, `D-108` and `D-109`
+**Verdict:** ratified
+**docs/:** unchanged
+
+The two entries `R-066`, `R-069`, `R-072` and `R-075` passed over, because they
+were on `design/poverty-seed`. The merge `eb62bfb` brought them here. Both are
+process, so ratified or rejected, never promoted (`D-011`). Each was read
+against what it cites, and its claims against the commits it names.
+
+- **`D-108`, the review of the poverty and seed batch.** Stands. Checked:
+  `9250363` adds `SPEC-QUESTIONS.md` alone, and the entry follows in `5485132`,
+  as it says; `SQ-009` to `SQ-022` are the fourteen entries it counts, `SQ-020`
+  marked the user's under reserve 4. A branch for a batch of design work is what
+  `R-048` later made the rule for plans, and the branch was merged without
+  squashing. Gathering the low findings in `SQ-019` and `SQ-022` is right: each
+  item there is a correction of wording that a single ruling can apply, and
+  splitting them would cost a ruling each for no difference in what is decided.
+- **`D-109`, the draft of the cost measurement plan.** Stands. Checked:
+  `64147ba` touches `REVIEW-REQUEST.md` alone. `Kind: process` follows from what
+  the plan moves: no acceptance criterion, nothing in `core/`, and a world that
+  is a stand-in. The tolerances are what the entry says: half and twice P-63's
+  3.3 µs, and a fifth either side of 15.8 / 3.3 ≈ 4.8, which excludes a ranking
+  linear in rows. Keeping `bench/` after the plan answers `SQ-004`'s finding, a
+  stand-in thrown away whose contents nobody can now recover. Sizes as
+  measurement inputs without P-numbers read `R-050` correctly: it numbers values
+  that drive the simulation, and these drive a benchmark. The question the entry
+  raised as blocking, where the plan sits against `R-046`, is `R-067`'s, and the
+  request's item 2 now carries that marker, owed since `R-067` because the file
+  was on the other branch.
+
+**The watermark advances to `D-113`.** `D-110` to `D-113` were ruled by `R-066`,
+`R-069`, `R-072` and `R-075`, and only `D-108` and `D-109` held it back.
+
+**Cost.** None.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` as it
+stood when written.
+**Not verified:** the user's words for the sizes per settlement type, which
+`D-109` reports as approved and `SQ-024` records; the plan's draft was not run,
+and its calibration rests on P-63 and P-64 as measured on a stand-in nobody
+holds.

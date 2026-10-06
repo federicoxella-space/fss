@@ -197,5 +197,7 @@ machine, the runtime and the clock's resolution are printed with the results.
 
 1. **The draft**, approved, amended, or rejected. In particular the five
    `Fails when:` lines, and the calibration tolerances of point 1.
-2. **Where it sits against `R-046`** — or that the decider answers it first.
+2. ~~**Where it sits against `R-046`** — or that the decider answers it first.~~
+   **Answered by `R-067`:** the check stays with phase 4's first point; this plan
+   runs under the agents without claiming it.
 3. Then the plan is installed on `misura-costi` and point 1 starts.

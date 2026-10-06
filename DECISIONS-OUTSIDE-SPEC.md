@@ -2949,7 +2949,8 @@ already.
 
 ### D-108 · Review of the poverty and seed proposal, and of the batch it became
 
-**Ruling:** none yet. The proposal entered `docs/` through `R-054` to `R-065`; the
+**Ruling:** R-076 — ratified.
+The proposal entered `docs/` through `R-054` to `R-065`; the
 findings on the result are `SQ-009` to `SQ-022`.
 
 The user asked for three things in turn: review the proposal before transcription,
@@ -2987,7 +2988,8 @@ wanting the low findings split one per entry.
 
 ### D-109 · The draft of the cost measurement plan, at moment one
 
-**Ruling:** none yet. The draft is in `REVIEW-REQUEST.md`, for the user's answer
+**Ruling:** R-076 — ratified; where the plan sits against `R-046` answered by R-067.
+The draft is in `REVIEW-REQUEST.md`, for the user's answer
 under `R-048` and `R-049`.
 
 `SQ-023` owes a measurement before its ruling, and the user approved the sizes
