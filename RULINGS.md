@@ -2941,3 +2941,50 @@ item and its `Fails when:` line. Cite `R-070` and `R-074`.
 **Not verified:** whether any other rule of `plan-state` mixes number and
 position; the script was read whole for it and none was found, but only the
 `stopped` case was probed.
+
+### R-075 — `D-113` is ratified, save what `R-074` resolved
+
+**Date:** 2026-10-06   **Origin:** register audit, `D-113`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Point 3 of the process plan, `plan-state`. Process, so ratified or rejected,
+never promoted (`D-011`). The entry was read against point 3's frozen text and
+`/plan-status` step 4, and its claims against `b509ca5`, the script read whole.
+The self-test was run in this session: 58 cases, exit 0. Run on the live
+`PLAN.md` it reports points 1 to 3 closed, one commit each, and next point 4.
+
+- **The JSON shape.** Stands; the point lists what is read, not names, and the
+  names are the implementer's.
+- **An abandoned plan reports no next point.** Right on the merits: a next point
+  `/plan-next` must refuse is a report that contradicts the skill reading it.
+- **`stopped` needs an open point after the failure; a failed last point is
+  `finished`.** Stands as a reading of `/plan-next`'s words. How "after" is
+  computed is `R-074`'s.
+- **A reserve open leaves `state` alone.** Stands: `R-011` puts the unmet exit
+  condition on the skills' reading, and `reservesOpen` gives them what they need.
+- **A marker counts only right after the date sentence.** Checked: the regex
+  strips the outcome marker and the first sentence, then anchors. The prose case
+  it guards against, `FALLITO` named in a closed point, is in the fixture.
+- **The check marker, `Core:` absent as `null`, commits resolved only for the
+  live plan and the archives, the `main` warning, "no plan" as a missing path,
+  the 31 points in the self-test.** Stand. Tying the self-test to the
+  repository's history is right for the reason given: a rewrite that breaks it
+  breaks the lookup it proves.
+
+**One reading of the decider's count**, not a defect of the entry. Run today,
+`decider` reports four entries, `D-110` to `D-113`, though three carry rulings:
+the watermark stays at `D-107` while `D-108` and `D-109` are on
+`design/poverty-seed` (`R-066`), and `R-002`'s count is taken from the watermark,
+not from markers. The script does what `R-002` says. The count stays high until
+the branches meet and the audit reaches `D-109`.
+
+**The watermark is not advanced**, for `R-066`'s reason.
+
+**Cost.** None beyond `R-074`.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`; a skill at point 6 or 7 needing a field
+in another shape, as the entry says.
+**Not verified:** the three faults seen red were taken from the outcome line.
+Calling the script from an agent's `Bash` is point 4's probe. Headings inside a
+fence of a plan, which the entry records, were not probed.

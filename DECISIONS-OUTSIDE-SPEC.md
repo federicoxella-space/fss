@@ -3109,6 +3109,8 @@ the two folders.
 
 ### D-113 · Point 3 · `plan-state`: what the point left open
 
+**Ruling:** R-075 — ratified; the `stopped` read by number found at audit resolved by R-074.
+
 **Decided.**
 - **The JSON shape.** One object: `path`, `exists`, `kind`, `abandoned`,
   `points` — each with `number`, `title`, `status`, `check`, `core`,
