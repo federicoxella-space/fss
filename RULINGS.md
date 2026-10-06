@@ -118,6 +118,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-095`**, within point 8: a self-test case of `mutate` in which a call to
   `tree-state` fails and `mutate` exits 3, and its fault — `mutate` ignoring the
   failure — seen red, beside the frozen `Closed by:` under `R-005`'s case 1.
+- **`R-096`**, before the cost measurement plan's draft is next read through
+  `plan-state -Draft`, and no later than the commit installing that plan: the
+  current request's draft under `## Draft plan`, and "What a request holds"
+  stating the heading for every moment-one request.
 
 ## Escalated to the user
 
@@ -4517,3 +4521,52 @@ and Windows paths in the JSON: `docs/probe.md` and `core/Tests/` denied with exi
 2, `core/Runtime/`, `harness/` and `.claude/settings.json` allowed, the last as
 point 8 expects to change. Whether Claude Code fires the hook for a subagent is
 still unproven.
+
+### R-096 — A moment-one request holds its draft under `## Draft plan`, and the current one is brought to it
+
+**Date:** 2026-10-07   **Origin:** D-117 (a finding for the decider)
+**Verdict:** resolved; one action owed
+**docs/:** unchanged
+
+`D-117` found that `plan-state -Draft` cannot read the cost measurement plan's
+request. Checked in this session: run on `REVIEW-REQUEST.md` as it stands, the
+script prints `exists: false`. The draft is there, in a fenced block, under
+`## The draft plan`; the script looks for the exact line `## Draft plan`, which
+point 3's frozen text names. The request was written on `design/poverty-seed`
+on 2026-10-05, before `plan-state` existed, and nothing told its writer the
+heading: `R-048` and the rule `AGENTS.md` now carries say "a draft inside the
+review request" and name none, and "What a request holds" at the top of
+`REVIEW-REQUEST.md` lists six parts and no draft. The heading is a contract that
+lives only in its reader.
+
+**The request conforms; the reader does not widen.** A parser that accepts
+variants of a heading is reading prose, and the next variant is the next miss.
+One exact line is something a self-test can pin, and point 3's text already
+fixes it, so a `plan-state` matching anything else would depart from its own
+frozen "Does". Renaming one heading in a request changes nothing the user reads.
+
+**And the writer is told.** The defect is not the one heading but that the next
+moment-one request would be written the same way. The place a writer of a
+request reads is "What a request holds"; one sentence there, under the six
+parts, closes it: a request at moment one carries the draft whole in one fenced
+block under `## Draft plan`, which `plan-state -Draft` reads.
+
+**Timing.** The user has not yet answered this request (item 1), and once the
+plan is installed `-Draft` has nothing to read. But `/plan-explain` reads a
+draft through `-Draft` today (point 6), and is the skill a user would run on a
+draft before answering. So the heading moves before that, not after.
+
+**Cost.** One heading and one sentence. The convention binds every later
+request, and a request written by hand must match it exactly.
+**Owed by the implementer:** the current request's draft sits under
+`## Draft plan`, so that `plan-state -Draft` reports it, before the draft is
+next read through the script and no later than the commit installing that plan;
+and "What a request holds" in `REVIEW-REQUEST.md` states that a moment-one
+request carries its draft in one fenced block under that heading. Neither is
+trivial under `AGENTS.md`, since this ruling decided it. Cite `R-096`.
+**Would overturn it:** a second reader of drafts that needs another shape, which
+would argue for writing the format once, in the plan design note, and pointing
+both at it.
+**Not verified:** that nothing outside `.claude/` reads `## The draft plan`; the
+skills and hooks were grepped for "Draft plan", and only `plan-state` and
+`/plan-explain` name it, both as `## Draft plan`.

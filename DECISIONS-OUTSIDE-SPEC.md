@@ -3423,6 +3423,8 @@ naming no C rule, suggests disk.
 
 ### D-117 · Point 6 · `/plan-explain` and `/plan-status` on `plan-state`: what the point left open
 
+**Ruling:** R-096 — its first finding resolved: the request conforms to `## Draft plan`.
+
 **Permission for `.claude/skills/` (`D-087`).** Granted by the user, Federico
 Xella, in answering the process plan's moment-one request (the plan installed
 in `6d6d098`), for point 6 as its text states it: both skills are named in it.
