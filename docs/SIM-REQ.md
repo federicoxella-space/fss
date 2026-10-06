@@ -2,7 +2,7 @@
 
 **Document:** SIM-REQ
 **Status:** Draft 1
-**Revision:** 2026-10-04
+**Revision:** 2026-10-06
 **Scope:** Headless simulation core, runnable outside the game
 
 ---
@@ -417,7 +417,7 @@ capped by available stock at origin and by haulage capacity on the link, with `k
 
 **FR-K-14** — A cleared dungeon permits a mine under FR-P-19, so ordinary miners extract its material through the normal production path at ordinary risk.
 
-**FR-K-15** — Recipes may require dungeon-only materials. Data validation at load must prove that no tier 0 or tier 1 good depends, directly or transitively, on such a material. A world that fails this check does not run.
+**FR-K-15** — Recipes may require dungeon-only materials. Data validation at load must prove that every tier 0 and tier 1 need can be met by at least one good, at or above the need's minimum grade, that depends directly or transitively on no such material (AC-56). A world that fails this check does not run.
 
 **FR-K-16** — Recipes recovered from a dungeon enter that settlement's known recipe set, which is bounded per settlement state. Knowledge spreads from there like any other information.
 

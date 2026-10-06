@@ -383,7 +383,7 @@ code, and the pins move there anyway (`R-034`, Cost).
 **Blocks:** no. Dungeons are events-subsystem work, and `R-063` puts no
 dungeon-only material in phase 4. It must be answered before the point that
 writes load validation, since the check is defined twice.
-**Status:** open.
+**Status:** **closed 2026-10-06 by R-077.**
 
 FR-K-15 requires that "no tier 0 or tier 1 good depends, directly or
 transitively, on such a material". Goods no longer carry a tier: FR-P-03 and

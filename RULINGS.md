@@ -3696,3 +3696,29 @@ stood when written.
 `D-109` reports as approved and `SQ-024` records; the plan's draft was not run,
 and its calibration rests on P-63 and P-64 as measured on a stand-in nobody
 holds.
+
+### R-077 — FR-K-15 states the dungeon check as AC-56 does: on needs, not on goods
+
+**Date:** 2026-10-06   **Origin:** SQ-009
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-K-15, its second sentence; revision bumped.
+
+FR-K-15 required that "no tier 0 or tier 1 good depends … on such a material".
+Since `R-059` a good has no tier: FR-P-03 and DEC-098 put tiers on needs, and the
+user rewrote AC-56 and DEC-080 to protect needs (reserve 2 of `R-001`, revision 9
+of the proposal). FR-K-15 was not in the proposal, so the same check at load had
+two definitions, one of them with no referent. A grep of `docs/` for a tier
+attached to a good finds FR-K-15 alone.
+
+The two are not equivalent, and AC-56's is the right one on the merits, not only
+because it is the user's. "No subsistence good depends on a dungeon" forbids
+a dungeon material from entering any good a need accepts, which would rule out
+a luxury bread made with a rare spice. "Every subsistence need can be met
+without a dungeon" forbids only what the rule exists for, a famine caused by a
+dungeon closing. FR-K-15 now carries AC-56's predicate and cites it, so the
+requirement and its test say one thing.
+
+**Cost.** None to code; no validation exists yet.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** none foreseen; AC-56 is the user's and this follows it.
+**Not verified:** nothing; FR-K-11 to FR-K-15, AC-56 and DEC-080 were read.
