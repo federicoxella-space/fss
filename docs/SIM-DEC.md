@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-10-04
+**Revision:** 2026-10-06
 **Companion:** SIM-REQ
 
 ---
@@ -183,7 +183,7 @@ An entity's state at tick T is computed directly, not by replaying T ticks. Attr
 
 ### DEC-015 — A good is a data record and a recipe is a data record
 
-Unit weight, reference value, perishability, role, classes with a value in each, processing grade. Recipes carry inputs, output, labour, building. No good and no recipe requires code.
+Unit weight, reference value, perishability, role, classes, at most one per class tree, with a value in each, processing grade. Recipes carry inputs, output, labour, building. No good and no recipe requires code.
 
 **Rationale.** The plan is to start with seven goods and grow. That only works if growth costs data entry rather than branches.
 
@@ -237,7 +237,7 @@ Village degree ≤ 3, town and city degree ≤ 6. The generator builds the initi
 
 ### DEC-098 — Needs are met by classes of goods, by grade
 
-Goods belong to classes, data records that may nest under a parent class. A good carries a value per unit in each class it belongs to, nutrition for food, and one processing grade. A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day, and any good of the class or its subclasses at or above the grade meets it. Tier is the urgency of the need, not a property of the good. Processing creates no food: no recipe yields more food value than its inputs embody, a good outside the food class carrying the least food value consumed to make it.
+Goods belong to classes, data records that may nest under a parent class. A good carries a value per unit in each class it belongs to, at most one class per tree and its value in the units of the tree's root, nutrition for food, and one processing grade. A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day, and any good of the class or its subclasses at or above the grade meets it. Tier is the urgency of the need, not a property of the good. Processing creates no food: no recipe yields more food value than its inputs embody, a good outside the food class carrying the least food value consumed to make it.
 
 **Rationale.** With needs defined per good, every new food would be one more need: everyone would have to eat bread and also potatoes. Classes make food a set of alternatives, and the minimum grade keeps urgency and processing on separate scales while letting them meet: survival can accept grain, a basic need can ask for bread. Grain becomes food, so a released seed reserve feeds the cohort that holds it. Without the conservation rule, baking would create food, and a famine could be cured in the oven. The rule runs along the chain rather than recipe by recipe, because flour belongs to no food class: milling consumes food, baking yields it, and only the two together say whether food was made.
 

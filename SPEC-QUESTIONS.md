@@ -402,7 +402,7 @@ requirement.
 **Blocks:** no. `R-063`'s content has no subclass, so no good meets the case. It
 must be answered before the point that writes the goods record and its
 validation.
-**Status:** open.
+**Status:** **closed 2026-10-06 by R-078.**
 
 FR-P-03a's second sentence says a good "belongs to one or more classes and
 carries a value per unit in each". `R-060` appended to the same requirement that

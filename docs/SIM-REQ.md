@@ -138,7 +138,7 @@ dayOfMonth = dayOfYear % 28
 
 ## 6. Goods and production
 
-**FR-P-01** — A good is a data record: unit weight, value reference, perishability, role, the classes it belongs to with a value per unit in each, and its processing grade (FR-P-03a). Adding a good requires no code change.
+**FR-P-01** — A good is a data record: unit weight, value reference, perishability, role, the classes it belongs to, at most one in each class tree, with a value per unit in each, and its processing grade (FR-P-03a). Adding a good requires no code change.
 
 **FR-P-02** — A recipe is a data record: inputs, output, labour required, building required. Adding a recipe requires no code change.
 
@@ -152,7 +152,7 @@ dayOfMonth = dayOfYear % 28
 
 A good's record says whether it is durable. A good that is not takes the consumable role where a need accepts it and the input role where a recipe takes it, and may take both, as grain does. How urgently a good is wanted is not a property of the good but of the needs it meets (FR-P-03b).
 
-**FR-P-03a** — A goods class is a data record with a name and an optional parent class. A good belongs to one or more classes and carries a value per unit in each, nutrition for food, and one processing grade. Classes and memberships are added or changed without code change. A subclass measures in its parent's units: a good carries one value per class tree it belongs to, in the units of the tree's root, and validation at load refuses a good with two values in one tree.
+**FR-P-03a** — A goods class is a data record with a name and an optional parent class. A good belongs to one or more classes, at most one in each class tree, and carries a value per unit in each, nutrition for food, and one processing grade. Belonging to a subclass is belonging to every class above it, for the needs that read them (FR-P-03b). Classes and memberships are added or changed without code change. A subclass measures in its parent's units: a good's value is in the units of its tree's root, and validation at load refuses a good that names two classes of one tree.
 
 **FR-P-03b** — A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day. Any good of the class or of its subclasses, at or above the minimum grade, meets it in proportion to its value. Tier 0 holds exactly one need, on the food class, and validation at load refuses a needs table that holds another. Needs add: each is a quantity of its own, and a unit consumed meets one need only.
 

@@ -3722,3 +3722,38 @@ requirement and its test say one thing.
 **Owed by the implementer:** nothing beyond `docs/`.
 **Would overturn it:** none foreseen; AC-56 is the user's and this follows it.
 **Not verified:** nothing; FR-K-11 to FR-K-15, AC-56 and DEC-080 were read.
+
+### R-078 — A good names at most one class in each class tree
+
+**Date:** 2026-10-06   **Origin:** SQ-010
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-01 and FR-P-03a; `SIM-DEC` DEC-015 and DEC-098. Both
+revisions bumped.
+
+`R-060` appended to FR-P-03a that a good carries one value per class tree and that
+validation refuses two values in one tree, and left standing the sentence before
+it: a good "belongs to one or more classes and carries a value per unit in each".
+A good in a class and in its subclass needed two values by the first and was
+refused for them by the second. FR-P-01, DEC-015 and DEC-098 repeated the first.
+
+`R-060` is the user's decision and is kept whole; what was missing is the
+membership rule that makes it consistent. **A good names at most one class in
+each tree, and belonging to a subclass is belonging to every class above it.**
+That is what FR-P-03b already assumes, since a need on a class accepts its
+subclasses, and it is the only reading under which "one value per tree" and "a
+value in each class it belongs to" are both true: the classes a good names are
+one per tree, and each carries one value in the root's units. Validation refuses a
+good naming two classes of one tree, which is the same check as `R-060`'s, stated
+on what the record holds rather than on a value derived from it.
+
+The other reading, a good naming several classes of a tree with only one value,
+would make the extra memberships inert: a need on any of them is met by the one
+value through the subclass rule. It adds data that says nothing.
+
+**Cost.** None to code. An author who wants a good in two branches of one tree
+cannot; that is two trees, as `R-060`'s overturning already says.
+**Owed by the implementer:** the check at load, with FR-P-03b's validation, as
+`R-060` owed it.
+**Would overturn it:** as for `R-060`.
+**Not verified:** nothing; FR-P-01, FR-P-03a to FR-P-03c, DEC-015 and DEC-098 were
+read, and `docs/` grepped for "a value in each" and "value per unit in each".
