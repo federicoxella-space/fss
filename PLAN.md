@@ -166,6 +166,56 @@ eseguiti. Build e suite .NET non eseguite: nessun file C# toccato. Registro
   stopped at `FAILED` as in progress.
 - **Core:** no — touches no path under `core/`.
 
+## 8. The settings files, the identifier match, and four guards closed after audit
+
+*Added 2026-10-07 under `D-014`, owed by `R-070`: no point renumbered, no
+criterion above rewritten. Placed between points 6 and 7 and run before point 7,
+at the user's request, departing from `D-014`'s "runs last" for this point only
+(`R-070`); the preamble's "point 7, the last" is left as written. Approved by the
+user: `R-068` ("approvo R-068, applicalo"), `R-071`, `R-073` and `R-074` in the
+questions that chose them, `R-093` ("approvo la raccomandazione di R-093,
+applicala", `R-094`); every `Fails when:` line below read by the user (`R-047`).*
+
+- **Does:**
+  1. `.claude/settings.json` and `.claude/settings.local.json` join "What the
+     coder may not write" in the design and `$CoderDenied` in `path-guard`, with
+     a self-test case each (`R-070`).
+  2. In the design's "The hole that `Bash` leaves", the check reading
+     "`AGENTS.md` in the diff only if the point names it" covers every
+     `CLAUDE.md` as well. Point 7's text stays as it is: it builds the check from
+     the amended list (`R-070`).
+  3. `git-guard` matches the identifier case-sensitively, with a self-test case
+     for a lowercase `a-` (`R-068`, `R-070`).
+  4. `tree-state` reads untracked names unquoted — `-z`, or `core.quotePath` off
+     for its own calls — and, when any file it must hash cannot be read, exits
+     non-zero and prints no hash. A self-test case each. `mutate` treats a failed
+     `tree-state` as a tree not returned, and stops with exit 3 when either call
+     fails (`R-071`).
+  5. `mutate` refuses, with exit 2, a patch in which either side of any entry, a
+     rename's or copy's source included, lies outside `core/Runtime/` and
+     `harness/`. A self-test case (`R-073`).
+  6. `plan-state` decides `stopped` by position in the file: a failed point with
+     an open point anywhere after it in the plan is `stopped`, whatever the
+     numbers. A self-test fixture whose points are numbered out of file order
+     (`R-074`).
+  7. `.claude/agents/coder.md`, where its body lists the paths the coder may not
+     write, adds `.claude/settings.json` and `.claude/settings.local.json`
+     (`R-094`).
+- **Closed by:** `pwsh -File <script> -SelfTest` exits 0 for `path-guard.ps1`,
+  `git-guard.ps1`, `tree-state.ps1`, `mutate.ps1` and `plan-state.ps1`, each
+  holding the cases of items 1 and 3 to 6; a grep finds `CLAUDE.md` in the
+  design's list under "The hole that `Bash` leaves", and both settings files in
+  the design's "What the coder may not write" and in `coder.md`'s body.
+- **Fails when:** the coder may write `.claude/settings.json`; a subject "Tidy the
+  a-priori notes" passes with no identifier; the design's list has no line for
+  `CLAUDE.md` (`R-070`). An edit to an untracked file named `città.txt` leaves the
+  hash unchanged; a file that cannot be read still yields a hash (`R-071`). A
+  patch that renames `docs/a.txt` to `core/Runtime/a.txt` is applied (`R-073`). A
+  plan whose point 8, placed before point 7, has failed is reported `running`
+  with next point 7 (`R-074`). After point 8, `coder.md` names no settings file
+  while `path-guard` denies them (`R-094`).
+- **Core:** no — touches no path under `core/`.
+
 ## 7. `/plan-next` and `reviewers.md` rewired
 
 - **Does:** `/plan-next` runs the life of a point of the design: each step

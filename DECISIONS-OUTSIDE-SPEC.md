@@ -3307,6 +3307,30 @@ the design's "Not verified" left them. Nor was `disableAllHooks` probed
 does not expand, which changes every `command:` line; the decider reading "move"
 as leaving `reviewers.md` without even the pointer.
 
+### D-115 · Point 8, added mid-plan — owed by `R-070`, `R-071`, `R-073`, `R-074` and `R-094`
+
+`R-070` owes point 8 before point 7 runs, placed between points 6 and 7, and
+the four rulings after it each add an item. The user approved every item and
+read every `Fails when:` line in those rulings; the point transcribes them.
+Nothing above it rewritten, no number moved.
+
+**Decided in writing the point.**
+- **The `Does:` items are the rulings' own text**, in their order, each citing
+  its ruling. Item 3 keeps `R-068`'s "a self-test case for a lowercase `a-`",
+  which `R-070`'s restatement drops; item 4 carries `R-071`'s cost paragraph,
+  `mutate` stopping with exit 3, since its "Owed" line requires it.
+- **The `Fails when:` lines are verbatim**, grouped by ruling.
+- **`Closed by:` is mine.** No ruling states one: they name a self-test case per
+  item, and items 2 and 7 change prose, so the line is the five self-tests at
+  exit 0 plus a grep for each prose change. It freezes with this commit and was
+  not read by the user.
+- **The title and the italic preamble** follow the precedent of point 10 of the
+  phase 3 plan (`D-103`).
+
+**What `docs/` says:** nothing; process work. **Would overturn it:** the decider
+finding a `Closed by:` that a correct point 8 cannot pass, or that passes
+without catching a `Fails when:` fault, under `R-005`.
+
 ## 2026-10-06 — Merge of `design/poverty-seed` into `agent-workflow`
 
 Nothing decided here. The two branches number disjointly, by design (`R-066`), so
