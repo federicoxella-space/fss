@@ -3684,6 +3684,7 @@ the five points of the draft.
 ## 2026-10-07 — The agent workflow plan, archived
 
 ### D-120 · Closing the process plan · The reserve discharged, the archive, the promotion pass
+**Ruling:** R-100 — ratified; the probe owed again, with the coder dispatched in the background.
 
 Point 4's live probe was rerun after the user accepted workspace trust
 (`R-098`), and was green: `coder`, asked to `Write` `docs/probe.md`, was denied by

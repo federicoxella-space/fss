@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-119 — audited by `R-099`. The next audit starts at the
+**Register watermark:** D-120 — audited by `R-100`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -129,11 +129,15 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   current request's draft under `## Draft plan`, and "What a request holds"
   stating the heading for every moment-one request.~~ **Done in `e276547`**,
   checked by `R-099`.
-- **`R-098`**, before the process plan is archived: once the user has accepted
+- ~~**`R-098`**, before the process plan is archived: once the user has accepted
   workspace trust for the folder, point 4's live probe is run again. Green, the
   *Reserve discharged* line goes under point 4's outcome; red with trust
   accepted, the result goes to the register and the decider, and the reserve
-  stays open.
+  stays open.~~ **Done in `2801c19`**, checked by `R-100`.
+- **`R-100`**, before the first plan point dispatches the coder: point 4's live
+  probe run again with `coder` dispatched in the background, the harness's
+  default. Green, recorded in the register; red, the register and the decider,
+  and no point dispatches the coder until the decider has ruled.
 
 ## Escalated to the user
 
@@ -4771,3 +4775,69 @@ the design as it stood when written.
 check script of point 7 was not rerun, since it is not in the repository.
 No point has yet run under the rewired `/plan-next`, so whether its dispatches
 work as written is the first real run's to show (`R-046`).
+
+### R-100 — `D-120` is ratified; the watermark reaches `D-120`, and the probe is owed once more, in the background
+
+**Date:** 2026-10-07   **Origin:** register audit, `D-120`
+**Verdict:** ratified; one action owed
+**docs/:** unchanged
+
+`D-120` closes the process plan: the reserve of point 4 discharged, the archive,
+the promotion pass. Process, so ratified or rejected, never promoted (`D-011`).
+Its claims were checked against `2801c19`, `875c629` and the merge `1b10a00`.
+
+- **The reserve discharged.** Stands, and it is what `R-098` asked. `2801c19`
+  adds only the *Reserve discharged* line under point 4, carries no
+  `Plan-point:` trailer and cites `R-098`. The line names trust accepted under
+  one key, the probe rerun in a new session and the denial by `path-guard`.
+- **The archive.** Stands. `875c629` moves `PLAN.md` to
+  `.claude/plans/2026-10-05-agent-workflow.md` unchanged, and `git log
+  --diff-filter=A` on `.claude/plans/` finds it, so `/plan-status` can bound the
+  plan's range. `plan-state` run here on the archive reads `state: finished`,
+  `reservesOpen` empty, point 4 `reserve-discharged`. `main` carries no
+  `PLAN.md` (`R-048`).
+- **The pass over `D-107` to `D-120`.** Stands: nothing promoted. `D-107` to
+  `D-120` describe how the simulator is built, and `D-108`'s content reached
+  `docs/` through rulings, as the pass says.
+- **`REVIEW-REQUEST.md` not touched.** Stands: no commit between `32f20af` and
+  `1b10a00` touches it, and the measurement plan's moment one is still its own.
+- **No merge.** True when written. The merge followed in `1b10a00`, with two
+  parents and no squash, as "Commits" in `AGENTS.md` requires. The register
+  does not record who asked for it.
+
+**The gap the entry names, and why it is owed now.** The probe ran with the
+coder in the foreground. `R-098` left open whether frontmatter hooks fire for
+an agent run in the background, and `D-120` leaves it open again. The harness
+runs subagents in the background unless told otherwise, and `/plan-next` says
+nothing on the matter. So the mode the first real point will most likely use is
+the one never probed. `R-067` runs the cost measurement plan under the agents,
+and that plan is next. If the hook stays silent in the background, the coder's
+denylist rests on the hashes of step 3 alone. They catch a breach after it
+happens (`D-119`), and only for the paths they hash. The check is the probe
+already written, with one parameter changed, so it costs one session. Waiting
+until a real point breaches would cost a reverted point and a register entry.
+This would have been the right call before any code existed: a guard claimed
+for a run is probed in the mode the run uses.
+
+The probe of `Edit` is not owed: the coder's hook matches `Edit|Write` in one
+entry, with one command, so the `Write` probe exercised the hook that `Edit`
+reaches. The other roles' hooks are not owed either. The coder's denylist is
+the one guarding `docs/` and the tests, which is what the gate protects.
+
+`R-098` is marked done under "Owed by the implementer", in `2801c19`.
+
+**Cost.** One probe session before the measurement plan's first point that
+dispatches the coder. If it is red, that plan waits on a ruling, and possibly on
+the user, since how `/plan-next` dispatches is a change to `.claude/skills/`
+(`D-087`).
+**Owed by the implementer:** before the first plan point dispatches the coder,
+point 4's live probe again, with `coder` dispatched in the background. Green:
+the result in the register. Red: the register and the decider, and no point
+dispatches the coder until ruled. Cite `R-100`.
+**Would overturn it:** the harness's documentation stating that frontmatter
+hooks fire in both modes alike, quoted from the page, not summarised; or
+`/plan-next` dispatching in the foreground, by a change the user permits.
+**Not verified:** the probe itself; the two commits' claims were read, not
+rerun. That the harness's default is the background was taken from this
+session's tool description, not from documentation. Who asked for the merge in
+`1b10a00` was not established.
