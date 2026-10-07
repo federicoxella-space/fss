@@ -3585,6 +3585,7 @@ for a reason other than a non-ASCII byte (a tab, a double quote); the copy patch
 in `git`'s other copy-detection modes.
 
 ### D-119 · Point 7 · `/plan-next` and `reviewers.md` rewired: what the point left open
+**Ruling:** R-098 — point 4's reserve stays open; the probe reruns after workspace trust is accepted.
 
 **Permission for `.claude/skills/` (`D-087`).** Granted by the user, Federico
 Xella, in answering the process plan's moment-one request (the plan installed in

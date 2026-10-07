@@ -125,6 +125,11 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   `plan-state -Draft`, and no later than the commit installing that plan: the
   current request's draft under `## Draft plan`, and "What a request holds"
   stating the heading for every moment-one request.
+- **`R-098`**, before the process plan is archived: once the user has accepted
+  workspace trust for the folder, point 4's live probe is run again. Green, the
+  *Reserve discharged* line goes under point 4's outcome; red with trust
+  accepted, the result goes to the register and the decider, and the reserve
+  stays open.
 
 ## Escalated to the user
 
@@ -4627,3 +4632,69 @@ the design as it stood when written.
 **Not verified:** the agents' runs and the faults seen red were taken from the
 entries; the code-reviewer's dispatch on the fixtures was not repeated. The
 citations of C1, C2, C4 and C6 to C9 and S1 remain unread, as `R-028` left them.
+
+### R-098 — Point 4's reserve stays open: a red probe discharges nothing, and workspace trust is the first suspect
+
+**Date:** 2026-10-07   **Origin:** D-119 (the line under point 4, left to the human)
+**Verdict:** resolved; one action owed
+**docs/:** unchanged
+
+`D-119` ran point 4's live probe in a session that sees the six agents: `coder`,
+asked to write `docs/probe.md`, wrote it, with no hook message. The same
+`command:` run by hand on the same input exits 2, so the hook did not fire.
+The entry leaves "the line under point 4" to the human.
+
+**`R-011` already answers which line: none.** A reserve closes a point whose
+work is done but for an action only a human can take, and it is discharged
+when the clause's check, run after that action, passes. This check failed.
+So no *Reserve discharged* line can be written, the reserve stays open, and
+the plan's exit condition, which names "the six agents", stays unmet. `R-011`
+gives an open reserve exactly this job: to keep a plan from reading as done
+while a clause is not. None of this is a new rule, so reserve 1 of `R-001`
+does not apply.
+
+**What the human action is.** Point 4 took it to be a session started after
+`1ed624a`. The documentation names another. The subagents page
+(code.claude.com/docs/en/sub-agents.md, read through a guide agent, not
+opened directly) says frontmatter hooks of a project agent need the workspace
+trust dialog accepted for the folder. Without it the agent runs and its hooks
+are skipped, with the error only in the debug log. This has been so since
+v2.1.218, and this session runs 2.1.283. `~/.claude.json` holds this project
+under two keys: `F:\fantasy-socioeconomic-simulator` with trust accepted, and
+`F:/fantasy-socioeconomic-simulator` without. If the session that ran the
+probe was keyed by the second, it explains the result exactly: the agent
+runs, the hook is silent. Accepting trust is a security setting and the
+user's alone, so the reserve is still the right status. The missing action
+is the human's, not work the agent could do.
+
+**If the probe stays red with trust accepted,** that is no longer a reserve:
+the clause fails for a reason the agent must find and fix, which `R-011` says
+a reserve is not for. Then it is reported in the register as a finding. A
+point to fix it is added only with the user's approval under `D-014`, and
+whether the workflow may run with the hashes of step 3 as its only barrier is
+governance, the user's.
+
+**What waits.** Under `R-048`, `main` carries no live `PLAN.md`. The agents
+reach `main`, and the cost measurement plan's branch is cut from `main`, only
+once the process plan is archived, and a plan is not archived with its exit
+condition unmet. So the measurement plan waits on this probe. It needs the
+hooks: `R-067` runs it under the agents.
+
+**Cost.** The measurement plan, and with it the ruling on `SQ-023` and the
+phase 4 plan, wait on one user action and one probe. Until then the coder's
+denylist is enforced only by the hashes `/plan-next` takes around step 3
+(`D-119`). These catch a breach after it happens, not before.
+**Owed by the implementer:** once the user has accepted workspace trust for
+the folder, run point 4's live probe again. Green: the *Reserve discharged* line
+under point 4's outcome, in a commit without a `Plan-point:` trailer (`R-011`).
+Red with trust accepted: the result in the register, for the decider. Cite
+`R-098`.
+**Would overturn it:** the probe red with trust accepted, which ends the reserve
+reading as above; the user choosing to archive the plan with the reserve open.
+That would be a change to `R-011`, and theirs.
+**Not verified:** that trust is the cause. Which of the two keys the probing
+session used was not established, and the probe was not rerun here. The
+documentation was read through a summary, not quoted from the page.
+`disableAllHooks` is unset, and `.claude/settings.json` does not exist, so it
+was not the cause. Whether a hook fires for an agent run in the background was
+not documented, and was not tested.
