@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-107 — audited by `R-044`. The next audit starts at the
+**Register watermark:** D-119 — audited by `R-099`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -66,9 +66,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   one full state hash is measured against the cost of the tick, on the world the
   checks of `AC-02` run, and recorded in the register with the size chosen for
   those checks.
-- **`R-045`**, within the process plan point that writes `D-089`'s language
+- ~~**`R-045`**, within the process plan point that writes `D-089`'s language
   rule: the five outcome markers become English in `AGENTS.md` and in the three
-  plan skills, which write the English form and recognise both.
+  plan skills, which write the English form and recognise both.~~ **Done in
+  `58d8557`**, checked by `R-097`.
 - **`R-046`**, as amended by **`R-066`**: the process plan holds the design's
   points 1 to 5, `plan-state` and the two read-only skills on it, and no
   simulator change; the first point of the phase 4 plan is run by the agents,
@@ -80,24 +81,65 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 - **`R-047`**, within the process plan point that rewires `/plan-next` and
   `reviewers.md`: the reviewers' brief quotes the `Fails when:` line and asks for
   missing faults. And every moment-one request carries the `Fails when:` lines.
-- **`R-048`**, from the next plan: the draft goes in the moment-one request, and
+  The code-reviewer's half is done in `1ed624a`, checked by `R-093`; the brief's
+  in `7b1fdbe`, checked by `R-099`. The moment-one half binds every plan.
+- ~~**`R-048`**, from the next plan: the draft goes in the moment-one request, and
   `PLAN.md` is installed on its branch after the user's answer, in a commit that
-  cites it; the process plan point that edits `AGENTS.md` writes the rule.
-- **`R-049`**, within the process plan point that rewires `/plan-next`: step 1
+  cites it; the process plan point that edits `AGENTS.md` writes the rule.~~
+  **Done in `6d6d098` and `58d8557`**, checked by `R-097`: the rule now binds from
+  `AGENTS.md`.
+- ~~**`R-049`**, within the process plan point that rewires `/plan-next`: step 1
   refuses a plan's first point until the user has answered its moment-one
-  request; until then the ruling binds as written.
+  request; until then the ruling binds as written.~~ **Done in `7b1fdbe`**,
+  checked by `R-099`.
 - **`R-050`**, from the phase 4 plan: every simulation constant cites a P-number
   of `SIM-REQ` §16, a new one proposed in the point that needs it.
 - **`R-052`**, in every phase 4 plan: `Satisfies:` and `Serves` are read against
   the table of `SIM-REQ` §18.
 - **`R-053`**, at the closing point of each phase 4 subsystem: `AC-01` and
   `AC-04` over what exists, against provisional bounds derived from `docs/`.
+- **`R-065`**, within the first phase 4 plan point that adds static data or a
+  simulation parameter: the rules file of DEC-100 — a binary format with a reader
+  per version, its compiler in the harness from a text source in the repository,
+  validation whole at creation and at load, the file held in World and carried by
+  the save, and the rule version extended by the core's digest of it. The content
+  of `R-063` and the curves of `R-064` go into it, and the check of `R-060` into its
+  validation. **`R-088`**: and the base rules compiled into the core by the same
+  compiler, used when the host hands no file; validation that returns a refusal
+  and never fails, with the caps P-74 to P-76. **`R-092`**: and the three age
+  bands with their labour flags, from the point that builds cohort rows.
+- ~~**`R-070`**, before point 7 of the process plan runs: point 8 added to
+  `PLAN.md`, placed between points 6 and 7, carrying `R-068`'s three changes.
+  **`R-071`**: and a fourth, `tree-state` reading untracked names unquoted and
+  printing no hash when a file cannot be read, with its `Fails when:` line.
+  **`R-073`**: and a fifth, `mutate` refusing a patch whose rename or copy
+  source lies outside `core/Runtime/` and `harness/`, with its `Fails when:`.
+  **`R-074`**: and a sixth, `plan-state` reading "after the failure" by position
+  in the file, not by number, with its `Fails when:`.
+  **`R-094`**: and a seventh, `.claude/agents/coder.md`'s list of the paths it
+  may not write gaining the two settings files, with its `Fails when:`.
+  Point 8 added in `02293d6`, checked by `R-095`.~~ **Done in `9d8ea3c`**, its seven
+  items, run before point 7; checked by `R-099`.
+- ~~**`R-095`**, within point 8: a self-test case of `mutate` in which a call to
+  `tree-state` fails and `mutate` exits 3, and its fault — `mutate` ignoring the
+  failure — seen red, beside the frozen `Closed by:` under `R-005`'s case 1.~~
+  **Done in `9d8ea3c`**, checked by `R-099`.
+- ~~**`R-096`**, before the cost measurement plan's draft is next read through
+  `plan-state -Draft`, and no later than the commit installing that plan: the
+  current request's draft under `## Draft plan`, and "What a request holds"
+  stating the heading for every moment-one request.~~ **Done in `e276547`**,
+  checked by `R-099`.
+- **`R-098`**, before the process plan is archived: once the user has accepted
+  workspace trust for the folder, point 4's live probe is run again. Green, the
+  *Reserve discharged* line goes under point 4's outcome; red with trust
+  accepted, the result goes to the register and the decider, and the reserve
+  stays open.
 
 ## Escalated to the user
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-*None.* `R-031` was answered by `R-033`.
+*None.* `R-082` was answered by `R-091`, `R-089` by `R-092`, `R-093` by `R-094`.
 
 ---
 
@@ -2439,6 +2481,663 @@ which would say the phase 4 gate proved little.
 `docs/`. Migration flow, urban share, legitimacy and infection prevalence were
 not checked for one; prices, stocks and population were.
 
+### R-054 — Emigrants take their share of what can be carried, and travel as a scheduled transient
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), open item O-5
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in
+`.claude/design/2026-10-04-proposal-poverty-seed.md` and enters `docs/` with the
+proposal, which the user holds until B12b is written: `SIM-REQ` FR-D-04a, FR-P-10d,
+§16 P-72, §18 Mobility; `SIM-STATE` §Transient; `SIM-ECON` phase 11.
+
+Nothing in `docs/` says what a migrant takes with them. Three texts say they
+take something. FR-J-18 and DEC-068 make buried stock of "what its people could
+not carry", which presumes both that people carry and that carrying has a limit.
+FR-P-22 has resettling cohorts carry durables. The proposal's seed reserve
+(PD-4) passes the emigrant's seed to this rule. And phase 1 of `SIM-ECON` lands
+migrants who left in an earlier update, so between one settlement's phase 11
+and another's phase 1 they exist nowhere in `SIM-STATE`. Any currency among
+them breaks A-02 unless it is transient contents.
+
+**The rule.** Members leaving a row take its mean share per member: all of its
+currency, and of its goods and durables outside the seed reserve as much as P-72
+weight per member allows. They take the highest value per unit of weight first,
+ties by good id. Buildings never move. What they leave stays with the row.
+
+- **The mean**, because the row cannot say which of its members leave: the
+  wealth curve has no memory. The mean is also the one share that leaves the
+  per-member currency of those who stay unchanged. Under any other share,
+  emigration would make the stayers richer or poorer.
+- **A weight limit**, because without one FR-J-18 is empty: the last to leave
+  would carry everything movable, and abandonment would make no hoard. The
+  limit gives the hoard its content and follows DEC-016: cloth and tools
+  travel, grain stays.
+- **Currency has no weight here.** A cohort holds no denominations (FR-C-13), and
+  weight applies to none of its coin (FR-C-18). Emigrants are a fraction of a
+  cohort.
+- **The seed reserve stays**, as it does for every use but sowing. It is
+  computed on the land the vector allocates, and land does not leave.
+
+**The candidate is rejected.** The proposal's candidate was to convert goods to
+currency at the local price, within demand. That is a sale outside phase 7: a
+second clearing pass in phase 11, against demand that phase 7 has already met.
+It would run the most expensive part of the update twice. It is also the forced
+sale that `SIM-ECON` lists as not covered (item 1), and it would reopen choice
+two. And it buys nothing. Holdings above a cohort's own needs are already supply
+in phase 7 of every update, so what an emigrant would sell has already been
+offered.
+
+**On the road** emigrants are a scheduled transient of kind *migrants*. Each
+carries a count, the key of the row it left, the hunger deficit of FR-D-03a, its
+currency as one integer and its goods. A-02 counts that currency among transient
+contents, and A-04 those goods among goods in transit. Which row they join on
+arrival is not decided here: Z-14 of the phase 4 note.
+
+**Cost.** A transient kind with fields the others lack. A row that loses most of
+its members keeps the heavy goods the leavers could not carry, so in goods it
+holds more per head than before. One more parameter. FR-P-22 is left unsettled:
+either the resettlers' endowment is what they carry, or P-54 makes durables
+from nothing. This ruling does not choose.
+**Owed by the implementer:** nothing now. The text binds the mobility subsystem
+once it is in `docs/`.
+**Would overturn it:** the user wanting emigrants to sell up before leaving, which
+would first need a rule for who buys; or a sweep finding P-72 small enough to make
+migration irrelevant to goods, in which case the limit is not worth its field.
+**Not verified:** that a transient with these extra fields fits the shapes of
+DEC-085; that no other text in `docs/` assumes migrants arrive with nothing. Only
+§5, §6, §7, `SIM-ECON` and `SIM-STATE` were read for it.
+
+### R-055 — The destitute emigrate first, and on the road they are the displaced population of FR-M-13
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), open item O-6
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in the proposal and
+enters `docs/` with it: `SIM-REQ` FR-D-04a, first sentence, and FR-M-13; `SIM-ECON`
+phase 11; `SIM-LOOPS` B12b, the paragraph under R12, and R4.
+
+The proposal makes B12b, "the destitute emigrate", the brake that holds R12, and
+leaves it two questions: what emigrants carry, which is `R-054`, and whether the
+destitute who leave are the "displaced population" of FR-M-13, which is O-6.
+B12b needs a third answer that neither question names: **who emigrates**.
+Nothing in `docs/` says which rows emigrants come from. Drawn in proportion to
+count, the destitute would leave only at their share of the population. B12b
+would then be no stronger than emigration in general, and R12 would keep its
+pressure.
+
+**Emigrants are drawn from the destitute row first**, and from the other rows
+in proportion to their counts for the rest. On the merits: the destitute own no
+buildings, durables or seed (DEC-090), so leaving costs them nothing they hold,
+and the landless poor were who moved. It also weakens R1. When those who leave
+were selling labour nobody fully bought, output falls less than when farmers
+go.
+
+**O-6: yes.** FR-M-13 names "famine refugees" first. FR-I-03a says what a
+refugee is: "Refugees from a famine are first-hand sources about it." They are
+migrants who flee hunger. `SIM-OBS` OBS-2 has them "arriving and saying what
+they fled". The destitute row is where members go when they can no longer feed
+themselves at the local price (DEC-090), so its emigrants are those refugees.
+Emigrants from the other rows leave with their property for a better wage, and
+are not displaced. **Each destitute emigrant raises the danger of the link it
+travels by P-40**, which is P-40's own unit: "per unit of displaced
+population". Danger falls only through contracts and garrisons, not by decay,
+so a flow of refugees builds a stock that outlasts them. R4 gains the source it
+lacked: poverty, the destitute row, sends displaced people, its emigrants, onto
+the links.
+
+**The alternative is rejected.** It would make the destitute row itself, in
+place, the displaced population. "Displaced" means moved. That reading would
+give danger a source in every poor settlement whether or not anyone travels, a
+mechanism FR-M-13 does not contain.
+
+**The coupling is named, not hidden.** B12b brakes R12 by exporting it to R4,
+whose brakes B4a and B4b already stand. That is DEC-064's intent: the world
+makes its threats from its own failures. **B12b is not unconditional, and the
+text says so.** It acts only where a neighbour is more attractive by more than
+the hysteresis band (FR-D-09). In a region poor throughout, nobody leaves. R12
+then stops at the lower clamp of the wage (DEC-045), which bounds it without
+braking it, and at hunger, R5. The proposal's sentence "B12b is the brake that
+holds" is replaced by one that says when it holds. This is a statement about a
+loop, not a change to the gate of `SIM-LOOPS`. R12 has two named balancing
+loops, and the gate asks for one.
+
+"Failed migration" and soldiers disbanded at the end of a war, the other two
+sources FR-M-13 names, are not touched.
+
+**Cost.** Refugees take the roads towards more attractive places, usually
+towards towns, so a famine can raise danger on the route that would relieve it.
+That is R4 working, and P-40 is tuned against P-41 for it. The destitute arrive
+somewhere. If they join the destination's destitute row (Z-14 decides), they
+carry R12's pressure there, bounded by the inbound cap of FR-D-10.
+**Owed by the implementer:** nothing now.
+**Would overturn it:** a sweep in which refugee danger cuts relief routes faster
+than famine ends, which would argue for danger from refugees on arrival rather
+than in transit; or regions where R12 settles at the wage clamp for years, which
+would argue for a brake that does not need a destination.
+**Not verified:** that attractiveness under FR-D-04 falls with the wage fast
+enough for B12b to act before hunger does; its weights over food, wage and
+safety are not set.
+
+### R-056 — A good's record says only whether it is durable, and processing creates no food along the chain
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), open item O-15
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in the proposal and
+enters `docs/` with it: `SIM-REQ` FR-P-03 and FR-P-03c; `SIM-DEC` DEC-098, the
+decision, rationale and cost.
+
+The user decided in PD-14 that FR-P-03's roles describe only behaviour in
+production and over time, and that urgency moves to the needs. That closes Z-07
+of the phase 4 note. The form of the roles was left to the decider, as was the
+rule that processing creates no food. Both are answered here inside PD-14 as the
+user decided it. Grain is food of grade 0, flour is an ingredient and not food,
+and values are carried per class. That is reserve 5 of `R-001`, and nothing in
+it moves.
+
+**The roles.** The proposal's text gives every good one of three roles:
+consumable, input, durable. PD-14 itself breaks that. Grain meets the food need,
+so it is consumable. Grain→Flour takes it, so it is an input. It is also a
+planting good. Of the three roles only one is a property the state needs to
+know from the record:
+
+- durables are held apart from goods (`SIM-STATE` §Cohort, `durables`);
+- they wear (FR-P-23);
+- they are seized after goods (FR-C-27);
+- the destitute own none (DEC-090).
+
+Consumable and input follow from the data that names a good. A need that
+accepts it makes it consumable, and a recipe that takes it makes it an input.
+Storing them in the record would be a second statement of the same fact, and
+the two could disagree. **So the record says whether a good is durable. A good
+that is not takes the consumable role where a need accepts it, the input role
+where a recipe takes it, or both, as grain does.** AC-09's table, which the
+user decided, reads correctly under this form. "A consumable takes the row of
+the most urgent need it can meet" puts grain under tier 0. A good no need
+accepts takes the input row.
+
+**The conservation rule.** Recipe by recipe the rule fails, as the proposal
+notes. Flour belongs to no food class, so Grain→Flour consumes food and yields
+none, and Flour→Bread yields food from none. The proposal's other way out, flour
+carrying a food value that no need accepts, is closed by PD-14 itself. A need on
+the food class accepts every subclass at or above its grade, and survival
+accepts grade 0. Flour with a food value would therefore be eaten, and the user
+decided it is not food. **So the rule runs along the chain.** Every good carries
+an embodied food value:
+
+- a good of the food class carries its value there;
+- another good that recipes produce carries the least food value any recipe
+  producing it consumes per unit, inputs counted at their own embodied value;
+- anything else carries zero.
+
+No recipe yields more food value than its inputs embody. Validation at load
+refuses a table that breaks this, or that passes food value around a cycle.
+
+- **The least**, because the guarantee has to hold on the path that consumes
+  least. If flour can also be made from something that embodies no food, then
+  bread from that flour would create food. The rule refuses it, and should.
+- **The food class only**, the one the tier 0 need names (FR-P-03b), not every
+  class. A rule per class would refuse brewing a drink from grain, which
+  converts between classes by design. What protects the famine is that no oven
+  makes food, and no stock of any other class carries that guarantee.
+
+**Cost.** A validation pass over the recipe graph at load, and an author can
+trip it by setting a food value one unit too high, three recipes away from the
+error. A recipe cycle that food value passes through refuses the load, even
+where the content would have been harmless.
+**Owed by the implementer:** nothing now. The rule binds the production subsystem
+and the validation at load, once in `docs/`.
+**Would overturn it:** content in which processing truly adds nutrition and the
+user wants it, which is the user's to decide as an exception; or a recipe cycle
+the content needs.
+**Not verified:** PD-14 does not say in whose units a good of a subclass carries
+its value: the subclass's, or its parent's. "Its value in the food class" reads
+both the same only if a subclass measures in its parent's units. The user should
+settle that in FR-P-03a, as a finding on a decision of their own. Nor was it
+checked that no recipe proposed in K-03 forms a cycle.
+
+### R-057 — Needs add: each is a quantity of its own, and a unit consumed meets one need
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), PD-15 (open item O-13)
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in the proposal and
+enters `docs/` with it: `SIM-REQ` FR-P-03b, one sentence; `SIM-DEC` DEC-099, its
+first sentence and the first half of its rationale.
+
+PD-15 proposes that two needs on the same class add. Survival asks for a
+quantity of food of any grade, and tier 1 asks for a further quantity of grade
+at least 1. The alternative is one ration whose grade the tier 1 need raises.
+
+**PD-15 is adopted, for a reason other than the one it gives.** The proposal
+argues that under one ration, whoever loses purchasing power "goes straight
+from eating well to dying". That does not follow. Tier 1 is deferrable, so a
+cohort priced out of bread eats grain, meets its survival need, and only its
+discontent rises, under either option. **The two options differ in quantity,
+not in grade.** With one ration, an ordinary year's consumption equals the
+survival minimum, so every unit short is hunger. With needs that add, an
+ordinary year eats the minimum plus the tier 1 share. A shortfall then takes
+first the share, which is deferrable, and only after it the minimum. That
+margin is what `SIM-ECON` asks for when it makes a famine "a season rather than
+a tick". It also gives DEC-044's severity a scale before mortality:
+discontent, which feeds fragility (FR-E-03), and then hunger.
+
+**Stated generally.** Each need is a quantity of its own, and a unit consumed
+meets one need only. That covers two needs on one class and needs on a class
+and its subclass alike. Otherwise one loaf could count once for survival and
+again for the tier 1 share.
+
+**Cost.** An ordinary year's demand for food is the minimum plus the tier 1
+share. Production, the generator's initial stocks (K-09) and the import bound of
+FR-D-14 are all sized on that larger figure, and the needs table's quantities
+are tuned so that the total is plausible. In every lean year discontent rises
+before anyone is hungry, so fragility moves more often.
+**Owed by the implementer:** nothing now.
+**Would overturn it:** a sweep in which the margin makes famine too rare to see,
+which would argue for a smaller tier 1 share rather than for one ration.
+**Not verified:** how large the tier 1 share must be to give the margin
+`SIM-ECON` wants; that is the needs table's content, which has no numbers yet.
+
+### R-058 — The plate follows the purse: needs are bought at their cheapest, and a better grade comes after every need
+
+**Date:** 2026-10-04   **Origin:** user, the poverty and seed proposal (revision 9), PD-16 (open item O-13)
+**Verdict:** resolved
+**docs/:** unchanged by this commit. The text is deposited in the proposal and
+enters `docs/` with it: `SIM-DEC` DEC-099, decision, rationale and cost;
+`SIM-REQ` FR-C-04, steps 2 and 4; `SIM-ECON` §Demand, the paragraph "Choice
+within a class".
+
+PD-16 has a cohort feed itself in four steps. It eats from its own holdings
+first, lowest grade first. It buys survival at the lowest price per unit of
+value. With what remains, it replaces units of a lower grade with a higher one,
+the share of members able to pay read from the wealth curve. The markets of a
+class clear in descending grade, and demand rationed out of one grade falls to
+the next within the update. **Adopted**, for what the proposal says it buys.
+Within one mestiere the poorer eat grain and the better-off bread, which makes
+OBS-3 visible at the table. Demand for grain gains elasticity. And reading the
+curve rather than the cohort's mean keeps a small price move from switching a
+whole cohort between goods. Three corrections, each needed for the rule to hold
+together with what `docs/` already says:
+
+1. **The better grade comes after every need, in spending and in rationing.**
+   The proposal spends what remains after survival on the better grade, which
+   would put a rich cohort's bread before a poorer cohort's tier 1 need.
+   `SIM-ECON` says that tiers are met in order and that rationing runs "within
+   a tier, never across tiers: nobody buys cloth while another cohort … cannot
+   buy bread and could pay for it". A better grade is a preference, not a
+   need. So it is bought from the currency left once tiers 0 and 1 are met,
+   before tier 2 takes its fraction. In a market it ranks after every demand
+   that meets a need: nobody eats better while another cannot eat and could
+   pay. Every need is bought at its cheapest, tier 1 as well as survival.
+2. **Rationed demand falls to any good that meets the same need, not only to
+   the grade below.** One pass in descending grade lets a cohort rationed out
+   of bread fall back to grain. It does not let a cohort rationed out of grain
+   buy bread left unsold in a market that has already cleared. That cohort
+   would starve beside the bread, and the cause would be the order of a loop,
+   not price or purse. So the rule is stated as its principle. Demand rationed
+   out of one good falls, within the update, to the other goods that meet the
+   same need, cheapest per unit of value first. The order in which a class's
+   markets clear is derived from grade, price and good id, and may take a
+   second pass over what supply remains. The implementer records it.
+3. **Alternation within a grade is a cost, written down.** All of a need's
+   demand goes to the cheapest good per unit of value. Two foods of one grade
+   at nearly equal prices then take turns: the one bought down becomes dearer,
+   and the next update buys the other. Stock bounds the swing, and with one food
+   per grade in the baseline content it cannot arise yet. Content that adds a
+   second food of a grade (O-11) is where it is measured.
+
+**Cost.** Every food is one more market to ration in the most expensive phase,
+so the number of foods is set after a measurement. The markets of a class
+acquire an order, and demand may cross them more than once in an update. In
+ordinary years the plate is mixed, and the needs table is tuned so that the
+total is plausible.
+**Owed by the implementer:** nothing now.
+**Would overturn it:** the measurement of phase 7 with the food markets the
+content fixes coming in over the budget of DEC-041, which would argue for
+dropping the upgrade first, since it is the part that serves only legibility;
+or alternation within a grade large enough to show in AC-04's soft bands, which
+would argue for splitting a need's demand across goods of a grade rather than
+giving it whole to the cheapest.
+**Not verified:** that the curve, read for currency left after needs rather than
+for wealth, gives a plausible share of upgraders. The proposal's own
+approximation in DEC-097, one shape for wealth and currency, is carried one step
+further here.
+
+### R-059 — The poverty and seed proposal enters `docs/`
+
+**Date:** 2026-10-04   **Origin:** user: "sì, trascrivi la proposta in docs/"
+**Verdict:** specified
+**docs/:** all six documents, each revision bumped to today.
+- `SIM-DEC`: DEC-090 to DEC-099 new; DEC-015, DEC-038, DEC-043, DEC-047, DEC-076
+  and DEC-080 edited.
+- `SIM-REQ`:
+  - §5: FR-D-03a and FR-D-04a.
+  - §6: FR-P-01, FR-P-03, FR-P-04, FR-P-10, FR-P-15, FR-J-01 and FR-J-03; new
+    FR-P-03a to FR-P-03c, FR-P-10a to FR-P-10e and FR-J-19 to FR-J-22.
+  - §7: FR-C-03 to FR-C-05 and FR-C-25.
+  - §8: FR-M-13.
+  - §14: FR-G-01.
+  - §16: P-66 to P-72, and P-09 at 8.
+  - §17: AC-09 and AC-56.
+  - §18: the Phase 4 table.
+  - §19: P-17.
+- `SIM-ECON`: phases 4 to 7, 11 and 12; new phase 8a; the paragraph on phase 7
+  moved below the table; dated steps, §Demand, spoilage, and items 2 and 5 of
+  what the sequence does not cover.
+- `SIM-STATE`: §Cohort, §Transient, static data, A-16 and A-17.
+- `SIM-LOOPS`: B2, R4, R5, R7, new R12, the standalone loops, the gate check,
+  and open item 4.
+- `SIM-OBS`: OBS-3, "Served by".
+
+The proposal of 2026-10-04, revision 10, records the decisions the user took in
+the design sessions of revisions 2 to 9. It also holds the text `R-054` to
+`R-058` decided for what the user left to the decider. The user conditioned its
+entry on B12b being written, so that the gate of `SIM-LOOPS` would not reopen.
+`R-055` wrote it, and the user then asked for the transcription. **This ruling
+decides nothing new. It transcribes.**
+
+**How.** A script read each quoted block of the proposal and replaced or
+inserted it at the place the proposal names. It refused any target that was not
+found exactly once. It stripped the ruling markers, and refused any block still
+holding a `[DECIDER]` placeholder. The diff was then read against the proposal,
+document by document.
+
+**What the proposal reserved to the user, and is applied here on the user's
+authority.** The new AC-09 table and AC-56's wording are reserve 2 of `R-001`,
+decided by the user in revision 9. The addition to OBS-3's "Served by" is
+reserve 3, authorised by the user in the same revision. P-09 at 8, with flour,
+is the user's. The decider applied these and did not decide them.
+
+**Where the text differs from the proposal.** Each is form, not content:
+
+- DEC-098's cost said "approved under R-050". `docs/` does not cite rulings, and
+  that rule is already stated in §16, so the cost now reads "approved by the
+  user as static content under SIM-REQ section 16, \"Parameters to fix\"", in
+  the form of `R-013`.
+- Four instructions in the proposal are prose in Italian, not text to insert:
+  - FR-J-01's two additions;
+  - P-17's re-measurement in §19;
+  - DEC-047's sentence;
+  - the R4 lines.
+
+  Each was written in English as the proposal describes it. The P-17 row now
+  says the measurement counts 11 and 33 rows, eight goods and the food markets.
+  P-63 and P-64 stay as measured, with the row stating what they were measured
+  on.
+- §18: Production's "FR-P" now reads "FR-P, save FR-P-03b", since the proposal
+  places FR-P-03b under Needs. Otherwise one requirement would sit under two
+  subsystems.
+- P-72's description drops the ruling number from the parameter's name.
+- "Choice within a class" goes after the Hunger paragraph of §Demand. The
+  proposal gave no place.
+
+**Findings left open.** Each one is the user's or a later point's, not this
+ruling's:
+
+1. PD-14 does not say in whose units a subclass carries its value (`R-056`).
+2. FR-P-22's endowment is either what resettlers carry or durables made from
+   nothing (`R-054`).
+3. OBS-2 and OBS-4 could cite FR-D-04a. That would be reserve 3, and it is not
+   done.
+4. DEC-047's title, "once per sowing", still contradicts FR-P-15's settlement
+   cadence for other activities (X-3, Z-05).
+5. `SIM-ECON` phase 6 implements FR-P-10d, which §18 places under Production.
+   The point that builds the seed reserve must record which subsystem releases
+   it (`R-052`).
+6. FR-P-04's list and all the static content of §16 are still awaiting the
+   user's approval (`R-050`).
+
+**Cost.** Phase 4's scope grows by the destitute and day-labourer rows, the crop
+stages and the goods classes. P-17, P-63 and P-64 must be measured again. The
+static content to approve before the plan grows with them.
+**Owed by the implementer:** nothing new beyond `docs/` as it now stands. The
+phase 4 plan reads its `Satisfies:` against the amended §18 table (`R-052`).
+**Would overturn it:** a passage of `docs/` found to differ from the proposal
+beyond the differences listed above.
+**Not verified:** the diff was read whole, but the transcribed passages were not
+compared word for word against the proposal. That rests on the script's exact
+copying. A grep of `docs/` finds no remaining "Subsistence", "Luxury", "need
+tier", `wealthSpread` or `creditLine`, but references to the old vocabulary in
+other words were not searched for.
+
+### R-060 — A subclass measures in its root's units, and a good carries one value per class tree
+
+**Date:** 2026-10-04   **Origin:** user, design session, on the finding of `R-056`
+**Verdict:** specified — the user's decision, reserve 5 of `R-001` (PD-14 is theirs)
+**docs/:** `SIM-REQ` FR-P-03a gains one sentence. Revision already today's.
+
+PD-14 let classes nest and gave a good a value per class, without saying in whose
+units a subclass counts. A need on a class accepts its subclasses "in proportion to
+its value" (FR-P-03b), and the conservation rule reads a good's value "in the food
+class" (FR-P-03c); both need one scale per tree. The alternative, units per class
+with a conversion factor to the parent, is more data that can be wrong and buys no
+behaviour the single scale lacks. Put to the user with that recommendation, the user
+approved it: a subclass measures in its parent's units, a good carries one value per
+class tree, and validation at load refuses two values in one tree.
+
+**Cost.** None now: the content approved by `R-063` has no subclass.
+**Owed by the implementer:** the check at load, with the validation of FR-P-03b.
+**Would overturn it:** a class whose subclasses are genuinely incommensurable, which
+should then be two trees, not one.
+**Not verified:** nothing; FR-P-03a to FR-P-03c were read.
+
+### R-061 — Resettlement creates no goods: the endowment is the generator's, resettlers bring what they carried
+
+**Date:** 2026-10-04   **Origin:** user, design session, on the finding of `R-054`
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-22 reworded; §16 P-54 renamed. Revision already today's.
+
+FR-P-22 gave founders and resettlers alike an endowment of durables. Since `R-054`,
+emigrants carry their durables (FR-D-04a), so an endowment at resettlement on top
+of that would create durables from nothing, and emigrating to an empty settlement
+would become a way to mint tools. What FR-P-22 protected against, a cohort that
+cannot work for lack of tools, is already handled by the crude variants of FR-P-21
+and DEC-073; and tools, light and valuable, are what FR-D-04a loads first. Put to
+the user with that recommendation, the user approved it: the generator's founders
+carry P-54, resettlers bring what they carried, and resettlement creates nothing.
+
+**Cost.** A resettled village restarts slower than one founded by the generator.
+B9, the brake on abandonment, runs on land per capita and is not weakened.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** a sweep in which resettled villages never recover their
+tools, which would argue for cheaper crude variants rather than for minting.
+**Not verified:** that no other text gives resettlers goods; FR-D-07, DEC-067,
+DEC-070 and FR-J-18 were read and do not.
+
+### R-062 — OBS-2 and OBS-4 already cover FR-D-04a; `SIM-OBS` is not changed
+
+**Date:** 2026-10-04   **Origin:** user, design session, on the finding of `R-059`
+**Verdict:** resolved — the user's decision, reserve 3 of `R-001`
+**docs/:** unchanged
+
+`R-059` left open whether OBS-2 and OBS-4 should cite FR-D-04a. Neither needs to.
+OBS-2's "Served by" reads "FR-D-01 to FR-D-11", a range FR-D-04a and FR-D-03a fall
+inside; OBS-4's reads "FR-M-12 to FR-M-14", and the refugee sentence lives in
+FR-M-13. `SIM-OBS` lists the requirements that lose their justification if the
+entry is cut, and FR-D-04a would keep its own through OBS-2 if OBS-4 went. The user
+approved leaving the document as it is.
+
+**Cost.** None.
+**Owed by the implementer:** nothing.
+**Would overturn it:** OBS-2 being cut, which would leave FR-D-04a to be justified
+by OBS-4 explicitly.
+**Not verified:** nothing; the five "Served by" lines were read.
+
+### R-063 — The static content of Phase 4 is approved
+
+**Date:** 2026-10-04   **Origin:** user, design session: "approvo tutto"
+**Verdict:** resolved — the user's approval under `R-050`
+**docs/:** `SIM-REQ` FR-P-04 confirmed, §19's P-17 row at 12 and 36 rows; `SIM-STATE`
+§Cohort at 12 rows, open item 1 closed. Revisions already today's.
+
+`R-050` makes static content the user's, approved before the plan that uses it. The
+decider proposed it from the phase 4 note (K-01 to K-11) as amended by the proposal
+of `R-059`, and the user approved the whole. It is recorded here because it is
+data, not specification: under `R-065` it lives in the rules file, and `docs/`
+keeps only what a requirement states. **Every number in it is Provisional under
+`R-050`**: the implementer proposes it in the point that first needs it, and the
+decider numbers it in §16. The user approved structure, not values.
+
+**Goods, classes, grades.**
+
+| Good | Class | Grade | Behaviour |
+|---|---|---|---|
+| Grain | Food | 0 | consumable, input, planting good |
+| Flour | Ingredient | 1 | input |
+| Bread | Food | 2 | consumable |
+| Cloth | Clothing | 1 | consumable: the need is the rate of replacement |
+| Ore, Timber, Wool | Material | 0 | input |
+| Tools | Implement | 1 | durable |
+
+No subclass. Ingredient, Material and Implement are labels that no need reads. A
+grade counts processing steps, so bread is 2.
+
+**Needs.** Tier 0: Food, grade 0 or more, the survival minimum. Tier 1: Food, grade
+1 or more, the share above the minimum (`R-057`); Clothing, grade 1 or more. Tier 2:
+none in the baseline; the code path is tested with a test good.
+
+**Recipes and buildings.**
+
+| Recipe | Building | Durable | Crude variant |
+|---|---|---|---|
+| Grain → Flour | Mill, site water | independent | yes: a hand quern, no building, far slower |
+| Flour → Bread | Oven | independent | no |
+| → Ore | Mine, site ore | requires Tools | yes |
+| → Timber | none, site forest | improved by Tools | — |
+| Ore + Timber → Tools | Forge | requires Tools | yes |
+| → Wool | none; continuous, modulated by climate | independent | — |
+| Wool → Cloth | Loom | improved by Tools | — |
+
+The quern is content, not FR-P-21's obligation: without it every settlement with no
+running water would leave its tier 1 food need unmet for good, and fragility would
+mark the same places for ever.
+
+**Mestieri.** Eleven in the allocation vector: farmer, miller, baker, miner,
+woodcutter, smith, shepherd, weaver, caravanner, merchant, day labourer; and the
+destitute row outside it. Mean wealth at generation, descending: merchant, miller,
+smith, baker and weaver, farmer, shepherd, miner and woodcutter, caravanner, day
+labourer, destitute. Spread within a row: high for merchant and farmer, middling for
+the crafts, low for day labourer and destitute. The day labourer adjusts faster than
+P-19 and has no yearly cap.
+
+**Crops.** Grain alone, sown with itself; a harvest window of a few updates; care
+levels zero in the shipping configuration (DEC-094).
+
+**Age bands.** Three, closing `SIM-STATE` open item 1.
+
+**Generator (K-09), as rules.** Kingdoms counted by a Provisional parameter; five
+terrains, plain, hill, forest, mountain, water, each with a transport cost; sites by
+terrain, forest in forest, ore in hill and mountain, water along watercourses;
+initial stocks that cover each settlement's tier 0 for a season; the destitute row
+from the wealth curves (FR-G-01).
+
+**Deferred to their subsystem.** Event classes (K-10) and contracts, dungeons and rare
+materials (K-11): no dungeon-only material in Phase 4, so P-09 stays at 8. Climate
+curves are `R-064`.
+
+**Cost.** Twelve rows per settlement where `SIM-STATE` said eleven and phase 3
+measured nine: P-17, P-63 and P-64 are measured on twelve and thirty-six.
+**Owed by the implementer:** the content as above, in the rules file of `R-065`, with
+each value proposed as a P-number when first needed (`R-050`).
+**Would overturn it:** the user revising any item, which is theirs at any time before
+the plan that uses it.
+**Not verified:** that the conservation rule (FR-P-03c) admits the chain with the
+values the implementer will propose; nothing is numbered yet.
+
+### R-064 — Each climate modifier has its own pair of curves
+
+**Date:** 2026-10-04   **Origin:** user, design session (K-08 of the phase 4 note)
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-08 and §16 P-14; `SIM-DEC` DEC-037, title, decision,
+rationale and cost. Revisions already today's.
+
+FR-P-08 named two curves and five modifiers, and did not say whether the five share
+the pair. P-14's "2 curves" read as sharing. One pair cannot render a winter that
+stops building sites without raising mortality as well, so the five would move in
+lockstep, and the seasons of trade, construction and death could not differ. Put to
+the user with a pair per modifier, the user approved it. Only the curves a subsystem
+uses are written when it lands; the implementer prepares smooth starting curves and
+the user approves them, as static content under `R-050`.
+
+**Cost.** Five pairs to author and tune instead of one: 520 numbers.
+**Owed by the implementer:** the curves of each modifier in the rules file of
+`R-065`, written with the subsystem that first reads it.
+**Would overturn it:** two modifiers found always to want the same curves, which
+could then share a pair by data, with no change to the rule.
+**Not verified:** nothing; FR-P-07 to FR-P-11, DEC-036, DEC-037 and P-14 were read.
+
+### R-065 — Static content and simulation parameters are a rules file the host supplies: DEC-100; `R-004` revised
+
+**Date:** 2026-10-04   **Origin:** user, design session: "approvo C"
+**Verdict:** promoted as DEC-100 — the user's decision; it touches NFR-01 and AC-02,
+reserve 2 of `R-001`, and revises `R-004`
+**docs/:** `SIM-DEC` DEC-100 new, after DEC-089; DEC-032 title and decision, DEC-033
+and DEC-089 one clause each. `SIM-REQ` FR-A-05 new; NFR-01, NFR-08, NFR-09, NFR-12
+and AC-02; §16's opening paragraph. `SIM-STATE` §World gains `rulesData`, and
+`ruleVersion` is the logic's version; §Static data says where the data come from.
+Revisions already today's.
+
+The user objected to recipes living in the core, since every change is a rebuild.
+Three answers were put to the user: tables in the core's source; tables generated
+into the core from a text source; or a binary rules file the host reads and hands to
+the core. The decider recommended the third, and the user chose it.
+
+**Why.** A rebuild of the core costs seconds, so speed of editing is not the
+argument. The arguments are three:
+
+- **Sweeps.** Phase 6 sweeps run many worlds that differ only in content and
+  parameters, and with the data in the core each variant would be a build.
+- **Content patches.** Content can be patched without releasing logic.
+- **Authors.** Content can be written by people who do not touch the C#.
+
+The core still reads no file: the host hands over bytes, as it does for saves
+(DEC-034, D-090).
+
+**What it costs the specification**, each part applied above:
+
+1. **The data are input, like the seed.** NFR-01 and AC-02 name the rules file
+   beside the seed and the commands. Without that, two runs with different files
+   would break the criterion as written. This is reserve 2, and the user's
+   decision.
+2. **The world carries its rules file, and the save with it** (NFR-08, DEC-032).
+   A reported bug reproduces only with the exact file. DEC-033's resumption under
+   the old rules needs the old rules at hand. A loaded world runs on the file its
+   save carries. Moving an existing world to new content would need an id
+   mapping and a reshape of state, so it is refused until a requirement asks for
+   it.
+3. **`R-004` revised.** `R-004` held that "the rules are part of the build", so
+   that a new world's rule version is the build's and nothing the host chooses.
+   Half of the rules now come from the host. The rule version becomes the logic's
+   version, still the build's, together with a digest of the rules file computed
+   by the core from the bytes (NFR-09). `R-004`'s point survives: a host-declared
+   version was "the only one that can lie", and a digest the core computes cannot.
+4. **Binary, from text.** The source is text in the repository, readable and
+   reviewed where the user approves content. An offline tool in the harness
+   converts it to integers and fixed point, and checks the result by handing it
+   to the core (NFR-12). Parsing text in the core would put number formatting
+   and locale on a path that must be deterministic.
+5. **Validation is the only check** of content now that the compiler is not. It
+   already exists in pieces (FR-P-03b, FR-P-03c, AC-56, DEC-089). Under FR-A-05
+   it refuses a file whole.
+
+**Cost.**
+- A second versioned format.
+- A compiler in the harness.
+- A host that must ship and pass the file.
+- Validation that must be complete.
+- Existing code:
+  - `WorldState`'s constructor stamps `Simulation.CurrentRuleVersion` alone;
+  - `SaveFormat` writes no rules file;
+  - the pins of `R-034` and `R-036` move once `World` gains the field.
+
+**Owed by the implementer:** listed above under "Owed by the implementer". Cite
+`R-065`.
+**Would overturn it:** a consumer that cannot ship a data file beside the core,
+which would bring the tables back into the source (the second answer); or a need to
+move an existing world to new content, which would need the id mapping this ruling
+refuses.
+**Not verified:** that the consumer of §20 can ship and read such a file; that
+hashing the file's digest rather than its bytes is enough for the state hash. The
+file is immutable, so the digest stands for it, but the fold's injectivity
+(`D-069`) was not reconsidered for a 64-bit digest.
+
 ### R-066 — The process plan's seven points and its changes to the design are the user's: `R-046` and `R-028` amended
 
 **Date:** 2026-10-05   **Origin:** D-110
@@ -2558,3 +3257,1517 @@ plan, which puts `R-046` back where it was.
 exist. Item 2 of that branch's request, "Where it sits against `R-046`", is
 answered here but not marked there, since the file lives on the other branch.
 The marker is owed by the decider when the branches meet.
+
+### R-068 — The coder may not write the settings files that can switch its hooks off
+
+**Date:** 2026-10-05   **Origin:** D-111 (a finding noted, not acted on)
+**Verdict:** escalated — reserve 1 of `R-001`: what each role may write is
+`D-087`'s, and the design `R-028` ratified is the user's
+**docs/:** unchanged
+
+`D-111` notes that the coder's denylist does not hold `.claude/settings.json` or
+`CLAUDE.md`, and leaves it there on one premise: "A settings file can add hooks,
+not remove an agent's own." The premise does not hold as stated. Claude Code's
+documentation (hooks guide, "Configure hook location") gives a settings key,
+`disableAllHooks`, that turns hooks off, and says a settings file edited during a
+session is normally picked up by a file watcher in that session. Whether the key
+reaches hooks declared in an agent's frontmatter the documentation does not say.
+So one `Write` the coder is allowed today may disable `path-guard` and
+`git-guard` for every role, or may not; nothing in the repository knows which.
+
+The design gives the reason for its own last three entries: they "keep an agent
+from loosening its own constraint". A settings file is the same kind of file as
+`.claude/hooks/`, and the reason applies to it whether or not the key reaches
+frontmatter hooks: a settings file adds hooks, and a hook is a command run on
+every tool call of every role. The orchestrator's check after the coder, "no
+path of its denylist changed", inherits the gap, since it reads the same list.
+
+`CLAUDE.md` is a different case. The root file only imports `AGENTS.md`, and
+`core/Runtime/Systems/CLAUDE.md` holds a rule `R-019` changed as governance.
+They are standing instructions, as `AGENTS.md` is, and the design keeps
+`AGENTS.md` off the denylist on purpose: a process point may edit it, and the
+orchestrator stops if the diff touches it and the point does not name it.
+
+**A second finding, on `git-guard`.** `D-111` defines an identifier as `NFR-`,
+`FR-`, `DEC-`, `AC-`, `SQ-`, `A-`, `R-` or `D-` followed by a letter or digit.
+The script matches with `-notmatch`, which in PowerShell ignores case, so a
+subject reading "Tidy the a-priori notes" passes as carrying one; checked in
+this session. The guard stops mistakes, and this one lets a subject with no
+identifier through.
+
+**Recommendation.** One point added to the process plan under `D-014`, before
+point 7 so that the rewired orchestrator reads the final list:
+
+1. `.claude/settings.json` and `.claude/settings.local.json` join the coder's
+   denylist, in the design and in `path-guard`, with a self-test case each.
+2. Every `CLAUDE.md` is treated as `AGENTS.md` is: not denied, and the
+   orchestrator stops when a diff touches one the point does not name. Point 7
+   writes that check, so the point adds it to point 7's scope by naming it.
+3. `git-guard` matches the identifier case-sensitively, with a self-test case
+   for a lowercase `a-`.
+
+Point 1 is closed and frozen; none of this reopens it. The fault each change
+must catch is the case it adds.
+
+**Cost.** One more point in a plan of seven, and a design note amended by a
+point rather than by `R-028`. A coder can no longer fix a settings file a
+simulator point needs changed; the orchestrator does it, in a point that says so.
+**Owed by the implementer:** nothing until the user answers.
+**Would overturn it:** a probe at point 4 showing that `disableAllHooks` does not
+reach frontmatter hooks and that a settings file cannot otherwise weaken an
+agent's guard, which leaves item 1 resting on the design's general reason alone.
+**Not verified:** whether `disableAllHooks` reaches frontmatter hooks, which the
+documentation leaves open and this session did not probe; the guide was read
+through a subagent, not opened directly.
+
+### R-069 — `D-111` is ratified, save what `R-068` escalated
+
+**Date:** 2026-10-05   **Origin:** register audit, `D-111`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Point 1 of the process plan, the first two guards. Process, so ratified or
+rejected, never promoted (`D-011`). The entry was read against the design's
+"Enforcement" items 1 and 2 and "What the coder may not write", and its claims
+against `0ea4e42`. Both self-tests were run in this session: `path-guard` 32
+cases, `git-guard` 43, exit 0 each.
+
+- **The role as `-Role`, an unknown role denied.** Stands; it is the only way a
+  single script can be keyed by role, and point 4's probe is where it is shown
+  to work. Denying the unknown is the allowlist reading the design implies.
+- **Outside the repository, denied to every role.** Stands, and answers the
+  entry's own "would overturn it": "everything except the denylist" is read
+  inside the repository. Nothing in the roles writes elsewhere, and a coder
+  writing outside the tree escapes every check the orchestrator runs on it.
+- **Paths resolved before matching, case-insensitively.** Checked: the cases for
+  `DOCS\`, `..` and a sibling folder named `repo-other` are in the self-test,
+  and a trailing dot (`docs.\x`) resolves to `docs\x` under .NET's own
+  normalisation. 8.3 short names do not arise on this volume.
+- **Insert-only refuses an empty `old_string`.** Right on the merits: every
+  string begins with the empty one, so without it insert-only admits a
+  rewrite of any file the documenter holds.
+- **`git-guard` refusing more than the design lists**, and `Plan-point` counted
+  anywhere in the message. Each follows from "admits only" read as an allowlist,
+  and from the skill's rule that only a closing commit carries the word.
+- **Exit 2 with the reason on stderr.** The hook contract's blocking form.
+- **The phrase "no identifier applies"** as the words that say none applies.
+  Stands. The identifier half is `R-068`'s second finding: the script matches it
+  without regard to case, which the entry's definition does not.
+
+The note on `.claude/settings.json` and `CLAUDE.md` is `R-068`'s first finding.
+
+**The watermark is not advanced**, for `R-066`'s reason: `D-108` and `D-109` lie
+between it and this entry and are not on this branch. `D-110` and `D-111` carry
+their markers, and the audit that reaches `D-108` after the merge passes over
+both.
+
+**Cost.** None beyond `R-068`.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` or
+the design as it stood when written; point 4's probe showing the role cannot be
+passed as an argument.
+**Not verified:** the faults of `Fails when:` seen red were taken from the
+outcome line; that Claude Code runs the scripts from frontmatter is point 4's.
+That the commit `0ea4e42` and the outcome line are in Italian is consistent
+with the plan's own rule that points 1 to 4 close in the forms in use, and was
+not otherwise examined.
+
+### R-070 — `R-068` accepted: point 8 of the process plan closes the settings files and the identifier match, before point 7
+
+**Date:** 2026-10-06   **Origin:** user, on `R-068`
+**Verdict:** resolved — the user's decision, reserve 1 of `R-001`
+**docs/:** unchanged
+
+The user approved `R-068`'s recommendation and asked for it to be applied:
+"approvo R-068, applicalo". The changes are to the design of 2026-09-30, to
+`path-guard` and to `git-guard`, none of which a decider session writes. So
+applying it means owing a point, which the implementer adds to `PLAN.md` under
+`D-014` and runs as any other. This ruling records the user's approval that
+`D-014` requires.
+
+**Where the point goes.** `R-068` placed it "before point 7". `D-014` says a
+point added mid-plan runs last, so as not to renumber points already cited.
+Both hold if the point is **numbered 8 and placed in `PLAN.md` between points 6
+and 7**. No number moves. `/plan-next` runs "the first `## <n>.` section with no
+outcome line", so it runs 8 before 7. Running it last would not work. Point 7
+wires the agents in, so a point after it would be run by them, and its coder
+cannot write `.claude/hooks/`. It would also contradict the plan's premise that
+no point of it runs under the agents (`R-046`, `R-067`). This departs from
+`D-014`'s "runs last" for this point only, at the user's request. `D-014`'s
+reason, no renumbering, is kept whole. The plan's preamble, which calls point 7
+"the last", is not edited; point 8's own text says it runs before 7, citing this
+ruling.
+
+**What it does**, `R-068`'s three items, with one refinement to the second:
+
+1. `.claude/settings.json` and `.claude/settings.local.json` join "What the coder
+   may not write" in the design and `$CoderDenied` in `path-guard`, with a
+   self-test case each.
+2. In the design's "The hole that `Bash` leaves", the check reading
+   "`AGENTS.md` in the diff only if the point names it" covers every
+   `CLAUDE.md` as well. `R-068` had point 7's scope widened "by naming it".
+   That is not needed: point 7's frozen text already has the orchestrator "run
+   the checks of 'The hole that `Bash` leaves'", so point 7 builds the check
+   from the amended list, and its text stays as it is. The same holds for the
+   coder's denylist, which point 7's check after the coder reads from the
+   design.
+3. `git-guard` matches the identifier case-sensitively.
+
+**Its `Fails when:`**, the cases `R-068` named: the coder may write
+`.claude/settings.json`; a subject "Tidy the a-priori notes" passes with no
+identifier; the design's list has no line for `CLAUDE.md`. It declares
+`Core: no`.
+
+**Cost.** One more point. The preamble's "point 7, the last" is now inaccurate
+and stays so, since editing the plan's text above an added point is what
+`D-014` avoids. A reader of `PLAN.md` alone learns the order from point 8's own
+line.
+**Owed by the implementer:** before point 7 runs, point 8 is added to `PLAN.md`
+between points 6 and 7, with the content and `Fails when:` above, in a commit
+citing `R-068` and `R-070`, and is run in its turn. Cite `R-070`.
+**Would overturn it:** the user preferring point 8 after point 7, run by the
+orchestrator alone; or point 4's probe showing that no settings key reaches a
+frontmatter hook, which leaves item 1 on the design's general reason, as
+`R-068` said.
+**Not verified:** that `plan-state`, built at point 3, reads points in file
+order and not by number. Its frozen criterion was not checked for it, and if
+it sorts, point 8 would read as next only after 7. The user approved `R-068`
+before this ruling stated the `Fails when:` lines, so the user reads them here,
+as `R-047` asks of moment one, and has not yet done so.
+
+**`Fails when:` read by the user, 2026-10-06:** "approvo le condizioni di
+fallimento di R-070". The three lines stand as stated above, and point 8 carries
+them verbatim.
+
+### R-071 — `tree-state` misses edits to an untracked file whose name git quotes: a fourth item for point 8
+
+**Date:** 2026-10-06   **Origin:** D-112 (found at audit)
+**Verdict:** resolved — the user's approval under `D-014`
+**docs/:** unchanged
+
+Point 2's `Fails when:` names, first, "an edit to a file that is already
+untracked leaves the hash unchanged". `tree-state` commits that fault for one
+class of file. It lists untracked files with `git ls-files --others`, which under
+`core.quotePath`, on by default and unset here, prints a name holding a
+non-ASCII byte in C quotes: `"citt\303\240.txt"`. `Join-Path` makes that a path
+to nothing, `Get-FileHash` fails with a non-terminating error, the line for the
+file carries an empty hash, and the script prints a hash all the same. Checked in
+this session on a throwaway repository: `città.txt` untracked, edited between two
+calls, the same hash printed twice, an error on stderr each time, nothing that
+stops a caller.
+
+The second half is the wider defect. Whatever the cause — a quoted name, a file
+locked by a running build, a permission — a file `tree-state` cannot read
+leaves its hash where it was, and the script still answers. A check that cannot
+look should say so, not report that nothing moved. `mutate` is not exposed
+through its own refusal: `git apply --numstat` quotes the same names, a quoted
+path does not begin with `core/Runtime/`, and the patch is refused. It is exposed
+through the hash it compares, and so are the skills of points 6 and 7, which call
+`tree-state` on the whole tree.
+
+The point stays closed. Its check was met, the self-test's untracked file is
+ASCII, and the outcome line is not rewritten; the defect is in code the check did
+not reach. In practice the names under `core/Runtime/` and `harness/` are ASCII,
+and the repository's are; that is why this is not urgent, and why it is not
+nothing either, since an Italian-speaking repository is where a name like
+`città.txt` turns up.
+
+Put to the user with three answers — a fourth item in point 8, a point 9 placed
+before point 6, or the limit accepted and recorded — the user chose the first.
+Point 8 is owed by `R-070`, is not yet in `PLAN.md`, and runs before point 7,
+the first after which an agent runs under `tree-state`. It is the same kind of
+change, a guard closed after an audit found a way past it.
+
+**The fourth item.** `tree-state` reads untracked names unquoted — `-z`, or
+`core.quotePath` off for its own calls — and, when any file it must hash cannot
+be read, exits non-zero and prints no hash. A self-test case each.
+
+**Its `Fails when:`**, read by the user in the question that chose it, under
+`R-047`: an edit to an untracked file named `città.txt` leaves the hash
+unchanged; a file that cannot be read still yields a hash.
+
+**Cost.** Point 8 grows by one item and one line. A caller of `tree-state` must
+treat a non-zero exit as "unknown", which `mutate` does not yet do: it compares
+two strings, and an empty `$before` against an empty `$after` would read as
+"returned". Point 8 makes `mutate` stop with exit 3 when either call fails.
+**Owed by the implementer:** point 8, as `R-070` owes it, carries this fourth
+item and its `Fails when:` line, and `mutate` treats a failed `tree-state` as a
+tree not returned. Cite `R-070` and `R-071`.
+**Would overturn it:** none foreseen short of the user moving it to its own point.
+**Not verified:** a locked file, which was not produced; only the quoted name was.
+That `-z` output reaches PowerShell intact through a native call was not tried.
+
+### R-072 — `D-112` is ratified, save what `R-071` resolved
+
+**Date:** 2026-10-06   **Origin:** register audit, `D-112`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Point 2 of the process plan, `mutate` and `tree-state`. Process, so ratified or
+rejected, never promoted (`D-011`). The entry was read against the design's
+"Enforcement" item 3 and point 2's frozen text, and its claims against
+`5cd1db4`. Both self-tests were run in this session: `tree-state` 11 cases,
+`mutate` 9, exit 0 each.
+
+- **The check as a command string run by `pwsh`.** Stands. The design names no
+  form, and the tester already holds `Bash`, so the string runs nothing the
+  tester could not.
+- **Four exit codes.** Stands, with one consequence for later points. The design
+  asks only for non-zero when the tree did not return, and exit 1, a fault not
+  caught, is non-zero too: a caller that reads zero against non-zero would take
+  a missed fault for a tree left dirty. The tester's definition at point 4 and
+  its brief at point 7 read the four codes, not the sign.
+- **A patch outside `core/Runtime/` and `harness/` refused.** Right on the
+  merits: the restore is proved only where `tree-state` looks. Checked on a
+  throwaway repository: a path through `..` passes the filter, since `--numstat`
+  prints it as written, and is then refused by `git apply --check` ("invalid
+  path"), so `mutate` exits 2. A rename is not refused: `--numstat` prints only
+  its destination, so a patch moving `docs/a.txt` to `core/Runtime/a.txt`
+  passes, applies, and leaves `docs/a.txt` absent while the check runs; the
+  reverse put it back, and nothing proved it. That is `R-073`'s.
+- **The working tree, the reversal in `finally`.** Stands; the self-test's fault
+  is written against uncommitted code, as the coder's will be.
+- **`--binary`, `--no-ext-diff`, `--no-textconv`.** Stands; the binary case is in
+  the self-test and the two flags keep a user's configuration out of the hash.
+- **`-Path` and `-Repo`; the self-test of `mutate` beyond the criterion.** Stand.
+
+The untracked file the hash cannot read is `R-071`'s, and the rename `R-073`'s; both owe the fix in
+point 8. The outcome line in Italian is the plan's own rule for points 1 to 4.
+
+**The watermark is not advanced**, for `R-066`'s reason: `D-108` and `D-109` are
+not on this branch.
+
+**Cost.** None beyond `R-071` and `R-073`.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`; point 4's probe showing the tester cannot
+run `pwsh` from its `Bash`.
+**Not verified:** the known patch through `mutate` against the real suite was not
+rerun, to keep the decider's session off `core/Runtime/`; the two faults seen red
+were taken from the outcome line.
+
+### R-073 — `mutate` lets a rename out of the guarded folders through: a fifth item for point 8
+
+**Date:** 2026-10-06   **Origin:** D-112 (found at audit)
+**Verdict:** resolved — the user's approval under `D-014`
+**docs/:** unchanged
+
+`D-112` decides that "a patch touching any path outside `core/Runtime/` and
+`harness/` is refused", because the restore is proved only for what `tree-state`
+records. The filter reads `git apply --numstat`, which prints one path per file:
+for a rename, the destination only. Checked in this session on a throwaway
+repository: a patch renaming `docs/a.txt` to `core/Runtime/a.txt` passes
+`--numstat` and `--check`, applies, and removes `docs/a.txt` for as long as the
+check runs. The reverse put it back. Nothing proved that it did, because
+`tree-state` looks only at the two folders, and that proof is the reason the
+filter exists. A copy reads its source and writes nothing outside, so it is
+harmless today, but a filter that reads both sides of each entry covers it at no
+extra cost.
+
+The risk is small. The tester holds `Bash` and can reach any file without a
+patch, and the guard stops mistakes, not an agent set on getting round it (the
+design's "The hole that `Bash` leaves"). But the rule as `D-112` wrote it does
+not hold, and the next reader of the entry would rely on it. Put to the user
+with the fix in point 8 or the limit recorded, the user chose the fix, beside
+`R-071`'s item, for the same reasons.
+
+**The fifth item.** `mutate` refuses, with exit 2, a patch in which either side
+of any entry, a rename's or copy's source included, lies outside `core/Runtime/`
+and `harness/`. A self-test case.
+
+**Its `Fails when:`**, read by the user in the question that chose it, under
+`R-047`: a patch that renames `docs/a.txt` to `core/Runtime/a.txt` is applied.
+
+**Cost.** One more item in point 8. The tester cannot move a file into the guarded
+folders by a patch; it never needs to, since a fault is a change to code that
+exists.
+**Owed by the implementer:** point 8, as `R-070` and `R-071` owe it, carries
+this fifth item and its `Fails when:` line. Cite `R-070` and `R-073`.
+**Would overturn it:** none foreseen short of the user moving it to its own point.
+**Not verified:** how `git apply --numstat -z` prints a rename, which is one way
+to read both sides; the implementer's choice, and its self-test is the check.
+
+### R-074 — `plan-state` reads "after the failure" by number, not by position: a sixth item for point 8
+
+**Date:** 2026-10-06   **Origin:** D-113 (found at audit)
+**Verdict:** resolved — the user's approval under `D-014`
+**docs/:** unchanged
+
+`D-113` decides that "`stopped` needs an open point after the failure, as
+`/plan-next` words it". `/plan-next` step 1 says "with points still open after
+it", and its next point is "the first `## <n>.` section with no outcome line":
+both read the plan in file order. `plan-state` reads the next point the same
+way, taking the first open point in the list it built from the file. That
+answers `R-070`'s "Not verified": point 8, placed between 6 and 7, is reported
+next after 6. But the test for `stopped` compares numbers: an open point counts
+only if its number is greater than the failed one's.
+
+The two orders agree in every plan so far, since `D-014` appends an added point
+at the end. `R-070` made the one plan where they part: point 8 before point 7.
+Checked in this session on a fixture in the scratchpad, points 6, 8 and 7 in
+that order, 6 closed, 8 `FAILED`, 7 open: the script prints `state: running`,
+`next: 7`, `stoppedAt: null`. That is the third fault of point 3's
+`Fails when:`, "a plan stopped at a `FAILED` point is reported as running",
+committed for the case the fixtures did not hold. After point 6, `/plan-explain`
+and `/plan-status` read that state; after point 7, `/plan-next` does too.
+
+The point stays closed, as `R-071` left point 2: its check was met, and the
+outcome line is not rewritten. Put to the user with the fix in point 8 or the
+limit recorded, the user chose the fix.
+
+**The sixth item.** `plan-state` decides `stopped` by position in the file: a
+failed point with an open point anywhere after it in the plan is `stopped`,
+whatever the numbers. A self-test fixture whose points are numbered out of file
+order.
+
+**Its `Fails when:`**, read by the user in the question that chose it, under
+`R-047`: a plan whose point 8, placed before point 7, has failed is reported
+`running` with next point 7.
+
+**Cost.** One more item in point 8. Until it lands, a failure of point 8 is
+misreported by the two skills that point 6 puts on `plan-state`; the outcome
+line `FAILED` is still there for a human to read.
+**Owed by the implementer:** point 8, as `R-070` owes it, carries this sixth
+item and its `Fails when:` line. Cite `R-070` and `R-074`.
+**Would overturn it:** none foreseen short of the user moving it to its own point.
+**Not verified:** whether any other rule of `plan-state` mixes number and
+position; the script was read whole for it and none was found, but only the
+`stopped` case was probed.
+
+### R-075 — `D-113` is ratified, save what `R-074` resolved
+
+**Date:** 2026-10-06   **Origin:** register audit, `D-113`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Point 3 of the process plan, `plan-state`. Process, so ratified or rejected,
+never promoted (`D-011`). The entry was read against point 3's frozen text and
+`/plan-status` step 4, and its claims against `b509ca5`, the script read whole.
+The self-test was run in this session: 58 cases, exit 0. Run on the live
+`PLAN.md` it reports points 1 to 3 closed, one commit each, and next point 4.
+
+- **The JSON shape.** Stands; the point lists what is read, not names, and the
+  names are the implementer's.
+- **An abandoned plan reports no next point.** Right on the merits: a next point
+  `/plan-next` must refuse is a report that contradicts the skill reading it.
+- **`stopped` needs an open point after the failure; a failed last point is
+  `finished`.** Stands as a reading of `/plan-next`'s words. How "after" is
+  computed is `R-074`'s.
+- **A reserve open leaves `state` alone.** Stands: `R-011` puts the unmet exit
+  condition on the skills' reading, and `reservesOpen` gives them what they need.
+- **A marker counts only right after the date sentence.** Checked: the regex
+  strips the outcome marker and the first sentence, then anchors. The prose case
+  it guards against, `FALLITO` named in a closed point, is in the fixture.
+- **The check marker, `Core:` absent as `null`, commits resolved only for the
+  live plan and the archives, the `main` warning, "no plan" as a missing path,
+  the 31 points in the self-test.** Stand. Tying the self-test to the
+  repository's history is right for the reason given: a rewrite that breaks it
+  breaks the lookup it proves.
+
+**One reading of the decider's count**, not a defect of the entry. Run today,
+`decider` reports four entries, `D-110` to `D-113`, though three carry rulings:
+the watermark stays at `D-107` while `D-108` and `D-109` are on
+`design/poverty-seed` (`R-066`), and `R-002`'s count is taken from the watermark,
+not from markers. The script does what `R-002` says. The count stays high until
+the branches meet and the audit reaches `D-109`.
+
+**The watermark is not advanced**, for `R-066`'s reason.
+
+**Cost.** None beyond `R-074`.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`; a skill at point 6 or 7 needing a field
+in another shape, as the entry says.
+**Not verified:** the three faults seen red were taken from the outcome line.
+Calling the script from an agent's `Bash` is point 4's probe. Headings inside a
+fence of a plan, which the entry records, were not probed.
+
+### R-076 — `D-108` and `D-109` are ratified; the watermark reaches `D-113`
+
+**Date:** 2026-10-06   **Origin:** register audit, `D-108` and `D-109`
+**Verdict:** ratified
+**docs/:** unchanged
+
+The two entries `R-066`, `R-069`, `R-072` and `R-075` passed over, because they
+were on `design/poverty-seed`. The merge `eb62bfb` brought them here. Both are
+process, so ratified or rejected, never promoted (`D-011`). Each was read
+against what it cites, and its claims against the commits it names.
+
+- **`D-108`, the review of the poverty and seed batch.** Stands. Checked:
+  `9250363` adds `SPEC-QUESTIONS.md` alone, and the entry follows in `5485132`,
+  as it says; `SQ-009` to `SQ-022` are the fourteen entries it counts, `SQ-020`
+  marked the user's under reserve 4. A branch for a batch of design work is what
+  `R-048` later made the rule for plans, and the branch was merged without
+  squashing. Gathering the low findings in `SQ-019` and `SQ-022` is right: each
+  item there is a correction of wording that a single ruling can apply, and
+  splitting them would cost a ruling each for no difference in what is decided.
+- **`D-109`, the draft of the cost measurement plan.** Stands. Checked:
+  `64147ba` touches `REVIEW-REQUEST.md` alone. `Kind: process` follows from what
+  the plan moves: no acceptance criterion, nothing in `core/`, and a world that
+  is a stand-in. The tolerances are what the entry says: half and twice P-63's
+  3.3 µs, and a fifth either side of 15.8 / 3.3 ≈ 4.8, which excludes a ranking
+  linear in rows. Keeping `bench/` after the plan answers `SQ-004`'s finding, a
+  stand-in thrown away whose contents nobody can now recover. Sizes as
+  measurement inputs without P-numbers read `R-050` correctly: it numbers values
+  that drive the simulation, and these drive a benchmark. The question the entry
+  raised as blocking, where the plan sits against `R-046`, is `R-067`'s, and the
+  request's item 2 now carries that marker, owed since `R-067` because the file
+  was on the other branch.
+
+**The watermark advances to `D-113`.** `D-110` to `D-113` were ruled by `R-066`,
+`R-069`, `R-072` and `R-075`, and only `D-108` and `D-109` held it back.
+
+**Cost.** None.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` as it
+stood when written.
+**Not verified:** the user's words for the sizes per settlement type, which
+`D-109` reports as approved and `SQ-024` records; the plan's draft was not run,
+and its calibration rests on P-63 and P-64 as measured on a stand-in nobody
+holds.
+
+### R-077 — FR-K-15 states the dungeon check as AC-56 does: on needs, not on goods
+
+**Date:** 2026-10-06   **Origin:** SQ-009
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-K-15, its second sentence; revision bumped.
+
+FR-K-15 required that "no tier 0 or tier 1 good depends … on such a material".
+Since `R-059` a good has no tier: FR-P-03 and DEC-098 put tiers on needs, and the
+user rewrote AC-56 and DEC-080 to protect needs (reserve 2 of `R-001`, revision 9
+of the proposal). FR-K-15 was not in the proposal, so the same check at load had
+two definitions, one of them with no referent. A grep of `docs/` for a tier
+attached to a good finds FR-K-15 alone.
+
+The two are not equivalent, and AC-56's is the right one on the merits, not only
+because it is the user's. "No subsistence good depends on a dungeon" forbids
+a dungeon material from entering any good a need accepts, which would rule out
+a luxury bread made with a rare spice. "Every subsistence need can be met
+without a dungeon" forbids only what the rule exists for, a famine caused by a
+dungeon closing. FR-K-15 now carries AC-56's predicate and cites it, so the
+requirement and its test say one thing.
+
+**Cost.** None to code; no validation exists yet.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** none foreseen; AC-56 is the user's and this follows it.
+**Not verified:** nothing; FR-K-11 to FR-K-15, AC-56 and DEC-080 were read.
+
+### R-078 — A good names at most one class in each class tree
+
+**Date:** 2026-10-06   **Origin:** SQ-010
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-01 and FR-P-03a; `SIM-DEC` DEC-015 and DEC-098. Both
+revisions bumped.
+
+`R-060` appended to FR-P-03a that a good carries one value per class tree and that
+validation refuses two values in one tree, and left standing the sentence before
+it: a good "belongs to one or more classes and carries a value per unit in each".
+A good in a class and in its subclass needed two values by the first and was
+refused for them by the second. FR-P-01, DEC-015 and DEC-098 repeated the first.
+
+`R-060` is the user's decision and is kept whole; what was missing is the
+membership rule that makes it consistent. **A good names at most one class in
+each tree, and belonging to a subclass is belonging to every class above it.**
+That is what FR-P-03b already assumes, since a need on a class accepts its
+subclasses, and it is the only reading under which "one value per tree" and "a
+value in each class it belongs to" are both true: the classes a good names are
+one per tree, and each carries one value in the root's units. Validation refuses a
+good naming two classes of one tree, which is the same check as `R-060`'s, stated
+on what the record holds rather than on a value derived from it.
+
+The other reading, a good naming several classes of a tree with only one value,
+would make the extra memberships inert: a need on any of them is met by the one
+value through the subclass rule. It adds data that says nothing.
+
+**Cost.** None to code. An author who wants a good in two branches of one tree
+cannot; that is two trees, as `R-060`'s overturning already says.
+**Owed by the implementer:** the check at load, with FR-P-03b's validation, as
+`R-060` owed it.
+**Would overturn it:** as for `R-060`.
+**Not verified:** nothing; FR-P-01, FR-P-03a to FR-P-03c, DEC-015 and DEC-098 were
+read, and `docs/` grepped for "a value in each" and "value per unit in each".
+
+### R-079 — The hunger deficit is written once per update, at the end of phase 7
+
+**Date:** 2026-10-06   **Origin:** SQ-011
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-D-03a gains one sentence, §18's Needs row names the
+write; `SIM-ECON` phases 1, 7, 8a and 12 cite FR-D-03a, phase 7 says what it writes,
+§Demand "Hunger" says when it is written and who reads it. `SIM-ECON` revision
+bumped; `SIM-REQ`'s already today's.
+
+FR-D-03a defines the deficit and how it moves between rows, and no row of the
+update table wrote it. Three places read it: phase 6 for the seed reserve
+(FR-P-10d), phase 11 for mortality (FR-D-03), and FR-D-04a carries it with
+emigrants.
+
+**At the end of phase 7**, because that is the first moment the update's food is
+known. Tier 0 is met in phase 6 from own holdings and in phase 7 by purchase; a
+deficit written after phase 6 would count as hunger what the market was about to
+feed, and one written in phase 11 would need the unmet need carried from 7 to 11
+as a value outside state. Written at 7, mortality in phase 11 reads this update's
+hunger, and the seed reserve in phase 6 reads the deficit as it stood after the
+last update's market, one update behind. That lag is the right one: the reserve
+is released when hunger has already accumulated, which is what P-66's threshold
+means, and it cannot read a market that has not run.
+
+**Before the market subsystem exists.** `R-051` builds needs before the market,
+and `R-052` places FR-D-03a under needs. The rule is stated on phases, not on
+subsystems, so it holds unchanged: while phase 7 does nothing, the tier 0 need
+still unmet after phase 6 is what the end of phase 7 reads. The needs subsystem
+builds the write in that slot, and the market lands before it. §18's Needs row
+now names the write so `R-052`'s check reads it as needs' own.
+
+**Movements between rows.** FR-D-03a's weighted average applies wherever members
+change row: phase 1, where migrants join; phase 8a, where members enter and
+leave the destitute row; and phase 12, where FR-J-03 realigns the share of
+population in each mestiere to the vector. All three now cite it. Phase 11's emigrants carry the deficit
+by FR-D-04a, which already says so.
+
+**Cost.** None to code. Phase 7 gains a pass over rows after clearing, one
+comparison and one write each.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** a sweep in which the one-update lag of the seed reserve
+lets hunger kill before the reserve opens, which would argue for phase 6
+reading this update's shortfall after own consumption as well.
+**Not verified:** nothing; every row of the update table was read for a
+movement of members, and FR-J-03, FR-J-19, FR-J-20 and FR-D-04a were read.
+
+### R-080 — The seed reserve releases this update's unmet survival need, which holds the deficit at P-66
+
+**Date:** 2026-10-06   **Origin:** SQ-012
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-10d; `SIM-DEC` DEC-092; `SIM-LOOPS` B5c; `SIM-ECON`
+phase 6. `SIM-LOOPS` revision bumped; the others already today's.
+
+FR-P-10d released the reserve "as far as needed to bring the deficit back to
+P-66"; DEC-092 and B5c said "to hold it there". The finder is right that under
+FR-D-03a the first has no quantity. The deficit grows by what is missing and
+decays by P-70 only in an update whose need is met in full. No amount eaten in one
+update brings a deficit above P-66 back to it; the most food can do is meet the
+need, and then decay does the rest at its own rate.
+
+**The quantity is the update's tier 0 need left unmet by the cohort's other
+holdings**, converted to the planting good by its nutrition and capped by the
+reserve. Released so, the need is met, the deficit decays by P-70, and once it
+is at or below P-66 the reserve closes until hunger grows again. The deficit
+therefore stays near P-66, which is what DEC-092 and B5c said and what B5c needs
+to be a brake: seed is protected until desperation, then spent only to stop
+desperation from deepening. "Bring back" is dropped; it described the effect over
+several updates as if it were the quantity of one.
+
+The deficit read in phase 6 is the one `R-079` writes at the end of phase 7,
+one update behind; FR-P-10d says so, so the implementer does not look for a
+fresher one that does not exist.
+
+Releasing more — enough to make the deficit decay faster, or the whole reserve —
+would spend next year's harvest to shorten this year's hunger by a margin P-70
+already sets, and would weaken B5c without a sweep asking for it.
+
+**Cost.** None to code. Phase 6 computes the unmet tier 0 need before it touches
+the reserve, which it computes anyway to meet needs from holdings.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** a sweep in which a deficit held at P-66 still kills at a
+rate the famine tuning cannot accept, which would argue for a lower P-66, not for
+a larger release.
+**Not verified:** how P-67's share of the release, zero in the shipping
+configuration, interacts with a release sized to the need: a non-zero share
+leaves part of the need unmet by construction. That is the forced sale DEC-092's
+cost names, and P-71's citation is `SQ-022`'s item 13.
+
+### R-081 — DEC-085's widths come from the logic or from the rules file, and content widths never change within a world
+
+**Date:** 2026-10-06   **Origin:** SQ-013
+**Verdict:** specified
+**docs/:** `SIM-DEC` DEC-085, rationale and cost. Revision already today's.
+
+DEC-085 predates DEC-100. Its rationale said widths come from "static data
+versioned with `ruleVersion`", and its cost that a patch adding a good reshapes
+the arrays. Under DEC-100 `ruleVersion` is the logic's version, static data come
+from the rules file the world carries, and an existing world cannot take new
+content. `R-065` listed the entries it touched and missed this one; it is the
+use site of a rule updated and its definition left behind, the failure of
+`SQ-003`.
+
+The fix separates what DEC-100 separated. **A width the logic sets** — the
+four denominations — changes with the logic and reshapes its arrays inside
+NFR-08's migration, as DEC-085 said. **A width the content sets** — one stock per
+good — is fixed for the life of the world, because the world's rules file is.
+DEC-085's decision is untouched: values in contiguous arrays, nothing nested.
+
+`SQ-023` may make per-good state sparse per settlement. If it does, the width of
+the sparse field is a capacity or a pool under DEC-085's own second sentence, and
+this ruling does not anticipate which.
+
+**Cost.** None to code.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** a requirement to move an existing world to new content,
+which DEC-100 refuses until one exists.
+**Not verified:** nothing; DEC-085, DEC-100, DEC-033 and `SIM-STATE` §World were
+read, and `docs/` grepped for `ruleVersion`.
+
+### R-082 — Generation parameters are a second input beside the seed, and only what a host chooses per world
+
+**Date:** 2026-10-06   **Origin:** SQ-014
+**Verdict:** escalated — reserve 2 of `R-001`: the answer edits NFR-01 and AC-02
+**docs/:** unchanged
+
+Since `R-065`, NFR-01 and AC-02 name three inputs: seed, rules file, commands.
+FR-G-02, NFR-08, DEC-032 and `SIM-STATE`'s `generationParams` keep a fourth, the
+generation parameters, saved beside the seed. Two runs with the same seed, rules
+file and commands but a different settlement count differ from tick 0, so AC-02
+as written fails for any code the moment a host may choose a parameter. And no
+text says which values are generation parameters and which belong to the rules
+file: P-02, P-12, P-54 and the kingdom count of `R-063` could sit in either.
+
+**Two answers.**
+
+- **A. Generation parameters go into the rules file.** One input fewer, and
+  NFR-01 and AC-02 stay as they are. But the rules file is what NFR-09's digest
+  identifies as the rules: a world of 500 settlements and one of 2,000 would run
+  under different rule versions with the same content and logic, and a sweep
+  over world size would be a sweep over rule versions. The rules file describes
+  how the world behaves; the size of the map is not a rule.
+- **B. They stay a separate input, and the determinism texts name them.**
+  NFR-01 and AC-02 read "the same seed and generation parameters, rules file and
+  commands". FR-G-02 says what they are: the values a host may choose per world
+  when creating it — settlement count (P-02), settlement mix (P-12), kingdom
+  count. Every other value the generator reads, how sites follow terrain, the
+  founders' endowment (P-54), initial stocks, is content and lives in the rules
+  file. Each value then has one home, and the test of which is whether a player
+  could pick it on a new-game screen.
+
+**Recommendation: B.** It keeps NFR-09's rule version meaning what DEC-100 made
+it mean, and it is the only answer that needs no change to what the save already
+carries. The cost is the wording of NFR-01 and AC-02, which is why it is not
+ruled here: adding an input to the premise of a determinism criterion is the
+same kind of change `R-065` put to the user as reserve 2.
+
+**Cost.** Under B: NFR-01 and AC-02 gain three words; FR-G-02 gains a sentence;
+P-54 moves from "generator" to rules content in its description. The host gains
+a second thing to pass at creation, which it already had to store.
+**Owed by the implementer:** nothing until the user answers. The question
+binds the generator's point (`R-052`), the first of phase 4.
+**Would overturn it:** a host that must vary a rules-file value per world —
+a difficulty setting that changes P-66, say — which would argue for a
+per-world overlay of parameters, a third shape neither answer has.
+**Not verified:** whether DEC-040's prior history reads any generation
+parameter after tick 0; FR-W-10 fixes the settlement count, and nothing else was
+checked.
+
+### R-083 — FR-A-05 opens Phase 4, with the generator
+
+**Date:** 2026-10-06   **Origin:** SQ-015
+**Verdict:** specified
+**docs/:** `SIM-REQ` §18, "Delivery phases": the Phase 4 table's Production row
+and the line on what lies outside Phase 4. Revision already today's.
+
+`R-052` sent "§13, what the host observes and does" to Phase 7, and `R-065` later
+put FR-A-05, the rules file, in §13. `R-063` and `R-064` place every piece of phase
+4's content in that file, and `R-065` owes its format from the first phase 4 point
+that adds static data. So the requirement the first point must serve sat in a
+phase three later, and `R-052`'s check of `Satisfies:` against §18 would have
+flagged the point that does what `R-065` requires.
+
+FR-A-05 is not host behaviour in the sense `R-052` meant. It is how content enters
+a world, and no world exists without it: the generator reads terrains,
+mestieri and recipes before it writes a row. It goes where the generator goes,
+before production, and the line on Phase 7 names the exception. What the host
+does with the file — ship it, read it from disk, offer a mod — stays the host's
+and Phase 7's; Phase 4 builds the core's half, the format, validation and the
+digest, and the harness's compiler.
+
+**Cost.** None to code; Phase 4 already owed the work under `R-065`.
+**Owed by the implementer:** nothing beyond `docs/`. `R-065` stands.
+**Would overturn it:** none foreseen.
+**Not verified:** nothing; §13, §18 and `R-052`, `R-063` to `R-065` were read.
+
+### R-084 — `SIM-STATE` lists every carry: one per good for holdings, one per building type, one for interest, one per good on each link
+
+**Date:** 2026-10-06   **Origin:** SQ-016
+**Verdict:** specified
+**docs/:** `SIM-STATE` §Cohort gains `goodsCarry`, `buildingsCarry`,
+`interestCarry` and a paragraph stating the rule, `durables` names its wear as
+the carry; §Trade link gains `lossCarry`. `SIM-ECON` "Spoilage and integer
+rounding" says where transit loss carries. `SIM-STATE` revision bumped,
+`SIM-ECON`'s already today's.
+
+`SIM-ECON` makes the remainder accumulator a rule of the codebase and names five
+rates it applies to; `AGENTS.md` repeats it as the first rule the build cannot
+catch. `SIM-STATE` §Rule says anything that influences a future tick is listed,
+and §Cohort listed one carry, the destitution share's. Every other carry would
+have been a field the implementer added outside the inventory, which is the
+determinism hole §Serialisation notes names, and which this file's reader could
+not check for.
+
+**One carry per good for holdings, not one per rate.** Production and harvest add
+fractions to a stock, spoilage takes them away, and all three act on the same
+holding. A carry is the fraction of a unit the holding has beyond its integer
+count, in [0, 1); each rate adds to it or takes from it, and a whole unit moves
+between carry and stock when reached. Separate carries per rate on one stock
+would each be right and together would let a stock hold two fractions of the same
+unit. One carry per holding conserves the good exactly, which is what A-04 asks.
+It is laid out as `goods` is, so whatever `SQ-023` decides for the layout of
+holdings, the carry follows.
+
+**The others.** Building decay at P-51 acts on a count per building type, so a
+carry per building type. Wear at P-53 already had its place: `durables` carries
+"accumulated wear", which is the carry, and now says so. Interest acts on one
+debt per row, so one carry. **Transit loss is the case `SIM-ECON`'s "stays with
+its row" did not fit**: a shipment lands once, so a carry on the transient
+vanishes with it and a small shipment never loses anything. It is held on the
+link, per good, as `flowAccumulator` already is, and cleared when the link is
+evicted.
+
+**The rule stated once.** A paragraph under §Cohort's table says every rate on an
+integer field of a row keeps a carry beside it, in its layout, and that a rate
+added later brings its carry into the table. The list is what the update names
+today; taxation on cohort currency and any rate a later phase adds are bound by
+the paragraph and enter the table with the point that builds them.
+
+**Cost.** Four fields, two of them as wide as the goods or the building types: the
+holdings' carry doubles the per-good state of a cohort, which is the figure
+`SQ-023` already counts ("twice that with a carry per good"). Every carry is
+hashed and saved.
+**Owed by the implementer:** nothing beyond `docs/`; each carry lands with the
+point that first applies its rate.
+**Would overturn it:** `SQ-023`'s measurement showing the per-good carry too
+costly at the catalogue's size, which would argue for holdings in fixed point
+with no separate carry, a change to the type of `goods`.
+**Not verified:** whether the advance of FR-C-25 accrues interest, which would
+need a carry of its own; FR-C-25 was not read for it. That interest whole units
+reach the lender's credit is `SQ-018`'s territory and is not stated here.
+
+### R-085 — The yearly cap is P-73, applied per adjustment, and needs no state
+
+**Date:** 2026-10-06   **Origin:** SQ-017
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-15 and §16, P-73 new; `SIM-DEC` DEC-096. Revisions
+already today's.
+
+FR-P-15 and DEC-096 made "P-19 and the yearly cap" the default for an activity
+whose record carries neither. The cap had no P-number, which §16 calls a defect,
+and enforcing a cap on the year's movement needed the movement already made this
+year per activity, which no table held, nor anything that reset it.
+
+**The number.** P-73, the default yearly cap, Open and set by sweep, as P-19 is.
+
+**The state.** Two answers: a field per settlement and activity holding the
+year's movement, with a reset at the year's start; or the cap applied at each
+adjustment, divided by the number of adjustments the activity makes in a year —
+one per sowing for a crop, 52 at settlement cadence. The second bounds the year's
+total exactly as the first does, since no year holds more adjustments than the
+divisor counts, and it needs no field, no reset and no dated step. What it gives
+up is the freedom to spend a whole year's cap in one step after a shock. That
+freedom is what FR-P-16 prohibits in spirit — a partial, damped adjustment — so
+losing it costs nothing the specification wants. For a crop, adjusted once a
+year, the two are identical.
+
+**Cost.** For non-agricultural activities the response to a shock is spread
+over the year rather than taken at once; a sweep of P-73 sees that as a slower
+response than the same number would give under the first answer.
+**Owed by the implementer:** nothing beyond `docs/`; P-73 cited by the point that
+builds allocation adjustment (`R-050`).
+**Would overturn it:** a requirement that an activity respond to a shock within
+the year by more than an even share of its cap; the day labourer, which needs
+that, already carries no cap.
+**Not verified:** nothing; FR-P-14 to FR-P-16, FR-J-21, DEC-047, DEC-096 and
+§16 were read.
+
+### R-086 — An advance is a loan like any other: the crop is collateral, the lender holds the claim, interest runs
+
+**Date:** 2026-10-06   **Origin:** SQ-018
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-C-24 and FR-C-25; `SIM-STATE` §Cohort, `advance` and
+`interestCarry`. Revisions already today's.
+
+FR-C-25 calls an advance "a loan collateralised by that output", and then
+departs from what every other loan has. FR-C-24 lists collateral as goods,
+durables and buildings, so a cohort holding only a standing crop could not take
+the advance FR-C-25 offers it. `advance` was a bare `int64`, while FR-C-23 gives
+debt and credit a counterparty category. And FR-C-27 puts a write-off's loss "on
+the lender" with nothing saying who that is.
+
+The answer is in FR-C-25's own first sentence: it is a loan. FR-C-22 says a loan
+transfers currency that exists, so someone's currency fell when the advance was
+paid, and their claim has to be somewhere or a write-off has nothing to fall on
+and a repayment has nowhere to go. The lender's credit stock is where FR-C-23 puts
+every claim a cohort holds. So:
+
+- **FR-C-24 lists the standing crop**, for an advance only. It does not become
+  collateral for ordinary debt: FR-C-25 binds it to the crop's own output, and
+  pledging a crop twice would need a rule for which claim it serves first.
+- **`advance` carries the counterparty's category**, as debt does, and the
+  lender holds the matching claim in its `credit`. A write-off falls on it by the
+  same path as any loan's under FR-C-27, whatever that path turns out to be.
+- **It bears interest under FR-C-26.** A loan with no price for time would make
+  the advance the cheapest credit in the world for anyone with a crop.
+  `interestCarry` widens to two, one for debt and one for the advance, under
+  `R-084`'s rule; the two balances are kept apart, so their fractions are.
+
+How a write-off held by category reaches a particular lender's credit is not this
+entry's question. It is FR-C-27's for every loan, and the credit point decides it.
+
+**Cost.** None to code. The credit point builds the advance as a second balance
+on the machinery of the first.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** content in which the advance is paid by the settlement
+or a guild rather than a cohort, which would need a lender outside the cohort
+table and a claim held there.
+**Not verified:** how FR-C-27's write-off distributes a loss among lenders that
+share a category; FR-C-23 to FR-C-30 were read and none says.
+
+### R-087 — `SIM-LOOPS`' tables and gate check are brought back to agreement
+
+**Date:** 2026-10-06   **Origin:** SQ-019
+**Verdict:** specified
+**docs/:** `SIM-LOOPS` §Stocks: Population, Goods, Currency and Debt rows, and a
+Standing crop row; B2's and R12's tuning lines; two rows of §Gate check.
+Revision already today's.
+
+The finder is right on each count. The poverty and seed batch added flows the
+stock table did not show, R12 arrived with no tuning line, and the gate check
+counted loops by a list older than three of them. The user conditioned the batch
+on the phase 1 gate staying closed, so a status reading "Met" over tables that
+do not support it is the claim to fix, not to leave.
+
+- **§Stocks.** The standing crop is a stock: sowing puts the planting good into
+  it, harvest takes it out, and so does loss before harvest or when the window
+  closes (FR-P-10a, FR-P-10b, FR-P-10e, FR-C-25). Goods gain sowing, seizure and
+  emigrants among outflows, and arriving migrants and seizure received among
+  inflows; goods in transit are held by transients. Population and currency
+  gain migrants in transit (FR-D-04a). Debt gains advances (`R-086`). Every row
+  has a source and a sink, so the first row of the check stays "Met".
+- **Tuning.** B2 is tuned by P-73 as well since `R-085`. R12's brakes are tuned
+  by P-68 and P-69, which set who enters and leaves the destitute row, by the day
+  labourer's own rate for B12a and by P-46 for B12b. B7 has no parameter: it is
+  the order of phases 6 and 7, and there is nothing to tune. The check now says
+  so instead of reading "Met" over it.
+- **The count.** R9, R10 and R11 have named brakes and were missing from the
+  list; R3 has its own row; R8 balances itself and terminates, as its section
+  says.
+
+Nothing changes in what the gate asks. Every status still reads "Met"; one now
+names the brake it does not apply to.
+
+**Cost.** None.
+**Owed by the implementer:** nothing.
+**Would overturn it:** a reading of "brakes have a tuning parameter" as a
+requirement on every brake, which would make B7 a defect; that would be a change
+to the gate, reserve 2, and the user's.
+**Not verified:** that no other flow of `docs/` is missing from §Stocks; the
+batch's flows were checked, the older ones were taken as they stood.
+
+### R-088 — `R-065` revised by the user's answer to `SQ-020`: base rules in the core, a file replaces them, validation never fails
+
+**Date:** 2026-10-06   **Origin:** SQ-020, the user's answer of 2026-10-05
+**Verdict:** specified — the user's decision on §20, reserve 4 of `R-001`; the
+sentence on AC-04 is the user's, reserve 2
+**docs/:** `SIM-DEC` DEC-100, title, decision, rationale and cost; `SIM-REQ`
+FR-A-05, AC-04 one sentence, §16 P-74 to P-76 new; `SIM-STATE` §Static data.
+Revisions already today's.
+
+`R-065` left unverified whether the consumer of §20 can ship and read a rules
+file. Only the user could answer, and did: a hybrid. The base rules are compiled
+into the core, as bytes written by the same compiler from the same text source;
+an external file, where the game can read one, replaces them. The rest of
+`R-065` stands, and the user named three consequences for the decider to write.
+This ruling transcribes them; it decides only their wording and the numbers.
+
+- **The default.** FR-A-05 and DEC-100 say a world runs on the base rules when
+  the host hands no file, and that a file replaces them whole. Both go through
+  the same validation, digest and save, so a world on the base rules is no
+  different in kind from one on a file; `R-004`'s point, as `R-065` kept it,
+  survives — the core computes the digest of whatever bytes it runs on.
+- **Validation that never fails.** Players will write files. A malformed one is
+  refused by a result the host receives, never by an exception or a crash of the
+  core. That is a property of the validator, stated in FR-A-05, and the reason
+  the cost line of DEC-100 now says validation must hold against files the
+  repository's compiler did not write.
+- **Caps.** A file may not declare more goods, mestieri or recipes than P-74,
+  P-75 and P-76, Open, set after the Phase 4 measurement of P-17, so that no file
+  takes the core past P-01 without anyone noticing. Three numbers, not one,
+  because the three grow different costs: goods widen holdings, mestieri add rows,
+  recipes add production work.
+- **AC-04.** Its bounds are a claim about the base rules; it says it makes no
+  claim about a world on another file. The user asked for this sentence. It
+  narrows the domain of an acceptance criterion, which is reserve 2, and is
+  applied as theirs.
+
+`SQ-023` bears on the caps: if state becomes sparse per settlement, the cost that
+P-74 guards is the goods present in a place, not the catalogue, and the cap may be
+looser. That is for the ruling on `SQ-023`, after the measurement.
+
+**Cost.** The base rules are a build output: the build regenerates them when the
+source changes, and a check that the bytes in the core match the source is a
+natural test for the point that builds them. Three more parameters.
+**Owed by the implementer:** `R-065`'s action, widened as noted under "Owed by
+the implementer". Cite `R-065` and `R-088`.
+**Would overturn it:** the user revising the hybrid; a platform that can read a
+file but must not accept mods, which would need a way to refuse a valid file.
+**Not verified:** how the base rules reach the core as bytes — a generated source
+file, an embedded resource — which `BannedSymbols.txt` and §20 constrain and the
+implementer chooses.
+
+### R-089 — Age bands are content, each marking whether it works; the base values await the user
+
+**Date:** 2026-10-06   **Origin:** SQ-021
+**Verdict:** specified; the base values escalated — static content is the
+user's under `R-050`
+**docs/:** `SIM-STATE` §Cohort `ageDistribution`, open item 1, and open item 6
+new; `SIM-REQ`
+FR-C-05 gains one sentence. Revisions already today's.
+
+`R-063` approved "Age bands. Three, closing `SIM-STATE` open item 1." The text
+that `R-059`'s transcription put into `docs/` said more: the names children,
+working age and elderly, that only working age offers labour, and that a wider
+split is a format migration. No ruling decided the second and third, and the
+finder is right that the labour rule is not a label: it decides who sells labour
+under FR-C-05, and so the dependency ratio of every settlement.
+
+**The structure is specified here.** Age bands are content, as `R-063` made them,
+and each band carries whether its members offer labour. FR-C-05 now says labour
+offered is the members of the bands so marked. Stating it per band keeps the
+rule in the rules file with the bands themselves: a content author who splits
+working age in two, or lets the elderly work, changes data, not code, which is
+what DEC-100 is for.
+
+**The remark on migration was wrong** after `R-081`. A band count set by content
+is a width the content sets, fixed for the life of a world; a wider split is new
+content, not a migration of an existing world's format. The item now says so.
+
+**The base values are not the decider's.** Three bands named children, working
+age and elderly, with working age alone offering labour, is a plausible base and
+the one the text already held, and the decider recommends it: it gives the
+model a dependency ratio, which is how age structure reaches the economy, and
+leaves child and elderly work to content that wants it. But values in the rules
+file are static content, approved by the user before the plan that uses them
+(`R-050`). They stand in `docs/` as the base, marked under "Escalated to the
+user" until approved.
+
+**Cost.** One flag per band in the rules file. A world where nobody but working
+age works feels a demographic shock in its labour supply a generation later,
+which is the point of a dependency ratio and a tuning question for Phase 6.
+**Owed by the implementer:** nothing beyond `docs/` once the user approves; the
+point that builds cohort rows reads the flags.
+**Would overturn it:** the user approving other values, which changes content
+only.
+**A gap found beside it.** Nothing in `docs/` says how members move from one
+band to the next; a grep for ageing finds only the knowledge table's. It is
+recorded as `SIM-STATE` open item 6, due with the demography subsystem, rather
+than decided here: the rate per band is a parameter and its shape follows from
+how births and deaths are written.
+
+**Not verified:** nothing further; FR-D-01 to FR-D-03, FR-D-13 and FR-C-05 were
+read.
+
+### R-090 — The fourteen leftovers of the batch are corrected; two are decided on the way
+
+**Date:** 2026-10-06   **Origin:** SQ-022
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-01, FR-P-10d, FR-C-04, FR-C-29, FR-A-05, §16 P-17,
+P-17a, P-63, P-64, §18 Phase 4, §19 P-17 and P-01; `SIM-DEC` DEC-015, DEC-047
+title, DEC-052, DEC-076, DEC-092, DEC-041's cost (P-17's figure); `SIM-ECON`
+phases 4 and 7, the allocation step, §Demand; `SIM-STATE` §Static data.
+Revisions already today's.
+
+Item by item, as the entry numbers them.
+
+1. **Phase counts.** The update has phases 1 to 12 and 8a; §18 and §19 now say
+   "all its phases". The measured figures keep "5 of 12": that was the update
+   they were taken on, and DEC-041's cost line now says so. §19's unmeasured
+   phases are eight since 8a.
+2. **9 and 27 cohorts.** The four rows record measurements, and are relabelled
+   "measured on 9 rows" and "27 rows" rather than restated at 12 and 36: §19
+   already says the real measurement counts 12 and 36.
+3. **DEC-015** starts with "the goods of P-09", which cannot go stale again.
+4. **DEC-052**: one mechanism, damped at each activity's rate (DEC-096).
+5. **DEC-047's title**: "at each activity's adjustment".
+6. **The allocation step** adjusts at sowing for a crop's activity and at
+   settlement cadence for the others, as FR-P-15 says.
+7. **Implements.** Phase 4 cites FR-P-10e, phase 7 FR-P-10d and FR-J-22, and
+   §18's Production row lists phase 12 for FR-J-03's realignment.
+8. **A crop yields one good — decided.** DEC-092 let a crop whose seed is not food
+   yield its seed "alongside its harvest"; FR-P-10 and FR-P-10b give a crop one
+   yield. One yield wins: the content of `R-063` has one crop sown with its own
+   harvest, and a co-yield would add a second output to the crop record, the
+   harvest, the carry of `R-084` and the conservation of FR-P-03c for a case no
+   content holds. A crop whose seed is not its harvest names a planting good
+   obtained as any good is, by a recipe or by trade.
+9. **FR-P-01 and DEC-015** say "whether it is durable", not "role" (`R-056`).
+10. **`rulesData`.** §Static data says the content is not state and the bytes
+    are, as World's `rulesData`, immutable.
+11. **FR-A-05** refuses a file "this build cannot read or whose content fails
+    its validation", which is what DEC-089 asks of a save, and no longer admits
+    a file only a later build could read.
+12. **Rent — decided.** FR-C-29 said rent "reopens when the wealth axis is
+    added", and DEC-054 added it long ago, so read literally rent was already
+    in scope. It is not: no requirement, phase or content carries it, and
+    `SIM-ECON`'s "does not cover" item 1 still treats rent as a future change.
+    The condition was a pointer to what would carry rent, written before the
+    axis existed. Both texts now say that: the wealth axis is what would carry
+    rent and tenancy if they enter the model. Bringing them in is a scope
+    decision that belongs with the user and a phase, not with a wording fix.
+13. **P-71** is cited by FR-P-10d and DEC-092 as the CI share of the release.
+14. **"Per good".** FR-C-04 keeps a pass per good, in DEC-099's order within a
+    need; §Demand's quantity is per cohort per need. Whether the pass is per good
+    or per clearing is `SQ-023`'s, after the measurement.
+
+**Cost.** None to code.
+**Owed by the implementer:** nothing beyond `docs/`.
+**Would overturn it:** for item 8, content needing a crop with two outputs; for
+item 12, the user bringing rent into scope.
+**Not verified:** that every other mention of the old counts is gone; `docs/`
+was grepped for "twelve", "seven goods", "once per sowing", "role" in a good's
+record and "no build could", and what remains is historical and says so.
+
+### R-091 — `R-082` accepted: generation parameters are a second input, named in NFR-01 and AC-02
+
+**Date:** 2026-10-07   **Origin:** user, on `R-082`
+**Verdict:** specified — the user's decision, reserve 2 of `R-001`
+**docs/:** `SIM-REQ` NFR-01, AC-02, FR-G-02, §16 P-54's description; `SIM-STATE`
+§World `generationParams`. Both revisions bumped.
+
+The user approved `R-082`'s recommendation and asked for it to be applied:
+"approvo R-082 e R-089, applicali". Answer B, as `R-082` wrote it.
+
+- **NFR-01 and AC-02** name the seed and generation parameters together, beside
+  the rules file and the commands. The criterion now lists every input a run is
+  given, so correct code can pass it when a host chooses a world's size.
+- **FR-G-02** defines generation parameters as the values a host may choose for
+  each world: settlement count (P-02), settlement mix (P-12), kingdom count.
+  Every other value the generator reads is content in the rules file. The
+  kingdom count has no P-number yet; `R-063` left it Provisional, and the
+  generator's point proposes one under `R-050`.
+- **P-54**, the founders' endowment, is described as rules content read by the
+  generator, which is the home FR-G-02 now gives it.
+- **`generationParams`** in `SIM-STATE` says what it holds.
+
+The rule version of NFR-09 keeps meaning what DEC-100 made it mean: two worlds of
+different size on the same content and logic run under the same rule version.
+
+**Cost.** As `R-082`: the host passes a second input at creation, which it
+already had to store. The pins of `R-034` and `R-036` do not move: phase 3's
+worlds have no generation parameter beyond the one `D-062` kept.
+**Owed by the implementer:** nothing beyond `docs/`; the generator's point reads
+FR-G-02 as it now stands.
+**Would overturn it:** as `R-082`: a per-world choice of a rules-file value.
+**Not verified:** as `R-082`: whether prior history reads a generation parameter
+after tick 0.
+
+### R-092 — `R-089` accepted: the base rules hold three age bands, and only working age offers labour
+
+**Date:** 2026-10-07   **Origin:** user, on `R-089`
+**Verdict:** resolved — the user's approval of static content under `R-050`
+**docs/:** unchanged; `SIM-STATE` open item 1 already states the values.
+
+The user approved `R-089`'s recommendation: "approvo R-082 e R-089, applicali".
+The base rules hold three age bands, children, working age and elderly, and only
+working age offers labour. `SIM-STATE` open item 1 carried these values since
+`R-089`, marked as awaiting approval only here; they now stand as approved
+content, beside the rest of `R-063`. As every number of `R-063`, the bands are
+structure, and the rates that move members between them are open item 6.
+
+**Cost.** None beyond `R-089`'s.
+**Owed by the implementer:** the point that builds cohort rows writes the three
+bands and their labour flags into the rules file of `R-065`, as it writes the
+rest of `R-063`. Cite `R-089` and `R-092`.
+**Would overturn it:** the user revising the content before that point.
+**Not verified:** nothing.
+
+### R-093 — `D-114` is ratified; the watermark reaches `D-114`
+
+**Date:** 2026-10-07   **Origin:** register audit, `D-114`
+**Verdict:** ratified; one recommendation escalated — reserve 1 of `R-001`: point
+8's content is the user's (`R-070`)
+**docs/:** unchanged
+
+Point 4 of the process plan, the six agent definitions. Process, so ratified or
+rejected, never promoted (`D-011`). The entry was read against point 4's frozen
+text and the design's "The roles", "What the coder may not write",
+"Enforcement", "The tester, in two dispatches" and "Where the rules live", and
+its claims against `1ed624a`, the six files and the diff of `reviewers.md` read
+whole.
+
+- **The frontmatter.** Checked by hand against the roles table, since the
+  entry's script was not committed: model, effort and tools agree for all six,
+  each `description` says "Dispatched by /plan-next only", no reviewer holds
+  `Edit` or `Write`, and the three `path-guard` roles and the committer's
+  `git-guard` carry the matchers and commands the entry states.
+- **No hook on the reviewers; `Write` in the documenter's matcher.** Stand. A
+  hook on `Edit|Write` sees nothing an agent without those tools can do, and
+  what `Bash` leaves is the orchestrator's check, as the design says. The extra
+  matcher costs nothing and guards a tool list widened by mistake.
+- **The code-reviewer reads `AGENTS.md` whole.** Stands. Point 5 writes the
+  section the design points at, and point 5's own check runs the code-reviewer
+  against C1 and C5, so reading the whole file reaches the section the day it
+  exists. Its body asks which fault the check would miss, the code-reviewer's
+  half of `R-047`, now marked under "Owed by the implementer".
+- **The five rules moved, a pointer left in `reviewers.md`.** Stands. Rules 1 to
+  4 are verbatim and rule 5 loses only its heading. Until point 7, `/plan-next`
+  dispatches agent types that do not read `revisioner.md`, so the sentence
+  telling the brief to copy them keeps the rules reaching a reviewer. No other
+  file names the old headings; grepped.
+- **The bodies add no step.** Checked against the design: the empty
+  implementation in the tester's second dispatch is the design's (`D-065`,
+  `D-070`); the documenter's STOP cases are `/plan-next` step 6's; the
+  committer's comparison of the staged set is "Enforcement" item 2.
+- **The check left outside the repository.** Accepted, as a cost. `AGENTS.md`
+  asks a point for a runnable check, and this one ran once and went with the
+  session's scratchpad; a later edit to an agent file meets no check. The
+  comparison is six frontmatter blocks against six rows, and this audit redid it
+  in minutes, so a script is not worth a home that the design reserves for
+  hooks. The first real run, `R-046`, is the check that matters.
+
+**The reserve of point 4.** This session started after `1ed624a` and lists the six
+types among its agents, with the tool sets above: the definitions load in a fresh
+session, which is half of what the reserve waited for. Whether the coder's hook
+fires on a write to `docs/probe.md` was not probed here: the probe is the
+implementer's, under `R-011`, and the definitions say they are dispatched by
+`/plan-next` only. The reserve stays open until the implementer runs it and
+writes the *Riserva sciolta* line.
+
+**A finding, escalated.** `coder.md` restates its denylist in prose, a third copy
+beside the design and `path-guard`. Point 8 (`R-070`) adds the two settings
+files to the other two copies and does not name this one, so after point 8 the
+coder's own instructions would list less than its hook denies. The hook is what
+enforces, so nothing is breached; but the body is what the coder reads.
+**Recommendation:** point 8 also names `.claude/agents/coder.md` and adds the
+settings files to its list. The content of point 8 was approved by the user item
+by item (`R-070`, `R-071`, `R-073`, `R-074`), so a seventh change is theirs to
+approve; until then point 8 carries the six.
+
+**The watermark advances to `D-114`.**
+
+**Cost.** None beyond the check that cannot be rerun.
+**Owed by the implementer:** nothing new; the code-reviewer's half of `R-047` is
+marked done.
+**Would overturn it:** as for `R-008`; the probe showing the hook does not fire
+or `$CLAUDE_PROJECT_DIR` does not expand, which the entry names and which would
+change every `command:` line.
+**Not verified:** that the hooks fire for a subagent, that `effort` is honoured,
+and `disableAllHooks` (`R-068`); none was probed. The `command:` lines were not
+rerun.
+
+### R-094 — `R-093` accepted: point 8 also updates `coder.md`'s list, a seventh item
+
+**Date:** 2026-10-07   **Origin:** user, on `R-093`
+**Verdict:** resolved — the user's decision, reserve 1 of `R-001`
+**docs/:** unchanged
+
+The user approved `R-093`'s recommendation and asked for it to be applied:
+"approvo la raccomandazione di R-093, applicala". The change is to
+`.claude/agents/coder.md`, which a decider session does not write, so applying it
+means owing it to point 8, as `R-071`, `R-073` and `R-074` did. This ruling
+records the user's approval that `D-014` requires for the addition.
+
+**The seventh item.** `.claude/agents/coder.md`, where its body lists the paths
+the coder may not write, adds `.claude/settings.json` and
+`.claude/settings.local.json`, so that its prose matches the denylist point 8
+gives the design and `path-guard`. Point 8 names the file in its own text: the
+design reserves `.claude/agents/` to the orchestrator "in a point that names
+them", and point 8 is run by the orchestrator, before point 7 (`R-070`).
+
+The alternative, replacing the list with a pointer to `path-guard`, would leave
+one home for the rule, as the design prefers. It was not what the user approved,
+and a coder that reads its limits in its own instructions is told them before the
+hook refuses it; the list stays, kept in step.
+
+**Its `Fails when:`**, proposed here and not yet read by the user (`R-047`):
+after point 8, `coder.md` names no settings file while `path-guard` denies them.
+
+**Cost.** One more item in point 8, and three copies of the denylist to keep in
+step instead of two, until a point decides the body should point rather than list.
+**Owed by the implementer:** point 8, as `R-070` owes it, carries this seventh item
+and its `Fails when:` line, and names `.claude/agents/coder.md`. Cite `R-070` and
+`R-094`.
+**Would overturn it:** the user preferring the pointer to the list.
+**Not verified:** nothing; `coder.md` was grepped and names no settings file today.
+
+**`Fails when:` read by the user, 2026-10-07:** "approvo la condizione di
+fallimento di R-094". The line stands as stated above, and point 8 carries it
+verbatim.
+
+### R-095 — `D-115` is ratified; point 8 owes a self-test of `mutate`'s exit 3 beside its criterion
+
+**Date:** 2026-10-07   **Origin:** register audit, `D-115`
+**Verdict:** ratified; one action owed
+**docs/:** unchanged
+
+Point 8 as written into `PLAN.md` by `02293d6`, owed by `R-070`. Process, so
+ratified or rejected, never promoted (`D-011`). The point was read against
+`R-068`, `R-070`, `R-071`, `R-073`, `R-074` and `R-094`, and the commit's diff
+read whole: it appends point 8 between points 6 and 7 and the entry, and
+changes nothing above.
+
+- **The seven items** are the rulings' own, in their order, each citing its
+  ruling. Item 3 restoring `R-068`'s self-test case for a lowercase `a-`, and item
+  4 carrying `R-071`'s `mutate` exit 3 from its cost paragraph, are both what the
+  rulings owe.
+- **The `Fails when:` lines** are verbatim, the eight faults the user read.
+- **The placement.** `plan-state` reports the points in file order, 8 before 7,
+  and `next: 5`; `R-070`'s reading holds.
+- **`Closed by:` is the implementer's.** No ruling stated one, and a criterion
+  written by the point's author is the rule, not an exception. Each named fault
+  turns it red: the five self-tests carry the cases of items 1 and 3 to 6, and the
+  greps catch items 2 and 7.
+
+**One gap, under `R-005`'s case 1.** Item 4 asks `mutate` to stop with exit 3 when
+either call to `tree-state` fails. That is the half of `R-071` that matters: a
+`tree-state` that refuses to hash is only safe if its caller does not read two
+empty answers as "returned". No `Fails when:` names it, and the `Closed by:` asks
+`mutate`'s self-test for "the cases of items 1 and 3 to 6" without saying that
+item 4 gives `mutate` one. A `mutate` that ignores the failure passes the point as
+written. The criterion is frozen and is not rewritten; correct code passes it, so
+the point is not `FAILED`. The case goes beside it.
+
+**Cost.** One more self-test case in `mutate`, and one more fault introduced.
+**Owed by the implementer:** within point 8, a self-test case of `mutate` in which
+a call to `tree-state` fails and `mutate` exits 3, with the fault of `mutate`
+ignoring the failure seen red; the outcome line names it as the check beside the
+criterion. Cite `R-095`.
+**Would overturn it:** reading "the cases of items 1 and 3 to 6" as already
+including `mutate`'s exit 3, which the implementer may show by the case being
+there; the action is then met by the point itself.
+**Not verified:** the live probe of point 4's reserve. The coder's `command:` line
+was run by hand, through `bash` with `CLAUDE_PROJECT_DIR` set to the Windows path
+and Windows paths in the JSON: `docs/probe.md` and `core/Tests/` denied with exit
+2, `core/Runtime/`, `harness/` and `.claude/settings.json` allowed, the last as
+point 8 expects to change. Whether Claude Code fires the hook for a subagent is
+still unproven.
+
+### R-096 — A moment-one request holds its draft under `## Draft plan`, and the current one is brought to it
+
+**Date:** 2026-10-07   **Origin:** D-117 (a finding for the decider)
+**Verdict:** resolved; one action owed
+**docs/:** unchanged
+
+`D-117` found that `plan-state -Draft` cannot read the cost measurement plan's
+request. Checked in this session: run on `REVIEW-REQUEST.md` as it stands, the
+script prints `exists: false`. The draft is there, in a fenced block, under
+`## The draft plan`; the script looks for the exact line `## Draft plan`, which
+point 3's frozen text names. The request was written on `design/poverty-seed`
+on 2026-10-05, before `plan-state` existed, and nothing told its writer the
+heading: `R-048` and the rule `AGENTS.md` now carries say "a draft inside the
+review request" and name none, and "What a request holds" at the top of
+`REVIEW-REQUEST.md` lists six parts and no draft. The heading is a contract that
+lives only in its reader.
+
+**The request conforms; the reader does not widen.** A parser that accepts
+variants of a heading is reading prose, and the next variant is the next miss.
+One exact line is something a self-test can pin, and point 3's text already
+fixes it, so a `plan-state` matching anything else would depart from its own
+frozen "Does". Renaming one heading in a request changes nothing the user reads.
+
+**And the writer is told.** The defect is not the one heading but that the next
+moment-one request would be written the same way. The place a writer of a
+request reads is "What a request holds"; one sentence there, under the six
+parts, closes it: a request at moment one carries the draft whole in one fenced
+block under `## Draft plan`, which `plan-state -Draft` reads.
+
+**Timing.** The user has not yet answered this request (item 1), and once the
+plan is installed `-Draft` has nothing to read. But `/plan-explain` reads a
+draft through `-Draft` today (point 6), and is the skill a user would run on a
+draft before answering. So the heading moves before that, not after.
+
+**Cost.** One heading and one sentence. The convention binds every later
+request, and a request written by hand must match it exactly.
+**Owed by the implementer:** the current request's draft sits under
+`## Draft plan`, so that `plan-state -Draft` reports it, before the draft is
+next read through the script and no later than the commit installing that plan;
+and "What a request holds" in `REVIEW-REQUEST.md` states that a moment-one
+request carries its draft in one fenced block under that heading. Neither is
+trivial under `AGENTS.md`, since this ruling decided it. Cite `R-096`.
+**Would overturn it:** a second reader of drafts that needs another shape, which
+would argue for writing the format once, in the plan design note, and pointing
+both at it.
+**Not verified:** that nothing outside `.claude/` reads `## The draft plan`; the
+skills and hooks were grepped for "Draft plan", and only `plan-state` and
+`/plan-explain` name it, both as `## Draft plan`.
+
+### R-097 — `D-116` and `D-117` are ratified; the watermark reaches `D-117`
+
+**Date:** 2026-10-07   **Origin:** register audit, `D-116` and `D-117`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Points 5 and 6 of the process plan. Process, so ratified or rejected, never
+promoted (`D-011`). Each entry was read against its point's frozen text and the
+rulings it applies, and its claims against `58d8557` and `e8f7590`.
+
+- **`D-116`, point 5.** Stands. Checked: the permission for `AGENTS.md` is
+  recorded as `R-010` requires, and the diff of `AGENTS.md` changes the "Criteria
+  are frozen" bullet and adds the three sections, nothing else; the markers
+  `FAILED` and *with reserve* replace the Italian ones there. A grep of
+  `AGENTS.md` and the three skills finds the Italian markers only in "Language"'s
+  table and in each skill's recognising sentence, five forms in `/plan-next`,
+  four in the other two. `/plan-next` is 2,793 words, as the entry says.
+  - **The first defect is `R-005`'s case 1, and the reading by identifier is
+    the right one.** The section's effect on a reviewer is that its findings
+    name the rule they apply; on a fixture whose defects other parts of
+    `AGENTS.md` already reach, that is the only effect a check can see. So the
+    entry's "would overturn it" does not arise.
+  - **The second is case 1 too**, and the check beside it is the right one: a
+    grep for markers present cannot see a marker gone.
+  - **Point 8 owes a code-reviewer** dispatched by hand, as the entry says: it
+    changes PowerShell scripts, and "Review and self-governance" applies from
+    `58d8557`.
+  - **The 38 words** are point 7's to recover, as the entry says.
+- **`D-117`, point 6.** Stands. Checked: `e8f7590` touches the two skills, the
+  register and `PLAN.md`. Reading "this request's draft" as the process plan's
+  own request, from `main`, is the only reading under which the point could be
+  checked as written, since the request on this branch cannot be read by
+  `plan-state` (`R-096`).
+  - **The session running `plan-state`, a `tree-state` difference stopping the
+    skill, "guarantee" dropped with its sibling, the range sentence kept for
+    C1.** Stand.
+  - **The second fault green on the first injection, red on the second.** Not
+    a defect of the criterion: the first change did not produce the fault
+    named, since the agent still reported "stopped"; the second did, and the
+    check caught it.
+  - **The two findings.** The first is `R-096`'s. The second, a check as strong
+    as the sentence the agent obeys, is a property of every agent-run check
+    and is accepted as such.
+
+`R-045` and `R-048` are marked done under "Owed by the implementer".
+
+**Cost.** None beyond `R-096`.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` or
+the design as it stood when written.
+**Not verified:** the agents' runs and the faults seen red were taken from the
+entries; the code-reviewer's dispatch on the fixtures was not repeated. The
+citations of C1, C2, C4 and C6 to C9 and S1 remain unread, as `R-028` left them.
+
+### R-098 — Point 4's reserve stays open: a red probe discharges nothing, and workspace trust is the first suspect
+
+**Date:** 2026-10-07   **Origin:** D-119 (the line under point 4, left to the human)
+**Verdict:** resolved; one action owed
+**docs/:** unchanged
+
+`D-119` ran point 4's live probe in a session that sees the six agents: `coder`,
+asked to write `docs/probe.md`, wrote it, with no hook message. The same
+`command:` run by hand on the same input exits 2, so the hook did not fire.
+The entry leaves "the line under point 4" to the human.
+
+**`R-011` already answers which line: none.** A reserve closes a point whose
+work is done but for an action only a human can take, and it is discharged
+when the clause's check, run after that action, passes. This check failed.
+So no *Reserve discharged* line can be written, the reserve stays open, and
+the plan's exit condition, which names "the six agents", stays unmet. `R-011`
+gives an open reserve exactly this job: to keep a plan from reading as done
+while a clause is not. None of this is a new rule, so reserve 1 of `R-001`
+does not apply.
+
+**What the human action is.** Point 4 took it to be a session started after
+`1ed624a`. The documentation names another. The subagents page
+(code.claude.com/docs/en/sub-agents.md, read through a guide agent, not
+opened directly) says frontmatter hooks of a project agent need the workspace
+trust dialog accepted for the folder. Without it the agent runs and its hooks
+are skipped, with the error only in the debug log. This has been so since
+v2.1.218, and this session runs 2.1.283. `~/.claude.json` holds this project
+under two keys: `F:\fantasy-socioeconomic-simulator` with trust accepted, and
+`F:/fantasy-socioeconomic-simulator` without. If the session that ran the
+probe was keyed by the second, it explains the result exactly: the agent
+runs, the hook is silent. Accepting trust is a security setting and the
+user's alone, so the reserve is still the right status. The missing action
+is the human's, not work the agent could do.
+
+**If the probe stays red with trust accepted,** that is no longer a reserve:
+the clause fails for a reason the agent must find and fix, which `R-011` says
+a reserve is not for. Then it is reported in the register as a finding. A
+point to fix it is added only with the user's approval under `D-014`, and
+whether the workflow may run with the hashes of step 3 as its only barrier is
+governance, the user's.
+
+**What waits.** Under `R-048`, `main` carries no live `PLAN.md`. The agents
+reach `main`, and the cost measurement plan's branch is cut from `main`, only
+once the process plan is archived, and a plan is not archived with its exit
+condition unmet. So the measurement plan waits on this probe. It needs the
+hooks: `R-067` runs it under the agents.
+
+**Cost.** The measurement plan, and with it the ruling on `SQ-023` and the
+phase 4 plan, wait on one user action and one probe. Until then the coder's
+denylist is enforced only by the hashes `/plan-next` takes around step 3
+(`D-119`). These catch a breach after it happens, not before.
+**Owed by the implementer:** once the user has accepted workspace trust for
+the folder, run point 4's live probe again. Green: the *Reserve discharged* line
+under point 4's outcome, in a commit without a `Plan-point:` trailer (`R-011`).
+Red with trust accepted: the result in the register, for the decider. Cite
+`R-098`.
+**Would overturn it:** the probe red with trust accepted, which ends the reserve
+reading as above; the user choosing to archive the plan with the reserve open.
+That would be a change to `R-011`, and theirs.
+**Not verified:** that trust is the cause. Which of the two keys the probing
+session used was not established, and the probe was not rerun here. The
+documentation was read through a summary, not quoted from the page.
+`disableAllHooks` is unset, and `.claude/settings.json` does not exist, so it
+was not the cause. Whether a hook fires for an agent run in the background was
+not documented, and was not tested.
+
+### R-099 — `D-118` and `D-119` are ratified; the watermark reaches `D-119`
+
+**Date:** 2026-10-07   **Origin:** register audit, `D-118` and `D-119`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Points 8 and 7 of the process plan. Process, so ratified or rejected, never
+promoted (`D-011`). Each entry was read against its point's frozen text and the
+rulings it applies, and its claims against `9d8ea3c` and `7b1fdbe`. Both
+commits touch only the files their points name, and nothing under `core/`. The
+five self-tests were run in this session: `path-guard` 34 cases, `git-guard`
+44, `tree-state` 14, `mutate` 12, `plan-state` 59, exit 0 each, and the tree
+was clean after them.
+
+- **`D-118`, point 8.** Stands.
+  - **`tree-state` failing when a git call fails, not only when a file cannot
+    be read.** Right on the merits, and for `R-071`'s own reason: a check that
+    cannot look says so.
+  - **`mutate` stopping before the patch when the first call fails.** Right on
+    the merits: it is the only way the tree is known to be untouched.
+  - **A rename's or copy's source read from the header lines.** Stands. A quoted
+    source is refused, which is the safe side.
+  - **UTF-8 decoding, the locked file, the fixture.** Stand as recorded.
+  - **The check beside the criterion.** `R-095`'s case is in `mutate`'s
+    self-test, and its fault was seen red.
+  - **The code-reviewer's three findings.** The `copy from` case was applied.
+    The rejection of a case for the second call's failure is right, since it
+    would test a message.
+  - **The finding on point 2, left to the decider: no case covers `harness/` in
+    `$Guarded`.** Accepted as a limit, with no action. Dropping `harness` would
+    refuse the tester's valid patches with exit 2. That failure is loud and
+    stops the point, and lets nothing through. A case would pin a configuration
+    line, not a behaviour anyone could miss.
+- **`D-119`, point 7.** Stands.
+  - **The moment-one answer recorded in the installing commit or in the
+    request.** This reads `R-049`'s "recorded" as `AGENTS.md` and `R-048`
+    already place it. The cost measurement plan's answer stands in both:
+    `8f9c698`, and item 1 of the request.
+  - **The orchestrator introducing a fault `mutate` cannot reach, named in the
+    outcome line.** Stands: the design is silent, and saying who introduced the
+    fault keeps the record honest.
+  - **The checks of "The hole that `Bash` leaves" as hashes over pathspecs.**
+    Checked: step 3's list holds the same fourteen entries as `path-guard`'s
+    `$CoderDenied`.
+  - **The `R-047` question in every brief, the code-reviewer's included.**
+    That is what `R-047` asked of both halves.
+  - **The word count by `wc -w`.** It is the measure the cap was taken in.
+  - **The check left in the scratchpad.** Accepted as for `R-093`.
+  - **One cost, recorded rather than acted on.** The coder's denylist now has
+    four copies: the design, `path-guard`, `coder.md` and `/plan-next` step 3.
+    Point 8's grep keeps two of them in step for the settings files, and
+    nothing ties the skill's copy to the rest. The next change to the denylist
+    must name all four. Whether one home and three pointers would be better is
+    governance, and no one has asked.
+  - **Point 4's reserve.** `R-098`'s.
+
+The actions owed by `R-047` (the brief's half), `R-049`, `R-070`, `R-095` and
+`R-096` are marked done under "Owed by the implementer". `R-070` covers
+`R-071`, `R-073`, `R-074` and `R-094`.
+
+**Cost.** None beyond `R-098`.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` or
+the design as it stood when written.
+**Not verified:** the faults seen red were taken from the outcome lines; the
+check script of point 7 was not rerun, since it is not in the repository.
+No point has yet run under the rewired `/plan-next`, so whether its dispatches
+work as written is the first real run's to show (`R-046`).

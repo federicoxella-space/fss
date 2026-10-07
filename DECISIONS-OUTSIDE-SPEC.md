@@ -2947,6 +2947,84 @@ main". The design note ties archival to the plan's close, not to the merge, and
 archive rather than in `RULINGS.md`, or a candidate found to be in `docs/`
 already.
 
+### D-108 · Review of the poverty and seed proposal, and of the batch it became
+
+**Ruling:** R-076 — ratified.
+The proposal entered `docs/` through `R-054` to `R-065`; the
+findings on the result are `SQ-009` to `SQ-022`.
+
+The user asked for three things in turn: review the proposal before transcription,
+bring it and the phase 4 note into the repository and resolve the review's points,
+and check the decider's result. No code changed, and nothing in `docs/` was edited
+by this session.
+
+**Decided.**
+- **A branch, `design/poverty-seed`**, rather than commits on `main`: the
+  session's standing rule is to branch before committing on the default branch.
+  The decider's rulings landed on the same branch, so it carries the whole batch
+  and is merged without squashing like any other.
+- **The proposal's place and name** are
+  `.claude/design/2026-10-04-proposal-poverty-seed.md`, dated as the other design
+  notes are. The user's file in Downloads is the origin; revisions 9 and 10 exist
+  only here.
+- **Revision 9 was written by this session from the user's answers**, each put as
+  a choice with a recommendation; every one is marked as the user's in the
+  proposal. Two changes needed no answer and were made as form: the
+  conservation sentence of DEC-098 marked for the decider like FR-P-03c, and
+  FR-C-04's steps 5 and 6 stated as kept.
+- **Twenty-two findings became fourteen entries**: each medium finding its own,
+  the low ones gathered in `SQ-019` and `SQ-022`. Every entry says "Blocks: no"
+  and names the phase 4 point that must not start before it is answered, since
+  no plan exists yet to stop. `SQ-020` is marked the user's, under reserve 4.
+- **`9250363` names D-108 but does not contain it**: a hook refused the edit
+  after the commit had been prepared, and the entry follows in its own commit
+  rather than by amending.
+
+**What `docs/` says:** nothing on where a design proposal lives or how a
+review of the decider's work is filed; `AGENTS.md` sends objections to
+`SPEC-QUESTIONS.md`.
+**Would overturn it:** the user preferring the batch on `main`, or the decider
+wanting the low findings split one per entry.
+
+### D-109 · The draft of the cost measurement plan, at moment one
+
+**Ruling:** R-076 — ratified; where the plan sits against `R-046` answered by R-067.
+The draft is in `REVIEW-REQUEST.md`, for the user's answer
+under `R-048` and `R-049`.
+
+`SQ-023` owes a measurement before its ruling, and the user approved the sizes
+per settlement type and asked for the draft. Writing it forced these choices.
+
+**Decided.**
+- **`Kind: process`.** The points change no simulated world and nothing in
+  `core/`: they build a stand-in and measure it. A `Kind: simulator` plan must
+  name the acceptance criteria it moves, and this one moves none. The header
+  cites P-01, NFR-05, NFR-07 and `SQ-023` in its exit condition instead.
+- **A project of its own, `bench/`, kept after the plan.** Not in the harness,
+  which is the driver of §17's criteria (`R-039`) and runs in CI; timing in CI
+  is noise. Kept rather than thrown away because the stand-in behind P-63 and
+  P-64 was thrown away (`SQ-004`), and this plan's first point cannot know what
+  it contained.
+- **Calibration by tolerance, not by equality.** The cost at 9 rows within half
+  and twice P-63, the 27-to-9 ratio within a fifth of 4.8: wide, because the
+  old stand-in's five phases are unknown and the machine differs; narrow
+  enough that a ranking linear in the rows, about 3, fails.
+- **Checksums as the guard against a benchmark that measures nothing.** Every
+  layout computes the same outputs on the same world, so a faster layout that
+  skips work is caught by its checksum rather than praised for its speed.
+- **The sizes are measurement inputs, not constants**, and take no P-number
+  under `R-050`: they describe worlds to time, not the world the game runs.
+- **`64147ba` names D-109 but does not contain it**: as with `9250363`, the
+  edit and the commit were sent together and a hook refused the edit. The entry
+  follows in its own commit.
+
+**What `docs/` says:** §19 places P-17 and P-01's validity in Phase 4 on the
+real update; nothing on measuring before it. `R-046` names the next two plans,
+and this would be a third: raised in the request as blocking.
+**Would overturn it:** the decider placing the measurement inside phase 4's
+first point, which would make it `Kind: simulator`; or the user preferring the
+stand-in thrown away at the end.
+
 ### D-110 · The draft of the process plan, at moment one
 
 **Ruling:** R-066 — resolved: the two departures are the user's, the rest
@@ -2998,3 +3076,640 @@ are `R-045` to `R-049` and the design ratified by `R-028`.
 **Would overturn it:** the decider declining the departures from `R-046` and
 `R-028`, which brings the plan back to five points; the user's answer amending
 the draft, which the installing commit then reports.
+
+## 2026-10-05 — The agent workflow, built and wired
+
+The process plan installed in `6d6d098`, from the design of 2026-09-30. Each
+entry names the point it closes.
+
+### D-111 · Point 1 · `path-guard` and `git-guard`: what the design left open
+
+**Ruling:** R-069 — ratified; the settings-file note and the identifier match escalated by R-068.
+
+**Decided.**
+- **The role reaches `path-guard` as `-Role <name>`**, written in each agent's
+  frontmatter at point 4. An unknown or missing role is denied.
+- **A path outside the repository is denied to every role**, the coder
+  included. The design gives the coder "everything except the denylist", which
+  reads as everything in the repository; nothing in the roles writes elsewhere.
+- **Paths are resolved before matching**: relative to `CLAUDE_PROJECT_DIR`,
+  `..` collapsed, compared case-insensitively, because the file system is.
+  `core/Runtime/../../docs/x` and `DOCS/x` are both `docs/`.
+- **Insert-only also refuses an empty `old_string`**, which every `new_string`
+  begins with and which `Edit` uses to create a file.
+- **`git-guard` refuses more than the design lists**: a newline, a lone `&`,
+  `<` and `>` count as joining or redirecting; `git add` takes no option at all
+  and no glob or `:` pathspec; `--output` on the four read commands, which
+  writes a file; `git -C` and any first word other than `git`. Each follows
+  from "admits only", read as an allowlist.
+- **"Says in words that none applies"** is the phrase `no identifier applies`,
+  `no requirement applies` or `no decision applies` in the subject. An
+  identifier is `NFR-`, `FR-`, `DEC-`, `AC-`, `SQ-`, `A-`, `R-`, `D-` followed by
+  a letter or digit, as a word.
+- **`Plan-point` anywhere in the message counts**, case-insensitive: more than
+  one mention is refused, and one must be the line `Plan-point: <integer>`. A
+  body saying "closes no Plan-point" is refused, as the skill asks that the word
+  not be written at all.
+- **Deny is exit 2 with the reason on stderr**, the hook contract's blocking
+  form; no JSON output.
+
+**Noted, not acted on.** The coder's denylist does not hold
+`.claude/settings.json` or `CLAUDE.md`. A settings file can add hooks, not
+remove an agent's own. Not in the design's list, so not added.
+
+**Check.** Both self-tests exit 0 (32 and 43 cases, two of each through the
+script's real entry point with stdin and exit code; `git-guard`'s commit cases
+in a throwaway repository). The three faults of `Fails when:` seen red on
+copies, originals untouched. Not verified: that Claude Code invokes the scripts
+from an agent's frontmatter as written — point 4's live probe.
+
+**What `docs/` says:** nothing; process work. The design's "Enforcement" items 1
+and 2. **Would overturn it:** point 4's probe showing the role cannot be passed
+as an argument, or the decider reading "everything except the denylist" as
+including paths outside the repository.
+
+### D-112 · Point 2 · `mutate` and `tree-state`: what the design left open
+
+**Ruling:** R-072 — ratified; the unread untracked file found at audit resolved by R-071, the rename that passes the filter by R-073.
+
+**Decided.**
+- **`mutate.ps1 -Patch <file> -Check <command>`.** The check is a command
+  string, run by `pwsh -NoProfile -Command` in the repository root, and a fault
+  is caught when it exits non-zero. The design says "runs the named check"
+  without a form; a command covers a `dotnet test --filter` and anything else
+  the tester names. The tester holds `Bash`, so running its string widens
+  nothing.
+- **Four exit codes**, where the design names one: 0 the check went red and the
+  tree is restored; 1 the check stayed green, the fault was not caught; 2
+  refused before anything was applied (missing argument, unreadable patch, a
+  patch that does not apply); 3 the tree did not return, which wins over the
+  others. Without 1 the tester would read a missed fault from the log alone.
+- **A patch touching any path outside `core/Runtime/` and `harness/` is
+  refused** (exit 2): the restore is proved only for what `tree-state` records,
+  so a fault elsewhere would be applied without proof that it went away.
+- **The patch is applied to the working tree**, not the index, so it is written
+  against the coder's uncommitted code; the reversal runs in a `finally`, so a
+  check that throws still has its patch reversed.
+- **`tree-state` hashes `git diff HEAD --binary`**, with `--no-ext-diff` and
+  `--no-textconv`. Without `--binary` a changed binary file prints "Binary files
+  differ" whatever its content, and the hash would not move; the self-test
+  carries the case. Status lines, the diff's SHA-256 and one line per untracked
+  file with its SHA-256 are joined and hashed once; ignored files, `bin/` and
+  `obj/` among them, are outside it.
+- **`tree-state -Path <pathspec>…` and `-Repo`.** `mutate` passes
+  `core/Runtime` and `harness`; the skills of points 6 and 7 call it with no
+  pathspec, the whole tree.
+- **`mutate.ps1 -SelfTest`**, which the criterion does not ask for: seven cases
+  in a throwaway repository and two through the entry point. It is what turns
+  red on the second fault of `Fails when:` without touching `core/`.
+
+**Check.** `tree-state.ps1 -SelfTest` 11 cases, `mutate.ps1 -SelfTest` 9 cases,
+both exit 0. The known patch — `Calendar.Month` dividing by `DaysPerMonth + 1` —
+through `mutate` with `dotnet test … --filter
+FullyQualifiedName~FRT05a_DateArithmeticIsIntegerDivision`: the test red at
+`CalendarTests.cs:91`, `mutate` exit 0, `Calendar.cs` byte-identical before and
+after (MD5) and the `core/Runtime,harness` hash unchanged. The two faults on
+copies, originals untouched: untracked files hashed by name only → 2 cases red
+("the untracked file edited", and the scoped one); `git apply -R` removed → 6
+cases red, the file left reading `wrong`.
+
+**Not verified.** A working file with mixed line endings: under
+`core.autocrlf=true` a patch made by `git diff` applied and reversed cleanly on a
+CRLF file, but the first self-test, writing mixed endings, did not apply — the
+self-test now writes uniform ones. A check that writes outside `core/Runtime/`
+and `harness/` is not seen by `mutate`; that is the orchestrator's check after
+the tester's second dispatch, in the design's "The hole that `Bash` leaves".
+
+**What `docs/` says:** nothing; process work. The design's "Enforcement" item 3.
+**Would overturn it:** the tester's brief at point 4 or 7 needing the check as a
+test name rather than a command, or a patch legitimately touching a path outside
+the two folders.
+
+### D-113 · Point 3 · `plan-state`: what the point left open
+
+**Ruling:** R-075 — ratified; the `stopped` read by number found at audit resolved by R-074.
+
+**Decided.**
+- **The JSON shape.** One object: `path`, `exists`, `kind`, `abandoned`,
+  `points` — each with `number`, `title`, `status`, `check`, `core`,
+  `coreReason`, `serves`, and `commits` for a closed point — then `state`
+  (`none`, `running`, `stopped`, `finished`, `abandoned`), `next`, `stoppedAt`,
+  `reservesOpen`, `range`, `warning`, `decider` (`count`, `first`, `last`). The
+  point lists what the skills read today and the design note says it is not a
+  schema; these names are mine. Non-ASCII is escaped, so the console code page
+  cannot garble a title.
+- **An abandoned plan reports `state: abandoned` and no next point**, whatever
+  its points say. The point names the declaration as a field and the state as
+  next point, stopped or finished; a plan abandoned with open points would
+  otherwise report a next point that `/plan-next` must refuse.
+- **`stopped` needs an open point after the failure**, as `/plan-next` words it.
+  A plan whose last point failed reports `finished`, with the point `failed`.
+- **A reserve open does not change `state`.** All points closed with a reserve
+  open reports `finished` and lists the point in `reservesOpen`; the skills, not
+  the script, say the exit condition is unmet (`R-011`).
+- **A marker counts only right after the date sentence**: `FALLITO`/`FAILED`,
+  *Chiuso con riserva*/*Closed with reserve*. Point 12 of the twelve-gaps plan
+  names `FALLITO` in prose ("Closed rather than `FALLITO`") and is closed; a
+  match anywhere in the paragraph would report it failed. A discharge is any
+  line of the section opening with *Riserva sciolta:*/*Reserve discharged:*.
+- **The check marker is a `- **Check: …**` bullet; failing that, a `Check: weak`
+  or `Check: shallow` inside the `Closed by` bullet.** Point 7 of this plan
+  declares its marker the second way. Prose elsewhere in the point — the title of
+  point 13 of the twelve-gaps plan names both markers — is not read.
+- **`Core:` with no line is `null`, not `yes`.** The default is the skills'
+  rule to apply; the script reports what is written. A reason is any text after
+  `yes`/`no` once punctuation and dashes are stripped.
+- **Commits are resolved only for `PLAN.md` at the root and for a plan added
+  under `.claude/plans/`**, with the range of `/plan-status` step 4. A fixture or
+  a draft has no range in history; `range` is `null` and no point carries
+  `commits`.
+- **The `main` warning covers both readings of "sits on main"**: `main`'s tree
+  holds `PLAN.md`, or the current branch is `main` and `PLAN.md` is in the
+  working tree.
+- **"No plan" is a path that does not exist**, not a fixture file; the other
+  eight cases are files. The draft fixture carries a `## 1.` heading outside the
+  fenced block, which must not be read as a point.
+- **The 31-points check is part of `-SelfTest`**, run on this repository's
+  history. A rewrite of that history turns the self-test red, which is the
+  intended reading: the lookup it proves would be broken too.
+
+**Check.** `plan-state.ps1 -SelfTest` 58 cases, exit 0: the nine fixture cases,
+31 archived points each resolved to one commit, the total, the entry point. The
+three faults of `Fails when:` on a copy, original untouched: `*Outcome:*` not
+recognised → 4 cases red; trailer grep unanchored → 2 red (twelve-gaps point 1
+finds 5 commits, phase 3 point 1 finds 2); the `stopped` branch disabled → 2 red.
+
+**Not verified.** Calling the script from an agent's `Bash` rather than this
+session's. Headings inside a fenced block of a plan would be read as headings:
+none of the six plans holds a fence today (grep). A draft whose fence holds a
+nested fence: the first closing fence ends the draft.
+
+**What `docs/` says:** nothing; process work. The point's own text and
+`/plan-status` step 4.
+**Would overturn it:** a skill at point 6 or 7 needing a field in another shape,
+or the user ruling that an abandoned plan still reports its next point.
+
+### D-114 · Point 4 · The six agent definitions: what the design left open
+**Ruling:** R-093 — ratified; a recommendation on point 8 escalated to the user
+
+**Decided.**
+- **The hook command** is `pwsh -NoProfile -File
+  "$CLAUDE_PROJECT_DIR/.claude/hooks/<script>.ps1"`, with `-Role <name>` for
+  `path-guard` and nothing for `git-guard`, which has one role. Matcher
+  `Edit|Write` for the coder, the tester and the documenter, `Bash` for the
+  committer. The documenter's matcher holds `Write` although it lacks the tool,
+  so a tool list widened by mistake still meets the guard.
+- **No hook on the two reviewers.** They hold neither `Edit` nor `Write`, so
+  `path-guard` has nothing to see; what `Bash` leaves open is the orchestrator's
+  check, as the design says.
+- **The `code-reviewer` points at `AGENTS.md` read whole**, its rules the build
+  cannot catch first, rather than at "Comments and simplicity": that section is
+  point 5's, and a pointer to it now would name text that does not exist (C1).
+- **The five rules leave `reviewers.md`**, which keeps a pointer to
+  `revisioner.md` and one sentence: a brief to an agent of another type carries
+  them, copied from there. Until point 7 `/plan-next` dispatches `Plan` or
+  `Explore`, which do not read `revisioner.md`; without the sentence a review
+  run before then would lose the rules. Rules 1 to 4 moved verbatim; rule 5 lost
+  its own heading, "This one matters most" opening it instead, and "State it
+  explicitly in both briefs", which the body now does itself.
+- **The bodies say what each role does with its brief** — the table's
+  "Receives" and "Returns" as instructions, the tester's two dispatches, the
+  documenter's STOP cases from `/plan-next` step 6, the committer's comparison of
+  the staged set with the list it was given. Nothing in them adds a step the
+  design does not have.
+- **The frontmatter check is a script outside the repository**, run from the
+  session's scratchpad: per file the name, model, effort and tools as a set
+  against the roles table, the description's "Dispatched by /plan-next only",
+  the hook's matcher and command, no hook on a reviewer, six files, no `Edit` or
+  `Write` on a reviewer, and the two greps of the code-reviewer's body. Not
+  committed: the point names no place for it, and the design wants hooks in
+  `.claude/hooks/`, which it is not.
+
+**Check.** The frontmatter check exits 0. The fault of `Fails when:`, `Edit`
+added to the tools of `code-reviewer` and then of `revisioner`, turns it red
+twice (tool set, and the reviewer rule), restored after each. Each frontmatter
+`command:` line, run through `bash` with `CLAUDE_PROJECT_DIR` set and a sample
+JSON: coder denied `docs/probe.md`, `core/Tests/`, `PLAN.md` and allowed
+`core/Runtime/`; tester allowed only `core/Tests/`; documenter denied a `Write`
+everywhere; committer denied `git add -A`.
+
+**Not verified — the reserve.** The live probe. Agent definitions are read when a
+session starts, and this one started before they existed: `subagent_type:
+coder` is "not found". A fresh headless `claude -p` failed to authenticate. So
+whether Claude Code fires a frontmatter hook for a subagent, whether the shell
+expands `$CLAUDE_PROJECT_DIR`, and whether `effort` is honoured all remain as
+the design's "Not verified" left them. Nor was `disableAllHooks` probed
+(`R-068`).
+
+**What `docs/` says:** nothing; process work. The design's roles table,
+"Enforcement" and "Where the rules live", and `R-047` for the code-reviewer.
+**Would overturn it:** the probe showing the hook does not fire or the variable
+does not expand, which changes every `command:` line; the decider reading "move"
+as leaving `reviewers.md` without even the pointer.
+
+### D-115 · Point 8, added mid-plan — owed by `R-070`, `R-071`, `R-073`, `R-074` and `R-094`
+**Ruling:** R-095 — ratified; a self-test of `mutate`'s exit 3 owed beside the criterion
+
+`R-070` owes point 8 before point 7 runs, placed between points 6 and 7, and
+the four rulings after it each add an item. The user approved every item and
+read every `Fails when:` line in those rulings; the point transcribes them.
+Nothing above it rewritten, no number moved.
+
+**Decided in writing the point.**
+- **The `Does:` items are the rulings' own text**, in their order, each citing
+  its ruling. Item 3 keeps `R-068`'s "a self-test case for a lowercase `a-`",
+  which `R-070`'s restatement drops; item 4 carries `R-071`'s cost paragraph,
+  `mutate` stopping with exit 3, since its "Owed" line requires it.
+- **The `Fails when:` lines are verbatim**, grouped by ruling.
+- **`Closed by:` is mine.** No ruling states one: they name a self-test case per
+  item, and items 2 and 7 change prose, so the line is the five self-tests at
+  exit 0 plus a grep for each prose change. It freezes with this commit and was
+  not read by the user.
+- **The title and the italic preamble** follow the precedent of point 10 of the
+  phase 3 plan (`D-103`).
+
+**What `docs/` says:** nothing; process work. **Would overturn it:** the decider
+finding a `Closed by:` that a correct point 8 cannot pass, or that passes
+without catching a `Fails when:` fault, under `R-005`.
+
+### D-116 · Point 5 · `AGENTS.md`'s three rule sets and the English markers: what the point left open
+
+**Ruling:** R-097 — ratified.
+
+**Permission for `AGENTS.md` (`R-010`).** Granted by the user, Federico Xella,
+in answering the process plan's moment-one request (the plan installed in
+`6d6d098`), for point 5 as its text states it: the three rule sets of the
+design's "The rules this adds to `AGENTS.md`", `R-048`'s rule in "Criteria are
+frozen when written", and the five markers (`R-045`). The applied diff edits
+that bullet and adds three sections, and touches nothing else in the file. The
+three skills are named in the point's text, which is the permission the
+self-governance rule it writes asks for.
+
+**Decided.**
+- **Placement.** Three sections after "Rules the build cannot catch":
+  "Comments and simplicity", "Language", "Review and self-governance". The
+  design names the rule sets, not where they go.
+- **The table is the design's**, with its "Applied in" column. C10 reads "no
+  finding: it records the code's practice", the second of the two options
+  `R-028` gave.
+- **`R-048` in four sentences** appended to the "Criteria are frozen" bullet,
+  carrying the ruling's three elements: the draft in the request, the installing
+  commit that cites the answer and says whether it matches the draft as amended,
+  and no live `PLAN.md` on `main`. The point's summary names the first two; the
+  ruling's "Owed" line names all three.
+- **The language rule says when it took effect** — point 5 of this plan —
+  instead of the design's "points 7 to 9 of the phase 3 plan", written when the
+  rule was meant for that plan.
+- **Markers.** `R-045`'s table goes into "Language". Each skill carries one
+  sentence recognising the Italian forms: `/plan-next` lists five,
+  `/plan-explain` and `/plan-status` four, since neither reads *criterio
+  difettoso*. *criterio sbagliato*, a reason phrase in `/plan-next` that `R-045`
+  does not list, becomes *criterion wrong* under the language rule; no skill
+  matches on it, so nothing recognises it.
+- **A consequence for the points left.** From this commit every point that
+  touches code passes the code-reviewer. Point 8 changes PowerShell scripts, so
+  it owes one, although `/plan-next` does not dispatch the code-reviewer until
+  point 7: the orchestrator dispatches it by hand.
+- **`/plan-next` grows from 2,755 to 2,793 words.** Point 7's "no longer than
+  the 2,755 words it has today" is 38 words harder. Not trimmed here: cutting
+  unrelated prose to meet a later point's cap is that point's work.
+- **The fixtures are not committed**, as point 4's check was not (`R-093`): the
+  point names no place for them. Violation: the summary of
+  `Calendar.DayOfMonth` changed to "Day within the month, 0..27: four whole
+  weeks (FR-T-04)", and the line `// public static int DayOfMonth(long tick) =>
+  (int)(tick % DaysPerYear) % 28;` added under it. Clean: the same summary
+  citing `FR-T-02`, and no added line. `FR-T-04` is cadence; `FR-T-02` holds the
+  four-week month.
+
+**Check.**
+- The code-reviewer, briefed that the diff is a fixture with no criterion: on
+  the violation, `Calendar.cs:76` C1 and `Calendar.cs:78` C5; on the clean diff,
+  "no findings". `tree-state` unchanged across the dispatches.
+- The grep, as a script: whitespace normalised, each skill's recognising
+  sentence cut out, no Italian marker left in any of the three; exit 0.
+- **Fault 1**, "Comments and simplicity" cut from `AGENTS.md`: the
+  code-reviewer, same fixture, still reports both defects, the citation under
+  "Commits" and the commented line under "Close every task", naming neither C1
+  nor C5. Restored; `tree-state` back to its value before the dispatches.
+- **Fault 2**, `*Esito:*` cut from `/plan-status`'s recognising sentence: the
+  criterion's grep stays green; the check beside it, below, goes red with exit
+  1. Restored.
+
+**Criterion defective (`R-005`, case 1), twice.** Correct code passes both
+halves; neither half fails for its fault as written.
+- "Reports both", read as finding the two defects, stays green with the section
+  removed: the reviewer finds a wrong citation and a commented line without C1
+  and C5. It turns red only read as naming them by their identifiers, the
+  reading this check applied. On this fixture the section changes the rule a
+  finding names, not whether the defect is found.
+- The grep cannot fail for the second fault: a skill that stops recognising
+  `*Esito:*` holds fewer Italian markers, not more. **The check beside it:**
+  each skill's recognising sentence names every Italian form that skill reads —
+  five for `/plan-next`, four for the other two.
+
+**Review.** `git diff --name-only HEAD -- core/` empty: `Core: no` holds, the
+revisioners not run. No code-reviewer of the point: it touches no code, only
+`AGENTS.md` and three skills (the design's "What skips what").
+
+**What `docs/` says:** nothing; process work. `D-089`, `R-045`, `R-048`,
+`R-010` and the design.
+**Would overturn it:** the decider reading "reports both" as finding the
+defects, which leaves the first fault green and the section unproved by any
+check; the user wanting `R-048`'s rule outside the "Criteria are frozen" bullet.
+**Not verified:** whether the table's citations say what the rules say —
+`R-028` left C1, C2, C4, C6 to C9 and S1 unread, and so does this point, which
+checked only that `D-007`, `D-060`, `D-067`, `D-080`, `D-085` and `DEC-083`
+exist. That the code-reviewer repeats its results: one dispatch each. Whether
+it took `AGENTS.md` from disk or from the context it was given; the fault run,
+naming no C rule, suggests disk.
+
+### D-117 · Point 6 · `/plan-explain` and `/plan-status` on `plan-state`: what the point left open
+
+**Ruling:** R-096 — its first finding resolved: the request conforms to `## Draft plan`. R-097 — ratified.
+
+**Permission for `.claude/skills/` (`D-087`).** Granted by the user, Federico
+Xella, in answering the process plan's moment-one request (the plan installed
+in `6d6d098`), for point 6 as its text states it: both skills are named in it.
+The diff touches those two files and nothing else under `.claude/`.
+
+**Decided.**
+- **"This request's draft" is the process plan's own moment-one request**, the
+  one `D-110` wrote under `## Draft plan` so that this check could run on it. It
+  is `REVIEW-REQUEST.md` on `main` (`03782dc`), read from there into a scratch
+  file. The file on `agent-workflow` holds the cost measurement plan's request,
+  merged in from `design/poverty-seed`, whose heading is `## The draft plan`.
+- **The session runs `plan-state`, not the agent**, and puts the JSON in the
+  agent's brief: the script is the state, the agent reads the plan for what
+  needs judgement. `-Draft` and `-Path` are named in both skills; `/plan-status`
+  gains `-Path` so that an archived plan can be reported, which the check needs.
+- **A `tree-state` difference stops the skill** before the agent's report is
+  relayed: it says so, shows `git status --short`, and leaves the undoing to the
+  human. The point says to call it; what follows a difference is not stated.
+- **"Guarantee" goes, and so does its sibling** in `/plan-explain`, "an agent
+  without the tools cannot break it": both claim what `Bash` contradicts. Both
+  skills now say the tools make a write unlikely and `tree-state` notices one.
+- **The recognising sentence stays** in each skill, reworded to say the script
+  and the skill both read the Italian forms, so `D-116`'s check beside its
+  criterion still holds: four forms each.
+- **`/plan-status` step 4 keeps one sentence defining the range**, because
+  `plan-state.ps1` cites "the range of `/plan-status` step 4" twice; dropping the
+  definition would leave those comments pointing at nothing (C1). The `git log`
+  commands go: the script runs them.
+- **`/plan-explain`'s steps renumber**, 8 to 5: steps 1 to 4 become one step
+  acting on `state`. Point 6's own text says "`/plan-explain` step 7", which is
+  now step 4; the plan is frozen and keeps the old number.
+- **The `description`s** are trigger lists; `/plan-explain` gains the draft as a
+  trigger, `/plan-status` an archived plan.
+- **The design's "deliberately not built"** lists any change to these two
+  skills; `R-046` as amended by `R-066` put them in this plan, and the ruling
+  governs.
+
+**Check.** `tree-state` taken before the dispatches and after the last restore:
+the same hash, `5c01938…`. Four `Plan` agents, one per run:
+- `/plan-explain` on `failed-then-open.md`: "STATE: stopped", at point 2, its
+  outcome line quoted, point 3 not presented.
+- `/plan-status` on the same fixture: "STATE: stopped", point 2 reported apart.
+- `/plan-status` on `2026-09-20-fase-3-kernel.md`: ten points, `71f9c5e`,
+  `62e97a5`, `e9a556d`, `f8dc4d3`, `3d7fb31`, `b745b62`, `7e2bdd0`, `c6f786f`,
+  `f1e825b`, `2ec9fad` — the same ten the old skill's step 4 returns, run by hand
+  before any edit.
+- `/plan-explain` with `-Draft` on the process plan's request: "NEXT: 1 —
+  `path-guard` and `git-guard`".
+- A script greps both skills: no "first `## <n>.` section with no", both call
+  `plan-state.ps1` and `tree-state.ps1`, neither says "guarantee"; exit 0.
+
+**Faults.**
+- The sentence defining the next point in its own words put back into
+  `/plan-explain`: the grep red, exit 1. Restored.
+- `/plan-status` made to call a plan with an open point "in progress", first by
+  replacing step 3's `stopped` paragraph only: **green** — the agent reported
+  "stopped", following the script's `state`, which the skill still said decides.
+  Then also with the sentence handing the state to the script replaced by one
+  handing it to step 3: red, "STATE: in progress", point 3 named as worked on.
+  Restored.
+
+**Review.** `git diff --name-only HEAD -- core/` empty: `Core: no` holds, the
+revisioners not run. No code-reviewer: the diff is two skills, no code.
+
+**Findings for the decider.**
+- **`plan-state -Draft` cannot read the cost measurement plan's request**:
+  `## The draft plan` is not `## Draft plan`, and the script reports `exists:
+  false`. `R-048` names no heading; `D-110` chose this one, and `plan-state`
+  matches it exactly. When that plan comes to `/plan-explain` or the rewired
+  `/plan-next`, the draft will read as absent.
+- **The agents' runs are one dispatch each**, and the first fault shows the
+  check is as strong as the sentence the agent obeys: a skill that half
+  reinstates its own state rules still reports what the JSON says.
+
+**What `docs/` says:** nothing; process work. `R-045`, `R-046`, `R-066`,
+`R-048`, `D-087`, the design.
+**Would overturn it:** the decider reading "this request" as the request on the
+plan's branch, which `plan-state` cannot read as the point requires; the user
+wanting the agent, not the session, to run `plan-state`.
+**Not verified:** the skills invoked through `/plan-explain` and `/plan-status`
+themselves: each run here was a `Plan` agent briefed with the skill's path, the
+JSON and the plan, as the skills say to brief it. The `-Draft` default path,
+`REVIEW-REQUEST.md` on this branch, was not exercised beyond the `exists: false`
+above.
+
+### D-118 · Point 8 · The settings files, the identifier match, and four guards closed after audit
+**Ruling:** R-099 — ratified; the finding on point 2's `$Guarded` accepted as a limit.
+
+**Permission for `.claude/hooks/` and `.claude/agents/` (`D-087`).** Granted by
+the user, Federico Xella, item by item for point 8's content (`R-070`, `R-071`,
+`R-073`, `R-074`, `R-094`). The point names each file it touches: the five
+scripts, `.claude/agents/coder.md`, the design. The diff touches those, one new
+fixture under `.claude/hooks/fixtures/plan-state/`, and nothing else under
+`.claude/`.
+
+**Decided.**
+- **The `CLAUDE.md` line is a line of its own** in "The hole that `Bash`
+  leaves", beside the `AGENTS.md` one, citing `R-070`. The paragraph under "What
+  the coder may not write" that explains why `AGENTS.md` is off the list is left
+  as written: item 2 names the list, not the paragraph.
+- **`tree-state` decodes git's output as UTF-8**, setting
+  `[Console]::OutputEncoding` for the call and restoring it after. `core.quotePath`
+  off alone is not enough: probed, PowerShell reads native output in the console
+  code page (`ibm850` here) and `città.txt` arrives as a path to nothing.
+  `-c core.quotePath=false` rather than `-z`, since the lines are hashed as they
+  are and `-z` changes nothing else.
+- **`tree-state` also fails when any of its three git calls exits non-zero**, not
+  only when a file cannot be read. `R-071` names the file; the same reasoning — a
+  check that cannot look says so — covers a git call that cannot.
+- **The failure is an exception inside `Get-TreeState`**, turned into exit 1 and
+  a message on stderr at the entry point. `mutate` calls the script, so it reads
+  the exit code; it also treats an empty answer as a failure.
+- **`mutate` returns 3 without applying the patch when the first `tree-state`
+  call fails.** `R-071` says "stops with exit 3 when either call fails"; stopping
+  before the patch is the only way the tree is known untouched.
+- **A rename's or copy's source is read from the patch's `rename from` / `copy
+  from` lines.** `R-073` left the reading open. Probed: `git apply --numstat -z`
+  prints the destination only, as without `-z`. A header line cannot begin a
+  hunk line, which begins with a space, `+`, `-` or `\`. A quoted source, a name
+  git would escape, does not begin with `core/Runtime/` and is refused: the safe
+  side.
+- **The locked file is how "cannot be read" is produced** in both self-tests: a
+  `FileStream` opened with `FileShare.None` by the self-test process.
+- **`plan-state`'s fixture is `out-of-order.md`**: points 6, 8, 7 in that order,
+  8 `FAILED`, 7 open, as `R-074` probed.
+
+**The check beside the criterion (`R-095`).** `mutate`'s self-test holds a case
+in which a `tree-state` call fails — a locked file in `core/Runtime/` — and
+expects exit 3 with the patch not applied. Its fault, the two exit-3 checks
+removed, turns it red: exit 0. `R-095`'s reading that "the cases of items 1 and
+3 to 6" already include it holds now, since the case is there; the outcome line
+names it all the same.
+
+**The code-reviewer's findings.**
+- **No `copy from` case** in `mutate`'s self-test: dropping `copy` from the
+  pattern left every case green, while item 5 names a copy's source. Applied: a
+  case copying `docs/a.txt` into `core/Runtime/`, expecting 2; with `copy`
+  dropped it went red (exit 3, the patch applied).
+- **The second call's failure has no case of its own**: removing that check
+  changes only the message, since an empty `$after` differs from `$before` and
+  the exit is 3 either way. Rejected: the behaviour the point asks for holds
+  without it, and the case would test a message.
+- **No refusal case on the `harness/` side**: dropping `harness` from `$Guarded`
+  would refuse valid patches and no case would notice. Rejected for this point:
+  `$Guarded` is point 2's, unchanged here, and the point names no such case. A
+  finding on point 2, for the decider.
+
+**What `docs/` says:** nothing; process work. `R-068`, `R-070`, `R-071`,
+`R-073`, `R-074`, `R-094`, `R-095`, the design.
+**Would overturn it:** a host where PowerShell's console encoding is already
+UTF-8 and setting it fails, which would make `tree-state` throw for a reason
+other than the tree; git printing rename sources in a header form other than
+`rename from`.
+**Not verified:** `tree-state` on a file locked by another process, such as a
+running build, rather than by the self-test itself; a name that needs quoting
+for a reason other than a non-ASCII byte (a tab, a double quote); the copy patch
+in `git`'s other copy-detection modes.
+
+### D-119 · Point 7 · `/plan-next` and `reviewers.md` rewired: what the point left open
+**Ruling:** R-098 — point 4's reserve stays open; the probe reruns after workspace trust is accepted. R-099 — ratified.
+
+**Permission for `.claude/skills/` (`D-087`).** Granted by the user, Federico
+Xella, in answering the process plan's moment-one request (the plan installed in
+`6d6d098`), for point 7 as its text states it: `/plan-next` and `reviewers.md`
+are named in it. The diff touches those two files and nothing else under
+`.claude/`.
+
+**Decided.**
+- **The skill's steps are the design's ten**, numbered as "The life of a point"
+  numbers them, each heading naming its actor. "Before starting" maps
+  `plan-state`'s `state` to the old refusals one for one, `warning` added.
+- **The moment-one answer counts as recorded** when the commit that installed
+  `PLAN.md` cites it, as `AGENTS.md` requires, or when the request carries it.
+  `R-049` says "recorded" and names no place.
+- **A check that is not a test under `core/Tests/`** — a self-test, a grep — is
+  run by the tester at step 2 as it stands, and written with the point's other
+  files at step 3. The design gives the tester `core/Tests/` only and is silent
+  on a process point.
+- **A fault `mutate` cannot reach**, outside `core/Runtime/` and `harness/`, is
+  introduced by the orchestrator, with `tree-state` equal before and after, and
+  the outcome line says who introduced it. The design is silent.
+- **The checks of "The hole that `Bash` leaves" are hashes over pathspecs**:
+  the coder's denylist before and after step 3, `':!core/Tests'` before and
+  after step 4, the whole tree around step 6. Probed: `tree-state -Path` takes
+  several pathspecs only through `pwsh -Command`; under `-File` the second binds
+  to `-Repo`. The denylist is written out in the skill, a second copy beside
+  `path-guard`'s `$CoderDenied` and `coder.md`'s.
+- **The `R-047` question is in every brief**, the code-reviewer's included, so
+  `reviewers.md`'s "What every brief holds" is the brief of all three agents;
+  the briefed and blind sections stay the revisioners'.
+- **Prose cut for the cap**: the history of the trailer rule ("broken three
+  times by the author of the rule") and two short sentences. Nothing that states
+  a rule.
+
+**The word count.** The cap's 2,755 is Git Bash `wc -w`, which counts no token
+made only of non-ASCII characters (`—`, `→`); it is what `D-116` and `R-066`
+measured. By that measure the skill is 2,738 words. Counted in a UTF-8 locale,
+2,779 against 2,788 at the cap's commit: shorter by either measure.
+
+**The check, as a script** in the scratchpad, not committed, as for points 5 and
+8 (`R-093`): each step from 2 to 9 that the design assigns to an agent names
+it in a dispatch; `plan-state.ps1` and `tree-state.ps1` are invoked; step 6
+calls `tree-state.ps1` after the read-only agents; step 1 names "Owed by the
+implementer" and refuses a first point until the moment-one answer;
+`reviewers.md` names `Fails when:` and the missing-fault question and calls no
+agent type a guarantee; the `description` holds none of "implement", "verify",
+"commit"; the word count as `wc -w`. Exit 0 on the new files; on the files at
+the cap's commit, 16 of 17 checks red, the word count exactly 2,755. Its
+weakness is the one `Check: shallow` declares: it matches phrases, and a step
+reworded to dispatch nothing in other words would pass.
+
+**Point 4's reserve, probed and red.** This session sees the six agents, so the
+live probe was run before the record: `coder`, asked to `Write` `docs/probe.md`,
+wrote it. No hook message, and nothing denied. The same command as the
+frontmatter's, run by hand on the same input under `bash`, exits 2 with "the
+coder may not write docs/probe.md": the hook did not fire, rather than fire and
+allow. The file was removed, untracked, and
+`tree-state` returned to its hash before the probe. The reserve is **not
+discharged**: the clause's check is red, and the line under point 4 is the
+human's to choose. Until it is resolved, the frontmatter hooks enforce nothing
+in this version, and the hashes of step 3 are the only barrier against a coder
+writing its denylist. Point 7's criterion does not depend on the hooks, so the
+point closes on it.
+
+**What `docs/` says:** nothing; process work. `R-047`, `R-048`, `R-049`,
+`R-010`, `R-070`, the design.
+**Would overturn it:** frontmatter hooks found to fire under another
+dispatch path, which would make the probe's result a property of this session;
+the user reading the cap in another measure.
+**Not verified:** no point has yet run under the new skill; whether `pwsh
+-Command` with a pathspec list behaves the same when an agent rather than this
+session runs it; why the frontmatter hook did not fire.
+
+## 2026-10-06 — Merge of `design/poverty-seed` into `agent-workflow`
+
+Nothing decided here. The two branches number disjointly, by design (`R-066`), so
+`RULINGS.md` and this file were resolved by keeping both sides in numeric order:
+`R-065` before `R-070` in "Owed by the implementer", `R-054`–`R-065` before
+`R-066`, `D-108`–`D-109` before `D-110`.
+
+`REVIEW-REQUEST.md` holds one current request and each branch had its own. The
+user, Federico Xella, chose on 2026-10-06 to keep the cost measurement plan's,
+still open; the process plan's, already answered, stays in git. The file is
+taken from `design/poverty-seed` unchanged. Its line "Replaces the moment-three
+request of 2026-10-01" does not name the process plan request it now also
+replaces: left as written, since the request is not mine to compose.
+
+## 2026-10-07 — `R-096` applied to the current request
+
+Nothing decided beyond placing `R-096`'s sentence after the six parts and their
+closing paragraph, so that "The sixth is the reason" still follows the list it
+counts. Before: `plan-state -Draft` printed `exists: false` (`R-096`); after:
+the five points of the draft.
+
+## 2026-10-07 — The agent workflow plan, archived
+
+### D-120 · Closing the process plan · The reserve discharged, the archive, the promotion pass
+
+Point 4's live probe was rerun after the user accepted workspace trust
+(`R-098`), and was green: `coder`, asked to `Write` `docs/probe.md`, was denied by
+its frontmatter hook. The *Reserve discharged* line went in `2801c19`, without a
+`Plan-point:` trailer (`R-011`). `plan-state` then read `state: finished`,
+`reservesOpen` empty. The user asked to archive the plan: "Archivia il piano".
+
+**Decided.**
+- **The archive's name** is `2026-10-05-agent-workflow.md`: the date the plan was
+  installed (`6d6d098`) and the branch it ran on, as `D-107` named the last one.
+  The archive commit adds exactly one file under `.claude/plans/`, since
+  `/plan-status` bounds a plan's range by the commits that add one.
+- **The pass runs over `D-107` to `D-120`**: the 2026-10-01 pass covered `D-044`
+  to `D-106`, and `D-107` was written after it. No candidates; all of it is
+  process.
+- **`REVIEW-REQUEST.md` is not touched.** The current request is the cost
+  measurement plan's moment one, still open; archiving this plan does not answer
+  it.
+- **No merge into `main`.** The user asked for the archive only. Under `R-048` the
+  measurement plan's branch is cut from `main`, so the merge, `--no-ff` as
+  `D-107`'s was, is the next step, and the user's to ask for.
+
+**What `docs/` says:** nothing; process work. `R-011`, `R-048`, `R-098`, the plan
+mechanism's design note.
+**Would overturn it:** the decider finding a register entry in the range that
+constrains the simulator's code.
+**Not verified:** that the hooks fire for an agent run in the background (the
+probe ran in the foreground, as `R-098` left open); the probe exercised the
+coder's `Write` only, not `Edit`, and no other role's hook.

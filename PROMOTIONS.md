@@ -36,6 +36,18 @@ here would collide with whatever else is in flight.
 
 ---
 
+## Pass of 2026-10-07 — nothing
+
+Run over `D-107` to `D-120` on archiving the process plan, the agent workflow.
+No candidates. `D-107` records the phase 3 archive and merge; `D-108` the review
+of the poverty and seed proposal, whose content reached `docs/` through the
+decider's rulings, not through this file; `D-109` and `D-110` the drafts of two
+plans at moment one; `D-111` to `D-119` the hooks, scripts, agents and skills of
+the workflow; `D-120` this archive. All of it is the apparatus that builds the
+simulator, and `SIM-DEC` describes the simulated world.
+
+---
+
 ## Pass of 2026-10-01 — three candidates, phase 3: closed
 
 **All three were written into `SIM-DEC` on 2026-10-02, as `DEC-087` to `DEC-089`,
