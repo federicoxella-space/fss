@@ -3513,6 +3513,7 @@ JSON and the plan, as the skills say to brief it. The `-Draft` default path,
 above.
 
 ### D-118 · Point 8 · The settings files, the identifier match, and four guards closed after audit
+**Ruling:** R-099 — ratified; the finding on point 2's `$Guarded` accepted as a limit.
 
 **Permission for `.claude/hooks/` and `.claude/agents/` (`D-087`).** Granted by
 the user, Federico Xella, item by item for point 8's content (`R-070`, `R-071`,
@@ -3585,7 +3586,7 @@ for a reason other than a non-ASCII byte (a tab, a double quote); the copy patch
 in `git`'s other copy-detection modes.
 
 ### D-119 · Point 7 · `/plan-next` and `reviewers.md` rewired: what the point left open
-**Ruling:** R-098 — point 4's reserve stays open; the probe reruns after workspace trust is accepted.
+**Ruling:** R-098 — point 4's reserve stays open; the probe reruns after workspace trust is accepted. R-099 — ratified.
 
 **Permission for `.claude/skills/` (`D-087`).** Granted by the user, Federico
 Xella, in answering the process plan's moment-one request (the plan installed in

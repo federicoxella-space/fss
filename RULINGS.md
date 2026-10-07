@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-117 — audited by `R-097`. The next audit starts at the
+**Register watermark:** D-119 — audited by `R-099`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -82,15 +82,16 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   `reviewers.md`: the reviewers' brief quotes the `Fails when:` line and asks for
   missing faults. And every moment-one request carries the `Fails when:` lines.
   The code-reviewer's half is done in `1ed624a`, checked by `R-093`; the brief's
-  is point 7's.
+  in `7b1fdbe`, checked by `R-099`. The moment-one half binds every plan.
 - ~~**`R-048`**, from the next plan: the draft goes in the moment-one request, and
   `PLAN.md` is installed on its branch after the user's answer, in a commit that
   cites it; the process plan point that edits `AGENTS.md` writes the rule.~~
   **Done in `6d6d098` and `58d8557`**, checked by `R-097`: the rule now binds from
   `AGENTS.md`.
-- **`R-049`**, within the process plan point that rewires `/plan-next`: step 1
+- ~~**`R-049`**, within the process plan point that rewires `/plan-next`: step 1
   refuses a plan's first point until the user has answered its moment-one
-  request; until then the ruling binds as written.
+  request; until then the ruling binds as written.~~ **Done in `7b1fdbe`**,
+  checked by `R-099`.
 - **`R-050`**, from the phase 4 plan: every simulation constant cites a P-number
   of `SIM-REQ` §16, a new one proposed in the point that needs it.
 - **`R-052`**, in every phase 4 plan: `Satisfies:` and `Serves` are read against
@@ -107,7 +108,7 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   compiler, used when the host hands no file; validation that returns a refusal
   and never fails, with the caps P-74 to P-76. **`R-092`**: and the three age
   bands with their labour flags, from the point that builds cohort rows.
-- **`R-070`**, before point 7 of the process plan runs: point 8 added to
+- ~~**`R-070`**, before point 7 of the process plan runs: point 8 added to
   `PLAN.md`, placed between points 6 and 7, carrying `R-068`'s three changes.
   **`R-071`**: and a fourth, `tree-state` reading untracked names unquoted and
   printing no hash when a file cannot be read, with its `Fails when:` line.
@@ -117,14 +118,17 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   in the file, not by number, with its `Fails when:`.
   **`R-094`**: and a seventh, `.claude/agents/coder.md`'s list of the paths it
   may not write gaining the two settings files, with its `Fails when:`.
-  Point 8 added in `02293d6`, checked by `R-095`; it runs before point 7.
-- **`R-095`**, within point 8: a self-test case of `mutate` in which a call to
+  Point 8 added in `02293d6`, checked by `R-095`.~~ **Done in `9d8ea3c`**, its seven
+  items, run before point 7; checked by `R-099`.
+- ~~**`R-095`**, within point 8: a self-test case of `mutate` in which a call to
   `tree-state` fails and `mutate` exits 3, and its fault — `mutate` ignoring the
-  failure — seen red, beside the frozen `Closed by:` under `R-005`'s case 1.
-- **`R-096`**, before the cost measurement plan's draft is next read through
+  failure — seen red, beside the frozen `Closed by:` under `R-005`'s case 1.~~
+  **Done in `9d8ea3c`**, checked by `R-099`.
+- ~~**`R-096`**, before the cost measurement plan's draft is next read through
   `plan-state -Draft`, and no later than the commit installing that plan: the
   current request's draft under `## Draft plan`, and "What a request holds"
-  stating the heading for every moment-one request.
+  stating the heading for every moment-one request.~~ **Done in `e276547`**,
+  checked by `R-099`.
 - **`R-098`**, before the process plan is archived: once the user has accepted
   workspace trust for the folder, point 4's live probe is run again. Green, the
   *Reserve discharged* line goes under point 4's outcome; red with trust
@@ -4698,3 +4702,72 @@ documentation was read through a summary, not quoted from the page.
 `disableAllHooks` is unset, and `.claude/settings.json` does not exist, so it
 was not the cause. Whether a hook fires for an agent run in the background was
 not documented, and was not tested.
+
+### R-099 — `D-118` and `D-119` are ratified; the watermark reaches `D-119`
+
+**Date:** 2026-10-07   **Origin:** register audit, `D-118` and `D-119`
+**Verdict:** ratified
+**docs/:** unchanged
+
+Points 8 and 7 of the process plan. Process, so ratified or rejected, never
+promoted (`D-011`). Each entry was read against its point's frozen text and the
+rulings it applies, and its claims against `9d8ea3c` and `7b1fdbe`. Both
+commits touch only the files their points name, and nothing under `core/`. The
+five self-tests were run in this session: `path-guard` 34 cases, `git-guard`
+44, `tree-state` 14, `mutate` 12, `plan-state` 59, exit 0 each, and the tree
+was clean after them.
+
+- **`D-118`, point 8.** Stands.
+  - **`tree-state` failing when a git call fails, not only when a file cannot
+    be read.** Right on the merits, and for `R-071`'s own reason: a check that
+    cannot look says so.
+  - **`mutate` stopping before the patch when the first call fails.** Right on
+    the merits: it is the only way the tree is known to be untouched.
+  - **A rename's or copy's source read from the header lines.** Stands. A quoted
+    source is refused, which is the safe side.
+  - **UTF-8 decoding, the locked file, the fixture.** Stand as recorded.
+  - **The check beside the criterion.** `R-095`'s case is in `mutate`'s
+    self-test, and its fault was seen red.
+  - **The code-reviewer's three findings.** The `copy from` case was applied.
+    The rejection of a case for the second call's failure is right, since it
+    would test a message.
+  - **The finding on point 2, left to the decider: no case covers `harness/` in
+    `$Guarded`.** Accepted as a limit, with no action. Dropping `harness` would
+    refuse the tester's valid patches with exit 2. That failure is loud and
+    stops the point, and lets nothing through. A case would pin a configuration
+    line, not a behaviour anyone could miss.
+- **`D-119`, point 7.** Stands.
+  - **The moment-one answer recorded in the installing commit or in the
+    request.** This reads `R-049`'s "recorded" as `AGENTS.md` and `R-048`
+    already place it. The cost measurement plan's answer stands in both:
+    `8f9c698`, and item 1 of the request.
+  - **The orchestrator introducing a fault `mutate` cannot reach, named in the
+    outcome line.** Stands: the design is silent, and saying who introduced the
+    fault keeps the record honest.
+  - **The checks of "The hole that `Bash` leaves" as hashes over pathspecs.**
+    Checked: step 3's list holds the same fourteen entries as `path-guard`'s
+    `$CoderDenied`.
+  - **The `R-047` question in every brief, the code-reviewer's included.**
+    That is what `R-047` asked of both halves.
+  - **The word count by `wc -w`.** It is the measure the cap was taken in.
+  - **The check left in the scratchpad.** Accepted as for `R-093`.
+  - **One cost, recorded rather than acted on.** The coder's denylist now has
+    four copies: the design, `path-guard`, `coder.md` and `/plan-next` step 3.
+    Point 8's grep keeps two of them in step for the settings files, and
+    nothing ties the skill's copy to the rest. The next change to the denylist
+    must name all four. Whether one home and three pointers would be better is
+    governance, and no one has asked.
+  - **Point 4's reserve.** `R-098`'s.
+
+The actions owed by `R-047` (the brief's half), `R-049`, `R-070`, `R-095` and
+`R-096` are marked done under "Owed by the implementer". `R-070` covers
+`R-071`, `R-073`, `R-074` and `R-094`.
+
+**Cost.** None beyond `R-098`.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** as for `R-008`, any entry found to contradict `docs/` or
+the design as it stood when written.
+**Not verified:** the faults seen red were taken from the outcome lines; the
+check script of point 7 was not rerun, since it is not in the repository.
+No point has yet run under the rewired `/plan-next`, so whether its dispatches
+work as written is the first real run's to show (`R-046`).
