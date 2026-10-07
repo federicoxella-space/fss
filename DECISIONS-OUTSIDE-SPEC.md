@@ -3680,3 +3680,36 @@ Nothing decided beyond placing `R-096`'s sentence after the six parts and their
 closing paragraph, so that "The sixth is the reason" still follows the list it
 counts. Before: `plan-state -Draft` printed `exists: false` (`R-096`); after:
 the five points of the draft.
+
+## 2026-10-07 — The agent workflow plan, archived
+
+### D-120 · Closing the process plan · The reserve discharged, the archive, the promotion pass
+
+Point 4's live probe was rerun after the user accepted workspace trust
+(`R-098`), and was green: `coder`, asked to `Write` `docs/probe.md`, was denied by
+its frontmatter hook. The *Reserve discharged* line went in `2801c19`, without a
+`Plan-point:` trailer (`R-011`). `plan-state` then read `state: finished`,
+`reservesOpen` empty. The user asked to archive the plan: "Archivia il piano".
+
+**Decided.**
+- **The archive's name** is `2026-10-05-agent-workflow.md`: the date the plan was
+  installed (`6d6d098`) and the branch it ran on, as `D-107` named the last one.
+  The archive commit adds exactly one file under `.claude/plans/`, since
+  `/plan-status` bounds a plan's range by the commits that add one.
+- **The pass runs over `D-107` to `D-120`**: the 2026-10-01 pass covered `D-044`
+  to `D-106`, and `D-107` was written after it. No candidates; all of it is
+  process.
+- **`REVIEW-REQUEST.md` is not touched.** The current request is the cost
+  measurement plan's moment one, still open; archiving this plan does not answer
+  it.
+- **No merge into `main`.** The user asked for the archive only. Under `R-048` the
+  measurement plan's branch is cut from `main`, so the merge, `--no-ff` as
+  `D-107`'s was, is the next step, and the user's to ask for.
+
+**What `docs/` says:** nothing; process work. `R-011`, `R-048`, `R-098`, the plan
+mechanism's design note.
+**Would overturn it:** the decider finding a register entry in the range that
+constrains the simulator's code.
+**Not verified:** that the hooks fire for an agent run in the background (the
+probe ran in the foreground, as `R-098` left open); the probe exercised the
+coder's `Write` only, not `Edit`, and no other role's hook.
