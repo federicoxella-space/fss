@@ -3584,6 +3584,80 @@ running build, rather than by the self-test itself; a name that needs quoting
 for a reason other than a non-ASCII byte (a tab, a double quote); the copy patch
 in `git`'s other copy-detection modes.
 
+### D-119 · Point 7 · `/plan-next` and `reviewers.md` rewired: what the point left open
+
+**Permission for `.claude/skills/` (`D-087`).** Granted by the user, Federico
+Xella, in answering the process plan's moment-one request (the plan installed in
+`6d6d098`), for point 7 as its text states it: `/plan-next` and `reviewers.md`
+are named in it. The diff touches those two files and nothing else under
+`.claude/`.
+
+**Decided.**
+- **The skill's steps are the design's ten**, numbered as "The life of a point"
+  numbers them, each heading naming its actor. "Before starting" maps
+  `plan-state`'s `state` to the old refusals one for one, `warning` added.
+- **The moment-one answer counts as recorded** when the commit that installed
+  `PLAN.md` cites it, as `AGENTS.md` requires, or when the request carries it.
+  `R-049` says "recorded" and names no place.
+- **A check that is not a test under `core/Tests/`** — a self-test, a grep — is
+  run by the tester at step 2 as it stands, and written with the point's other
+  files at step 3. The design gives the tester `core/Tests/` only and is silent
+  on a process point.
+- **A fault `mutate` cannot reach**, outside `core/Runtime/` and `harness/`, is
+  introduced by the orchestrator, with `tree-state` equal before and after, and
+  the outcome line says who introduced it. The design is silent.
+- **The checks of "The hole that `Bash` leaves" are hashes over pathspecs**:
+  the coder's denylist before and after step 3, `':!core/Tests'` before and
+  after step 4, the whole tree around step 6. Probed: `tree-state -Path` takes
+  several pathspecs only through `pwsh -Command`; under `-File` the second binds
+  to `-Repo`. The denylist is written out in the skill, a second copy beside
+  `path-guard`'s `$CoderDenied` and `coder.md`'s.
+- **The `R-047` question is in every brief**, the code-reviewer's included, so
+  `reviewers.md`'s "What every brief holds" is the brief of all three agents;
+  the briefed and blind sections stay the revisioners'.
+- **Prose cut for the cap**: the history of the trailer rule ("broken three
+  times by the author of the rule") and two short sentences. Nothing that states
+  a rule.
+
+**The word count.** The cap's 2,755 is Git Bash `wc -w`, which counts no token
+made only of non-ASCII characters (`—`, `→`); it is what `D-116` and `R-066`
+measured. By that measure the skill is 2,738 words. Counted in a UTF-8 locale,
+2,779 against 2,788 at the cap's commit: shorter by either measure.
+
+**The check, as a script** in the scratchpad, not committed, as for points 5 and
+8 (`R-093`): each step from 2 to 9 that the design assigns to an agent names
+it in a dispatch; `plan-state.ps1` and `tree-state.ps1` are invoked; step 6
+calls `tree-state.ps1` after the read-only agents; step 1 names "Owed by the
+implementer" and refuses a first point until the moment-one answer;
+`reviewers.md` names `Fails when:` and the missing-fault question and calls no
+agent type a guarantee; the `description` holds none of "implement", "verify",
+"commit"; the word count as `wc -w`. Exit 0 on the new files; on the files at
+the cap's commit, 16 of 17 checks red, the word count exactly 2,755. Its
+weakness is the one `Check: shallow` declares: it matches phrases, and a step
+reworded to dispatch nothing in other words would pass.
+
+**Point 4's reserve, probed and red.** This session sees the six agents, so the
+live probe was run before the record: `coder`, asked to `Write` `docs/probe.md`,
+wrote it. No hook message, and nothing denied. The same command as the
+frontmatter's, run by hand on the same input under `bash`, exits 2 with "the
+coder may not write docs/probe.md": the hook did not fire, rather than fire and
+allow. The file was removed, untracked, and
+`tree-state` returned to its hash before the probe. The reserve is **not
+discharged**: the clause's check is red, and the line under point 4 is the
+human's to choose. Until it is resolved, the frontmatter hooks enforce nothing
+in this version, and the hashes of step 3 are the only barrier against a coder
+writing its denylist. Point 7's criterion does not depend on the hooks, so the
+point closes on it.
+
+**What `docs/` says:** nothing; process work. `R-047`, `R-048`, `R-049`,
+`R-010`, `R-070`, the design.
+**Would overturn it:** frontmatter hooks found to fire under another
+dispatch path, which would make the probe's result a property of this session;
+the user reading the cap in another measure.
+**Not verified:** no point has yet run under the new skill; whether `pwsh
+-Command` with a pathspec list behaves the same when an agent rather than this
+session runs it; why the frontmatter hook did not fire.
+
 ## 2026-10-06 — Merge of `design/poverty-seed` into `agent-workflow`
 
 Nothing decided here. The two branches number disjointly, by design (`R-066`), so

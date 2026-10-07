@@ -289,3 +289,17 @@ Register `D-118`.
   whose moment-one request is unanswered; a read-only agent dispatched with no
   `tree-state` call after it.
 - **Core:** no — touches no path under `core/`.
+
+*Outcome:* 2026-10-07. Closed. The check, as a script, exits 0: each step the
+design assigns to an agent dispatches it; `plan-state.ps1` and `tree-state.ps1`
+invoked; step 1 names "Owed by the implementer" and refuses a first point until
+the moment-one answer; `reviewers.md` names the `Fails when:` line and the
+missing-fault question; the `description` holds none of the three words; 2,738
+words by `wc -w`, the measure of the 2,755. `Check: shallow` held: it runs, and
+matches phrases. Each fault seen red in place: the documenter's dispatch cut
+from step 8, the moment-one refusal cut from step 1, the `tree-state` call cut
+from step 6; restored, `tree-state` equal. `git diff --name-only HEAD -- core/`
+empty: `Core: no` holds, revisioners not run; no code-reviewer, no code touched.
+Build and .NET suites not run: no C# file touched. Point 4's live probe run in
+this session and red, the coder's hook not firing: its reserve stays open.
+Register `D-119`.
