@@ -23,7 +23,8 @@ param(
 $CoderDenied = @(
     'docs/', 'core/Tests/', '.claude/agents/', '.claude/hooks/', '.claude/skills/',
     'PLAN.md', 'DECISIONS-OUTSIDE-SPEC.md', 'SPEC-QUESTIONS.md', 'REVIEW-REQUEST.md',
-    'PROMOTIONS.md', 'RULINGS.md', 'core/BannedSymbols.txt'
+    'PROMOTIONS.md', 'RULINGS.md', 'core/BannedSymbols.txt',
+    '.claude/settings.json', '.claude/settings.local.json'
 )
 $DocumenterFiles = @('DECISIONS-OUTSIDE-SPEC.md', 'PLAN.md', 'SPEC-QUESTIONS.md')
 
@@ -92,6 +93,8 @@ if ($SelfTest) {
         @('coder', (J 'Write' 'F:\repo\.claude\hooks\path-guard.ps1'), 'deny'),
         @('coder', (J 'Write' 'F:\repo\.claude\agents\coder.md'), 'deny'),
         @('coder', (J 'Write' 'F:\repo\.claude\skills\plan-next\SKILL.md'), 'deny'),
+        @('coder', (J 'Write' 'F:\repo\.claude\settings.json'), 'deny'),
+        @('coder', (J 'Edit' 'F:\repo\.claude\settings.local.json' 'a' 'b'), 'deny'),
         @('coder', (J 'Write' 'F:\elsewhere\x.cs'), 'deny'),
         @('coder', (J 'Write' 'F:\repo-other\x.cs'), 'deny'),
         @('coder', (J 'Write' 'F:\repo\core\Runtime\Systems\TickLoop.cs'), 'allow'),

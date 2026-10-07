@@ -29,7 +29,7 @@ function Split-Words([string]$Command) {
 # Returns $null if the message passes, or the reason it does not.
 function Get-MessageDenial([string]$Message) {
     $subject = ($Message -split "`r?`n")[0]
-    if ($subject -notmatch $Identifier -and $subject -notmatch $NoneApplies) {
+    if ($subject -cnotmatch $Identifier -and $subject -notmatch $NoneApplies) {
         return 'git-guard: the subject carries no identifier and does not say that none applies'
     }
     $mentions = [regex]::Matches($Message, '(?i)plan-point').Count
@@ -97,6 +97,7 @@ if ($SelfTest) {
     $noPoint = Msg 'nopoint.txt' "R-045: a subject`n`nBody.`n"
     $words   = Msg 'words.txt' "Tidy the hooks folder, no identifier applies`n"
     $noId    = Msg 'noid.txt' "Tidy the hooks folder`n`nPlan-point: 3`n"
+    $lower   = Msg 'lower.txt' "Tidy the a-priori notes`n"
     $prose   = Msg 'prose.txt' "D-111: a subject`n`nPlan-point: none, it installs the plan`n"
     $twice   = Msg 'twice.txt' "D-111: a subject`n`nPlan-point: 3`nPlan-point: 4`n"
     $inBody  = Msg 'inbody.txt' "D-111: a subject`n`nThis closes no Plan-point.`n"
@@ -138,6 +139,7 @@ if ($SelfTest) {
         @("git commit -F $noPoint", 'allow'),
         @("git commit -F $words", 'allow'),
         @("git commit -F $noId", 'deny'),
+        @("git commit -F $lower", 'deny'),
         @("git commit -F $prose", 'deny'),
         @("git commit -F $twice", 'deny'),
         @("git commit -F $inBody", 'deny'),

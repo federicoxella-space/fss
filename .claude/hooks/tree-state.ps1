@@ -15,20 +15,32 @@
 #>
 param([string]$Repo = (Get-Location).Path, [string[]]$Path = @(), [switch]$SelfTest)
 
+# Throws when git fails or a file it must hash cannot be read: a check that
+# cannot look says so rather than report that nothing moved (R-071).
 function Get-TreeState([string]$Repo, [string[]]$Path = @()) {
     $tmp = New-TemporaryFile
+    # Unquoted names, decoded as UTF-8: quoted, or read in the console's code
+    # page, a name like città.txt is a path to nothing (R-071).
+    $encoding = [Console]::OutputEncoding
+    [Console]::OutputEncoding = [Text.Encoding]::UTF8
     try {
-        $status = @(git -C $Repo status --porcelain=v1 -uall -- @Path)
+        $status = @(git -C $Repo -c core.quotePath=false status --porcelain=v1 -uall -- @Path)
+        if ($LASTEXITCODE -ne 0) { throw "tree-state: git status failed in $Repo" }
         # --binary: without it a changed binary file reads "Binary files differ" whatever its content.
         git -C $Repo diff HEAD --binary --no-ext-diff --no-textconv "--output=$tmp" -- @Path
-        $diff = (Get-FileHash -LiteralPath $tmp -Algorithm SHA256).Hash
-        $untracked = @(git -C $Repo ls-files --others --exclude-standard -- @Path | Sort-Object -CaseSensitive)
+        if ($LASTEXITCODE -ne 0) { throw "tree-state: git diff failed in $Repo" }
+        $diff = (Get-FileHash -LiteralPath $tmp -Algorithm SHA256 -ErrorAction Stop).Hash
+        $untracked = @(git -C $Repo -c core.quotePath=false ls-files --others --exclude-standard -- @Path | Sort-Object -CaseSensitive)
+        if ($LASTEXITCODE -ne 0) { throw "tree-state: git ls-files failed in $Repo" }
         $lines = @($status) + "diff $diff" + @($untracked | ForEach-Object {
-            "untracked $_ $((Get-FileHash -LiteralPath (Join-Path $Repo $_) -Algorithm SHA256).Hash)"
+            "untracked $_ $((Get-FileHash -LiteralPath (Join-Path $Repo $_) -Algorithm SHA256 -ErrorAction Stop).Hash)"
         })
         $bytes = [Text.Encoding]::UTF8.GetBytes($lines -join "`n")
         return [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($bytes)).ToLowerInvariant()
-    } finally { Remove-Item -LiteralPath $tmp -Force }
+    } finally {
+        [Console]::OutputEncoding = $encoding
+        Remove-Item -LiteralPath $tmp -Force
+    }
 }
 
 if ($SelfTest) {
@@ -73,6 +85,21 @@ if ($SelfTest) {
     Expect-Change 'the binary file edited again'
     Set-Content (Join-Path $repo 'ignored.txt') 'x'
     Expect-Same 'an ignored file added'
+    # A name git would quote: città.txt, built from its code point.
+    $accented = Join-Path $repo "citt$([char]0xE0).txt"
+    Set-Content $accented 'one'
+    Expect-Change 'an untracked file with a non-ASCII name added'
+    Set-Content $accented 'two'
+    Expect-Change 'the untracked file with a non-ASCII name edited'
+    # A file that cannot be read: no hash, a non-zero exit.
+    $steps++
+    $lock = [IO.File]::Open((Join-Path $repo 'locked.txt'), 'Create', 'ReadWrite', 'None')
+    try {
+        $out = @(pwsh -NoProfile -File $PSCommandPath -Repo $repo 2>$null)
+        if ($LASTEXITCODE -eq 0 -or $out.Count -ne 0) { $failed++; Write-Host "FAIL unreadable file: exit $LASTEXITCODE, printed: $out" }
+    } finally { $lock.Dispose() }
+    Remove-Item (Join-Path $repo 'locked.txt')
+    $prev = Get-TreeState $repo
     # -Path: a change outside the pathspec leaves the hash of the pathspec alone.
     $null = New-Item -ItemType Directory -Force (Join-Path $repo 'in')
     Set-Content (Join-Path $repo 'in/c.txt') 'one'
@@ -93,4 +120,4 @@ if ($SelfTest) {
     exit ([int]($failed -ne 0))
 }
 
-Get-TreeState $Repo $Path
+try { Get-TreeState $Repo $Path } catch { [Console]::Error.WriteLine("tree-state: no hash: $_"); exit 1 }

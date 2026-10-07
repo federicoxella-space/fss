@@ -19,7 +19,8 @@ state hash, no suppression without asking.
 
 A hook denies the paths you may not write: `docs/`, `core/Tests/`, the record
 files at the root, `core/BannedSymbols.txt`, `.claude/agents/`,
-`.claude/hooks/`, `.claude/skills/`. Writing them another way is not a way
+`.claude/hooks/`, `.claude/skills/`, `.claude/settings.json`,
+`.claude/settings.local.json`. Writing them another way is not a way
 round the rule; it is the breach the orchestrator checks for.
 
 Your brief holds the point, the `R-NNN` owed, and the tester's tests. Implement

@@ -3512,6 +3512,78 @@ JSON and the plan, as the skills say to brief it. The `-Draft` default path,
 `REVIEW-REQUEST.md` on this branch, was not exercised beyond the `exists: false`
 above.
 
+### D-118 · Point 8 · The settings files, the identifier match, and four guards closed after audit
+
+**Permission for `.claude/hooks/` and `.claude/agents/` (`D-087`).** Granted by
+the user, Federico Xella, item by item for point 8's content (`R-070`, `R-071`,
+`R-073`, `R-074`, `R-094`). The point names each file it touches: the five
+scripts, `.claude/agents/coder.md`, the design. The diff touches those, one new
+fixture under `.claude/hooks/fixtures/plan-state/`, and nothing else under
+`.claude/`.
+
+**Decided.**
+- **The `CLAUDE.md` line is a line of its own** in "The hole that `Bash`
+  leaves", beside the `AGENTS.md` one, citing `R-070`. The paragraph under "What
+  the coder may not write" that explains why `AGENTS.md` is off the list is left
+  as written: item 2 names the list, not the paragraph.
+- **`tree-state` decodes git's output as UTF-8**, setting
+  `[Console]::OutputEncoding` for the call and restoring it after. `core.quotePath`
+  off alone is not enough: probed, PowerShell reads native output in the console
+  code page (`ibm850` here) and `città.txt` arrives as a path to nothing.
+  `-c core.quotePath=false` rather than `-z`, since the lines are hashed as they
+  are and `-z` changes nothing else.
+- **`tree-state` also fails when any of its three git calls exits non-zero**, not
+  only when a file cannot be read. `R-071` names the file; the same reasoning — a
+  check that cannot look says so — covers a git call that cannot.
+- **The failure is an exception inside `Get-TreeState`**, turned into exit 1 and
+  a message on stderr at the entry point. `mutate` calls the script, so it reads
+  the exit code; it also treats an empty answer as a failure.
+- **`mutate` returns 3 without applying the patch when the first `tree-state`
+  call fails.** `R-071` says "stops with exit 3 when either call fails"; stopping
+  before the patch is the only way the tree is known untouched.
+- **A rename's or copy's source is read from the patch's `rename from` / `copy
+  from` lines.** `R-073` left the reading open. Probed: `git apply --numstat -z`
+  prints the destination only, as without `-z`. A header line cannot begin a
+  hunk line, which begins with a space, `+`, `-` or `\`. A quoted source, a name
+  git would escape, does not begin with `core/Runtime/` and is refused: the safe
+  side.
+- **The locked file is how "cannot be read" is produced** in both self-tests: a
+  `FileStream` opened with `FileShare.None` by the self-test process.
+- **`plan-state`'s fixture is `out-of-order.md`**: points 6, 8, 7 in that order,
+  8 `FAILED`, 7 open, as `R-074` probed.
+
+**The check beside the criterion (`R-095`).** `mutate`'s self-test holds a case
+in which a `tree-state` call fails — a locked file in `core/Runtime/` — and
+expects exit 3 with the patch not applied. Its fault, the two exit-3 checks
+removed, turns it red: exit 0. `R-095`'s reading that "the cases of items 1 and
+3 to 6" already include it holds now, since the case is there; the outcome line
+names it all the same.
+
+**The code-reviewer's findings.**
+- **No `copy from` case** in `mutate`'s self-test: dropping `copy` from the
+  pattern left every case green, while item 5 names a copy's source. Applied: a
+  case copying `docs/a.txt` into `core/Runtime/`, expecting 2; with `copy`
+  dropped it went red (exit 3, the patch applied).
+- **The second call's failure has no case of its own**: removing that check
+  changes only the message, since an empty `$after` differs from `$before` and
+  the exit is 3 either way. Rejected: the behaviour the point asks for holds
+  without it, and the case would test a message.
+- **No refusal case on the `harness/` side**: dropping `harness` from `$Guarded`
+  would refuse valid patches and no case would notice. Rejected for this point:
+  `$Guarded` is point 2's, unchanged here, and the point names no such case. A
+  finding on point 2, for the decider.
+
+**What `docs/` says:** nothing; process work. `R-068`, `R-070`, `R-071`,
+`R-073`, `R-074`, `R-094`, `R-095`, the design.
+**Would overturn it:** a host where PowerShell's console encoding is already
+UTF-8 and setting it fails, which would make `tree-state` throw for a reason
+other than the tree; git printing rename sources in a header form other than
+`rename from`.
+**Not verified:** `tree-state` on a file locked by another process, such as a
+running build, rather than by the self-test itself; a name that needs quoting
+for a reason other than a non-ASCII byte (a tab, a double quote); the copy patch
+in `git`'s other copy-detection modes.
+
 ## 2026-10-06 — Merge of `design/poverty-seed` into `agent-workflow`
 
 Nothing decided here. The two branches number disjointly, by design (`R-066`), so

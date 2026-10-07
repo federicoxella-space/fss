@@ -158,9 +158,14 @@ function Get-PlanState([string]$Repo, [string]$Path, [bool]$Draft) {
 
     $open = @($state.points | Where-Object { $_.status -eq 'open' })
     $state.reservesOpen = @($state.points | Where-Object { $_.status -eq 'reserve-open' } | ForEach-Object { $_.number })
-    $failed = @($state.points | Where-Object { $_.status -eq 'failed' } | Select-Object -First 1)
+    # "After the failure" is by position in the file, not by number: a point added
+    # under D-014 may sit before a lower-numbered one (R-074).
+    $failedAt = -1
+    for ($i = 0; $i -lt $state.points.Count; $i++) { if ($state.points[$i].status -eq 'failed') { $failedAt = $i; break } }
     if ($state.abandoned) { $state.state = 'abandoned' }
-    elseif ($failed.Count -and @($open | Where-Object { $_.number -gt $failed[0].number }).Count) { $state.state = 'stopped'; $state.stoppedAt = $failed[0].number }
+    elseif ($failedAt -ge 0 -and @($state.points | Select-Object -Skip ($failedAt + 1) | Where-Object { $_.status -eq 'open' }).Count) {
+        $state.state = 'stopped'; $state.stoppedAt = $state.points[$failedAt].number
+    }
     elseif ($open.Count) { $state.state = 'running'; $state.next = $open[0].number }
     else { $state.state = 'finished' }
     return $state
@@ -188,6 +193,9 @@ if ($SelfTest) {
     $s = Of 'failed-then-open.md'
     Expect 'FAILED with open points after it: stopped at 2' ($s.state -eq 'stopped' -and $s.stoppedAt -eq 2 -and $null -eq $s.next)
     Expect 'FAILED point reported failed' ((Status $s 2) -eq 'failed')
+
+    $s = Of 'out-of-order.md'
+    Expect 'point 8 placed before 7 has FAILED: stopped at 8, no next' ($s.state -eq 'stopped' -and $s.stoppedAt -eq 8 -and $null -eq $s.next)
 
     $s = Of 'reserve-open.md'
     Expect 'reserve open: status reserve-open' ((Status $s 1) -eq 'reserve-open')

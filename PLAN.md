@@ -242,6 +242,25 @@ applicala", `R-094`); every `Fails when:` line below read by the user (`R-047`).
   while `path-guard` denies them (`R-094`).
 - **Core:** no — touches no path under `core/`.
 
+*Outcome:* 2026-10-07. Closed. `-SelfTest` exits 0 for the five scripts:
+`path-guard` 34 cases, `git-guard` 44, `tree-state` 14, `mutate` 12,
+`plan-state` 59. The greps, as a script, exit 0. Each fault of the `Fails when:`
+introduced in place and seen red: the settings files cut from `$CoderDenied` (2
+cases red); `-cnotmatch` back to `-notmatch` ("Tidy the a-priori notes"
+allowed); the `CLAUDE.md` line deleted (grep red); `tree-state` back to quoted
+names in the console code page (the `città.txt` edit leaves the hash unchanged);
+`-ErrorAction Stop` removed (a locked file still yields a hash, exit 0); the
+`rename from` reading removed (the rename into `core/Runtime/` applied);
+`stopped` by number again (`running`, next 7); both settings files cut from
+`coder.md` (grep red). All restored. Beside the criterion, under `R-095`: a
+`mutate` case in which `tree-state` fails on a locked file, exit 3 and the patch
+not applied; its fault, the failure ignored, red with exit 0. The
+code-reviewer, `tree-state` unchanged across it: a `copy from` case missing,
+applied and seen red with `copy` dropped; two findings rejected, in the
+register. `git diff --name-only HEAD -- core/` empty: `Core: no` holds,
+revisioners not run. Build and .NET suites not run: no C# file touched.
+Register `D-118`.
+
 ## 7. `/plan-next` and `reviewers.md` rewired
 
 - **Does:** `/plan-next` runs the life of a point of the design: each step
