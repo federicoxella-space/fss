@@ -131,6 +131,14 @@ frontmatter eseguito a mano con JSON d'esempio nega e ammette come atteso.
 eseguiti. Build e suite .NET non eseguite: nessun file C# toccato. Registro
 `D-114`.
 
+*Reserve discharged:* 2026-10-07 — the user accepted workspace trust for the
+folder, and `~/.claude.json` now holds the project under one key,
+`F:/fantasy-socioeconomic-simulator`, with `hasTrustDialogAccepted` true
+(`R-098`). The live probe rerun in a new session: `coder`, asked to `Write`
+`docs/probe.md`, was denied by its frontmatter hook with "path-guard: the coder
+may not write docs/probe.md"; the file was not created and `git status` stayed
+clean.
+
 ## 5. `AGENTS.md`: the three rule sets, and the English markers
 
 - **Does:** edits `AGENTS.md`, adding the three rule sets of the design's "The
