@@ -2,7 +2,7 @@
 
 **Document:** SIM-OBS
 **Status:** Draft for correction
-**Revision:** 2026-09-19
+**Revision:** 2026-10-04
 **Companion:** SIM-REQ, SIM-DEC
 
 ---
@@ -73,7 +73,7 @@ In a hungry settlement, some go without while the market still holds grain. Who 
 
 **Timescale.** A season.
 
-**Served by.** FR-C-01 to FR-C-05, FR-W-08, FR-J-01 to FR-J-03, DEC-042, DEC-043, DEC-044, DEC-052, DEC-054.
+**Served by.** FR-C-01 to FR-C-05, FR-W-08, FR-J-01 to FR-J-03, FR-J-19 to FR-J-22, FR-P-03a, FR-P-03b, FR-P-10a, FR-P-10d, FR-P-10e, FR-D-03a, DEC-042, DEC-043, DEC-044, DEC-052, DEC-054, DEC-090, DEC-091, DEC-092, DEC-095, DEC-097, DEC-098, DEC-099.
 
 **If cut.** Cohorts no longer need to hold currency or be partitioned by occupation. The clearing pass collapses into a consumption rate. This is the single most expensive observable in the list, and the one to cut first if the budget forces a cut.
 

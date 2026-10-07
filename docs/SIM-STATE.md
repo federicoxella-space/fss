@@ -2,7 +2,7 @@
 
 **Document:** SIM-STATE
 **Status:** Draft
-**Revision:** 2026-10-02
+**Revision:** 2026-10-07
 **Gate:** The assert list is executable.
 
 ---
@@ -21,8 +21,9 @@ Input is not state. A command the host has submitted and the simulator has not y
 |---|---|---|
 | tick | int64 | the only clock |
 | worldSeed | uint64 | also the RNG root |
-| generationParams | record | travels with the save so any report reproduces |
-| ruleVersion | int | drives materialisation on patch, DEC-033 |
+| generationParams | record | the values the host chose for this world, FR-G-02; travels with the save so any report reproduces |
+| ruleVersion | int | version of the core's logic; drives materialisation on patch, DEC-033 |
+| rulesData | byte[] | the rules file the world runs on, immutable; the hash folds its digest, DEC-100 |
 | currencyTotal | int64 | in smallest units, the invariant target |
 
 No RNG state. Randomness is `Hash(worldSeed, subject, tick, channel, index)`, under NFR-03 and DEC-081.
@@ -53,20 +54,30 @@ Always simulated. Roughly 2,000 rows.
 
 ## Cohort
 
-Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the shipping configuration, three in CI. Roughly 9 rows per settlement at Phase 4.
+Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the shipping configuration, three in CI. 12 rows per settlement at Phase 4: eleven mestieri in the allocation vector and the destitute row.
 
 | Field | Type | Notes |
 |---|---|---|
 | count | int | |
-| ageDistribution | int[] | bands |
+| ageDistribution | int[] | per age band of the rules file |
 | currency | int64 | single integer in smallest units |
 | goods | int[] | one per good |
-| wealthSpread | fixed | drives the closed-form affordability fraction |
+| goodsCarry | fixed[] | laid out as goods: the fraction of a unit each holding carries, in [0, 1). Production, harvest and spoilage add to it or take from it, and a whole unit moves to or from goods when reached |
 | buildings | int[] | per building type, owned by this cohort |
-| durables | int[] | per durable good, with accumulated wear |
+| buildingsCarry | fixed[] | per building type: decay at P-51 not yet a whole building |
+| durables | int[] | per durable good, with accumulated wear, the carry of P-53 |
 | debt | int64 plus category | owed, counterparty category only |
+| interestCarry | fixed[2] | interest on debt and on advance not yet a whole smallest unit, one each |
 | credit | int64 plus category | owed to this cohort |
 | defaultMark | int | ticks remaining |
+| hungerDeficit | fixed | per member, FR-D-03a; read by mortality and by the seed reserve; averaged by count when members arrive |
+| transitionRemainder | fixed | carry of the share entering or leaving destitution; cleared when the row empties |
+| sownLand | int[] | per crop; set at sowing, FR-P-10a |
+| landInField | int[] | per crop; falls through the harvest window, FR-P-10b |
+| condition | fixed[] | per crop, 0–20000, FR-P-10c |
+| advance | int64 plus category | owed against the standing crop, FR-C-25; not included in debt; the lender's claim is in its credit |
+
+Every rate applied to an integer field of a row keeps its fraction in a carry beside the field, in the field's layout, cleared when the row's count reaches zero (SIM-ECON, "Spoilage and integer rounding"). The carries above are those the update names; a rate added later brings its carry into this table.
 
 ---
 
@@ -81,6 +92,7 @@ Edge count bounded by the degree caps.
 | danger | fixed | FR-M-12 |
 | volume | fixed | rolling, drives weakest-edge eviction |
 | flowAccumulator | int[] | per good |
+| lossCarry | fixed[] | per good: transit loss (FR-C-11) on this link's shipments not yet a whole unit; cleared when the link is evicted |
 
 ---
 
@@ -116,12 +128,14 @@ Capped at roughly 300 hot. Dormant agents hold a difference record only.
 
 | Field | Type | Notes |
 |---|---|---|
-| kind | enum | caravan, convoy, merchant, adventurer |
+| kind | enum | caravan, convoy, merchant, adventurer, migrants |
 | authoritative | bool | scheduled versus sampled |
 | link or route | id[] | |
 | departureTick, speed | int | |
 | contents | int[] plus int[4] | goods and coin |
 | weight | int | |
+
+Migrants are a scheduled transient. Beside the fields above they carry a count, the key of the row they left and its hunger deficit (FR-D-03a); their currency is one integer in smallest units, as a cohort's (FR-C-13), not four denominations. A-02 counts it and A-04 their goods.
 
 Sampled transients are not stored. They are enumerated on demand from the draw of NFR-03, with the link as subject.
 
@@ -152,7 +166,7 @@ Sampled transients are not stored. They are enumerated on demand from the draw o
 
 ## Static data, not state
 
-Goods, recipes, mestieri, crops, climate curves, event class definitions. Versioned with `ruleVersion`, never mutated at runtime.
+Goods, recipes, mestieri, crops, climate curves, event class definitions, goods classes, needs table, wealth curves, and the values of the parameters that drive the simulation. They never change during a run. They arrive in the rules file the host supplies, or in the base rules compiled into the core when it supplies none (DEC-100), and World holds the bytes whole so that a save carries them. The content is not state; the bytes that carry it are, as World's `rulesData`, immutable for the life of the world.
 
 ---
 
@@ -176,6 +190,8 @@ Goods, recipes, mestieri, crops, climate curves, event class definitions. Versio
 | A-13 | Each cadence bucket fires exactly once per its period, and consecutive firings of a bucket are exactly one period apart |
 | A-14 | No cohort holds negative count, currency, or goods |
 | A-15 | Buried stock only decreases |
+| A-16 | For every cohort and crop, landInField ≤ sownLand; for every settlement, sownLand summed over its cohorts and crops ≤ land |
+| A-17 | Destitute rows hold no buildings and no durables |
 
 A-02 and A-03 together are the currency invariant. A-01 and A-14 are the population invariant. A-04 is the goods invariant.
 
@@ -197,8 +213,9 @@ A-13 is the one assert about the schedule rather than about state: a firing leav
 
 ## Open
 
-1. Confirm the age band count for cohorts, which multiplies cohort width.
+1. Closed: age bands are content in the rules file, each saying whether its members offer labour. The base rules hold three, children, working age and elderly, and only working age offers labour. Their number is a width the content sets, fixed for the life of a world (DEC-085).
 2. Decide whether `flowAccumulator` needs per-good history or a single rolling figure.
 3. Decide the chronicle retention policy. Entries accumulate over 60 years and nothing above discards them.
 4. Decide how the chronicle dates prior history. FR-G-03 runs it "before tick 0" and DEC-040 takes the result as tick 0, so entries written during it carry ticks that are negative once the run is relabelled, or later than the run's first tick if it is not.
 5. Decide how an `EntityId` names its table, before a second table issues them. The chronicle's `entities` may mix settlements, kingdoms and agents, and an index plus a generation does not say which; DEC-083's "two distinct entities are distinct keys" holds across tables only if their indices share one space.
+6. Decide how members move from one age band to the next: a rate per band, which under the rule of §Cohort needs a carry. Falls due with the demography subsystem, whose births enter the first band and whose deaths read every band (FR-D-03).

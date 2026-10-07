@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-10-02
+**Revision:** 2026-10-06
 **Companion:** SIM-REQ
 
 ---
@@ -55,9 +55,9 @@ Population, currency, and goods each belong to exactly one simulation level. Lev
 
 A state field is a value or one contiguous array of values. A per-row quantity of fixed width `w`, such as a treasury of four denominations or one stock per good, is stored as one array of `rows × w`. A per-row quantity of variable length is stored either at a fixed capacity, which is then its width, or in one shared pool addressed by a per-row offset and count. No array holds arrays, and no composite value inside state holds an array.
 
-**Rationale.** An array of arrays is an object graph under another name: each inner array is a reference, which NFR-10 excludes, and each is a separate allocation that DEC-003's bulk serialise, copy and hash cannot cover in one pass. Widths come from static data versioned with `ruleVersion`, so `rows × w` is known whenever the state is.
+**Rationale.** An array of arrays is an object graph under another name: each inner array is a reference, which NFR-10 excludes, and each is a separate allocation that DEC-003's bulk serialise, copy and hash cannot cover in one pass. Widths come from the core's logic or from the rules file the world carries (DEC-100), so `rows × w` is known whenever the state is.
 
-**Cost.** Every access to a wide field computes an index. A patch that changes a width, a new good for instance, reshapes the arrays that carry it inside the migration of NFR-08. A pooled field needs a compaction rule, and that rule orders by id or it becomes a determinism hole of its own.
+**Cost.** Every access to a wide field computes an index. A width the logic sets, the four denominations for instance, changes only with the logic, and reshapes the arrays that carry it inside the migration of NFR-08. A width the content sets, one stock per good for instance, never changes within a world, since an existing world cannot take new content (DEC-100). A pooled field needs a compaction rule, and that rule orders by id or it becomes a determinism hole of its own.
 
 ### DEC-088 — Only the rows in use are state
 
@@ -183,9 +183,9 @@ An entity's state at tick T is computed directly, not by replaying T ticks. Attr
 
 ### DEC-015 — A good is a data record and a recipe is a data record
 
-Unit weight, reference value, perishability, role, need tier. Recipes carry inputs, output, labour, building. No good and no recipe requires code.
+Unit weight, reference value, perishability, whether durable, classes, at most one per class tree, with a value in each, processing grade. Recipes carry inputs, output, labour, building. No good and no recipe requires code.
 
-**Rationale.** The plan is to start with seven goods and grow. That only works if growth costs data entry rather than branches.
+**Rationale.** The plan is to start with the goods of P-09 and grow. That only works if growth costs data entry rather than branches.
 
 **Cost.** Goods with genuinely unique mechanics need a general mechanism added to the schema rather than a special case, which is more work up front for the first such good.
 
@@ -234,6 +234,22 @@ Village degree ≤ 3, town and city degree ≤ 6. The generator builds the initi
 **Rationale.** Diffusion along the graph gives propagation delay, which is both cheaper and closer to how a medieval economy behaves. Distance means something.
 
 **Cost.** Prices never reach a true equilibrium, so any design that assumes an arbitrage-free market has to be reconsidered.
+
+### DEC-098 — Needs are met by classes of goods, by grade
+
+Goods belong to classes, data records that may nest under a parent class. A good carries a value per unit in each class it belongs to, at most one class per tree and its value in the units of the tree's root, nutrition for food, and one processing grade. A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day, and any good of the class or its subclasses at or above the grade meets it. Tier is the urgency of the need, not a property of the good. Processing creates no food: no recipe yields more food value than its inputs embody, a good outside the food class carrying the least food value consumed to make it.
+
+**Rationale.** With needs defined per good, every new food would be one more need: everyone would have to eat bread and also potatoes. Classes make food a set of alternatives, and the minimum grade keeps urgency and processing on separate scales while letting them meet: survival can accept grain, a basic need can ask for bread. Grain becomes food, so a released seed reserve feeds the cohort that holds it. Without the conservation rule, baking would create food, and a famine could be cured in the oven. The rule runs along the chain rather than recipe by recipe, because flour belongs to no food class: milling consumes food, baking yields it, and only the two together say whether food was made.
+
+**Cost.** Demand becomes a choice among goods of a class. Static content grows: classes, memberships, values, grades and needs, all approved by the user as static content under SIM-REQ section 16, "Parameters to fix". A recipe table can fail to load for a food value set too high several recipes away from the error.
+
+### DEC-099 — The plate follows the purse
+
+Needs add: each is a quantity of its own, and a unit consumed meets one need. A cohort meets its needs tier by tier from its own holdings first, lowest grade first, so that a better good is kept for the need that asks for it, and buys what remains of each need at the lowest price per unit of value among the goods that meet it. With the currency left once tiers 0 and 1 are met, and before tier 2 takes its fraction, members replace units of a lower grade with units of a higher grade that meet the same need, as far as they can pay; the share of members able to pay for each grade is read from the wealth curve (DEC-097). In rationing, demand that meets a need comes before demand that only raises its grade. Demand rationed out of one good falls, within the update, to the other goods that meet the same need, cheapest per unit of value first.
+
+**Rationale.** Adding needs keeps the survival minimum apart from the ordinary meal. An ordinary year eats the minimum and the tier 1 share, so a shortfall first takes the share, which is deferrable, and only then the minimum: a famine tightens belts before it kills, and stays a season. One ration made better by grade would leave no such margin, and every unit short would be hunger. The plate then shows wealth: within one mestiere the poorer eat grain and the better-off bread, and in a famine bread leaves the poorer tables first. Reading the better grade through the wealth curve rather than the cohort's mean keeps a small price move from switching a whole cohort between goods. Ranking it after every need keeps the rationing rule of SIM-ECON: nobody eats better while another cannot eat and could pay.
+
+**Cost.** Every food is one more market to ration in the most expensive phase, so the number of foods is set after a measurement. The markets of a class acquire an order, derived from grade, price and good id, and demand falling between them may cross them more than once in an update. In ordinary years the plate is mixed, and the quantities of the needs table are tuned so that the total is plausible. A need's demand goes whole to its cheapest good, so two foods of one grade at nearly equal prices can take turns from one update to the next.
 
 ---
 
@@ -353,9 +369,9 @@ A tick opens by applying, in submission order, every command waiting when it sta
 
 **Cost.** Snapshot handover needs a defined publication point, and the render layer always shows state that is at least one tick old.
 
-### DEC-032 — A save is a full state snapshot plus seed and generation parameters
+### DEC-032 — A save is a full state snapshot plus seed, generation parameters and rules file
 
-Format carries a version number and a migration path. It also carries the commands submitted and not yet applied, in submission order; they are input, not state, and stay outside the state hash.
+Format carries a version number and a migration path. It carries the rules file the world runs on (DEC-100). It also carries the commands submitted and not yet applied, in submission order; they are input, not state, and stay outside the state hash.
 
 **Rationale.** Load time stays constant instead of growing with campaign length. The seed and parameters travel with the save so any player-reported bug reproduces exactly. A save that dropped pending commands would not: the world reloaded would miss the player's last action.
 
@@ -363,7 +379,7 @@ Format carries a version number and a migration path. It also carries the comman
 
 ### DEC-033 — State records its rule version, and a patch materialises deferred entities
 
-On first load after an update, deferred entities resume under the rules that produced them, then continue under the new ones.
+On first load after an update, deferred entities resume under the rules that produced them, then continue under the new ones. An update is a new version of the core's logic: the rules file a world carries does not change with it (DEC-100).
 
 **Rationale.** Closed-form resumption means a deferred entity's past is recomputed rather than stored, so changing a formula would silently rewrite history the player already lived through. Materialising at the patch boundary freezes that history instead.
 
@@ -371,11 +387,19 @@ On first load after an update, deferred entities resume under the rules that pro
 
 ### DEC-089 — A load refuses what no build could have written
 
-A save is input from outside the core. Reading one checks every count against the bytes left before allocating for it; every field against the rules its writer keeps, the invariants of SIM-STATE that are claims about state among them; the format version against those this build reads, and the rule version against those this build can run or bring forward; and each pending command's form, a kind this build knows with fields inside what that kind declares. Any failure refuses the whole save, as one kind of error distinct from a caller's mistake, and returns no world.
+A save is input from outside the core. Reading one checks every count against the bytes left before allocating for it; every field against the rules its writer keeps, the invariants of SIM-STATE that are claims about state among them; the format version against those this build reads, and the rule version against those this build can run or bring forward, and the rules file it carries as it was checked when the world was created (DEC-100); and each pending command's form, a kind this build knows with fields inside what that kind declares. Any failure refuses the whole save, as one kind of error distinct from a caller's mistake, and returns no world.
 
 **Rationale.** A save crosses the host's disk and a player's hands. A world partly loaded, or holding a row no system could have written, fails ticks later where nothing points back at the save, and the bug report DEC-032 wants reproducible does not reproduce. A rule version later than the build's is refused because the state would claim rules it does not run (NFR-09); an earlier one is brought forward under DEC-033. A command's form needs no state to check, so a kind the build does not know is refused at the load rather than reaching a drain; whether a command fits the state of the tick it lands on stays the drain's to decide (DEC-086).
 
 **Cost.** Each writer's rule is stated twice, where it writes and where the load checks it, and a rule changed in one place only refuses valid saves or admits invalid ones. The invariants checked at load run in every build, not only where the per-tick asserts do. What the core does with a command the state refuses is not settled here.
+
+### DEC-100 — Static content and simulation parameters are a rules file the world carries: the core's base rules, or one the host supplies
+
+Goods, classes, needs, recipes, buildings, mestieri, crops and curves, with the values of the parameters that drive the simulation, form a rules file in a versioned binary format. The host may read one and hand its bytes to the core when it creates a world; the core validates it whole and keeps it in the world, and a save carries it. A loaded world runs on the rules file its save carries, never on another the host offers. The rule version of NFR-09 is the version of the core's logic together with a digest of the rules file, computed by the core. The file is compiled offline from a text source kept in the repository; the core reads only the binary, in integers and fixed point. The same compiler writes the base rules into the core as bytes, and a world for which the host hands no file runs on them; a file handed over replaces them whole. Whatever their source, the bytes are validated alike, named by their digest and carried by the save. Validation refuses a malformed file by returning a refusal, never by failing, and refuses a file declaring more goods, mestieri or recipes than its caps.
+
+**Rationale.** Content and parameters change far more often than logic, and the sweeps of Phase 6 run many worlds that differ only in them; with the data compiled into the core every variant would be a build. A file the host hands over keeps the core away from files, as saves already do. Data that change a run are input, like the seed, so the world must carry them: a reported bug reproduces only with the exact file, and a patch can resume deferred entities under the old rules only if the old rules are at hand (DEC-033). The digest is computed by the core from the bytes, so no host can declare a version that did not produce the state. Text in the repository keeps the content readable and reviewable; parsing text in the core would bring number formatting and locale into a path that must be deterministic, so an offline tool converts it to integers once. The base rules exist because not every platform the game ships on can read a file beside the core: there the game runs on what the build carries, and content patches and mods are possible only where a file can be read.
+
+**Cost.** A second versioned format, with a reader for every version, as saves have under NFR-08. The compiler no longer checks content: validation at creation and at load is the only check, and must be complete. An existing world cannot take new content: that would need a mapping from old ids to new and a migration of the state's shape, and it is refused until a requirement asks for it. The harness gains a compiler for the rules source. The base rules in the core are a build output that must be regenerated when the source changes. A modded save reproduces only with the player's file, which the save carries for that reason. Validation must hold against files written by players, not only by the repository's compiler.
 
 ### DEC-034 — The core targets Windows x64 and knows nothing about its host
 
@@ -413,21 +437,21 @@ The generator assigns each settlement a fixed-point `climateIndex` on 0–10000.
 
 **Cost.** Designers cannot author a rule that applies to "the northern band". Anything band-specific has to be expressed as a function of the index.
 
-### DEC-037 — Climate acts through two 52-entry weekly curves, interpolated
+### DEC-037 — Climate acts through pairs of 52-entry weekly curves, interpolated
 
-Authored `cold` and `warm` curves give a weekly modifier each; a settlement interpolates between them on its `climateIndex` in integer arithmetic. The modifiers govern travel cost, mortality, livestock growth, timber yield, and construction labour.
+Each modifier has an authored pair of curves, `cold` and `warm`, giving a weekly value each; a settlement interpolates between the pair on its `climateIndex` in integer arithmetic. The modifiers govern travel cost, mortality, livestock growth, timber yield, and construction labour.
 
-**Rationale.** Weekly resolution turns climate into a ramp rather than four jumps a year, so prices drift instead of stepping. Two curves plus interpolation cover the whole map in a few kilobytes and stay fully authorable without code.
+**Rationale.** Weekly resolution turns climate into a ramp rather than four jumps a year, so prices drift instead of stepping. Two curves plus interpolation cover the whole map in a few kilobytes and stay fully authorable without code. A pair per modifier, rather than one pair for all, lets a winter stop building sites without also raising mortality.
 
-**Cost.** Tuning happens across 104 authored numbers rather than a handful of constants, which needs a curve editor or a spreadsheet import before Phase 6.
+**Cost.** Tuning happens across 104 authored numbers per modifier, 520 for the five, rather than a handful of constants, which needs a curve editor or a spreadsheet import before Phase 6.
 
 ### DEC-038 — Crops are dated events, not continuous production
 
-A crop record carries sowing date, maturation length, harvest date, and yield per land and labour. Harvest delivers the full amount into settlement stock at once. Per-settlement date offsets derive from `climateIndex`. A dated event fires at the first settlement update at or after its date, so it can lag by up to six ticks.
+A crop record carries sowing date, maturation length, harvest date, and, per DEC-092 to DEC-094, a planting good, labour per stage and yield per unit of land. The harvest date opens a window of updates over which the crop is reaped. Per-settlement date offsets derive from `climateIndex`. A dated event fires at the first settlement update at or after its date, so it can lag by up to six ticks.
 
 **Rationale.** The annual price cycle, the irreversibility of a bad harvest, the value of storage, and the autumn grain wave across latitudes all fall out of this one choice with no dedicated code. A settlement that loses its harvest cannot produce more grain until next year and must buy, migrate, or starve, which is what separates a famine from a dip in output.
 
-**Cost.** Grain output responds to a shock only at the next harvest, so any event meant to change food supply within the year has to act on stock, transport, or population instead.
+**Cost.** Grain output responds to a shock only at the next harvest. An event meant to change food supply within the year acts on a standing crop through its condition (DEC-094), or on stock, transport, or population.
 
 ### DEC-039 — The core is imported as source, isolated by its own assembly
 
@@ -451,7 +475,7 @@ World creation runs the simulator for P-18 years with no hot agents, then takes 
 
 **Rationale.** At the shipping configuration the simulator uses roughly 40% of the budget, which leaves room to add subsystems while keeping the failure close enough that an unexpected doubling of cost trips the test on the day it appears. A looser budget stays silent for years; a tighter one fires on legitimate work until someone raises it, which removes the signal either way.
 
-**Cost.** The figure rests on a measurement covering five of the twelve phases of a settlement update, carried with a factor of two allowance for the rest. The allowance is a judgement, and Phase 4 will replace it with the real number.
+**Cost.** The figure rests on a measurement covering five phases of a settlement update, of the twelve it had when the figure was taken, carried with a factor of two allowance for the rest. The allowance is a judgement, and Phase 4 will replace it with the real number.
 
 ### DEC-042 — Cohorts hold currency and own what they produce
 
@@ -465,7 +489,7 @@ Settlement stock is the sum of cohort holdings. Markets hold no currency and no 
 
 A cohort eats what it produced before buying, and market allocation under shortage runs in descending order of ability to pay.
 
-**Rationale.** Ability to pay applied to the whole stock would make a farming cohort buy back its own grain and starve beside its field, and would create an unbraked spiral where the poor die, labour falls, output falls, and prices rise further. Ordering own production first confines the rule to the traded share, which is where it belongs. It also gives famine a legible shape: labourers, artisans, and townsfolk feel it before farmers.
+**Rationale.** Ability to pay applied to the whole stock would make a farming cohort buy back its own grain and starve beside its field, and would create an unbraked spiral where the poor die, labour falls, output falls, and prices rise further. Ordering own production first confines the rule to the traded share, which is where it belongs. It also gives famine a legible shape: labourers, artisans, and townsfolk feel it before farmers, and farmers feel it when they start eating their seed reserve (DEC-092).
 
 **Cost.** Cohorts that both produce and trade need two accounting steps per update rather than one.
 
@@ -493,9 +517,9 @@ Currency enters only by an explicit minting event and leaves only by an explicit
 
 **Cost.** Kingdom spending has to have somewhere to go from the first version, which means garrisons, works, and holdings become simulation objects earlier than they otherwise would.
 
-### DEC-047 — Allocation adjusts partially, once per sowing
+### DEC-047 — Allocation adjusts partially, at each activity's adjustment
 
-The settlement moves its land and labour allocation toward the highest expected return by a damped rate, capped per year.
+The settlement moves its land and labour allocation toward the highest expected return by a damped rate, capped per year. An activity may carry its own rate and cap (DEC-096).
 
 **Rationale.** Sowing decisions made on current prices and acted on at the next harvest form a cobweb: full adjustment overshoots, and the oscillation grows instead of settling. Partial adjustment is what makes the loop converge, and it also matches how slowly a farming population actually changes what it plants.
 
@@ -533,6 +557,38 @@ A settlement's annual remittance becomes an entity moving over the trade graph, 
 
 **Cost.** Convoys are a new entity class with a lifecycle, a route, and interception rules, which makes money movement more concrete than goods movement and invites the question of why goods are not convoys too.
 
+### DEC-092 — Sowing consumes a planting good, protected until desperation when it is food
+
+A crop record names its planting good and the amount needed per unit of land. For grain the planting good is the harvest itself; a crop whose seed is not its harvest names a planting good obtained as any other good is, by a recipe or by trade. Sowing consumes the planting good from the sowing cohort's holdings. The seed reserve is derived, not stored: the amount per unit of land times the land the current allocation vector gives the cohort's crop, and nothing but sowing draws on it. When the planting good is food, the reserve is released once the cohort's hunger deficit exceeds P-66, only as far as needed to meet the tier 0 need the cohort's other holdings leave unmet in that update, which holds the deficit there, and only to own consumption; P-67 is the share that may reach the market, zero in the shipping configuration; P-71 is the same share in CI, where the path is exercised.
+
+**Rationale.** Without seed a lost harvest costs one year, since the next sowing is whole regardless. Eating seed borrows against next year at the crop's yield ratio, and the choice is distributive: keeping seed pushes the famine onto those who buy, eating it drags it onto those who grow over several years. A threshold produces both. Imported grain is also seed, so trade becomes the way out of a famine that outlasts a year. Bounding the reserve by allocated land keeps it from exceeding what the next sowing can use.
+
+**Cost.** Famine length depends on each crop's yield ratio and on where P-66 sits against the onset of hunger mortality. Farmers gain a path into destitution that DEC-043 excluded. Letting P-67 above zero reopens forced sale.
+
+### DEC-093 — Labour bounds a crop at sowing and at harvest, over a window
+
+Labour is a capacity at two dates, not a yield multiplier, and both are measured in area. Labour is the cohort's own and what it hires. Sowing labour bounds the land sown. The harvest date opens a window of N updates, N carried by the crop, and harvest labour bounds the area reaped in each update of it. Nothing is lost while the window is open; what is still standing when it closes is lost. The harvest goes to the cohort that sowed.
+
+**Rationale.** Without hands nothing is sown or reaped, and counting labour again in the yield would count it twice. Reaping depends on the plants sown, not on what each one yields. A window keeps a single week's labour from deciding a year's harvest: reaping late costs nothing until the window closes, and the risk is not finishing. The demand peaks give day labourers their season through the wage.
+
+**Cost.** Threshing and carting scale with quantity and are not modelled, so a doubled harvest needs no more hands. A standing crop becomes state per cohort per crop. The labour market of the settlement update must see the demand of every crop stage active in the update.
+
+### DEC-094 — A standing crop carries a condition from neglect to full care
+
+A crop's life has three stages, sowing, growth and harvest, each declaring labour per unit of land. Growth declares two levels, normal care and full care. A standing crop carries a condition on 0–20000 that multiplies its yield: below normal care it falls towards 0, at normal care it is 10000, towards full care it rises to 20000. Exogenous events that strike a standing crop multiply its condition. Both levels are zero in the shipping configuration, where the condition stays at 10000, and non-zero in a CI configuration.
+
+**Rationale.** Tending the crop and the events that strike it between sowing and harvest both need somewhere to act. Holding that field from the first day, at a degenerate value, keeps adding them a data change rather than a change of state layout and a save migration. Two levels keep any labour spent on a crop with a zero requirement from reading as extra care.
+
+**Cost.** A field that does nothing in the shipping configuration, and a CI configuration to keep the code that moves it from rotting. Full care doubles what the same land can yield, which loosens B1 and B3a: both assume a fixed yield per unit of land, and both are rechecked before care is enabled.
+
+### DEC-095 — A crop left without its cohort belongs to whoever reaps it
+
+When the cohort that sowed a crop is empty, the crop stands as an open field until its harvest window closes. Labour left unhired when the labour market clears is assigned to it and reaps it with the harvest, and each cohort keeps the harvest in proportion to the labour it put in.
+
+**Rationale.** A ripe field rotting beside a hungry village reads as a fault. Idle labour already exists after the labour market clears, so an open field needs no wage, no payer and no new market. In a crisis the idle are mostly destitute, so the gleaning reaches them without naming them.
+
+**Cost.** One more step after the labour market. An advance on the crop is written off, since its collateral became everyone's.
+
 ---
 
 ## Occupations and transients
@@ -541,7 +597,7 @@ A settlement's annual remittance becomes an entity moving over the trade graph, 
 
 Activity, building, productivity, placement, wealth tendency, social rank. Cohorts are partitioned by it. Occupational shares move under the same damped allocation vector that moves land and labour.
 
-**Rationale.** Occupations follow the rule that already governs goods and recipes, so the list grows by data entry. Reusing the allocation vector means a weaver's wage rising and a field switching from wool to grain are the same mechanism with one damping constant, rather than two systems that can disagree.
+**Rationale.** Occupations follow the rule that already governs goods and recipes, so the list grows by data entry. Reusing the allocation vector means a weaver's wage rising and a field switching from wool to grain are the same mechanism, damped at each activity's rate (DEC-096), rather than two systems that can disagree.
 
 **Cost.** Any occupation with genuinely unique behaviour needs a general field added to the record rather than a special case.
 
@@ -713,6 +769,38 @@ Same output, no durable needed, a far worse input-to-output ratio.
 
 **Cost.** Every durable-requiring recipe needs a crude twin authored alongside it, and the ratio between them is a tuning lever that decides how badly a stripped settlement suffers.
 
+### DEC-090 — Destitution is a row, entered by impoverishment
+
+Every settlement holds a destitute row: a service mestiere with no building, outside the allocation vector, entered only by impoverishment. The destitute own no buildings and no durables. The generator populates the row at tick 0 from the wealth curves.
+
+**Rationale.** With one row per mestiere the rationing order of DEC-043 reaches whole trades, so a famine falls evenly on the rich and the poor of the same mestiere and nobody is the one who has least. Fixed wealth bands would make poverty a label written by the generator. A row entered when members can no longer feed themselves at the local price makes poverty a market outcome, and gives FR-C-24 a population that cannot borrow by construction. It is kept apart from day labour by choice, so that recovery can be read from wealth without expelling those who labour by choice. Entry is not gated on the cohort's credit: a poor member cannot pledge a rich member's buildings, and what the cohort borrows in phase 3 already counts in its wealth.
+
+**Cost.** FR-J-03 gains an exception. An entrant's former mestiere is lost. The row is seldom empty, and the budget of DEC-041 is measured with it full.
+
+### DEC-091 — The destitute leave to fill the vector's gaps, at the cadence of their destination
+
+Destitute members above the entry threshold by P-69 leave at the next adjustment of their destination: a crop's sowing date for agricultural activities, settlement cadence for the others. They go first to mestieri whose actual share, among the population outside the destitute row, is below the allocation vector's, in proportion to the gap, and the rest in proportion to the vector. The vector is a target and does not move for them.
+
+**Rationale.** The countryside offers fewer chances to recover than the town, and the asymmetry should show. Filling gaps first repopulates the trades a famine emptied. Since the vector does not move, P-19 is not involved and no cobweb can form.
+
+**Cost.** Two asymmetries add: the destination's cadence and the local wage. Wealth curves have no memory, so a member who leaves can fall back below the threshold; only the margin P-69 holds it.
+
+### DEC-096 — Day labour is a chosen mestiere that follows the wage at its own rate
+
+Day labourer is an ordinary service mestiere inside the allocation vector, with no building, whose expected return is the wage. An activity's record may carry its own adjustment rate and cap, P-19 and P-73, the default yearly cap of FR-P-15, applying where it carries none; day labour carries a faster rate and no yearly cap. Where labour offered exceeds labour demanded, every cohort selling labour is hired in proportion to what it offers.
+
+**Rationale.** The cobweb comes from the delay between sowing and harvest. Day labour is paid in the update it is hired, so it needs none of the damping crops need, and with that damping its share could not follow a harvest lasting a few weeks. A rate in the record avoids an exception wired to one mestiere. Proportional hiring favours neither those who labour by choice nor the destitute.
+
+**Cost.** P-19 is no longer the vector's only rate. One update still separates the wage from the arrivals it draws, so the rate is tuned below one. When the wage does not justify day labour the vector drives its share towards zero, as DEC-061 expects of any unremunerative mestiere.
+
+### DEC-097 — Wealth within a row is an authored curve, generated from a lognormal
+
+Each mestiere record carries a wealth curve, the share of members below a given ratio to the row's mean, and its companion curve, the share of wealth those members hold, each sampled at up to 32 points. An offline tool generates both from a lognormal with the record's σ; they are static content and may be edited. The core interpolates them in integer arithmetic. The same curves read wealth for entry to and exit from destitution, and currency for the share of a cohort able to pay when supply is rationed.
+
+**Rationale.** A row is uniform and would cross any threshold all at once; the curve says how many members lie below it. A lognormal has no floor, so poverty appears by degrees. Pareto describes the rich tail and has a floor at the bottom like a uniform. Authored curves, as for climate under DEC-037, keep transcendental functions out of the core under NFR-02 and keep the shape out of the architecture.
+
+**Cost.** The curve has no memory: after each crossing the row spreads again around its new mean, so persistence lives in the destitute row. Reading wealth and currency through one shape is an approximation. Two curves and a σ per mestiere to approve, an offline tool, and no historical data to calibrate them against yet.
+
 ---
 
 ## Credit
@@ -737,9 +825,9 @@ The rate is the bounded price function applied to credit supply against demand, 
 
 Goods, then durables, then buildings. No person is taken. Land remains a settlement attribute.
 
-**Rationale.** Stopping short of bonded labour keeps a defaulted cohort economically alive and able to sell its labour, so ruin is recoverable. Leaving land unowned protects the settlement-level land per capita that brakes the migration spiral, and keeps rent and tenancy out until the wealth axis exists to carry them.
+**Rationale.** Stopping short of bonded labour keeps a defaulted cohort economically alive and able to sell its labour, so ruin is recoverable. Leaving land unowned protects the settlement-level land per capita that brakes the migration spiral, and keeps rent and tenancy out; the wealth axis of DEC-054 is what would carry them if they enter.
 
-**Cost.** No dispossession of peasants, no rent, no great estates. A substantial medieval dynamic sits outside the model until the cohort key gains its second axis.
+**Cost.** No rent, no great estates. A peasant is dispossessed only by losing what working the land needs: seed, durables, buildings (DEC-090, DEC-092). Rent and tenancy stay outside the model until the cohort key gains its second axis.
 
 ---
 
@@ -771,7 +859,7 @@ Stock regenerates below what unconstrained extraction would take. Infested it ra
 
 ### DEC-080 — Dungeon materials may be required, and a static check protects subsistence
 
-Recipes may require dungeon-only materials. Validation at load proves nothing in tier 0 or tier 1 depends on one.
+Recipes may require dungeon-only materials. Validation at load proves every tier 0 and tier 1 need can be met without one.
 
 **Rationale.** Required materials give dungeon extraction a standing industrial demand, which is a steadier income for adventurers than contracts funded by other people's misfortune. Restricting the dependency to higher tiers means losing access costs the world its fine goods and its lost arts, never its bread.
 

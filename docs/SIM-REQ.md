@@ -2,7 +2,7 @@
 
 **Document:** SIM-REQ
 **Status:** Draft 1
-**Revision:** 2026-10-02
+**Revision:** 2026-10-07
 **Scope:** Headless simulation core, runnable outside the game
 
 ---
@@ -108,7 +108,11 @@ dayOfMonth = dayOfYear % 28
 
 **FR-D-03** — Death rate is per age band and responds to hunger, disease, and violence.
 
+**FR-D-03a** — Unmet tier 0 need accumulates as a hunger deficit per member of each cohort, in units of nutrition, and decays by P-70 per update when the need is met. It is updated once per update, after market clearing, from the tier 0 need still unmet once own consumption and the market have run (SIM-ECON phase 7). When members move from one row to another, the receiving row's deficit becomes the average of its own and that of the row they leave, weighted by count; the row they leave keeps its own. The death rate's response to hunger in FR-D-03 reads this deficit.
+
 **FR-D-04** — Migration moves people along trade links toward higher attractiveness, where attractiveness combines food per capita, real wage, and safety. Migration per tick is capped.
+
+**FR-D-04a** — Emigrants are drawn from a settlement's destitute row first, and from its other rows in proportion to their counts for the rest. Members leaving a row take its mean share per member: all of its currency, and of its goods and durables outside the seed reserve as much as P-72 weight per member allows, highest value per unit of weight first, ties by good id. Buildings never move, and what emigrants do not take stays with the row. On the road, emigrants are a scheduled transient carrying their count, the key of the row they left, their hunger deficit, their currency as one integer and their goods.
 
 **FR-D-05** — Land per capita raises output per worker, which raises attractiveness. This is the balancing term against the migration feedback loop and is required, not optional.
 
@@ -134,20 +138,27 @@ dayOfMonth = dayOfYear % 28
 
 ## 6. Goods and production
 
-**FR-P-01** — A good is a data record: unit weight, value reference, perishability, role, need tier. Adding a good requires no code change.
+**FR-P-01** — A good is a data record: unit weight, value reference, perishability, whether it is durable (FR-P-03), the classes it belongs to, at most one in each class tree, with a value per unit in each, and its processing grade (FR-P-03a). Adding a good requires no code change.
 
 **FR-P-02** — A recipe is a data record: inputs, output, labour required, building required. Adding a recipe requires no code change.
 
-**FR-P-03** — Every good occupies one of four roles:
+**FR-P-03** — Roles describe how a good behaves in production and over time:
 
 | Role | Behaviour |
 |---|---|
-| Subsistence | consumed daily, cannot be deferred |
-| Input | consumed by production |
+| Consumable | consumed to meet the needs that accept it (FR-P-03b) |
+| Input | consumed by the recipes that take it (FR-P-02) |
 | Durable | not consumed, decays slowly, raises productivity |
-| Luxury | bought at market only from currency left after needs are met |
 
-**FR-P-04** — Baseline goods set *(proposed, pending confirmation)*: Grain, Bread, Ore, Timber, Tools, Wool, Cloth. Three chains: Grain→Bread, Ore+Timber→Tools, Wool→Cloth.
+A good's record says whether it is durable. A good that is not takes the consumable role where a need accepts it and the input role where a recipe takes it, and may take both, as grain does. How urgently a good is wanted is not a property of the good but of the needs it meets (FR-P-03b).
+
+**FR-P-03a** — A goods class is a data record with a name and an optional parent class. A good belongs to one or more classes, at most one in each class tree, and carries a value per unit in each, nutrition for food, and one processing grade. Belonging to a subclass is belonging to every class above it, for the needs that read them (FR-P-03b). Classes and memberships are added or changed without code change. A subclass measures in its parent's units: a good's value is in the units of its tree's root, and validation at load refuses a good that names two classes of one tree.
+
+**FR-P-03b** — A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day. Any good of the class or of its subclasses, at or above the minimum grade, meets it in proportion to its value. Tier 0 holds exactly one need, on the food class, and validation at load refuses a needs table that holds another. Needs add: each is a quantity of its own, and a unit consumed meets one need only.
+
+**FR-P-03c** — Processing creates no food. Every good carries an embodied food value: a good of the food class, the class the tier 0 need names, carries its value there; another good that recipes produce carries the least food value that any recipe producing it consumes per unit, each input counted at its own embodied food value; any other good carries zero. No recipe yields more food value than its inputs embody, and validation at load refuses a recipe table that breaks this or that passes food value around a cycle.
+
+**FR-P-04** — Baseline goods set *(approved by the user; classes, values and grades under FR-P-03a)*: Grain, Flour, Bread, Ore, Timber, Tools, Wool, Cloth. Three chains: Grain→Flour→Bread, Ore+Timber→Tools, Wool→Cloth.
 
 **FR-P-05** — Weight-to-value ratio governs how far a good travels. Heavy cheap goods stay in their basin; light valuable goods cross kingdoms. This falls out of transport cost and needs no per-good code.
 
@@ -155,11 +166,21 @@ dayOfMonth = dayOfYear % 28
 
 **FR-P-07** — Each settlement carries a `climateIndex`, a fixed-point value on 0–10000 assigned by the generator. The simulator consumes it without knowing what produced it.
 
-**FR-P-08** — Two authored 52-entry weekly curves, `cold` and `warm`, define climate modifiers across the year. A settlement's modifier for week *w* interpolates between them on its `climateIndex`, in integer arithmetic. Climate modifiers govern travel cost, mortality, livestock growth, timber yield, and available construction labour.
+**FR-P-08** — Each climate modifier has its own pair of authored 52-entry weekly curves, `cold` and `warm`. A settlement's modifier for week *w* interpolates between the pair on its `climateIndex`, in integer arithmetic. Climate modifiers govern travel cost, mortality, livestock growth, timber yield, and available construction labour.
 
 **FR-P-09** — Named climate bands (3–4) group `climateIndex` ranges for presentation only. No simulation rule reads a band.
 
-**FR-P-10** — Crops are not produced continuously. A crop is a data record carrying sowing date, maturation length, harvest date, and yield per unit of land and labour. Harvest delivers the full amount to settlement stock in one event.
+**FR-P-10** — Crops are not produced continuously. A crop is a data record carrying sowing date, maturation length, harvest date, harvest window length in updates, its planting good and the amount needed per unit of land, yield per unit of land, and labour per unit of land for sowing, for harvest, and for growth at normal care and at full care.
+
+**FR-P-10a** — Sowing consumes the planting good from the sowing cohort's holdings. Land sown is the least of the land allocated, the land the planting good held can sow, and the land the cohort's own and hired sowing labour can sow. Land without seed or hands lies fallow.
+
+**FR-P-10b** — The harvest date opens the crop's window. Each update reaps the lesser of the area still standing and the area the cohort's own and hired harvest labour can reap, and delivers area reaped × yield per unit of land × condition to the holdings of the cohort that sowed. Nothing is lost while the window is open; what is still standing when it closes is lost.
+
+**FR-P-10c** — A standing crop carries a condition on 0–20000, set to 10000 at sowing. Growth labour below normal care lowers it towards 0; growth labour between normal and full care raises it towards 20000. Exogenous events striking a standing crop multiply it. Both care levels are zero in the shipping configuration; CI runs a configuration where they are not.
+
+**FR-P-10d** — A cohort's seed reserve is the planting good needed per unit of land times the land the current allocation vector gives its crop. Only sowing draws on it: own consumption, market supply, recipe inputs and emigrants (FR-D-04a) leave it untouched. When the planting good is food and the cohort's hunger deficit exceeds P-66, the reserve is released to own consumption only as far as needed to meet the update's tier 0 need that the cohort's other holdings leave unmet. That holds the deficit near P-66: the need met, the deficit decays (FR-D-03a), and once it is at or below P-66 the reserve closes again. The deficit read is the one written at the end of the previous update. A share of what is released may become supply: P-67 in the shipping configuration, P-71 in CI, where the path is exercised.
+
+**FR-P-10e** — A standing crop whose cohort is empty is an open field until its harvest window closes. Labour left unhired once the labour market of FR-C-05 clears is assigned to it and reaps it under FR-P-10b, and each cohort keeps the harvest in proportion to the labour it supplied. An advance against it is written off under FR-C-27.
 
 **FR-P-11** — A settlement's sowing and harvest dates shift by an integer day offset derived from its `climateIndex`. Adjacent settlements differ by at most one day.
 
@@ -169,7 +190,7 @@ dayOfMonth = dayOfYear % 28
 
 **FR-P-14** — Each settlement holds an allocation vector in fixed point over its available activities, summing to one, covering land and labour.
 
-**FR-P-15** — At each crop's sowing date the settlement computes expected return per activity as expected yield × current price − input cost − wage cost, then moves the allocation toward the highest by adjustment rate P-19, capped per year. Non-agricultural activities adjust the same way at settlement cadence.
+**FR-P-15** — At each crop's sowing date the settlement computes expected return per activity as expected yield × current price − input cost − wage cost, then moves the allocation toward the highest by the activity's adjustment rate, capped per year by the activity's cap. The yearly cap is applied at each adjustment, divided by the number of adjustments the activity makes in a year: one per sowing for a crop, 52 at settlement cadence. No state records the movement already made in a year. An activity whose record carries neither uses P-19 and P-73. Non-agricultural activities adjust the same way at settlement cadence; the expected return of day labour is the wage.
 
 **FR-P-16** — The adjustment is partial and damped. Full adjustment to last year's prices produces a diverging cobweb oscillation and is prohibited.
 
@@ -185,17 +206,17 @@ dayOfMonth = dayOfYear % 28
 
 **FR-P-21** — Every recipe that requires a durable has a crude variant requiring none, at a much worse input-to-output ratio (P-52). Iron can be worked with a stone, badly. This breaks the bootstrap circle with data rather than with a special case in code.
 
-**FR-P-22** — Cohorts founding or resettling a settlement carry a basic endowment of durables (P-54).
+**FR-P-22** — Cohorts the generator founds carry a basic endowment of durables (P-54). Cohorts resettling a settlement bring only what their emigrants carried under FR-D-04a; resettlement creates no goods.
 
 **FR-P-23** — Durables wear with use at P-53 and must be replaced. This is the demand for durable goods, without which they are produced and never bought.
 
 ### Occupations
 
-**FR-J-01** — A mestiere is a data record: the activity it performs (a recipe, or a service with no material output), building required, productivity per unit of labour, placement as settled or itinerant, wealth tendency, and social rank. Adding a mestiere requires no code change.
+**FR-J-01** — A mestiere is a data record: the activity it performs (a recipe, or a service with no material output), building required, productivity per unit of labour, placement as settled or itinerant, wealth tendency, the mean wealth per member the generator gives it, and social rank. Adding a mestiere requires no code change. It also carries a wealth curve under FR-J-22, and may carry its own adjustment rate and cap under FR-P-15.
 
 **FR-J-02** — Cohorts are partitioned by mestiere, under the key of FR-W-08.
 
-**FR-J-03** — The share of population in each mestiere moves under the same damped allocation vector as land and labour. There is one allocation mechanism, not two.
+**FR-J-03** — The allocation vector is a target, and the share of population in each mestiere is realigned to it whenever the mestiere's activity adjusts. The destitute row of FR-J-19 is the one exception: it is outside the vector, entered only by impoverishment, and left under FR-J-20 before realignment runs.
 
 **FR-J-04** — Caravanner is a service mestiere with no material output. Its population at a settlement supplies haulage capacity to the trade links leaving that settlement.
 
@@ -227,6 +248,14 @@ dayOfMonth = dayOfYear % 28
 
 **FR-J-18** — An abandoned settlement leaves behind what its people could not carry. That becomes buried stock under FR-J-14, so the world keeps producing new hoards from its own failures after the ones placed at tick 0 are gone.
 
+**FR-J-19** — Every settlement holds a destitute row: a service mestiere with no building, selling labour under FR-C-05, outside the allocation vector. With w a cohort's wealth per member, counting currency and food held at the local price with the seed reserve excluded, and T the local cost of the tier 0 need per person per day times P-68, the share of members below T and the share of wealth they hold are read from the cohort's wealth curve at T / w. Those members enter the destitute row of their wealth band, taking their share of the cohort's currency and nothing else. The destitute own no buildings and no durables.
+
+**FR-J-20** — Destitute members whose wealth exceeds T × (1 + P-69), in the share read from the destitute row's wealth curve, leave at the next adjustment of their destination under FR-P-15: a crop's sowing date for agricultural activities, settlement cadence for the others. They go first to mestieri whose actual share, among the population outside the destitute row, is below the allocation vector's, in proportion to the gap, and the rest in proportion to the vector, staying in their wealth band and taking their share of the row's currency. The vector does not move for them.
+
+**FR-J-21** — Day labourer is a service mestiere with no building inside the allocation vector, whose expected return is the wage. Its record carries an adjustment rate faster than P-19 and no yearly cap.
+
+**FR-J-22** — A mestiere record carries a wealth curve, the share of members below a ratio to mean wealth, and its companion curve of the share of wealth they hold, each at up to 32 points, generated offline from a lognormal with the record's σ and editable as static content. The core interpolates them in integer arithmetic. They are read for destitution under FR-J-19 and FR-J-20, and for the share of a cohort able to pay under FR-C-04.
+
 ---
 
 ## 7. Money and income
@@ -235,18 +264,18 @@ dayOfMonth = dayOfYear % 28
 
 **FR-C-02** — A cohort owns the output of the activity it performs. Settlement stock is the sum of cohort holdings, not a separate pool.
 
-**FR-C-03** — Consumption order is fixed: a cohort meets its needs from its own holdings first, then buys the remainder at market.
+**FR-C-03** — Consumption order is fixed: a cohort meets its needs from its own holdings first, lowest grade first, then buys the remainder at market.
 
-**FR-C-04** — Each settlement update runs a clearing pass per good:
+**FR-C-04** — Each settlement update runs a clearing pass per good, the goods that meet one need taken in the order of DEC-099:
 
-1. Cohorts consume from their own holdings.
-2. Unmet need becomes demand, capped by the cohort's currency at the current price.
-3. Holdings above the cohort's own needs become supply.
-4. If supply is short, it is allocated in descending order of ability to pay.
+1. Cohorts consume from their own holdings, the seed reserve excepted under FR-P-10d.
+2. Unmet need becomes demand for the goods that meet it, chosen under DEC-099, capped by the cohort's currency, which includes what it borrowed this update.
+3. Holdings above the cohort's own needs and its seed reserve become supply.
+4. If supply is short, it is allocated in descending order of ability to pay, the currency per member, demand that meets a need before demand that only raises its grade; the share of a cohort able to pay is read from its wealth curve under FR-J-22. Demand rationed out of one good falls to the other goods that meet the same need, within the update.
 5. Currency moves from buyers to sellers within the settlement.
 6. Price is recomputed from the resulting settlement stock for the next update.
 
-**FR-C-05** — Labour is traded like a good that cannot be stored: its price is set by the same bounded function of supply against demand, and it expires each update. Cohorts owning land or buildings hire labour from cohorts that own neither, and pay wages in currency.
+**FR-C-05** — Labour is traded like a good that cannot be stored: its price is set by the same bounded function of supply against demand, and it expires each update. Cohorts working land allocated to them or a standing crop, or owning buildings, hire labour from cohorts that do neither, and pay wages in currency. A cohort's labour offered is its members in the age bands the rules file marks as working. Where labour offered exceeds labour demanded, every cohort selling labour is hired in proportion to what it offers.
 
 **FR-C-06** — Currency is conserved. It enters only by an explicit minting event and leaves only by an explicit destruction event. Taxation, wages, purchases, and trade move currency, never create or destroy it.
 
@@ -266,9 +295,9 @@ dayOfMonth = dayOfYear % 28
 
 **FR-C-23** — Cohorts hold a debt stock and a credit stock, each carrying the counterparty's category rather than its identity. Agents hold explicit debt edges with amount, term, rate, and collateral.
 
-**FR-C-24** — Borrowing capacity is bounded by collateral: goods, durables, buildings. A cohort with none cannot borrow. Credit therefore does not reach the poorest, and the rationing order of FR-C-04 stands: a starving cohort with nothing to pledge is not rescued by lending.
+**FR-C-24** — Borrowing capacity is bounded by collateral: goods, durables, buildings, and for an advance under FR-C-25 the standing crop. A cohort with none cannot borrow. Credit therefore does not reach the poorest, and the rationing order of FR-C-04 stands: a starving cohort with nothing to pledge is not rescued by lending.
 
-**FR-C-25** — Payment advanced against future output is a loan collateralised by that output. It uses the same mechanism with a different collateral field.
+**FR-C-25** — Payment advanced against future output is a loan collateralised by that output: the cohort's standing crop under FR-P-10b. It is held as its own balance, apart from the cohort's other debt, carrying the counterparty's category as debt does; the lender holds the claim in its credit stock (FR-C-23), and it bears interest under FR-C-26 like any loan. A crop lost before harvest, or left to an open field under FR-P-10e, leaves the advance to be written off under FR-C-27.
 
 **FR-C-26** — The interest rate is the bounded price function applied to credit supply against credit demand, plus a risk premium derived from the debtor's collateral ratio. It is clamped like every other price (P-55).
 
@@ -276,7 +305,7 @@ dayOfMonth = dayOfYear % 28
 
 **FR-C-28** — A cohort or agent that has defaulted carries a mark for P-57 ticks, raising its risk premium.
 
-**FR-C-29** — Land is not owned by cohorts. It remains a settlement attribute, and rent and tenancy are out of scope. This reopens when the wealth axis is added to the cohort key.
+**FR-C-29** — Land is not owned by cohorts. It remains a settlement attribute, and rent and tenancy are out of scope. The wealth axis of DEC-054 is what would carry them if they enter the model.
 
 **FR-C-30** — Selling labour under FR-C-05 is always available as an alternative to borrowing, and is the only route open to a cohort with no collateral.
 
@@ -348,7 +377,7 @@ capped by available stock at origin and by haulage capacity on the link, with `k
 
 **FR-M-12** — Each trade link carries a danger value. It raises the wage caravanners require, raises transit loss, and severs the link at the top of its range.
 
-**FR-M-13** — Danger grows from displaced population: famine refugees, failed migration, soldiers disbanded at the end of a war. It falls through fulfilled contracts and through kingdom garrison spending.
+**FR-M-13** — Danger grows from displaced population: famine refugees, failed migration, soldiers disbanded at the end of a war. It falls through fulfilled contracts and through kingdom garrison spending. Destitute members who emigrate under FR-D-04a are famine refugees: each raises the danger of the link it travels by P-40.
 
 **FR-M-14** — Poverty, banditry, and interrupted trade form a reinforcing loop. Its brakes are contract-funded suppression and garrison spending under FR-C-08. Neither is optional.
 
@@ -388,7 +417,7 @@ capped by available stock at origin and by haulage capacity on the link, with `k
 
 **FR-K-14** — A cleared dungeon permits a mine under FR-P-19, so ordinary miners extract its material through the normal production path at ordinary risk.
 
-**FR-K-15** — Recipes may require dungeon-only materials. Data validation at load must prove that no tier 0 or tier 1 good depends, directly or transitively, on such a material. A world that fails this check does not run.
+**FR-K-15** — Recipes may require dungeon-only materials. Data validation at load must prove that every tier 0 and tier 1 need can be met by at least one good, at or above the need's minimum grade, that depends directly or transitively on no such material (AC-56). A world that fails this check does not run.
 
 **FR-K-16** — Recipes recovered from a dungeon enter that settlement's known recipe set, which is bounded per settlement state. Knowledge spreads from there like any other information.
 
@@ -475,15 +504,17 @@ Distance enters through travel time and therefore through staleness, never throu
 
 **FR-A-04** — Travel is walked by default and abstracted on fast travel. Both paths run the same simulation.
 
+**FR-A-05** — The host may supply a rules file as bytes when it creates a world: the static content and the values of the parameters that drive the simulation (DEC-100). When it supplies none, the world runs on the base rules compiled into the core from the same source. The core validates either and refuses, whole, a file this build cannot read or whose content fails its validation, and one that declares more goods, mestieri or recipes than P-74, P-75 and P-76 allow. A refusal is a result returned to the host, never a failure of the core: players write rules files. A loaded world runs on the rules file its save carries.
+
 ---
 
 ## 14. World generation
 
-**FR-G-01** — The generator produces the initial state at tick 0: terrain, settlements, trade graph, kingdoms, initial populations and stocks.
+**FR-G-01** — The generator produces the initial state at tick 0: terrain, settlements, trade graph, kingdoms, initial populations and stocks. Initial populations include each settlement's destitute row, read from the wealth curves, and in a configuration with several wealth bands the generator divides each mestiere's population among them by its wealth tendency.
 
 **FR-G-01a** — The generator assigns each settlement a `climateIndex` varying continuously across the map, plus the land area available to it.
 
-**FR-G-02** — The generator seed and all generation parameters are stored in the save file.
+**FR-G-02** — The generator seed and all generation parameters are stored in the save file. Generation parameters are the values a host may choose for each world when creating it: the settlement count (P-02), the settlement mix (P-12) and the kingdom count. Every other value the generator reads is content, in the rules file (DEC-100).
 
 **FR-G-03** — World creation generates prior history by running the simulator itself, at full fidelity and with no hot agents, for P-18 years before tick 0. The resulting state is the initial state. No separate coarse rule set exists.
 
@@ -493,7 +524,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 ## 15. Non-functional requirements
 
-**NFR-01 — Determinism.** Identical seed plus identical command sequence produces an identical state hash at every tick, on any Windows x64 build. The hash is a function of the state, computed in full when a check or the runner asks for it: the tick does not compute it, and the budget of NFR-05 does not include it.
+**NFR-01 — Determinism.** Identical seed and generation parameters (FR-G-02), identical rules file (DEC-100) and identical command sequence produce an identical state hash at every tick, on any Windows x64 build. The hash is a function of the state, computed in full when a check or the runner asks for it: the tick does not compute it, and the budget of NFR-05 does not include it.
 
 **NFR-02 — Numeric representation.** All simulation state is integer or fixed-point. No floating point, no transcendental functions in the core. Floats exist only in the presentation layer.
 
@@ -507,21 +538,21 @@ Distance enters through travel time and therefore through staleness, never throu
 
 **NFR-07 — Memory.** Settlement state stays under 50 MB at target scale *(estimate)*.
 
-**NFR-08 — Save format.** A save is a full state snapshot plus generation seed and parameters, and the commands submitted and not yet applied. Save format carries a version number and a migration path from day one. A load refuses, whole, a save no build could have written (DEC-089).
+**NFR-08 — Save format.** A save is a full state snapshot plus generation seed and parameters, the rules file the world runs on, and the commands submitted and not yet applied. Save format carries a version number and a migration path from day one. A load refuses, whole, a save no build could have written (DEC-089).
 
-**NFR-09 — Rule versioning.** State records which rule version produced it. On first load after a patch, all deferred entities materialise under the old rules, then continue under the new ones.
+**NFR-09 — Rule versioning.** State records which rule version produced it: the version of the core's logic, and the rules file, identified by a digest the core computes (DEC-100). On first load after a patch, all deferred entities materialise under the old rules, then continue under the new ones.
 
 **NFR-10 — State layout.** Struct-of-arrays, indexed by `EntityId { int index; int generation; }`. No object references inside serialised state.
 
 **NFR-11 — Platform.** Windows x64. The core compiles against the target runtime profile declared in section 20, "Downstream constraints", and uses no language feature above the declared level.
 
-**NFR-12 — Tooling.** A command-line runner executes N ticks headless, dumps state hashes, writes chronicle and metric series to CSV, and runs parameter sweeps.
+**NFR-12 — Tooling.** A command-line runner executes N ticks headless, dumps state hashes, writes chronicle and metric series to CSV, and runs parameter sweeps. It also compiles the rules source, text kept in the repository, into the binary rules file, and checks the result by handing it to the core.
 
 ---
 
 ## 16. Parameters to fix
 
-Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run before any sweep. A value used before it is fixed carries the status **Provisional**: the implementer proposes it in the plan point that first needs it, the decider records it here with its P-number and the phase that replaces it, and the point cites the P-number. A constant in the core that drives the simulation and has no P-number is a defect. Static content — goods, occupations, recipes, crops, building types — is not a parameter and is not set this way: it is approved by the user before the plan that uses it is written.
+Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run before any sweep. A value used before it is fixed carries the status **Provisional**: the implementer proposes it in the plan point that first needs it, the decider records it here with its P-number and the phase that replaces it, and the point cites the P-number. A constant in the core that drives the simulation and has no P-number is a defect. The values of those parameters travel in the rules file (DEC-100), not in the core's code; this table is their record. Static content — goods, occupations, recipes, crops, building types — is not a parameter and is not set this way: it is approved by the user before the plan that uses it is written.
 
 | # | Parameter | Value | Status |
 |---|---|---|---|
@@ -534,13 +565,13 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-07 | Cadences | 1 / 7 / 28 / 364 | Decided |
 | P-08 | Calendar | 364 days, 13 × 28, week of 7 | Decided |
 | P-13 | Season length | 91 ticks, presentation only | Decided |
-| P-14 | Climate curve resolution | 52 weekly entries, 2 curves | Decided |
+| P-14 | Climate curve resolution | 52 weekly entries, 2 curves per modifier | Decided |
 | P-15 | Named climate bands | 3–4, presentation only | Decided |
 | P-16 | Harvest offset, coldest to warmest | 28 days | Decided |
-| P-17 | Settlement ceiling at P-01, 9 cohorts | ~7,000 | Measured subset, 2x allowance for unmeasured phases |
-| P-17a | Settlement ceiling at P-01, 27 cohorts | ~1,500 | Measured subset, same allowance |
-| P-63 | Cost per settlement update, 9 cohorts | 3.3 us | Measured, 5 of 12 phases |
-| P-64 | Cost per settlement update, 27 cohorts | 15.8 us | Measured, 5 of 12 phases |
+| P-17 | Settlement ceiling at P-01, measured on 9 rows | ~7,000 | Measured subset, 2x allowance for unmeasured phases |
+| P-17a | Settlement ceiling at P-01, measured on 27 rows | ~1,500 | Measured subset, same allowance |
+| P-63 | Cost per settlement update, measured on 9 rows | 3.3 us | Measured, 5 of 12 phases |
+| P-64 | Cost per settlement update, measured on 27 rows | 15.8 us | Measured, 5 of 12 phases |
 | P-18 | Prior history length | TBD in Phase 6 | Open |
 | P-19 | Allocation adjustment rate | TBD by sweep | Open |
 | P-20 | Base tax rate | 10% of surplus | Proposed |
@@ -577,7 +608,7 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-51 | Building decay rate | TBD by sweep | Open |
 | P-52 | Crude recipe yield ratio | TBD by sweep | Open |
 | P-53 | Durable wear rate per unit of output | TBD by sweep | Open |
-| P-54 | Settlement founding endowment | TBD | Open |
+| P-54 | Founding endowment of durables, rules content read by the generator | TBD | Open |
 | P-55 | Interest rate bounds | TBD by sweep | Open |
 | P-56 | Collateral ratio required to borrow | TBD by sweep | Open |
 | P-57 | Default mark duration | TBD | Open |
@@ -587,7 +618,18 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-61 | Time before a cleared dungeon reverts | TBD by sweep | Open |
 | P-62 | Adventurer rank count | 4 | Proposed |
 | P-65 | Seeds per AC-04 run (M) | TBD | Open; Provisional from the first point that runs AC-04, replaced in Phase 6 |
-| P-09 | Goods count | 7 | Decided |
+| P-66 | Hunger deficit above which a food planting good is released | TBD by sweep | Open |
+| P-67 | Share of released planting good that may become supply, shipping | 0 | Decided |
+| P-68 | Days of tier 0 need a member's wealth must cover to stay out of destitution | TBD by sweep | Open |
+| P-69 | Exit margin for the destitute, as a fraction of T | TBD by sweep | Open |
+| P-70 | Hunger deficit decay per update when the tier 0 need is met | TBD by sweep | Open |
+| P-71 | Share of released planting good that may become supply, CI | TBD | Open |
+| P-72 | Weight an emigrant carries, per member, FR-D-04a | TBD by sweep | Open |
+| P-73 | Allocation adjustment cap per year, default, FR-P-15 | TBD by sweep | Open |
+| P-74 | Most goods a rules file may declare, FR-A-05 | TBD | Open; set after the Phase 4 measurement of P-17, so that no rules file takes the core past P-01 |
+| P-75 | Most mestieri a rules file may declare, FR-A-05 | TBD | Open; as P-74 |
+| P-76 | Most recipes a rules file may declare, FR-A-05 | TBD | Open; as P-74 |
+| P-09 | Goods count | 8 | Decided |
 | P-10 | Price bounds | 0.25× to 4× reference | Decided |
 | P-11 | Trade damping `k` | TBD by sweep | Open |
 | P-12 | Settlement mix | 8 cities / 75 towns / 1,917 villages at 2,000 total | Decided |
@@ -600,7 +642,7 @@ Every criterion below runs headless in CI, with no editor and no game client, dr
 
 **AC-01 — Conservation.** Population, currency, and goods invariants hold at every tick of every run.
 
-**AC-02 — Determinism.** Same seed and commands produce the same state hash sequence across builds and machines.
+**AC-02 — Determinism.** Same seed and generation parameters, rules file and commands produce the same state hash sequence across builds and machines.
 
 **AC-03 — Save round trip.** save → load → save produces identical bytes.
 
@@ -619,7 +661,7 @@ Every criterion below runs headless in CI, with no editor and no game client, dr
 | Kingdom legitimacy | minimum |
 | Infection prevalence | maximum |
 
-Each carries a hard bound that fails the test and a soft band that raises a warning. Values are set in Phase 6. Until then each hard bound is Provisional (§16) and derived from a bound the specification already states — no stock below zero, prices within P-10, a settlement's population within what FR-D-14 lets it import — and the test that no variable grows without bound runs beside it, its method stated by the point that writes it. Soft bands start in Phase 6. M is P-65.
+Each carries a hard bound that fails the test and a soft band that raises a warning. Values are set in Phase 6. Until then each hard bound is Provisional (§16) and derived from a bound the specification already states — no stock below zero, prices within P-10, a settlement's population within what FR-D-14 lets it import — and the test that no variable grows without bound runs beside it, its method stated by the point that writes it. Soft bands start in Phase 6. M is P-65. AC-04 runs on the base rules of FR-A-05 and makes no claim about a world running on another rules file.
 
 **AC-05 — Wake equivalence.** An entity simulated continuously for N ticks and the same entity deferred and resumed at tick N reach the same state within declared tolerance.
 
@@ -631,12 +673,15 @@ Each carries a hard bound that fails the test and a soft band that raises a warn
 
 **AC-09 — Shock response.** Removing 30% of a region's stock of a good moves its local price within X ticks and returns it to band within Y ticks. X and Y are measured in Phase 6 against this intent:
 
-| Role | X, first price move | Y, return to band |
+| Good | X, first price move | Y, return to band |
 |---|---|---|
-| Subsistence | short, within two settlement updates | long, up to the next harvest |
+| Consumable, tier 0 | short, within two settlement updates | long, up to the next harvest |
+| Consumable, tier 1 | medium | within the season |
+| Consumable, tier 2 | medium, bounded by travel | short |
 | Input | medium | within the season |
 | Durable | long | long |
-| Luxury | medium, bounded by travel | short |
+
+A consumable takes the row of the most urgent need it can meet.
 
 **AC-10 — No inert goods.** Over a long run, every good reaches scarcity somewhere at least once.
 
@@ -730,7 +775,7 @@ Each carries a hard bound that fails the test and a soft band that raises a warn
 
 **AC-55 — Hard problems stay hard.** A region whose halls hold only low ranks leaves high-rank contracts unfulfilled, and the danger behind them persists.
 
-**AC-56 — No subsistence depends on dungeons.** Static validation proves no tier 0 or tier 1 good depends transitively on a dungeon-only material. The check runs at load, not in a test.
+**AC-56 — No subsistence depends on dungeons.** Static validation proves that every tier 0 and tier 1 need can be met by at least one good, at or above the need's minimum grade, that depends transitively on no dungeon-only material. The check runs at load, not in a test.
 
 **AC-57 — Guilds do not hoard.** The share of currency held by guild halls stays within a declared band across 60 simulated years.
 
@@ -754,19 +799,19 @@ Each phase has an exit gate. No phase starts before the previous gate is green.
 | 6 | Tuning: sweeps, CSV output, charts | P-11, P-18, AC-04 bounds and AC-09 values recorded |
 | 7 | Host integration | Command queue and snapshot API only |
 
-**Phase 4 in full.** Phase 4 builds the whole settlement update of SIM-ECON, all twelve phases and its dated steps, and the generator it runs on. Each subsystem covers:
+**Phase 4 in full.** Phase 4 builds the whole settlement update of SIM-ECON, all its phases, 1 to 12 and 8a, and its dated steps, and the generator it runs on. Each subsystem covers:
 
 | Subsystem | SIM-ECON phases and steps | Requirements |
 |---|---|---|
-| Production | 5, 9; sowing, harvest, allocation adjustment, construction | FR-P; FR-J-01 to FR-J-03; FR-C-01, FR-C-02, FR-C-06. Before it, the generator: FR-G-01, FR-G-01a, FR-G-02, with the buried stock of FR-J-14 and FR-J-15 |
-| Needs | 6 | FR-C-03; SIM-ECON §Demand, tiers and the hunger deficit |
+| Production | 5, 9, 12 for realignment; sowing, harvest, allocation adjustment, construction | FR-P, save FR-P-03b; FR-J-01 to FR-J-03, FR-J-21, FR-J-22; FR-C-01, FR-C-02, FR-C-06. Before it, the rules file and the generator: FR-A-05; FR-G-01, FR-G-01a, FR-G-02, with the buried stock of FR-J-14 and FR-J-15 |
+| Needs | 6; the end of 7 for the hunger deficit | FR-C-03, FR-P-03b, FR-D-03a; SIM-ECON §Demand, tiers and the hunger deficit |
 | Market | 1 for goods, 2 for prices, 7, 10 | FR-M-01 to FR-M-07; FR-C-04, FR-C-10, FR-C-11; FR-C-12 to FR-C-18, FR-C-21; FR-J-04, FR-J-05; FR-I-05 to FR-I-06a |
-| Labour and income | 2 for the wage, 3, 4, 8; taxation | FR-C-05, FR-C-07 to FR-C-09, FR-C-19, FR-C-20, FR-C-22 to FR-C-30; FR-X-01, FR-X-06, FR-X-07 for the convoy |
+| Labour and income | 2 for the wage, 3, 4, 8, 8a; taxation | FR-C-05, FR-J-19, FR-J-20, FR-C-07 to FR-C-09, FR-C-19, FR-C-20, FR-C-22 to FR-C-30; FR-X-01, FR-X-06, FR-X-07 for the convoy |
 | Demography | 11 for births and deaths | FR-D-01 to FR-D-03, FR-D-13 |
-| Mobility | 1 for migrants, 11 for migration | FR-D-04, FR-D-05, FR-D-07 to FR-D-12, FR-D-14; FR-M-08 to FR-M-15; FR-J-06 to FR-J-10; FR-X-02, FR-X-03 |
+| Mobility | 1 for migrants, 11 for migration | FR-D-04, FR-D-04a, FR-D-05, FR-D-07 to FR-D-12, FR-D-14; FR-M-08 to FR-M-15; FR-J-06 to FR-J-10; FR-X-02, FR-X-03 |
 | Events | 12 | FR-E-01 to FR-E-07; FR-K-01 to FR-K-16; FR-J-11 to FR-J-13, FR-J-16 to FR-J-18; FR-I-01 to FR-I-04 |
 
-The gate holds per subsystem: when a subsystem closes, AC-01 and AC-04 are green over the invariants and the monitored variables that exist by then, and stay green as later subsystems land. Outside Phase 4: FR-D-06, agents, in Phase 5; FR-G-03 and FR-G-04, prior history, in Phase 6 with P-18; FR-X-04, FR-X-05 and §13, what the host observes and does, in Phase 7.
+The gate holds per subsystem: when a subsystem closes, AC-01 and AC-04 are green over the invariants and the monitored variables that exist by then, and stay green as later subsystems land. Outside Phase 4: FR-D-06, agents, in Phase 5; FR-G-03 and FR-G-04, prior history, in Phase 6 with P-18; FR-X-04, FR-X-05 and §13, what the host observes and does, in Phase 7, save FR-A-05, which Phase 4 needs first.
 
 ---
 
@@ -777,11 +822,11 @@ All remaining items depend on measurement and close in the phase named.
 | Item | Closes in | Procedure |
 |---|---|---|
 | P-11, trade damping `k` | Phase 6 | Sweep `k` against transport cost; accept on AC-09 and AC-04 |
-| P-17, settlement ceiling | Phase 4 | Measure the full twelve-phase settlement update, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach |
+| P-17, settlement ceiling | Phase 4 | Measure the full settlement update, all its phases, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach. P-63 and P-64 were measured on 9 and 27 rows and seven goods; the measurement counts the destitute and day-labourer rows, 12 per settlement in the shipping configuration and 36 in CI, eight goods, and the food markets the content fixes |
 | P-18, prior history length | Phase 6 | Measure cost per simulated year, set against the acceptable wait |
 | AC-04 bounds | Phase 6 | Long runs across seeds, bounds set from observed envelopes, replacing the provisional bounds of Phase 4 |
 | AC-09 X and Y per good | Phase 6 | Shock injection per good, values recorded against the intent table |
-| P-01 validity | Phase 4 | Confirm the per-entity cost against a real settlement update. The measured subset is in P-63 and P-64; what is unconfirmed is the factor of two carried for the seven unmeasured phases |
+| P-01 validity | Phase 4 | Confirm the per-entity cost against a real settlement update. The measured subset is in P-63 and P-64; what is unconfirmed is the factor of two carried for the phases left unmeasured, eight since phase 8a |
 
 ---
 

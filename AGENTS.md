@@ -74,11 +74,17 @@ belongs to `/plan-next`, `/plan-explain` and `/plan-status`, and the reasoning t
 - **Criteria are frozen when written.** A criterion that turns out to be wrong is
   reported and recorded, never rewritten to match what was built. If correct
   code passes it, the point closes with the missing check beside it and the plan
-  goes on; if correct code cannot pass it, the point closes `FALLITO` and the
+  goes on; if correct code cannot pass it, the point closes `FAILED` and the
   plan stops. Either way the register names the defect and the decider rules on
   it (`R-005`). A clause only a human can discharge — a push, a pull request —
-  closes the point *con riserva*: the plan goes on, and its exit condition is
+  closes the point *with reserve*: the plan goes on, and its exit condition is
   not met until the human has acted (`R-011`).
+  The moment of writing is the commit that installs the plan. A plan reaches
+  moment one as a draft inside the review request, its criteria and `Fails
+  when:` lines verbatim, and the user's answer may change any of it. After the
+  answer, one commit installs `PLAN.md` on the plan's branch, cut from `main`
+  for it; the commit cites the answer and says whether the plan matches the
+  draft as amended. `main` never carries a live `PLAN.md` (`R-048`).
 - **A point is one commit with a runnable check.** The commit carries the record
   with it: the register entry and the plan's own outcome line are written first
   and committed together with the code. The check names at least one fault it
@@ -162,6 +168,55 @@ a decision, and decisions belong to a human.
 - Anything that influences a future tick belongs in `WorldState` and in the
   state hash. A field outside the hash is a determinism hole.
 - Systems mutate state. Nothing else does.
+
+## Comments and simplicity
+
+The code-reviewer checks against these, and the coder writes to them. Each is a
+finding reviewers have already applied, and names the entry that applied it;
+none is invented here. A new rule arrives the same way: a finding, a register entry,
+a ruling (`D-089`).
+
+| # | Rule | Applied in |
+|---|---|---|
+| C1 | Every citation in a comment — `FR-`, `DEC-`, `§`, `D-`, `R-` — points to text that exists and says that | `D-085` |
+| C2 | A paraphrase of `docs/` neither narrows nor widens it | `D-080`, `D-085` |
+| C3 | No claim about phases or the plan unless checked against `SIM-REQ` §18 | `D-067` |
+| C4 | Claims of scope — "covers the whole surface", "safe", "injective", "cannot overflow" — are verified, or narrowed to what is true | `D-080`, `D-085` |
+| C5 | Dead code is deleted, not commented | `D-060`, `D-067` |
+| C6 | No reference to a register entry that does not exist yet | `D-080` |
+| C7 | A rule stated only in a comment, enforced by neither the build nor a test, is a decision and goes to the register | `D-007`, promoted as `DEC-083` |
+| C8 | A comment a ruling contradicts is updated in the commit that acts on the ruling | `D-085` |
+| C9 | A doc comment sits on the member it describes | `D-085` |
+| C10 | English; `summary` says what, `remarks` says why | no finding: it records the code's practice (`R-028`) |
+| S1 | Code that nothing reads and no test pins is deleted | `D-060`, `D-067` |
+
+## Language
+
+Every artefact of the repository is written in English: code, comments, the
+register, outcome lines, plans, commit messages, agent definitions. Records
+already written are not translated; they are frozen. The rule took effect with
+point 5 of the agent workflow plan, whose points 1 to 4 closed in Italian
+(`D-089`).
+
+The markers of an outcome line are English too (`R-045`):
+
+| Until point 5 | From it |
+|---|---|
+| `*Esito:*` | `*Outcome:*` |
+| `FALLITO` | `FAILED` |
+| *Chiuso con riserva* | *Closed with reserve* |
+| *Riserva sciolta* | *Reserve discharged* |
+| *criterio difettoso* | *criterion defective* |
+
+The skills write the English form and recognise both, since the archived plans
+and the points closed before the rule keep the Italian one.
+
+## Review and self-governance
+
+- Every point that touches code passes the code-reviewer, whatever its `Core:`
+  says: `Core: no` no longer means that no one reads the code (`D-088`).
+- `.claude/agents/`, `.claude/hooks/` and `.claude/skills/` change only with the
+  permission this file requires for itself, recorded the same way (`D-087`).
 
 ## Structure
 

@@ -75,7 +75,8 @@ dispatches `coder`, `tester` or `committer`: the decider writes no code.
 
 `docs/`, `core/Tests/`, `PLAN.md`, `DECISIONS-OUTSIDE-SPEC.md`,
 `SPEC-QUESTIONS.md`, `REVIEW-REQUEST.md`, `PROMOTIONS.md`, `RULINGS.md`,
-`core/BannedSymbols.txt`, `.claude/agents/`, `.claude/hooks/`, `.claude/skills/`.
+`core/BannedSymbols.txt`, `.claude/agents/`, `.claude/hooks/`, `.claude/skills/`,
+`.claude/settings.json`, `.claude/settings.local.json`.
 
 A denylist rather than an allowlist, because a process point legitimately writes
 files a simulator point never does.
@@ -193,6 +194,7 @@ round them. The last barrier is mechanical and belongs to the orchestrator:
 - no new `#pragma warning disable` or `SuppressMessage` in the diff: a
   suppression is a decision, and the orchestrator stops and asks (`AGENTS.md`);
 - `AGENTS.md` in the diff only if the point names it (`R-010`);
+- any `CLAUDE.md` in the diff only if the point names it (`R-070`);
 - `Core:` against the diff, as step 3 already does.
 
 ## The rules this adds to `AGENTS.md`
