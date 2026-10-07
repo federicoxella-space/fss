@@ -3714,3 +3714,137 @@ constrains the simulator's code.
 **Not verified:** that the hooks fire for an agent run in the background (the
 probe ran in the foreground, as `R-098` left open); the probe exercised the
 coder's `Write` only, not `Edit`, and no other role's hook.
+
+## 2026-10-07 — The cost of a settlement update, measured on a stand-in
+
+### D-121 · Point 1 · The stand-in and its calibration: what the point left open, and a check that under-covers
+
+**R-100's result, before the point:** the probe owed again was run with `coder`
+dispatched in the background (the harness default). Asked to `Write`
+`docs/probe.md`, it was denied by its frontmatter hook: "PreToolUse:Write hook
+error: [pwsh -NoProfile -File "$CLAUDE_PROJECT_DIR/.claude/hooks/path-guard.ps1"
+-Role coder]: path-guard: the coder may not write docs/probe.md". The file was
+not created; `tree-state` over the whole tree was equal before and after.
+Green: frontmatter hooks fire for a background coder (the open item of `D-120`,
+for `Write` only).
+
+**Built.** `bench/Sim.Bench.csproj` and `bench/Program.cs`, a console project
+on net8.0 (`Optimize` true, `TieredCompilation` false), added to `Sim.sln`. CI
+builds and tests by project path and never uses `Sim.sln`, and `core/Tests`
+references only `Sim.Core`, so `bench/` is outside the test run and CI. Five
+passes — production, own consumption, clearing per good with a selection sort by
+descending (cash + stock of the good), prices as their own pass over the
+residual supply, spoilage with a remainder carry per row and good — integer
+only, over dense per-good arrays; a checksum of stock and prices is folded into
+every update and printed. Check: `dotnet run -c Release --project bench/Sim.Bench.csproj`;
+exit 0 PASS, 1 FAIL, 2 pinning failed.
+
+**Decided (`docs/` silent on all of it).**
+1. **Ranking by selection sort**, n(n-1)/2 comparisons whatever the data, as
+   `DEC-054`'s "grows with the square" reads. The coder tried alternatives
+   against the bounds: insertion sort gave ratios 3.5 to 4.9, a selection sort
+   comparing through the index array up to 6.3; the kept version compares keys
+   directly. This is calibrating the stand-in's shape against the criterion; the
+   bounds stayed verbatim. *Would overturn it:* the decider judging that a
+   stand-in tuned to the bound no longer "means what it resembles" (`SQ-004`).
+2. **Measurement:** 3,000 ms time-based warm-up over both cells; 100,000 timed
+   updates per cell per run (the plan asks at least 10,000; at 20,000 the 9-row
+   p99 was too noisy); the cells interleaved in chunks of 500 updates so drift
+   lands on both sides of the ratio (whole-cell interleaving 9,27,9,27,9,27 was
+   tried: 1 FAIL in 12, ratio 5.87). The plan's header says every cell is
+   measured the same way and names only "a warm-up"; chunking is outside it.
+   *Would overturn it:* a measurement that stays stable without it.
+3. **The thread is pinned because the process is** (a one-bit affinity mask, core
+   2 when there are more than 2, High priority); no `SetThreadAffinityMask`
+   P/Invoke. Logical core 2 on an SMT machine may share a physical core with a
+   busy sibling. Not settled; open for the human, as a question of measurement
+   quality on this machine. *Would overturn it:* an explicit requirement to pin
+   the thread or to pick an idle physical core.
+4. **Stand-in devices:** cash refilled by 600 per row per update, supply per good
+   1000 + 37g, price floor 50, initial values from an LCG seeded 12345.
+   Measurement inputs, no P-number (`R-050`).
+5. `TieredCompilation` off, so the JIT is fully optimised before the warm-up;
+   `Optimize` true also makes a Debug build optimised.
+6. `SupportedOSPlatform("windows")` and `("linux")` on `Program`, with a
+   comment, so that CA1416 is quiet without a suppression.
+7. **The criterion's numbers:** "1.6" is below half of P-63 (1.65) and "3.8 to
+   5.8" a little wider than 4.8 within a fifth (3.84 to 5.76). The written
+   numbers were used, verbatim; the measured values fell nowhere near the
+   difference.
+
+**Verification.** Step 2: the check did not exist. First verification:
+unstable, 8 runs with 2 FAIL on the ratio's upper bound (7.74, 6.14), each when
+the 9-row cost dropped; all 9-row runs executed before any 27-row run, and
+prices was folded into the clearing loop. After round 1 (interleaving, warm-up,
+prices as its own pass): coder 14/14 PASS, ratio 5.18 to 5.60; tester 8/8 PASS,
+9 rows 3.20 to 4.40 us, ratio 4.84 to 5.57. After round 2 (a comment only): 5/5
+PASS, 9 rows 3.50 to 3.80 us, 27 rows 19.20 to 20.50 us, ratio 5.33 to 5.49. The
+ratio sits near 5.4, above `DEC-054`'s 4.8, with 0.3 to 0.5 of headroom under
+5.8; the 27-row cost is 19 to 20 us against P-64's 15.8. The printed checksum
+differs between runs, since the time-based warm-up runs a variable number of
+updates; this point does not ask for it to repeat, point 2 does.
+`dotnet build Sim.sln -c Release`, core and harness: 0 warnings, 0 errors;
+`core/Tests` Release 52/52, Debug 53/53 (one test is `#if DEBUG`, pre-existing).
+
+**Faults, introduced by the orchestrator** (`bench/` lies outside
+`mutate.ps1`'s reach). `tree-state` over the whole tree equal before and after
+both (2fc6528b...), the source restored byte-identical each time.
+- Linear ranking, the inner comparison loop bounded to one step: red, ratio
+  2.85, exit 1.
+- The work removed, `return;` at the top of `Update`: red, 9 rows 0.10 us,
+  ratio 1.00, checksum 0, exit 1.
+- **Incident:** the restore by file copy kept the source's old mtime, so the
+  incremental build kept the faulted DLL, and the code-reviewer saw FAIL at
+  0.10 us on the working tree. Fixed by deleting `bench/bin` and `bench/obj`
+  (git-ignored) and rebuilding: PASS, ratio 5.54. Not a code defect; a hazard of
+  restoring by copy that a future fault on `bench/` must avoid.
+
+**The criterion under-covers the point (`R-005`, case 1), and was not
+rewritten.** Correct code passes it, but it reads only the 9-row cost and the
+ratio and cannot see what the five passes compute. The code-reviewer named
+faults it misses (`R-047`): (a) spoilage without the carry, a few percent of
+cost and no change of ratio; (b) deleting pass 1, 2 or 4, each linear and small
+next to the sort; (c) ranking on a constant or a wrong key, or never reading
+`order`: the same quadratic comparisons, no ranking by ability to pay; (d)
+replacing clearing with any quadratic loop of similar weight; (e) a degenerated
+state, such as prices pinned at the floor of 50 after thousands of updates, so
+that trade and price movement stop (not tested whether it happens); (f) a Debug
+build, not refused by the check since `Optimize` is true. **The missing check:**
+the checksum of each cell's outputs, at a fixed update count, against a plain
+reference implementation of the five passes. It catches (a) to (d). Not run
+here; point 2 introduces checksums against a reference loop for its own cells.
+
+**Findings and their resolution** (code-reviewer, one dispatch; tester).
+- Stale binary on the working tree: accepted, the orchestrator's error, above.
+- The faults the check misses: recorded above, criterion unchanged.
+- Pinning failure exits 2 against a declared 0/1 contract: **rejected.** A
+  pinning failure is not a measurement, and keeping it apart from FAIL is
+  informative; PASS is still exit 0 only.
+- Core 2 hard-coded, possibly an SMT sibling: not settled, decision 3.
+- Interleaving in chunks is a choice outside `docs/`: accepted, decision 2.
+- `SupportedOSPlatform` unexplained (C7, C10): accepted, one comment line in
+  round 2.
+- Cash refill and supply constants invented: accepted, decision 4.
+- Tester: the ratio's headroom and the run-varying checksum, recorded above; its
+  question whether n log n against n squared was covered was answered by
+  `DEC-054` ("grows with the square"), so the brief asked for a quadratic
+  ranking.
+
+**Agents (`R-067`).** Dispatched: tester (step 2, step 4, two re-verifications),
+coder (implementation, two rounds, and the R-100 probe), code-reviewer (once),
+documenter, committer. Not run: the two revisioners, since `Core: no` held at
+step 5 (`git diff --name-only HEAD -- core/` empty); `mutate.ps1`, since `bench/`
+lies outside `core/Runtime/` and `harness/`. The tester wrote no test: the check
+is a run of `bench/`, not a test under `core/Tests/`. No outcome of this plan
+claims `R-046`'s check, which stays with phase 4's first point. The coder's
+denylist hashed before and after each coder dispatch: unchanged; the tree
+outside `core/Tests` around each tester dispatch: unchanged; the whole tree
+around the code-reviewer: unchanged.
+
+**What `docs/` says:** `DEC-054` that the clearing's cost grows with the square
+of the rows; P-63 and P-64 the costs measured; nothing on the stand-in's
+passes, its measurement method or its devices.
+**Would overturn it:** see decisions 1 to 3; and a reference checksum per cell
+showing that the stand-in computes something other than the five passes.
+**Not verified:** that the ratio holds on another machine or another core;
+that the SMT sibling of core 2 was idle; the faults (a) to (e).

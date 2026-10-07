@@ -34,6 +34,20 @@ machine, the runtime and the clock's resolution are printed with the results.
   below the floor. Both are introduced and seen red.
 - **Core:** no — the diff touches only `bench/` and the solution file.
 
+*Outcome:* 2026-10-07. Closed, *criterion defective* (`R-005`, case 1): the
+check ran PASS, the 9-row cost 3.50 to 3.80 µs and the ratio 5.33 to 5.49, and
+both faults went red (linear ranking, ratio 2.85; the work removed, 0.10 µs),
+but it reads only the 9-row cost and the ratio and cannot see what the five
+passes compute. The missing check, beside it: the checksum of each cell's
+outputs, at a fixed update count, against a plain reference implementation of
+the five passes; not run here, point 2 introduces checksums against a reference
+loop. The criterion is not rewritten. `D-121`. Agents (`R-067`): tester,
+coder, code-reviewer, documenter and committer dispatched; the code-reviewer's
+findings resolved in `D-121`, one rejected, one left open for the human. Not
+run: the revisioners, `Core: no` held at step 5; `mutate.ps1`, `bench/` outside
+its reach, so the orchestrator introduced the faults; no tester-written test,
+the check is a run of `bench/`. This outcome does not claim `R-046`'s check.
+
 ## 2. Dense state, scaled
 
 - **Does:** the stand-in swept at 12 rows over 8, 30, 100 and 300 goods, and at
