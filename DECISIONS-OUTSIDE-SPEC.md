@@ -3982,3 +3982,150 @@ devices, the sweep's measurement or what the bytes of state include.
 **Not verified:** that the costs hold on another machine or core; that the SMT
 sibling was idle; the bytes column against an independent count; that the timed
 instance computes what the checked instance does after more than 2000 updates.
+
+### D-123 · Point 3 · Sparse state per settlement type: the world, the dense reading, and a check that cannot fail where it matters
+
+**Owed and acted on:** `R-102`, items 1 and 2 (quoted from `RULINGS.md`, "Owed by
+the implementer"): "the bytes column, for point 2's cells and point 3's, counts
+the settlement state of `SIM-STATE` at its widths — the arrays standing for
+`goods`, `goodsCarry`, `currency` and the per-good price, and any index a layout
+holds — and leaves out content-derived rates and scratch; the figure recomputed
+independently from the sizes and compared, with an array dropped or counted twice
+seen red." Point 2's `StandIn.Bytes` and check changed accordingly (`bytesOk`
+against `ExpectedBytes`); point 3's bytes are counted the same way.
+
+**Built** (`bench/Program.cs` only). `World`, a static id-based world definition
+(`Cash(rid)`, `Cell(rid,gid)`, `Price0(gid)`), no update code. `Settlement`, one
+class for both layouts: sparse holds arrays sized to the present rows and goods
+plus an index `rowId[nr]`, `goodId[ng]`; dense allocates 41 x 300 and masks absent
+rows and goods with `rowOn`/`goodOn`, absent goods getting supply 0. `RefWorld.Run`,
+a plain reference of the five passes over the type's present rows and goods: 2-D
+arrays, insertion sort, no masks, no early exit; it shares only `World` and
+`StandIn.Supply`. `ExpectedBytes`, from sizes alone: rows x goods x 12 + rows x 8
++ goods x 8 + (sparse ? (rows + goods) x 4 : 0). Mode `point3`, per type:
+checksum at 2000 updates on fresh states, sparse = dense = reference required;
+rationing binds and the unranked run differs (`R-101` practice); the bytes of both
+layouts equal `ExpectedBytes`; the timed pair, built apart from the checked
+instances, must be the layout it is labelled and at its expected bytes (added at
+step 7, see findings); timing per point 2's header (1 s warm-up, three runs of
+20,000 updates, p99 each, median). `StandIn`'s update code is unchanged.
+
+**Decided (`docs/` silent on all; each a measurement input, no P-number, `R-050`).**
+1. **Which goods and rows a type holds:** ids spread evenly, good k of ng is id
+   k x 300 / ng, row k of nr is id k x 41 / nr, so the scarce pattern (id % 3 == 0)
+   and the id tie-break vary within each type. *Would overturn it:* a content
+   definition of which goods each type holds (`SQ-024` point 1, the user's,
+   deferred).
+2. **"The same world" in the dense layout:** dense holds 41 x 300 with only the
+   present cells filled; absent goods supply 0, absent rows are skipped in the
+   take loop, absent cells and rows are skipped in the checksum. So "the dense
+   cost of the same type" is the dense layout running that type's world, and it
+   varies by type (about 1.0 to 1.5 ms) because live cells do real takes; the
+   41-row sort still runs for every good, absent ones included. *Would overturn
+   it:* a reading of the plan as one fixed dense 300 x 41 figure, or a dense
+   layout that physically stores absent goods with zero stock.
+3. **One update code for both layouts;** only data and masks differ. The sparse
+   layout runs the same mask checks with every flag true, so its cost carries those
+   branches. Masks, `sup` and the `Sparse` flag are world definition, not state,
+   and lie outside the bytes. *Would overturn it:* a sparse path without masks
+   (slightly faster sparse).
+4. **Checksum:** h x 31 + stock over present cells in row-id then good-id order,
+   then h x 31 + price over present goods in id order; the same sequence in both
+   layouts.
+5. **`R-102` mapping:** stock to `goods` (4 bytes), carry to `goodsCarry` (8), cash
+   to `currency` (8), price to the per-good price (8); the sparse index `rowId` +
+   `goodId` at 4 bytes each; left out: `prod`, `need`, `spoilNum` (rates), `order`,
+   `key`, `residual`, `sup` (scratch), the masks. Dense counts no index: its ids
+   are positions (the dense layout allocates `rowId`/`goodId`, but they are
+   positions). *Would overturn it:* a narrower id width (2 bytes would do for
+   300 x 41), or the decider counting the dense masks (341 bytes, 0.2%) as an
+   index.
+6. **`ExpectedBytes` is independent of the layouts' own counting** (sizes only).
+   Limit: both formulas are by one author, so a width error shared by both would
+   not show.
+7. **`World` and `StandIn.Supply` are shared** by the layouts and the reference; a
+   wrong formula there moves all checksums together. Judged a smaller risk than a
+   second copy drifting. *Would overturn it:* a reference with its own copy.
+
+**Results.** Tester step 2: no point-3 mode existed. Coder round 1: sparse == dense
+only; the Fails-when off-by-one was invisible at the metropolis (sparse and dense
+coincide in geometry and share the update code), and the coder had injected it
+only below 300 goods. Round 2 (sent by the orchestrator): `RefWorld` added, sparse
+and dense each compared with it. Tester step 4, `point3` twice: PASS, exit 0, all
+five types at the approved sizes; checksums sparse = dense = reference and
+identical across runs: village 7988148488481991243, borgo -5091104827290509539,
+cittadina -7667466961022978001, city -5224349151507211922, metropolis
+-1623290518230209804. Bytes: sparse 1332, 4080, 13896, 56160, 151692; dense 150328
+each; all equal `ExpectedBytes`. Median p99 (us), run 1 / run 2: sparse village
+6.10/7.40, borgo 58.30/28.60, cittadina 105.7/104.0, city 462.3/478.2, metropolis
+1457.7/1450.0; dense 992.2/1140.1, 3324.2/1163.3, 1353.9/1299.4, 1306.6/1366.0,
+1466.5/1454.5; dense/sparse about 154-163, 41-57, 12.5-12.8, 2.83-2.86,
+1.00-1.01. Borgo run 1 was a factor 2 to 3 noisier than run 2; the others within
+about 15%. Point 2: PASS, bytes now per `R-102`: 12x8 1312, 12x30 4656, 12x100
+15296, 12x300 45696, 24x100 29792, 41x100 50328. Point 1: PASS (9 rows 5.20 us,
+ratio 5.00). `dotnet build Sim.sln -c Release` 0 warnings, 0 errors; `core/Tests`
+Release 52/52, Debug 53/53. Re-verification after step 7: `point3` PASS, same
+checksums, timed pair ok in all five types; sparse us 7.10, 22.00, 102.30, 479.80,
+1437.60; dense 1258.10, 1070.00, 1268.10, 1368.20, 1454.40; ratios 177.2, 48.6,
+12.4, 2.85, 1.01. Point 2 PASS. Point 1 PASS: 9 rows 5.70 us (bound 6.6), 27 rows
+27.60, ratio 4.84; the machine ran slower today and the 9-row cost sits under a
+tenth from its upper bound.
+
+**Faults, introduced by the orchestrator** in the working tree (`bench/` lies
+outside `mutate.ps1`'s reach), each rebuilt from clean `bin/obj`, the source
+restored byte-identical (`cmp`), `tree-state` over the whole tree equal before and
+after (40126f83...).
+- The Fails-when, the walk drops the last local good (market pass `g < Goods - 1`):
+  exit 1, all five types red. Village to city: sparse differs from dense and from
+  the reference. Metropolis: sparse = dense (-5829897961147613837), only the
+  reference differs.
+- The Fails-when, the walk drops the last row (`k < rows - 1`): exit 1, all five
+  red; at the metropolis again sparse = dense (5566991724587269817), caught by the
+  reference only.
+- Bytes, price array dropped: exit 1, MISMATCH in all five types, both layouts.
+- Bytes, carry counted twice: exit 1, MISMATCH in all five, both layouts.
+- Coder, at step 7: the timed dense built as sparse: FAIL, "WRONG LAYOUT" in all
+  five types (the exit code was not read, the pipe hid it).
+"Faster" is not observable: the faults' cost lies within the noise. The checksum
+alone makes them red.
+
+**The criterion is defective (`R-005`, case 1), and was not rewritten.** Correct
+code passes it, but the check as written, that sparse and dense give the same
+checksum, cannot fail for the reason it exists at the metropolis: both layouts
+have the same geometry and run the same code, so the Fails-when off-by-one leaves
+them equal. **The missing check, beside it:** each layout's checksum against an
+independent reference of the five passes on the type's world. It was built and run
+here (`RefWorld`) and caught both off-by-ones at every type.
+
+**Findings and their resolution** (code-reviewer, one dispatch).
+- The timed instances were never checked (the wrong layout timed, all green):
+  accepted, applied at step 7 (the timed-pair check), fault seen red, re-verified.
+- Which cost "dense at 300 goods and 41 rows" means, absent goods skipping the
+  take loop but not the sort: accepted, decision 2.
+- Timing is not gated (a sparse slower than or equal to dense passes): a limit,
+  recorded; the criterion sets no threshold.
+- Dense id arrays not counted, the comment silent on why: taste, left for the
+  human (decision 5).
+- `stock` counted at 4 bytes while a `long[]` in the stand-in, its int range over
+  the timed run unverified: recorded as not verified.
+- Nested ternary in `Main`: taste, **rejected** (not applied).
+- The coder's own doubt, the `Sparse` accessor redundant with the bytes comparison
+  (sparse and dense bytes differ in every type): taste, **rejected**, kept.
+
+**Agents (`R-067`).** Dispatched: tester (step 2, step 4, re-verification), coder
+(three rounds: implementation, reference, timed-pair check), code-reviewer (once),
+documenter, committer. Not run: the two revisioners, `Core: no` held at step 5
+(`git diff --name-only HEAD -- core/` empty); `mutate.ps1`, `bench/` lies outside
+its reach, so the orchestrator introduced the faults; no tester-written test, the
+check is a run of `bench/`. The coder's denylist hashed before and after each
+coder dispatch: unchanged; the tree outside `core/Tests` around the tester:
+unchanged; the whole tree around the code-reviewer: unchanged. This outcome does
+not claim `R-046`'s check.
+
+**What `docs/` says:** `SQ-024` the five types and the sizes the user approved;
+`SIM-STATE` §Rule and §Cohort the state and widths `R-102` applies; NFR-07 the 50
+MB; nothing on how a sparse layout is held or on the stand-in.
+**Would overturn it:** see decisions 1 to 5 and 7.
+**Not verified:** the costs on another machine or core; that `stock` stays within
+int range in the timed run; a width error shared by `ExpectedBytes` and the
+layouts; `World` and `Supply` against an independent copy.

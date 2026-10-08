@@ -89,6 +89,25 @@ not claim `R-046`'s check.
   off-by-one that is faster and changes the checksum.
 - **Core:** no — the diff touches only `bench/`.
 
+*Outcome:* 2026-10-08. Closed, *criterion defective* (`R-005`, case 1): the
+check ran PASS twice, all five types at the approved sizes, the checksums sparse
+= dense = reference and identical across runs, the bytes of both layouts equal to
+the figure recomputed from the sizes (`R-102`, items 1 and 2), and the dense/sparse
+cost ratio about 177, 49, 12.4, 2.85 and 1.01 from village to metropolis; the
+Fails-when faults (the walk dropping the last good, the last row) went red in all
+five types, as did the bytes faults (an array dropped, one counted twice) and a
+timed dense built as sparse. The criterion, "sparse and dense give the same
+checksum", cannot fail for the reason it exists at the metropolis, where both
+layouts have the same geometry and run the same code: the off-by-one leaves them
+equal. The missing check, beside it: each layout's checksum against an independent
+reference of the five passes on the type's world; built and run here, and it
+caught both off-by-ones at every type. The criterion is not rewritten. `D-123`.
+Agents (`R-067`): tester, coder, code-reviewer, documenter and committer
+dispatched; the code-reviewer's findings resolved in `D-123`, two rejected, one
+left open for the human. Not run: the revisioners, `Core: no` held at step 5;
+`mutate.ps1`, `bench/` outside its reach, so the orchestrator introduced the
+faults; no tester-written test. This outcome does not claim `R-046`'s check.
+
 ## 4. Market places and goods variants
 
 - **Does:** clearing runs only at market places, 100 of 2,000 by P-12 as
