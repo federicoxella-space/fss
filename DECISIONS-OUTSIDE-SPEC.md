@@ -3849,3 +3849,135 @@ passes, its measurement method or its devices.
 showing that the stand-in computes something other than the five passes.
 **Not verified:** that the ratio holds on another machine or another core;
 that the SMT sibling of core 2 was idle; the faults (a) to (e).
+
+### D-122 · Point 2 · Dense state, scaled: the devices, the sweep, and a check that under-covers the bytes
+
+**Owed and acted on:** `R-101`, items 1 to 4: each cell's checksum at a fixed
+update count compared against a plain reference implementation of the five
+passes; every cell run on a state where rationing binds, so that the ranking
+reaches the checksum; faults (a) and (c) of `D-121` seen red against it; point
+1's check rerun after any change to the stand-in's devices.
+
+**Built** (`bench/Program.cs` only). `StandIn` takes (rows, goods); `Bytes` sums
+`Buffer.ByteLength` over its arrays. A class `Reference` shares no code with
+`StandIn`: 2-D arrays, a comparison insertion sort, every good and every row, no
+early exit; it returns a checksum and a `denied` count (update, good pairs where
+demand exceeded supply), and has a `rank=false` mode clearing in row-id order.
+`Main` pins the process, then dispatches: no argument runs point 2, `point1` runs
+point 1's check. Exit 0 PASS, 1 FAIL, 2 pinning failed. Point 2's check, per
+cell: the checksum on a fresh state after 2000 updates against `Reference`;
+`denied` above 0; the `rank=false` checksum different from the ranked one. Timing:
+a 1 s time-based warm-up per cell, three runs of 20,000 timed updates, the p99 of
+each, the median reported; machine, runtime and clock printed. The array `paid`,
+written and never read, deleted (S1). The comment at line 91 narrowed (C4,
+code-reviewer finding).
+
+**Decided (`docs/` silent on all; each a measurement input, no P-number, `R-050`).**
+1. **Scarcity device:** Supply(g) = 4 when g % 3 == 0, else 1000 + 37g, so
+   rationing binds (`R-101` item 2). *Would overturn it:* a ruling fixing another
+   device.
+2. **Ranking key a total order:** (cash + stock) * 1024 + (1023 - r), ties to the
+   lower row id, so the reference need not copy the selection sort's tie order.
+   Limits the check to fewer than 1024 rows; the key sits in the measured path.
+   *Would overturn it:* a cell above 1023 rows.
+3. **Wants:** 1 + ((cash >> 6) & 3) units per row and good. Before, cash/(p*40)
+   was 0 for dear goods, so in the 100-goods cells the last good never reached
+   the checksum and the Fails-when fault was invisible there (coder's round 1,
+   below). Wants no longer depend on price. *Would overturn it:* a device that
+   makes dear goods unaffordable again.
+4. **Cash refill** 1000 + (cash & 4095); the old += 600 ran cash negative without
+   bound. *Would overturn it:* any bounded refill preferred.
+5. **Measurement:** the checksum at a fixed 2000 updates on a fresh instance, not
+   on the timed one; 1 s warm-up; 20,000 timed updates per run (the plan asks at
+   least 10,000); cells measured one after another, not interleaved in chunks as
+   in point 1 (`D-121` decision 2).
+6. **The 12 x 100 cell belongs to both sweeps** and is measured twice, giving
+   seven rows and six distinct cells, read as the plan's "seven cells". Its two
+   timings show the noise (71.2 against 77.6 us in one run).
+7. **The check is stricter than `R-101`:** `rank=false` must give a different
+   checksum, so fault (c) is caught by the check itself.
+8. **Bytes counts every array of `StandIn`,** including the scratch arrays
+   `order`, `key` and `residual`. Open for the human: whether "bytes of state per
+   settlement" means held state only.
+
+**Results.** Tester step 2: the check absent (point 1's output only; the checksum
+varied with the time-based warm-up). Coder round 1: the Fails-when fault
+(clearing loop to Goods-1) left the three 100-goods cells matching; sent back,
+devices changed (decisions 3 and 4), then all seven red. Tester step 4, two runs:
+exit 0 PASS, all seven cells match the reference, rationing binds, the ranking
+reaches the checksum; the checksums are identical across runs: 12x8
+-1821865995186469365, 12x30 5323051988096353993, 12x100 9171567396557610401,
+12x300 8280033743768488591, 24x100 -2873913667248244111, 41x100
+-7943819900709430484. Medians (us), run 1: 5.50, 20.60, 71.20, 192.90, 77.60,
+237.10, 416.00; run 2: 6.60, 25.10, 76.70, 234.90, 86.20, 209.90, 459.20. Bytes:
+4208, 15120, 49840, 149040, 49840, 98080, 166420. Machine Windows 10.0.26300 X64,
+16 logical cores, pinned to one; .NET 8.0.31; clock 100 ns. The spread between
+runs reaches 22% (12x300). `dotnet build Sim.sln -c Release` 0 warnings, 0
+errors; `core/Tests` Release 52/52, Debug 53/53. After the comment fix: PASS,
+checksums unchanged, build clean.
+
+**`R-101` item 4.** Point 1's check, rerun on the changed devices, PASS every
+time: coder 3.10/15.50 us, ratio 5.00, and 3.10/14.80, 4.77; tester 3.90/19.80,
+5.08, and 3.10/15.00, 4.84; code-reviewer, 9 rows 3.70, ratio 5.30. Green, so
+nothing goes to the decider for item 4.
+
+**Faults, introduced by the orchestrator** in the working tree (`bench/` lies
+outside `mutate.ps1`'s reach), each rebuilt from clean `bin/obj`, the source
+restored byte-identical (`cmp`), `tree-state` over the whole tree equal before
+and after (9104499f...).
+- The Fails-when fault, clearing loop `g < Goods - 1` (line 62): exit 1, 7 of 7
+  cells mismatch. Its cost was not reliably lower (within noise, 54.8 us against
+  71 to 77 at 12x100): the "costs less" half of the Fails-when is not observable
+  and the checksum alone makes it red.
+- `D-121` (a), spoilage without the carry (`carry[i] = 0`): exit 1, 7/7 mismatch.
+- `D-121` (c), a constant ranking key (`key[r] = 1023 - r`): exit 1, 7/7 mismatch.
+The tester also faulted copies in the scratchpad (one good fewer in clearing,
+spoilage over fewer elements, an empty `Update()`): all red. The coder faulted
+them in its own rounds.
+
+**The criterion under-covers the point (`R-005`, case 1), and was not
+rewritten.** Correct code passes it, but the bytes per settlement are in the
+"Does" and nothing checks them. **The missing check:** the bytes per cell
+recomputed independently from the array sizes and compared. Not run here.
+
+**Findings and their resolution** (code-reviewer, one dispatch).
+- C4, the line 91 comment overclaimed "state stays in range": accepted, narrowed
+  by the coder, re-verified.
+- Bytes unchecked (dropping or double-counting an array leaves the check green):
+  accepted as a fault the check misses; it is the missing check above.
+- The checksum comes from a fresh instance, not the timed one, so a fault that
+  shows only after many updates, or drift in the timed run, is not compared:
+  accepted as a fault the check misses, recorded; criterion unchanged.
+- Scarce goods' prices grow without bound (residual 0, +1/+2 per update) and cash
+  goes negative before the refill: the timed run sits in a different regime from
+  the checked one. Recorded, a degenerate state of the kind `D-121`'s (e) named;
+  not changed, the criterion does not ask about it. Open for the decider whether
+  it affects what the costs mean (`SQ-004`).
+- "A rerun gives the same checksums" holds by construction (fixed seed, no
+  randomness); nothing in one run turns red if it stopped holding. It was
+  verified by rerunning (coder, tester, faults). Recorded.
+- The duplicated 12x100 cell: recorded, decision 6.
+- Bytes counting the scratch arrays: interpretation, open for the human
+  (decision 8).
+- `Supply` public static, read only in `StandIn`: taste, **rejected** (not
+  applied), left for the human.
+- `R-101` item 3 unconfirmed by the reviewer: answered with the fact, faults (a)
+  and (c) run red by the orchestrator above.
+
+**Agents (`R-067`).** Dispatched: tester (step 2, step 4, re-verification), coder
+(three rounds: implementation, devices and `paid`, the comment), code-reviewer
+(once), documenter, committer. Not run: the two revisioners, `Core: no` held at
+step 5 (`git diff --name-only HEAD -- core/` empty); `mutate.ps1`, `bench/` lies
+outside its reach, so the orchestrator introduced the faults; no tester-written
+test, the check is a run of `bench/`. The coder's denylist hashed before and
+after each coder dispatch: unchanged; the tree outside `core/Tests` around the
+tester: unchanged; the whole tree around the code-reviewer: unchanged. This
+outcome does not claim `R-046`'s check.
+
+**What `docs/` says:** `DEC-054` that the clearing's cost grows with the square
+of the rows; P-63 and P-64 the costs measured; nothing on the stand-in's
+devices, the sweep's measurement or what the bytes of state include.
+**Would overturn it:** see decisions 1 to 4 and 8.
+**Not verified:** that the costs hold on another machine or core; that the SMT
+sibling was idle; the bytes column against an independent count; that the timed
+instance computes what the checked instance does after more than 2000 updates.

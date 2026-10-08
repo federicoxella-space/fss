@@ -60,6 +60,22 @@ the check is a run of `bench/`. This outcome does not claim `R-046`'s check.
   costs less and changes the checksum against a reference loop over every good.
 - **Core:** no — the diff touches only `bench/`.
 
+*Outcome:* 2026-10-08. Closed, *criterion defective* (`R-005`, case 1): the
+check ran PASS twice, all seven cells matching the reference loop over every
+good and row, rationing binding, the ranking reaching the checksum, the
+checksums identical across the two runs; the Fails-when fault (clearing loop to
+`Goods - 1`) went red 7 of 7, as did `D-121`'s (a) and (c), and point 1's check
+rerun on the changed devices was green every time (`R-101`, items 1 to 4). The
+criterion under-covers the "Does": the bytes per settlement are in it and nothing
+checks them. The missing check, beside it: the bytes per cell recomputed
+independently from the array sizes and compared; not run here. The criterion is
+not rewritten. `D-122`. Agents (`R-067`): tester, coder, code-reviewer,
+documenter and committer dispatched; the code-reviewer's findings resolved in
+`D-122`, one rejected, two left open for the human. Not run: the revisioners,
+`Core: no` held at step 5; `mutate.ps1`, `bench/` outside its reach, so the
+orchestrator introduced the faults; no tester-written test. This outcome does
+not claim `R-046`'s check.
+
 ## 3. Sparse state per settlement type
 
 - **Does:** a second layout holding, per settlement, rows only for the mestieri
