@@ -3851,6 +3851,7 @@ showing that the stand-in computes something other than the five passes.
 that the SMT sibling of core 2 was idle; the faults (a) to (e).
 
 ### D-122 · Point 2 · Dense state, scaled: the devices, the sweep, and a check that under-covers the bytes
+**Ruling:** R-102 — ratified, save decision 8, rejected; the regime question ruled; point 3 owes the bytes column at `SIM-STATE`'s widths.
 
 **Owed and acted on:** `R-101`, items 1 to 4: each cell's checksum at a fixed
 update count compared against a plain reference implementation of the five

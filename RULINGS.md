@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-121 — audited by `R-101`. The next audit starts at the
+**Register watermark:** D-122 — audited by `R-102`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -139,13 +139,20 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   default. Green, recorded in the register; red, the register and the decider,
   and no point dispatches the coder until the decider has ruled.~~ **Done in
   `93ef064`**, green, checked by `R-101`.
-- **`R-101`**, within point 2 of the cost measurement plan, beside its
+- ~~**`R-101`**, within point 2 of the cost measurement plan, beside its
   criterion: each cell's checksum at a fixed update count compared against a
   plain reference implementation of the five passes; every cell run on a state
   where rationing binds, so that the ranking reaches the checksum; faults (a)
   and (c) of `D-121` seen red against it; point 1's check rerun after any change
   to the stand-in's devices. Red on the last: the register and the decider
-  before point 3.
+  before point 3.~~ **Done in `9c3a0b8`**, checked by `R-102`.
+- **`R-102`**, within point 3 of the cost measurement plan, beside its
+  criterion: the bytes column, for point 2's cells and point 3's, counts the
+  settlement state of `SIM-STATE` at its widths — the arrays standing for
+  `goods`, `goodsCarry`, `currency` and the per-good price, and any index a
+  layout holds — and leaves out content-derived rates and scratch; the figure
+  recomputed independently from the sizes and compared, with an array dropped
+  or counted twice seen red.
 
 ## Escalated to the user
 
@@ -4939,3 +4946,103 @@ generated from it, and was not checked against the C# checksum. `R-100`'s probe
 was taken from `D-121`'s quoted hook message, not rerun. That the faults (a),
 (b) and (d) are caught by a reference check once rationing binds was reasoned,
 not run. The SMT topology of this machine was not examined.
+
+### R-102 — `D-122` is ratified, save decision 8: the bytes column counts the settlement state of `SIM-STATE`, at its widths
+
+**Date:** 2026-10-08   **Origin:** register audit, `D-122`
+**Verdict:** ratified; decision 8, left to the human, rejected; the open regime
+question ruled; one action owed
+**docs/:** unchanged
+
+Point 2 of the cost measurement plan, the dense sweep. Process, so ratified or
+rejected, never promoted (`D-011`). The entry was read against point 2's frozen
+text, `R-101`, NFR-07, `SIM-STATE` §Rule and §Cohort, and DEC-001; its claims
+against `9c3a0b8`, `bench/Program.cs` read whole. Point 2's check was run in this
+session: PASS, the seven checksums equal to the reference and to those `D-122`
+records, rationing binding in every cell.
+
+- **`R-101`'s four items** are met, and decision 7 goes further: the check
+  itself turns red when the ranking does not reach the checksum. `R-101` is
+  marked done.
+- **Decisions 1 to 4, the devices.** Stand. They make every good move stock and
+  cash and every third good ration, which is what `R-101` asked for. Demand no
+  longer depends on price, which costs the stand-in a resemblance to a market
+  and costs the measurement nothing: the work per update does not read it.
+- **Decisions 5 to 7.** Stand. Cells measured one after another trade drift
+  protection for simplicity. The cost shows: the 12 × 100 cell, measured twice
+  in one run, gave 61.8 and 52.8 µs here, and 71.2 and 77.6 in `D-122`'s. Every
+  figure of this sweep carries a noise of about a fifth, which `R-101`'s
+  overturning condition already covers. Reading the duplicated cell as the
+  plan's seventh is the plain reading of a sweep that lists it twice.
+- **The "costs less" half of the `Fails when:`** was not observable: one good in
+  a hundred is a percent of the work, inside the noise. The checksum caught the
+  fault, which is what the check is for.
+- **The rejected finding on `Supply`'s visibility** stands. It is taste and
+  nothing for the human.
+
+**The regime question, left to the decider.** The code-reviewer found that the
+timed instance runs far longer than the checked one, with scarce goods' prices
+rising by one or two every update without bound. Does that change what the
+costs mean? No. The work per update is fixed by loop counts, and those are the
+same in both regimes. The sort makes n(n − 1)/2 comparisons whatever the keys. A
+scarce good's supply of 4 runs out within four rows whatever the prices. A
+plentiful good's thousand units are never exhausted by at most 41 × 4 wants. So
+the longer run changes values and branch outcomes, not how much is done.
+Branch prediction differs, and that is inside the noise above. One part of the
+finding is wrong: cash is negative only inside an update. The refill,
+`1000 + (cash & 4095)`, puts it back in 1000 to 5095 every time. A fault that
+shows only after 2,000 updates stays a limit of the check, as the entry
+records.
+
+**Decision 8, rejected.** The bytes column exists to be read against NFR-07:
+"Settlement state stays under 50 MB". And `SIM-STATE` §Rule says what state is:
+what influences a future tick and cannot be derived from what is listed.
+`D-122` counts every array of the stand-in, and three kinds are not state:
+
+- **Scratch.** `order`, `key` and `residual` are written before they are read
+  in every update. In the simulator they belong to the thread, not to each of
+  2,000 settlements.
+- **Rates derived from content.** `prod`, `need` and `spoilNum` stand for what
+  the update derives from the rules file, the allocation and the count. None
+  is a field of §Cohort.
+- **Width.** The stand-in holds everything in `long`. §Cohort gives `goods` as
+  `int`, so a holding is 4 bytes, while its carry is fixed point over `long`
+  (DEC-001), 8 bytes. `currency` is `int64`.
+
+At 12 × 100 the column reads 49,840 bytes. The state it stands for is 15,296:
+4,800 of goods, 9,600 of carry, 96 of currency and 800 of prices. That is a
+third, and the bytes are the half of `SQ-023` that the estimate said fails
+first. An overstatement by three would reach the ruling on the shape of state
+as a verdict.
+
+The price per good is counted though §Cohort and §Settlement list no price
+field. The stand-in carries it across updates, and where prices live is
+`SQ-024`'s question.
+
+This would have held before any code: NFR-07 caps a quantity `SIM-STATE`
+defines, and a measurement read against it counts that quantity. The question
+was put to the human as one of meaning, and `SIM-STATE` answers it, so it is
+not a reserve.
+
+**Cost.** Point 3 recomputes point 2's column as well as its own, and states
+which arrays of each layout stand for which field. A sparse layout's index
+(offsets, the ids of the goods present) is state under §Rule, since the layout
+cannot be read without it, and counts.
+**Owed by the implementer:** within point 3, beside its criterion:
+1. the bytes column, for point 2's cells and point 3's, counts the settlement
+   state of `SIM-STATE` at its widths: the arrays standing for `goods` (4 bytes
+   each), `goodsCarry` (8), `currency` (8) and the per-good price (8), and any
+   index the layout holds. Content-derived rates and scratch are left out, or
+   printed apart;
+2. the figure is recomputed independently from the sizes and compared, the
+   missing check `D-122` names, with an array dropped or counted twice seen
+   red.
+
+Cite `R-102`.
+**Would overturn it:** a field of §Cohort that the stand-in's rates stand for
+after all, such as an allocation held per row and good, which would bring that
+array back into the count at its width.
+**Not verified:** whether `SIM-STATE` should list prices, and where. That
+belongs to `SQ-024`, and `SIM-ECON` was not read for whether a price carries
+over from one update to the next. The run-to-run spread was observed in one run
+here and taken from the entry for the rest.
