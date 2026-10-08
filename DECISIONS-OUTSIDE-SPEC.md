@@ -3718,6 +3718,7 @@ coder's `Write` only, not `Edit`, and no other role's hook.
 ## 2026-10-07 — The cost of a settlement update, measured on a stand-in
 
 ### D-121 · Point 1 · The stand-in and its calibration: what the point left open, and a check that under-covers
+**Ruling:** R-101 — ratified; decision 3 ruled; point 2 owes a reference check on a state where rationing binds.
 
 **R-100's result, before the point:** the probe owed again was run with `coder`
 dispatched in the background (the harness default). Asked to `Write`

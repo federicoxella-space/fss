@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-120 — audited by `R-100`. The next audit starts at the
+**Register watermark:** D-121 — audited by `R-101`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -134,10 +134,18 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   *Reserve discharged* line goes under point 4's outcome; red with trust
   accepted, the result goes to the register and the decider, and the reserve
   stays open.~~ **Done in `2801c19`**, checked by `R-100`.
-- **`R-100`**, before the first plan point dispatches the coder: point 4's live
+- ~~**`R-100`**, before the first plan point dispatches the coder: point 4's live
   probe run again with `coder` dispatched in the background, the harness's
   default. Green, recorded in the register; red, the register and the decider,
-  and no point dispatches the coder until the decider has ruled.
+  and no point dispatches the coder until the decider has ruled.~~ **Done in
+  `93ef064`**, green, checked by `R-101`.
+- **`R-101`**, within point 2 of the cost measurement plan, beside its
+  criterion: each cell's checksum at a fixed update count compared against a
+  plain reference implementation of the five passes; every cell run on a state
+  where rationing binds, so that the ranking reaches the checksum; faults (a)
+  and (c) of `D-121` seen red against it; point 1's check rerun after any change
+  to the stand-in's devices. Red on the last: the register and the decider
+  before point 3.
 
 ## Escalated to the user
 
@@ -4841,3 +4849,93 @@ hooks fire in both modes alike, quoted from the page, not summarised; or
 rerun. That the harness's default is the background was taken from this
 session's tool description, not from documentation. Who asked for the merge in
 `1b10a00` was not established.
+
+### R-101 — `D-121` is ratified; the stand-in's market never rations, so point 2 owes a reference check on a state where it does
+
+**Date:** 2026-10-08   **Origin:** register audit, `D-121`
+**Verdict:** ratified; decision 3, left to the human, ruled here; one action owed
+**docs/:** unchanged
+
+Point 1 of the cost measurement plan, the stand-in. Process, so ratified or
+rejected, never promoted (`D-011`). The entry was read against point 1's frozen
+text, the plan's header, `DEC-054`, P-63 and P-64, and its claims against
+`93ef064`, `bench/Program.cs` read whole. CI was grepped: it builds and tests by
+project path and never names `Sim.sln` or `bench/`. Point 1's check was run in
+this session: PASS, 9 rows 2.60 µs, 27 rows 14.90 µs, ratio 5.73.
+
+- **Decision 1, the selection sort.** Stands. `DEC-054` says the clearing's cost
+  "grows with the square" because rationing sorts the cohorts; a sort whose
+  comparisons do not depend on the data is the plainest reading of that, and
+  choosing it against the bounds is what a calibration point is for. What it
+  entails is recorded, not faulted: the ratio check now holds by construction,
+  so it shows that a quadratic term of this weight reproduces P-63 and P-64 over
+  rows, and nothing about cost per good, which the draft's own "What was not
+  verified" already said. The stand-in's row slope runs above `DEC-054`'s 4.8
+  (5.3 to 5.7), so the row terms of points 2 to 5 err on the expensive side.
+- **Decision 2, cells interleaved in chunks.** Stands. "Every cell is measured
+  the same way" is met when the cells measured together are measured alike.
+- **Decision 3, the thread pinned through the process, to logical core 2.**
+  Ruled here; it falls in no reserve of `R-001`. The plan asks for "one thread
+  pinned to one core", and a one-bit process mask meets it more strictly, since
+  the runtime's own threads share the core. A busy SMT sibling adds noise, and
+  noise shows in the spread of the three p99s the method prints. The question
+  `SQ-023` brings to this plan is one of order of magnitude against P-01, which
+  the estimate puts a hundred times over; noise of a tenth does not move it.
+  Ratified, with no action.
+- **Decisions 4 to 7.** Stand: the devices are measurement inputs (`R-050`, as
+  `R-076` read it for `D-109`); `TieredCompilation` off, the platform
+  attributes, and the criterion's numbers used as written, which a frozen
+  criterion requires.
+- **The incident, and the rejected finding.** Stand as recorded. A fault on
+  `bench/` restored by copy can leave a stale build; it fails loudly either way.
+
+**The criterion under-covers, and the missing check is blind too.** The point
+closed under `R-005`'s case 1 with the missing check named — a checksum per
+cell against a plain reference of the five passes — and deferred to point 2.
+The code-reviewer claimed that check catches faults (a) to (d). It does not
+catch (c), and the reason is fault (e), which the entry marks "not tested
+whether it happens". It happens. The stand-in was ported to a script in the
+scratchpad and run for 3,000 updates at 9, 27 and 41 rows: supply never ran
+out, the least residual was 918 of about 1,000 units, the even goods' prices
+sat at the floor of 50 and the odd goods' never moved from 110, 130 and 150.
+Refilled at 600 per update, a row buys a handful of units across seven goods;
+supply is a thousand per good. So every row is served whatever its rank, and
+the order the sort computes never reaches stock, cash or prices. A ranking on a
+constant key, or one never read, gives the same checksum as the real one, and
+costs less: no swaps and a perfectly predicted branch.
+
+That matters beyond point 1. Points 2 and 3 rewrite the stand-in for new
+layouts, and the key is indexed by row and good, `stock[r * Goods + g]`, which
+is exactly what a sparse layout re-indexes. Point 3's "same checksum, sparse
+and dense" cannot see a key read from the wrong good. The table those points
+produce is the evidence `SQ-023` is ruled on, so a check that cannot see the
+term `DEC-054` is about would leave that ruling resting on numbers no one has
+shown to come from a working market. This would have held before any code was
+written: a checksum proves only what reaches it.
+
+**Cost.** Point 2 grows by a reference implementation and a change to the
+devices, so that some good runs short. That changes point 1's calibration a
+little, since the allocation loop then stops early. The ratio already sits close
+to its bound: 5.73 against 5.8 in this session's run, with the 9-row figure at
+26 ticks of a 100 ns clock. A rerun may go red for that reason alone.
+**Owed by the implementer:** within point 2, beside its criterion, under
+`R-005`'s case 1 as `D-121` names it:
+1. each cell's checksum at a fixed update count compared against a plain
+   reference implementation of the five passes;
+2. every cell run on a state where rationing binds for at least one good within
+   the counted updates, so that the ranking reaches the checksum;
+3. faults (a) and (c) of `D-121`, spoilage without its carry and a ranking on a
+   constant key, seen red against it;
+4. point 1's check rerun after any change to the stand-in's devices, and its
+   result recorded.
+
+If the last is red, the result goes to the register and the decider before
+point 3 runs. Cite `R-101`.
+**Would overturn it:** a layout whose cost per simulated day lands within the
+spread of its runs of P-01, where noise could decide the verdict; then that
+layout is measured again on an idle physical core, which reopens decision 3.
+**Not verified:** the port was written from `Program.cs` by reading, not
+generated from it, and was not checked against the C# checksum. `R-100`'s probe
+was taken from `D-121`'s quoted hook message, not rerun. That the faults (a),
+(b) and (d) are caught by a reference check once rationing binds was reasoned,
+not run. The SMT topology of this machine was not examined.
