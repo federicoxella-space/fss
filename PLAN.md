@@ -178,3 +178,6 @@ introduced the faults; no tester-written test. The plan's exit condition, the
 table recorded in the register and in `SQ-023` and read against P-01, NFR-05
 and NFR-07, is met with this point. This outcome does not claim `R-046`'s
 check.
+
+*Ruled:* 2026-10-16 — *criterion defective* (`R-005`, case 1), by `R-105`: the
+check proves the day column sums its cells, while the point measures every cell.
