@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-123 — audited by `R-103`. The next audit starts at the
+**Register watermark:** D-124 — audited by `R-104`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -153,7 +153,7 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   layout holds — and leaves out content-derived rates and scratch; the figure
   recomputed independently from the sizes and compared, with an array dropped
   or counted twice seen red.~~ **Done in `385e713`**, checked by `R-103`.
-- **`R-103`**, within point 4 of the cost measurement plan, beside its
+- ~~**`R-103`**, within point 4 of the cost measurement plan, beside its
   criterion: each configuration's checksum — clearing at market places with
   the villages routed to them, and K = 1, 4 and 16 — at a fixed update count
   against an independent reference of the same clearing, on a state where
@@ -161,7 +161,18 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   demand left out of the market's ranking, and a split that drops a variant,
   seen red against it; the register stating how routed demand enters the
   ranking, and if as fewer entries than the cohort rows it comes from, the cost
-  with every routed row ranked measured beside it.
+  with every routed row ranked measured beside it.~~ **Done in `1faa5c0`**,
+  checked by `R-104`.
+- **`R-104`**, within point 5 of the cost measurement plan, beside its
+  criterion: every cell of the table from one run, in one session, on `Mkt`'s
+  update code for all four layouts; the dense layout at market places measured
+  under both readings of routed demand, every new configuration checked against
+  `MktRef` where rationing binds, `RoutedUnranked` and a dense walk dropping its
+  last good seen red; both readings in the table with per-type cells; beside each
+  recomputed day the directly timed p99 of a day for every sparse layout and any
+  dense one under 20 ms, the verdict on the higher; each day against 10 ms and
+  5 ms; the MB column the world's total by `R-102`'s rule, recomputed
+  independently; the measurement inputs named.
 
 ## Escalated to the user
 
@@ -5154,3 +5165,153 @@ read in its state, owed actions and the rulings from `R-100` on, not whole. The
 run-to-run drift of a factor two between this session and `D-123`'s was observed,
 not explained; point 5 combines figures of different sessions, and whether that
 moves a verdict against P-01 was not checked.
+
+### R-104 — `D-124` is ratified; point 5's table is four layouts on one update code in one run, and the dense layout at market places is measured, not copied
+
+**Date:** 2026-10-16   **Origin:** register audit, `D-124`
+**Verdict:** ratified; the items left open ruled; one action owed
+**docs/:** unchanged
+
+Point 4 of the cost measurement plan, market places and goods variants. Process,
+so ratified or rejected, never promoted (`D-011`). The entry was read against
+point 4's and point 5's frozen text, the plan's header and exit condition,
+`R-103`, `SQ-023`, `SQ-024`, NFR-05, NFR-07, P-01, P-17, P-63 and FR-T-06; its
+claims against `1faa5c0`, `bench/Market.cs` from `Layout` to the end of `Mkt`
+and `PointFour` whole. Point 4's check was run in this session: the eleven
+checksums engine = reference and equal to those `D-124` records, rationing
+binding where routed rows ask, every fault red, the ample check 8,128,546 of
+8,128,546 served; PASS, exit 0. The timed figures came out within a tenth of
+`D-124`'s: p99 per day 3.29 ms everywhere, 5.73 and 3.07 ms at market places
+by the two readings; K = 16 at 1.04 times K = 1; per type, the market with its
+nineteen villages 261.2, 331.4, 621.1 and 1,287.1 µs, a village 0.94 to 0.97 µs.
+
+- **`R-103`'s three items** are met. Every configuration, the four timed
+  per-type cells included, is checked against `MktRef`; `RoutedUnranked` and
+  `DropVariant` go red; decision 1 records both readings of routed demand and
+  measures each. `R-103` is marked done.
+- **Decisions 1 to 3, 5, 6 and 8 to 11.** Stand, as measurement inputs that say
+  what they stand in for. Decision 1 does not rule on `SQ-024` item 4, and the
+  table keeps both readings for that reason.
+- **The code-reviewer's (c), the binding condition.** Answered by the code, no
+  action. `Check` folds every fault's red into the run's verdict, so a run in
+  which routed demand could be served out of order without changing the
+  checksum fails. The ranking deciding is shown by the fault on every run, the
+  practice `R-102` ratified in `D-122`'s decision 7.
+- **The code-reviewer's (d), ties.** Stands, no action. The key is
+  `(cash + stock) × 1024 + (1023 − e)`, and the constructor refuses more than 1023
+  entries, so no two entries share a key and the order is total. How ties fall
+  changes who is served, not how much work is done, and work is what this plan
+  measures.
+- **The coder's doubts.** K on the one class good (decision 4): stands. Point 4
+  asks for "a class with K variants", and the 1.07 is read as the marginal cost
+  of one class, as the entry says. Nineteen villages per market whatever its
+  type (decision 5): stands as a declared limit. `SQ-024` items 1, 2 and 5 are
+  open, so no other assignment has a source. A control of sixteen separate goods
+  against sixteen variants is not asked by the plan. The day's p99 and dense at
+  market places are point 5's, below.
+
+**What point 5 inherits.** Its "Does" asks for one table "for each of the four
+layouts (dense or sparse, clearing everywhere or at market places)", with µs
+per update per type, ms per simulated day and MB of state. The exit condition
+asks for the same 2 × 2. Its `Fails when:` says it "gathers numbers already
+measured". Three cells of the four exist, and not in a form one table can hold:
+
+- **Dense at market places was never measured.** `D-124` decision 8 says so.
+  Nothing else in the record gives it, and a figure derived without a run would
+  be the kind of estimate `SQ-023` was raised against.
+- **The cells come from two update codes.** Dense and sparse clearing
+  everywhere, per type, are point 3's, from `StandIn`. The market places'
+  per-type cells are point 4's, from `Mkt`, which measured sparse clearing
+  everywhere too, but only as a whole day. `R-103` ratified point 3's single
+  update code for both layouts because it "makes the comparison about data".
+  The same holds across the 2 × 2: its two axes are layout and where clearing
+  runs, so the update code is held fixed.
+- **The cells come from sessions a factor two apart.** `R-103` observed that
+  drift and did not explain it. Point 4's figures sit within that factor of
+  P-01. Summed by point 5's own formula from `D-124`'s per-type cells, the sparse
+  layout at market places with every routed row ranked gives
+  (2 × 1,278.3 + 8 × 609.5 + 30 × 323.8 + 60 × 253.7 + 1,900 × 0.93) / 7 ≈ 4.9 ms.
+  Doubled, that is 9.8 ms against a budget of 10. Figures copied from different
+  sessions cannot carry that verdict.
+- **Only one reading has per-type cells.** Point 4 timed per type the market
+  with every routed row ranked; one entry per village only as a whole day.
+  `R-103` held that a measurement informing an open question measures the
+  readings it still allows, so both readings reach the table, each through the
+  criterion's recomputation.
+
+**The day against P-01.** NFR-05 and P-01 put the budget on a simulated day at
+p99. The criterion recomputes a day as the sum over types of count × cost per
+update ÷ 7. That figure is the average bucket at each type's p99. The p99 of
+days falls on the heaviest bucket, and under FR-T-06 the buckets do not hold the
+mix evenly: two metropolises cannot sit in seven buckets. Point 4 measured the
+day directly as well, 5.53 ms against the 4.9 recomputed from its own cells;
+this session's run gives 5.73 against 5.0. The
+criterion is frozen and is computed as written; the direct p99 is printed beside
+it where a verdict can turn on it.
+
+The stand-in is five passes calibrated to P-63, which is "Measured, 5 of 12
+phases". P-17 derives the ceiling at P-01 from that subset with a "2x allowance
+for unmeasured phases", and §19 keeps the factor open until phase 4. A stand-in
+day set against 10 ms alone would read the subset as the whole. The table sets
+it against 10 ms as the plan says, and beside it against 5 ms, the same budget
+with P-17's allowance. The sparse layout at market places with every routed row
+ranked sits on that line in this session's run: 5.0 ms recomputed, 5.73 timed.
+
+**The bytes.** `R-102`'s rule covers point 2's and point 3's cells. Point 4
+computed no bytes, so the market-places layouts have none. The MB column is the
+world's, the sum over the P-12 mix of count × bytes per settlement, which bytes
+per type alone do not give. A sum from `D-123`'s figures puts sparse at about
+3.9 MB and dense at 2,000 × 150,328 bytes, about 301 MB, six times NFR-07
+whatever clearing does. That is the half of `SQ-023` the estimate said fails
+first, and it holds before the dense market cell is run. The cell is owed all
+the same: the "Does" and the exit condition name it, and narrowing a plan the
+user approved is not the decider's.
+
+All of this would have held before any code. A table read against a budget
+compares figures taken alike; a cell it names is measured or marked missing,
+never derived; and a subset is read against the whole only with the allowance
+the specification already carries.
+
+**Cost.** Point 5 is no longer only a gathering. `Mkt` gains a dense layout and
+per-type cells for clearing everywhere and for one entry per village. The dense
+layout at market places with every routed row ranked sorts 41 + 19 × 41 = 820
+entries per good over 300 goods: by the stand-in's selection sort some 10⁸
+comparisons per market update, so its per-type cells, at the plan's 10,000
+updates and three runs, may take hours of wall clock. `StandIn`'s cells from
+points 2 and 3 do not enter the table.
+**Owed by the implementer:** within point 5, beside its criterion, under
+`R-005`'s case 1:
+1. every cell of the table measured in one run of the runner, in one session,
+   by the plan's method, on `Mkt`'s update code for all four layouts, the layouts
+   differing only in what each place holds and where clearing runs; nothing
+   copied from the register or from an earlier run;
+2. the dense layout at market places measured under both readings of routed
+   demand, and each new configuration — dense everywhere, dense at market
+   places, and the per-type cells added — checked against `MktRef` on a state
+   where rationing binds, with `RoutedUnranked` red wherever routed rows exist
+   and the off-by-one of point 3's `Fails when:`, applied to the dense walk so
+   that it drops its last good, red;
+3. the market-places layouts in the table once per reading of routed demand,
+   each with per-type cells and its day recomputed by the criterion's formula;
+4. beside each recomputed day, the p99 of a day timed directly in the same run,
+   for every sparse layout and for any dense layout whose recomputed day is
+   under 20 ms; the verdict against P-01 read on the higher of the two;
+5. each day set against 10 ms and, beside it, against 5 ms, P-01 with P-17's
+   allowance for the phases the stand-in does not run;
+6. the MB column as the world's total over the P-12 mix, from bytes per
+   settlement counted by `R-102`'s rule for every layout, the market-places
+   ones included, with the village-to-market assignment counted if the layout
+   holds it, and recomputed independently;
+7. the table naming the measurement inputs it rests on: nineteen villages per
+   market by a fixed assignment, both readings of routed demand, K on one class.
+
+Cite `R-104`.
+**Would overturn it:** the user waiving the dense cell at market places, a
+change to the plan they approved and theirs to make. Or a ruling on `SQ-024`
+item 4 before point 5 runs, which takes item 3 down to that reading.
+**Not verified:** the hours are arithmetic on the entry count, not a run. The
+3.9 MB and 301 MB are sums of `D-123`'s bytes, not recomputed from the code. That
+the buckets' composition moves the p99 of a day by more than noise was inferred
+from two direct figures, 5.53 against 4.9 and 5.73 against 5.0, on one
+layout. `RULINGS.md` was read in its state,
+owed actions and the rulings from `R-101` on, not whole.

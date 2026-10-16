@@ -4132,6 +4132,7 @@ int range in the timed run; a width error shared by `ExpectedBytes` and the
 layouts; `World` and `Supply` against an independent copy.
 
 ### D-124 · Point 4 · Market places and goods variants: routed demand in the ranking, the split, and a served check that cannot see the ranking
+**Ruling:** R-104 — ratified; the open items ruled; point 5 owes four layouts on one update code in one run, the dense layout at market places measured.
 **Ruling:** R-103 (5e1d9b2) — point 4 owes a reference check where routed demand is rationed.
 
 **Owed and acted on:** `R-103`, items 1 to 3 (read in `RULINGS.md`, "### R-103"): item 1, every
