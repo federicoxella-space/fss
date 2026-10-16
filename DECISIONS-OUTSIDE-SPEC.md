@@ -4251,6 +4251,7 @@ assignment or any geography; the formulas shared by engine and reference against
 at the supply boundary.
 
 ### D-125 · Point 5 · The table, read against the budget: four layouts on one update code, and a recomputation that checks the table against itself
+**Ruling:** R-105 — ratified; the criterion defective under `R-005`'s case 1, the table standing; decisions 3 and 6 ruled; one line owed under point 5's outcome.
 **Ruling:** R-104 (5d6ed85) — items 1 to 7 owed and acted on (read in `RULINGS.md`, "### R-104").
 
 **Built** (`bench/Table.cs` new: `PointFive`, the cells, the table, the recomputation `Verify`, the

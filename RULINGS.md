@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-124 — audited by `R-104`. The next audit starts at the
+**Register watermark:** D-125 — audited by `R-105`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -163,7 +163,7 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   ranking, and if as fewer entries than the cohort rows it comes from, the cost
   with every routed row ranked measured beside it.~~ **Done in `1faa5c0`**,
   checked by `R-104`.
-- **`R-104`**, within point 5 of the cost measurement plan, beside its
+- ~~**`R-104`**, within point 5 of the cost measurement plan, beside its
   criterion: every cell of the table from one run, in one session, on `Mkt`'s
   update code for all four layouts; the dense layout at market places measured
   under both readings of routed demand, every new configuration checked against
@@ -172,7 +172,11 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   recomputed day the directly timed p99 of a day for every sparse layout and any
   dense one under 20 ms, the verdict on the higher; each day against 10 ms and
   5 ms; the MB column the world's total by `R-102`'s rule, recomputed
-  independently; the measurement inputs named.
+  independently; the measurement inputs named.~~ **Done in `853e342`**, checked
+  by `R-105`.
+- **`R-105`**, before the cost measurement plan is archived: a line under point
+  5's outcome, never in its place, reading *criterion defective* (`R-005`, case
+  1) and naming `R-105`, in a commit without a `Plan-point:` trailer.
 
 ## Escalated to the user
 
@@ -5315,3 +5319,106 @@ the buckets' composition moves the p99 of a day by more than noise was inferred
 from two direct figures, 5.53 against 4.9 and 5.73 against 5.0, on one
 layout. `RULINGS.md` was read in its state,
 owed actions and the rulings from `R-101` on, not whole.
+
+### R-105 — `D-125` is ratified; point 5's criterion is defective under `R-005`'s case 1, and the table it closed on stands
+
+**Date:** 2026-10-16   **Origin:** register audit, `D-125`
+**Verdict:** ratified; the question left to the decider, and decisions 3 and 6,
+ruled; one action owed
+**docs/:** unchanged
+
+Point 5 of the cost measurement plan, the table. Process, so ratified or
+rejected, never promoted (`D-011`). The entry was read against point 5's frozen
+text, the plan's header and exit condition, `R-104`, `R-005`, `R-084`, `SQ-023`
+with its new section, NFR-05, NFR-07, P-01 and P-17; its claims against
+`853e342`, `bench/Table.cs` from `Run` to the table's printing and `Mkt.Bytes`
+and `Cur` in `bench/Market.cs`. The full check takes four hours and was not
+rerun. `point5-smoke` was run in this session: every reference check equal,
+rationing binding, every fault red, bytes counted equal bytes recomputed, the
+synthetic table's controls caught, exit 3 as designed.
+
+- **`R-104`'s seven items** are met, as the code-reviewer found and this reading
+  confirms. `R-104` is marked done.
+- **Decisions 1, 2, 4, 5 and 7 to 11.** Stand, as measurement inputs. Decision
+  5 checks the dense market worlds that are timed, the per-type groups, and the
+  dense P-12 world at market places is never timed, so nothing in the table runs
+  unchecked.
+- **Decision 3, `Cur`.** Stands for this table, on a reason narrower than the
+  entry's. `Cur` is a remainder accumulator for the even split among variants,
+  and at K = 1 it is `(cur + take) % 1`, always 0. A field that never changes
+  influences no future tick, so it is not state under `SIM-STATE` §Rule here.
+  With variants it is, at 4 bytes per row and class good. Counted on every cell,
+  it would add 1.13 MB to the sparse world and 98.4 MB to the dense one, which
+  moves no verdict against NFR-07.
+- **Decision 6, the village cell.** Stands. The day sums costs, and a p99 of the
+  19 villages' sum divided by 19 is the closer figure for a sum than 19 separate
+  p99s. Villages weigh 0.32 ms of the 5.16 ms day at market places; no plausible
+  reading of their cost moves a verdict against 10 ms, and against 5 ms that row
+  is already over on its timed day.
+- **Dense at market places ranking dead slots.** Stands. It is an upper bound,
+  and the dense layouts fail NFR-07 by a factor of six on bytes alone, whatever
+  their cost.
+- **Point 1 failing once at 6.00**, against a ceiling of 5.8, `StandIn`
+  untouched. Noise near the bound, as `R-101` and `R-103` foresaw. No action:
+  point 1 closed, and its figures do not enter the table.
+
+**The criterion is defective, case 1.** The frozen check proves that the day
+column is the sum of the cells. The point's "Does" asks for more: the MB column,
+each figure set against P-01 and NFR-07, and, since `R-104`, cells measured in
+the run rather than gathered. The `Fails when:` rests on "the point gathers
+numbers already measured", which `R-104` made untrue. Correct code passes the
+check, and the check proves less than the point does. That is `R-005`'s case
+1, as for points 1 to 4. The missing checks beside it are the reference checks,
+the bytes recomputation and the table's own controls, all of which ran red when
+broken.
+
+**The three faults it would miss do not touch the table as committed.**
+- (A) Read at `853e342`: every timed world is built from the `Cfg` named in its
+  row (`Layout.One(t, c.Dense)`, `Layout.Group(1, 0, t, true, c.Dense,
+  c.PerVillage)`, `Layout.P12(c.AtMarkets, c.PerVillage)`), and `Spec` gives
+  each row the flags its name states. The figures corroborate it: the borgo,
+  city and metropolis markets with every routed row ranked come out at 262.3,
+  642.0 and 1,343.1 µs, against 261.2, 621.1 and 1,287.1 in point 4's separate
+  run.
+- (B) Read: `Ns[t]` is filled by type index, and the market groups map type `t`
+  to `tt[t - 1]` without a shift. Every sparse row also rises from village to
+  metropolis, as the sizes do.
+- (C) The transcription in `SQ-023` was recomputed here: the six days from its
+  cells by count × cost ÷ 7 (2.671, 204.048, 5.156, 2.463, 2774.615, 73.366
+  ms), and the bytes from the sizes by `R-102`'s rule (3,945,144 and 300,656,000,
+  plus 7,600 of assignment). All equal what the entry and `SQ-023` print.
+
+So the weakness is real, and it matters only for a rerun. The table stands as
+the measurement `SQ-023` was owed. This would have held before any code: a
+check of a table's arithmetic says nothing of its labels, so the labels are
+read, and here they were.
+
+**What the ruling on `SQ-023` inherits**, recorded so that the next session does
+not rediscover it. Neither point is ruled here: `SQ-023`'s direction is the
+user's.
+1. The verdict at 5 ms, P-01 with P-17's allowance, divides the readings of
+   `SQ-024` item 4. With every routed row ranked, the sparse layout at market
+   places is read at 6.62 ms, within 10 and over 5. With one entry per village
+   it is read at 3.70, within both. Sparse clearing everywhere is read at 4.26.
+   Short runs swing far more than that: this session's smoke run, 100 updates
+   and not the plan's method, gave a recomputed day of 8.13 ms for sparse
+   clearing everywhere. Only runs by the method count.
+2. Variants of a class need a remainder accumulator for the split, per row and
+   class good with variants (decision 3). `R-084`'s list of carries has none. If
+   the user takes the sparse direction with variants, `SIM-STATE` gains one.
+
+**Cost.** One line in the archived plan. A rerun of the table for a verdict
+would first need the timed and checked worlds built from the same layout
+objects, which `D-125` declined to do, since the fix meant a rerun.
+**Owed by the implementer:** before the cost measurement plan is archived, a
+line under point 5's outcome, never in its place: *criterion defective*
+(`R-005`, case 1), `R-105`, in a commit without a `Plan-point:` trailer. Cite
+`R-105`.
+**Would overturn it:** a run of `point5` at `853e342` printing a cell more than
+the run-to-run drift away from `SQ-023`'s, which would mean a mislabel that
+reading missed. Or the user asking for the table again, which brings (A) back as
+a check owed before that run.
+**Not verified:** the full `point5` run was not repeated; the smoke run proves
+the controls, not the figures. (A) and (B) were read, not mutated. `RULINGS.md`
+was read in its state, owed actions, `R-001`, `R-005`, `R-009` to `R-011` and the
+rulings from `R-101` on, not whole.
