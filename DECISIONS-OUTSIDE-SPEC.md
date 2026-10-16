@@ -4355,3 +4355,29 @@ on the layouts' costs, the unit of a megabyte, or the bench.
 **Not verified:** the dense cells timed directly (all 20 ms or more, `R-104` item 4); routing and
 reassignment cost; point 1's bound, near the noise; the costs on another machine or core; faults (A)
 to (C).
+
+### D-126 · Orchestration of points 4 and 5 · how this session ran the decider and the long runs
+
+Task: the user's instruction of 2026-10-16, "Lancia /plan-next e /decide quando necessario fino al
+termine dello sviluppo o finché il decider non necessita di una mia decisione".
+
+1. **The decider ran as a separate agent, dispatched by this implementer session.** `AGENTS.md`
+   says an implementer session never plays the decider, and `/plan-next` step 10 says this session
+   does not run `/decide`. The user asked for both in one instruction. Each decider run (`R-103`,
+   `R-104`, `R-105`) was a fresh general-purpose agent briefed only with facts and told to follow
+   `.claude/skills/decide/SKILL.md` and to leave every reserve of `R-001` to the user; this session
+   wrote no ruling. `docs/` says nothing on who may dispatch a decider. Overturned by the user or a
+   ruling requiring a decider session the user opens.
+2. **`misura-costi` was brought up to date by merging `main` into it** (`b18b267`), not recut, so
+   the installing commit `c12b061` and its frozen criteria stayed as they were. Overturned by a
+   ruling that a plan branch is recut from `main` instead.
+3. **Point 5's step 4 was run by this session, not by a tester dispatch**, because the full check
+   takes 4h20 and pins the core: the five faults first, then the full run, then points 1 to 4, in
+   one background script with `tree-state.ps1` equal before and after. Overturned by a ruling that
+   step 4 is always a tester's.
+4. **The table was transcribed into `SQ-023` by this session**, the coder's denylist covering
+   `SPEC-QUESTIONS.md`; the two added sentences (the K figure's run, the dense ranking over masked
+   slots) are the code-reviewer's findings, accepted.
+
+**What `docs/` says:** nothing; these are process choices. **Not verified:** whether the user
+reads (1) as within the instruction; the decider was not asked.
