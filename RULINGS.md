@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-122 — audited by `R-102`. The next audit starts at the
+**Register watermark:** D-123 — audited by `R-103`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -146,13 +146,22 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   and (c) of `D-121` seen red against it; point 1's check rerun after any change
   to the stand-in's devices. Red on the last: the register and the decider
   before point 3.~~ **Done in `9c3a0b8`**, checked by `R-102`.
-- **`R-102`**, within point 3 of the cost measurement plan, beside its
+- ~~**`R-102`**, within point 3 of the cost measurement plan, beside its
   criterion: the bytes column, for point 2's cells and point 3's, counts the
   settlement state of `SIM-STATE` at its widths — the arrays standing for
   `goods`, `goodsCarry`, `currency` and the per-good price, and any index a
   layout holds — and leaves out content-derived rates and scratch; the figure
   recomputed independently from the sizes and compared, with an array dropped
-  or counted twice seen red.
+  or counted twice seen red.~~ **Done in `385e713`**, checked by `R-103`.
+- **`R-103`**, within point 4 of the cost measurement plan, beside its
+  criterion: each configuration's checksum — clearing at market places with
+  the villages routed to them, and K = 1, 4 and 16 — at a fixed update count
+  against an independent reference of the same clearing, on a state where
+  rationing binds at a market for a good that routed demand asks for; routed
+  demand left out of the market's ranking, and a split that drops a variant,
+  seen red against it; the register stating how routed demand enters the
+  ranking, and if as fewer entries than the cohort rows it comes from, the cost
+  with every routed row ranked measured beside it.
 
 ## Escalated to the user
 
@@ -5046,3 +5055,102 @@ array back into the count at its width.
 belongs to `SQ-024`, and `SIM-ECON` was not read for whether a price carries
 over from one update to the next. The run-to-run spread was observed in one run
 here and taken from the entry for the rest.
+
+### R-103 — `D-123` is ratified; point 4's served check runs where nothing is rationed, so it owes a reference check where routed demand is
+
+**Date:** 2026-10-16   **Origin:** register audit, `D-123`
+**Verdict:** ratified; decision 5, left to the human, ruled; one action owed
+**docs/:** unchanged
+
+Point 3 of the cost measurement plan, sparse state per settlement type. Process,
+so ratified or rejected, never promoted (`D-011`). The entry was read against
+point 3's frozen text, `R-102`, `SQ-024`'s five types and sizes, `SIM-STATE`
+§Rule and §Cohort, `SIM-ECON` phase 7 and §Rationing; its claims against
+`385e713`, `bench/Program.cs` from `StandIn.Bytes` to the end, and the diff from
+`9c3a0b8`, which leaves `StandIn`'s update code untouched. Point 3's check was run
+in this session: PASS, exit 0, the five checksums sparse = dense = reference and
+equal to those `D-123` records, the bytes equal to `ExpectedBytes` in every
+type, rationing binding and reaching the checksum, the timed pair the layouts
+they are labelled. The costs came out at about half of `D-123`'s (sparse 3.0,
+13.2, 72.5, 280.6 and 832.4 µs; dense 618 to 1,016), the ratios close to its.
+
+- **`R-102`'s two items** are met. `ExpectedBytes` follows `R-102`'s widths: 12
+  bytes per cell, 8 per row, 8 per good, 4 per id of a sparse index. Recomputed
+  here by hand: village 1,332, dense 150,328, point 2's 12 × 100 at 15,296, the
+  figure `R-102` gave. `R-102` is marked done.
+- **Decisions 1 to 4, 6 and 7.** Stand. Ids spread evenly put the scarce pattern
+  and the tie-break inside every type. Running the dense layout on the type's
+  own world is the plain reading of "the dense cost of the same type", and the
+  sort it runs for every absent good is the cost a dense layout pays. One update
+  code for both layouts makes the comparison about data, which is what point 3
+  asks. The shared `World` and `Supply` are a limit the entry names.
+- **Decision 5, left to the human: ruled here**, since it falls in no reserve of
+  `R-001`. It stands. A dense layout holds every good of the catalogue, so its
+  positions are the ids, and its masks exist only so the stand-in can run a
+  smaller world in a dense array. Neither is state under §Rule. The class
+  comment already says the ids are positions; the comment on `Bytes` repeating
+  it is taste, and no action.
+- **`stock` counted at 4 bytes while held in `long`.** Bounded by reasoning, not
+  by run: a cell gains at most 24 − 4 + 4 = 24 units in an update and loses at
+  least a thousandth of its stock to spoilage, so it settles below about 24,000,
+  far inside an `int`.
+- **The criterion is defective** under `R-005`'s case 1, as the entry says, and
+  the missing check was built and run. A criterion of equality between two
+  paths that share their code and their geometry cannot fail where they
+  coincide. The reference is what catches the off-by-one.
+- **The rejected findings** stand, as taste.
+
+**What point 4 inherits.** `R-101` found that a check run where nothing is
+rationed cannot see the ranking. Point 4's "Closed by" asks that, "with supply
+ample, every unit a village demands is served at its market". That is the same
+blind spot. With supply ample, routed demand can be served in any order, or
+outside the ranking altogether, and the check stays green while the cost falls.
+The cost is the thing measured. And the `Fails when:` names a market that
+ignores routed demand, not one that serves it unranked.
+
+The second gap is what the ranking ranks. `SIM-ECON` §Rationing allocates "by
+descending ability to pay", the share of a cohort able to pay read from its
+wealth curve: an order over cohorts. `SQ-024` item 4 leaves where that runs,
+once villages trade at a market, open. The two readings differ by more than the
+noise. Under P-12 as answered, about 1,900 villages share about 100 market
+places. A borgo's market ranking its own 10 rows and 19 villages' 6 rows each
+sorts 124 entries, some 7,600 comparisons per good. Ranking each village as one
+entry gives 29 entries, about 400 comparisons. Ranking its own rows alone gives
+45. Phase 7 is the term `SQ-023` is about, so a table measuring only the cheaper
+reading would decide the question on the reading that is not yet chosen. This
+would have held before any code: a measurement that informs an open question
+measures the readings that question still allows, or says which one it took.
+
+The check is the same as `R-101`'s and `D-123`'s: the checksum against a plain
+reference, on a state where the ranking binds. This is not a ruling on `SQ-024`
+item 4. Point 4 picks a reading as a measurement input and says so.
+
+**Cost.** Point 4 grows by a reference of market clearing with routed demand and
+variants, a device that makes some market good short, and possibly a second timed
+configuration. A second configuration that ranks every routed row may cost a
+large multiple of the first, which is the finding, not a defect.
+**Owed by the implementer:** within point 4, beside its criterion, under
+`R-005`'s case 1:
+1. each configuration's checksum at a fixed update count — clearing at market
+   places with the villages routed to them, and the class with K = 1, 4 and 16
+   variants — against an independent reference of the same clearing, on a state
+   where rationing binds at a market for at least one good that routed demand
+   asks for, so that the order of routed demand reaches the checksum;
+2. two faults seen red against it: routed demand served outside the market's
+   ranking, and a split that drops a variant;
+3. the register stating how routed demand enters the ranking. If it enters as
+   fewer entries than the cohort rows it comes from, the cost with every routed
+   row ranked is measured beside it.
+
+Cite `R-103`.
+**Would overturn it:** a ruling on `SQ-024` item 4 placing rationing before point
+4 runs, which makes item 3 measure that reading only. Or the two readings
+measured to cost within the noise of each other on the P-12 day, which empties
+item 3.
+**Not verified:** the comparison counts are arithmetic on the sizes of `SQ-024`
+and P-12 as answered, not measured; how many villages a market serves per group
+of goods depends on `SQ-024` item 1, which the user deferred. `RULINGS.md` was
+read in its state, owed actions and the rulings from `R-100` on, not whole. The
+run-to-run drift of a factor two between this session and `D-123`'s was observed,
+not explained; point 5 combines figures of different sessions, and whether that
+moves a verdict against P-01 was not checked.

@@ -3984,6 +3984,7 @@ sibling was idle; the bytes column against an independent count; that the timed
 instance computes what the checked instance does after more than 2000 updates.
 
 ### D-123 · Point 3 · Sparse state per settlement type: the world, the dense reading, and a check that cannot fail where it matters
+**Ruling:** R-103 — ratified; decision 5, left to the human, ruled; point 4 owes a reference check where routed demand is rationed.
 
 **Owed and acted on:** `R-102`, items 1 and 2 (quoted from `RULINGS.md`, "Owed by
 the implementer"): "the bytes column, for point 2's cells and point 3's, counts
