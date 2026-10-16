@@ -18,6 +18,7 @@ sealed class Layout
     public const int ClassGood = 20;   // a good id every type holds (a multiple of 20); the class that carries the K variants
     public int N, Period, K = 1;
     public bool Ample, PerVillage;     // Ample: supply exceeds any demand; PerVillage: a routed village enters the ranking as one entry
+    public bool Dense;                 // point 5: every place holds the catalogue's 41 rows x 300 goods, those it does not have masked off (the rest of the update code is the same)
     public int[] Type, Bucket, ClearsAt;
 
     public static int[] GoodIds(int type) { var a = new int[Size[type].goods]; for (int k = 0; k < a.Length; k++) a[k] = k * 300 / a.Length; return a; }
@@ -27,9 +28,9 @@ sealed class Layout
 
     // P-12 as SQ-024 answered it: 2 metropolises, 8 cities, 30 cittadine, 60 borghi, 1,900 villages; a market place every 20th id.
     // atMarkets: each village routes to the market place of the village's ordinal modulo 100 (19 villages each); otherwise every place clears itself.
-    public static Layout P12(bool atMarkets, bool perVillage = false, bool ample = false)
+    public static Layout P12(bool atMarkets, bool perVillage = false, bool ample = false, bool dense = false)
     {
-        var l = new Layout { N = 2000, Period = 7, PerVillage = perVillage, Ample = ample };
+        var l = new Layout { N = 2000, Period = 7, PerVillage = perVillage, Ample = ample, Dense = dense };
         l.Type = new int[2000]; l.Bucket = new int[2000]; l.ClearsAt = new int[2000];
         var mt = new int[100]; Array.Fill(mt, -1);
         foreach (var (t, c) in new[] { (4, 2), (3, 8), (2, 30) })
@@ -46,17 +47,28 @@ sealed class Layout
 
     // One borgo market and 19 villages routed to it, all updated together; K variants of the class good.
     // split: villages update on even days and the market on odd ones, so the two can be timed apart. mtype: the market's type.
-    public static Layout Group(int k, long classSupply = 100, int mtype = 1, bool split = false)
+    public static Layout Group(int k, long classSupply = 100, int mtype = 1, bool split = false, bool dense = false, bool perVillage = false)
     {
-        var l = new Layout { N = 20, Period = split ? 2 : 1, K = k, ClassSupply = classSupply };
+        var l = new Layout { N = 20, Period = split ? 2 : 1, K = k, ClassSupply = classSupply, Dense = dense, PerVillage = perVillage };
         l.Type = new int[20]; l.Bucket = new int[20]; l.ClearsAt = new int[20];
         l.Type[0] = mtype;
         if (split) l.Bucket[0] = 1;
         return l;
     }
+
+    // One place of a type that clears itself: the cell of a settlement type with clearing everywhere.
+    public static Layout One(int type, bool dense)
+    {
+        var l = new Layout { N = 1, Period = 1, Dense = dense };
+        l.Type = new[] { type }; l.Bucket = new int[1]; l.ClearsAt = new int[1];
+        return l;
+    }
+
+    // Bytes of the village-to-market assignment if the layout holds it: one int (the market's id) per routed place.
+    public long AssignmentBytes => 4L * Enumerable.Range(0, N).Count(p => ClearsAt[p] != p);
 }
 
-enum Fault { None, RoutedUnranked, IgnoreRouted, DropVariant }
+enum Fault { None, RoutedUnranked, IgnoreRouted, DropVariant, DropLast }   // DropLast: clearing skips the last good the place holds (point 3's off-by-one)
 
 // The stand-in's market update: places in ascending id; a place in the day's bucket runs local passes, then, if it
 // is a market place, clears its own rows and the rows routed to it, then the closing local passes.
@@ -65,8 +77,10 @@ sealed class Mkt
 {
     sealed class Pl
     {
-        public int Rows, Goods, Cols;
-        public int[] GoodId, ColStart, Routed, Loc;   // Loc: for a routed village, the local good index of each good of its market, or -1
+        public int Rows, Goods, Cols, LastLive;
+        public bool Dense;
+        public bool[] RowOn, GoodOn;                   // a dense place holds 41 x 300 and masks off the rows and goods its type does not have
+        public int[] RowId, GoodId, ColStart, Routed, Loc;   // Loc: for a routed village, the local good index of each good of its market, or -1
         public long[] Stock, Prod, Need, Carry, Spoil, Cash, Price, Resid, Sup;
         public int[] Cur;                              // per row and good, where the next unit of an even split starts (a remainder accumulator)
         public long Checksum;
@@ -79,6 +93,7 @@ sealed class Mkt
     readonly long[] eKey, eWant;
     int day;
     public long Denied, DeniedClass, VillageWanted, VillageServed;
+    int nLive;                                         // live entries of the good being cleared
 
     public Mkt(Layout l, Fault f = Fault.None)
     {
@@ -106,8 +121,14 @@ sealed class Mkt
     Pl Build(int p)
     {
         var q = new Pl();
-        int t = L.Type[p]; var rid = Layout.RowIds(t);
-        q.GoodId = Layout.GoodIds(t); q.Rows = rid.Length; q.Goods = q.GoodId.Length;
+        int t = L.Type[p]; var rid = Layout.RowIds(t); var gid = Layout.GoodIds(t);
+        q.Dense = L.Dense;
+        q.Rows = L.Dense ? 41 : rid.Length; q.Goods = L.Dense ? 300 : gid.Length;
+        q.RowId = new int[q.Rows]; q.GoodId = new int[q.Goods]; q.RowOn = new bool[q.Rows]; q.GoodOn = new bool[q.Goods];
+        for (int r = 0; r < q.Rows; r++) { q.RowId[r] = L.Dense ? r : rid[r]; q.RowOn[r] = !L.Dense; }
+        for (int g = 0; g < q.Goods; g++) { q.GoodId[g] = L.Dense ? g : gid[g]; q.GoodOn[g] = !L.Dense; }
+        if (L.Dense) { foreach (int r in rid) q.RowOn[r] = true; foreach (int g in gid) q.GoodOn[g] = true; }
+        for (int g = 0; g < q.Goods; g++) if (q.GoodOn[g]) q.LastLive = g;
         q.ColStart = new int[q.Goods + 1];
         for (int g = 0; g < q.Goods; g++) q.ColStart[g + 1] = q.ColStart[g] + (q.GoodId[g] == Layout.ClassGood ? L.K : 1);
         q.Cols = q.ColStart[q.Goods];
@@ -117,14 +138,27 @@ sealed class Mkt
         q.Cur = new int[q.Rows * q.Goods];
         for (int r = 0; r < q.Rows; r++)
         {
-            int rowKey = p * 41 + rid[r];
+            if (!q.RowOn[r]) continue;
+            int rowKey = p * 41 + q.RowId[r];
             q.Cash[r] = World.Cash(rowKey);
             for (int g = 0; g < q.Goods; g++)
+            {
+                if (!q.GoodOn[g]) continue;
                 for (int c = q.ColStart[g], v = 0; c < q.ColStart[g + 1]; c++, v++)
                     (q.Prod[r * q.Cols + c], q.Need[r * q.Cols + c], q.Stock[r * q.Cols + c], q.Spoil[r * q.Cols + c]) = World.Cell(rowKey, q.GoodId[g] + 300 * v);
+            }
         }
-        for (int g = 0; g < q.Goods; g++) { q.Price[g] = World.Price0(q.GoodId[g]); q.Sup[g] = L.Supply(q.GoodId[g]); }
+        for (int g = 0; g < q.Goods; g++) { q.Price[g] = World.Price0(q.GoodId[g]); q.Sup[g] = q.GoodOn[g] ? L.Supply(q.GoodId[g]) : 0; }
         return q;
+    }
+
+    // Bytes of place p's settlement state by R-102's rule: goods 4 (Stock), goodsCarry 8 (Carry), currency 8 (Cash), price 8,
+    // and, in a sparse place, the int id of each row and good held. Prod, Need, Spoil, Resid, Sup, Cur, the masks and the
+    // routing arrays are left out, as R-102 leaves out what SIM-STATE's list does not name. The assignment is Layout.AssignmentBytes.
+    public long Bytes(int p)
+    {
+        var q = pl[p];
+        return q.Stock.Length * 4L + q.Carry.Length * 8L + q.Cash.Length * 8L + q.Price.Length * 8L + (q.Dense ? 0 : (q.RowId.Length + q.GoodId.Length) * 4L);
     }
 
     public int NextBucket() => day % L.Period;
@@ -150,9 +184,18 @@ sealed class Mkt
                 q.Carry[i] = t - lost * 1000;
                 q.Stock[i] -= lost;
             }
+            // the checksum covers the cells present, rows then goods in ascending id, whichever the layout
             long h = q.Checksum;
-            for (int i = 0; i < n; i++) h = h * 31 + q.Stock[i];
-            if (clears) for (int g = 0; g < q.Goods; g++) h = h * 31 + q.Price[g];
+            for (int r = 0; r < q.Rows; r++)
+            {
+                if (!q.RowOn[r]) continue;
+                for (int g = 0; g < q.Goods; g++)
+                {
+                    if (!q.GoodOn[g]) continue;
+                    for (int c = q.ColStart[g]; c < q.ColStart[g + 1]; c++) h = h * 31 + q.Stock[r * q.Cols + c];
+                }
+            }
+            if (clears) for (int g = 0; g < q.Goods; g++) if (q.GoodOn[g]) h = h * 31 + q.Price[g];
             q.Checksum = h;
         }
     }
@@ -163,7 +206,8 @@ sealed class Mkt
     {
         for (int gi = 0; gi < m.Goods; gi++)
         {
-            int ne = 0;
+            if (fault == Fault.DropLast && gi == m.LastLive) continue;
+            int ne = 0; nLive = 0;
             for (int r = 0; r < m.Rows; r++) Add(p, m, r, gi, ne++, false);
             int nOwn = ne;
             if (fault != Fault.IgnoreRouted)
@@ -183,13 +227,15 @@ sealed class Mkt
                 int t = ord[a]; ord[a] = ord[mx]; ord[mx] = t;
                 long u = eKey[a]; eKey[a] = eKey[mx]; eKey[mx] = u;
             }
-            long supply = m.Sup[gi], price = m.Price[gi]; bool rationed = false; int k = 0;
+            long supply = m.Sup[gi], price = m.Price[gi]; bool rationed = false; int k = 0, done = 0;
             for (; k < ne && supply > 0; k++)
             {
                 int e = ord[k];
-                long want = eWant[e], take = want < supply ? want : supply;
+                long want = eWant[e];
+                if (want == 0) continue;                      // an entry the layout masks off
+                long take = want < supply ? want : supply;
                 if (take < want) rationed = true;
-                supply -= take;
+                done++; supply -= take;
                 Pl q = pl[ePl[e]];
                 if (eRow[e] >= 0) Give(q, eRow[e], eLg[e], take, price);
                 else
@@ -197,13 +243,14 @@ sealed class Mkt
                     long rem = take;
                     for (int r = 0; r < q.Rows; r++)
                     {
+                        if (!q.RowOn[r]) continue;
                         long w = 1 + ((q.Cash[r] >> 6) & 3), t = w < rem ? w : rem;
                         Give(q, r, eLg[e], t, price); rem -= t;
                     }
                 }
                 if (ePl[e] != p) VillageServed += take;
             }
-            if (k < ne) rationed = true;
+            if (done < nLive) rationed = true;
             if (rationed) { Denied++; if (m.GoodId[gi] == Layout.ClassGood) DeniedClass++; }
             m.Resid[gi] = supply;
         }
@@ -219,21 +266,24 @@ sealed class Mkt
         long s = 0; int b = row * q.Cols;
         for (int c = q.ColStart[lg]; c < q.ColStart[lg + 1]; c++) s += q.Stock[b + c];
         eKey[e] = (q.Cash[row] + s) * 1024 + (1023 - e);
-        eWant[e] = 1 + ((q.Cash[row] >> 6) & 3);
+        eWant[e] = q.RowOn[row] && q.GoodOn[lg] ? 1 + ((q.Cash[row] >> 6) & 3) : 0;   // 0 marks an entry the layout masks off
         ePl[e] = place; eRow[e] = row; eLg[e] = lg;
+        if (eWant[e] > 0) nLive++;
         if (routed) VillageWanted += eWant[e];
     }
 
     void AddVillage(int place, Pl v, int lg, int e)
     {
-        long s = 0, w = 0;
+        long s = 0, w = 0; bool held = v.GoodOn[lg];
         for (int r = 0; r < v.Rows; r++)
         {
-            s += v.Cash[r]; w += 1 + ((v.Cash[r] >> 6) & 3);
+            if (!v.RowOn[r]) continue;
+            s += v.Cash[r]; if (held) w += 1 + ((v.Cash[r] >> 6) & 3);
             for (int c = v.ColStart[lg]; c < v.ColStart[lg + 1]; c++) s += v.Stock[r * v.Cols + c];
         }
         eKey[e] = s * 1024 + (1023 - e); eWant[e] = w;
         ePl[e] = place; eRow[e] = -1; eLg[e] = lg;
+        if (w > 0) nLive++;
         VillageWanted += w;
     }
 
@@ -258,10 +308,13 @@ sealed class Mkt
         {
             Pl q = pl[p];
             h = h * 31 + q.Checksum;
-            for (int r = 0; r < q.Rows; r++) h = h * 31 + q.Cash[r];
-            for (int i = 0; i < q.Stock.Length; i++) h = h * 31 + q.Stock[i];
-            if (L.ClearsAt[p] == p) for (int g = 0; g < q.Goods; g++) h = h * 31 + q.Price[g];
-            for (int i = 0; i < q.Cur.Length; i++) h = h * 31 + q.Cur[i];
+            for (int r = 0; r < q.Rows; r++) if (q.RowOn[r]) h = h * 31 + q.Cash[r];
+            for (int r = 0; r < q.Rows; r++)
+                if (q.RowOn[r])
+                    for (int g = 0; g < q.Goods; g++)
+                        if (q.GoodOn[g]) for (int c = q.ColStart[g]; c < q.ColStart[g + 1]; c++) h = h * 31 + q.Stock[r * q.Cols + c];
+            if (L.ClearsAt[p] == p) for (int g = 0; g < q.Goods; g++) if (q.GoodOn[g]) h = h * 31 + q.Price[g];
+            for (int r = 0; r < q.Rows; r++) if (q.RowOn[r]) for (int g = 0; g < q.Goods; g++) if (q.GoodOn[g]) h = h * 31 + q.Cur[r * q.Goods + g];
         }
         return h;
     }
@@ -406,17 +459,17 @@ static class PointFour
     static double Median(double[] r) { var c = (double[])r.Clone(); Array.Sort(c); return c[c.Length / 2]; }
 
     // Times the worlds interleaved in chunks; per world, per run, the p99 and the mean of one update, in microseconds.
-    static (double p99, double mean)[] Time(Mkt[] w, int updates, string[] names)
+    internal static (double p99, double mean)[] Time(Mkt[] w, int updates, string[] names, int chunk = Chunk, int warmMs = WarmMs)
     {
         var sw = Stopwatch.StartNew();
-        while (sw.ElapsedMilliseconds < WarmMs) foreach (var s in w) s.Day();
+        while (sw.ElapsedMilliseconds < warmMs) foreach (var s in w) s.Day();
         var t = w.Select(_ => new long[updates]).ToArray();
         var p99 = w.Select(_ => new double[Runs]).ToArray(); var mean = w.Select(_ => new double[Runs]).ToArray();
         for (int k = 0; k < Runs; k++)
         {
-            for (int i = 0; i < updates; i += Chunk)
+            for (int i = 0; i < updates; i += chunk)
                 for (int c = 0; c < w.Length; c++)
-                    for (int j = i; j < i + Chunk; j++) { long a = Stopwatch.GetTimestamp(); w[c].Day(); t[c][j] = Stopwatch.GetTimestamp() - a; }
+                    for (int j = i; j < i + chunk; j++) { long a = Stopwatch.GetTimestamp(); w[c].Day(); t[c][j] = Stopwatch.GetTimestamp() - a; }
             for (int c = 0; c < w.Length; c++)
             {
                 mean[c][k] = t[c].Sum() * 1e6 / Stopwatch.Frequency / updates;
@@ -432,7 +485,7 @@ static class PointFour
         return res;
     }
 
-    static long Fresh(Layout l, int days, Fault f, out Mkt m) { m = new Mkt(l, f); for (int i = 0; i < days; i++) m.Day(); return m.Checksum(); }
+    internal static long Fresh(Layout l, int days, Fault f, out Mkt m) { m = new Mkt(l, f); for (int i = 0; i < days; i++) m.Day(); return m.Checksum(); }
 
     public static int Run()
     {
@@ -497,19 +550,18 @@ static class PointFour
     }
 
     // Worlds with Period 2: even days update the villages, odd days the market; p99 of each, interleaved, median of runs.
-    static (double village, double market)[] TimeSplit(Mkt[] w)
+    internal static (double village, double market)[] TimeSplit(Mkt[] w, int half = GroupUpdates / 2, int chunk = Chunk, int warmMs = WarmMs)
     {
         var sw = Stopwatch.StartNew();
-        while (sw.ElapsedMilliseconds < WarmMs) foreach (var s in w) s.Day();
-        int half = GroupUpdates / 2;
+        while (sw.ElapsedMilliseconds < warmMs) foreach (var s in w) s.Day();
         var tv = w.Select(_ => new long[half]).ToArray(); var tm = w.Select(_ => new long[half]).ToArray();
         var pv = w.Select(_ => new double[Runs]).ToArray(); var pm = w.Select(_ => new double[Runs]).ToArray();
         foreach (var s in w) if (s.NextBucket() != 0) s.Day();
         for (int k = 0; k < Runs; k++)
         {
-            for (int i = 0; i < half; i += Chunk / 2)
+            for (int i = 0; i < half; i += chunk / 2)
                 for (int c = 0; c < w.Length; c++)
-                    for (int j = i; j < i + Chunk / 2; j++)
+                    for (int j = i; j < i + chunk / 2; j++)
                     {
                         long a = Stopwatch.GetTimestamp(); w[c].Day(); long b = Stopwatch.GetTimestamp(); w[c].Day(); long d = Stopwatch.GetTimestamp();
                         tv[c][j] = b - a; tm[c][j] = d - b;
@@ -519,7 +571,7 @@ static class PointFour
         return Enumerable.Range(0, w.Length).Select(c => (Median(pv[c]), Median(pm[c]))).ToArray();
     }
 
-    static bool Check(string name, Layout l, int days, Fault[] faults, bool routed, bool cls = false)
+    internal static bool Check(string name, Layout l, int days, Fault[] faults, bool routed, bool cls = false)
     {
         long sum = Fresh(l, days, Fault.None, out var m);
         long refSum = MktRef.Run(l, days, out long rr, out _, out _);

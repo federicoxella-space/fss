@@ -152,3 +152,29 @@ introduced the faults; no tester-written test. This outcome does not claim
 - **Fails when:** shallow — the point gathers numbers already measured; the
   recomputation catches a table edited by hand.
 - **Core:** no — the diff touches only `bench/`, `SQ-023` and the register.
+
+*Outcome:* 2026-10-16. Closed. The check ran PASS (exit 0, one run of 260
+minutes): every reference check equal, bytes counted equal bytes recomputed,
+the table recomputed from its printed cells equal, a cost edited by 1 µs and a
+day edited by 1 ns caught, and the faults went red before any timing
+(`RoutedUnranked`, the dense walk dropping its last good, `DropLast`, a cell
+edited after the day, a day not derived from the cells). ms per day
+(recomputed) and MB: sparse everywhere 2.671, 3.945 MB, within P-01 and NFR-07;
+dense everywhere 204.05, 300.656 MB, over both; sparse at market places 5.156
+with every routed row ranked and 2.463 with one entry per village, 3.953 MB,
+within both; dense at market places 2774.61 and 73.37, 300.664 MB, over both.
+The check is shallow, as the point declares, and was not rewritten. Faults it
+would miss, beside it: the timed worlds are built from `Cfg` fields apart from
+the checked worlds, so a layout flag changed in the timed build leaves every
+check green and mislabels a cell (not fixed, a fix needs the 4h20 rerun); cells
+swapped among types are invisible to the recomputation; a hand edit of the
+`SQ-023` transcription after the run is outside the runner's reach. Whether
+this makes the criterion defective (`R-005`, case 1) is for the decider.
+`D-125`. Agents (`R-067`): tester, coder, code-reviewer, documenter and
+committer dispatched; the code-reviewer's findings resolved in `D-125`, one
+rejected, three accepted as limits or open. Not run: the revisioners, `Core: no`
+held at step 5; `mutate.ps1`, `bench/` outside its reach, so the orchestrator
+introduced the faults; no tester-written test. The plan's exit condition, the
+table recorded in the register and in `SQ-023` and read against P-01, NFR-05
+and NFR-07, is met with this point. This outcome does not claim `R-046`'s
+check.

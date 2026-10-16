@@ -225,7 +225,17 @@ static class Program
             p.PriorityClass = ProcessPriorityClass.High;
         }
         catch (Exception e) { Console.WriteLine("pinning failed: " + e.Message); return 2; }
-        return args.Length > 0 && args[0] == "point1" ? PointOne() : args.Length > 0 && args[0] == "point3" ? PointThree() : args.Length > 0 && args[0] == "point4" ? PointFour.Run() : PointTwo();
+        string a = args.Length > 0 ? args[0] : "point2";   // no argument keeps running point 2, as before
+        switch (a)
+        {
+            case "point1": return PointOne();
+            case "point2": return PointTwo();
+            case "point3": return PointThree();
+            case "point4": return PointFour.Run();
+            case "point5": return PointFive.Run(false);
+            case "point5-smoke": return PointFive.Run(true);   // the pipeline on small counts: not the plan's method, never exit 0
+            default: Console.WriteLine($"unknown argument '{a}'; expected point1, point2, point3, point4 or point5"); return 64;
+        }
     }
 
     // Point 1's check (9 and 27 rows, 7 goods, its bounds): `dotnet run -c Release --project bench -- point1`.
@@ -297,7 +307,7 @@ static class Program
 
     // R-102 item 2: the state bytes recomputed from the sizes alone, sharing nothing with the layouts' array lengths.
     // Per cell goods 4 + carry 8; per row currency 8; per good price 8; a sparse layout adds one int id per row and per good.
-    static long ExpectedBytes(long rows, long goods, bool sparse) => rows * goods * 12 + rows * 8 + goods * 8 + (sparse ? (rows + goods) * 4 : 0);
+    internal static long ExpectedBytes(long rows, long goods, bool sparse) => rows * goods * 12 + rows * 8 + goods * 8 + (sparse ? (rows + goods) * 4 : 0);
 
     // Point 3's check: `dotnet run -c Release --project bench -- point3`.
     // The five SQ-024 types as (name, goods, rows); the dense layout is always 300 goods and 41 rows.

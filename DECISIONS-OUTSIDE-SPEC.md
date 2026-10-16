@@ -4249,3 +4249,108 @@ the variant split (`SQ-023` open), or on the bench.
 **Not verified:** the costs on another machine or core; dense layout at market places; a real nearest
 assignment or any geography; the formulas shared by engine and reference against a second author; ties
 at the supply boundary.
+
+### D-125 · Point 5 · The table, read against the budget: four layouts on one update code, and a recomputation that checks the table against itself
+**Ruling:** R-104 (5d6ed85) — items 1 to 7 owed and acted on (read in `RULINGS.md`, "### R-104").
+
+**Built** (`bench/Table.cs` new: `PointFive`, the cells, the table, the recomputation `Verify`, the
+synthetic-table control, the edit controls; `bench/Market.cs`: dense layout through `RowOn`/`GoodOn`
+masks, `Layout.One`, `Layout.AssignmentBytes`, `Fault.DropLast`, `Mkt.Bytes`, every control before any
+timing; `bench/Program.cs`: explicit dispatch `point1` to `point5` and `point5-smoke`, no argument
+still runs point 2, an unknown argument exits 64, `ExpectedBytes` internal). Check:
+`dotnet run -c Release --project bench -- point5`. `core/` and `docs/` untouched.
+
+**Decided (`docs/` silent on all; each a measurement input).**
+1. **One update code for every layout**, masks `RowOn`/`GoodOn` in every loop; sparse village p99
+   about 1.15 us against 0.94 in point 4, so point 4's sparse numbers are not reproduced exactly.
+   *Would overturn it:* a layout-specific fast path.
+2. **Assignment counted as 4 bytes per routed village**; the market's `Routed` list and `Loc` are
+   derived and not counted. *Would overturn it:* another representation.
+3. **`Cur` (the K-split cursor) not counted in the bytes**, `R-102`'s list naming four arrays; it is
+   state, and 0 at K=1. *Would overturn it:* a ruling that it counts.
+4. **`DropLast` skips the last live good the place holds**; point 3's literal `Goods - 1` is red only
+   where good 299 is live. *Would overturn it:* a ruling for the literal form.
+5. **Dense at market places is checked on the market-with-19-villages group worlds at 40 days**, not
+   on P-12 (too slow); dense everywhere on P-12 and one place per type; K=4 and K=16 not repeated,
+   the table being K=1. *Would overturn it:* a ruling that the dense market check run on P-12.
+6. **The village cell at market places = the borgo group's p99 of 19 village updates divided by 19**
+   (a p99 of a sum, not 19 p99s). *Would overturn it:* a per-village timing at a market.
+7. **The day printed to the ns**, so a 1 us edit at the metropolis moves it.
+8. **The recomputation re-reads the printed Markdown in decimal**; costs printed in integers.
+9. **1 MB = 10^6 bytes.** *Would overturn it:* NFR-07 read in MiB.
+10. **`point5-smoke`** added: exit 3 on all-pass so it never reads as a pass, exit 1 on failure.
+11. **Fail-fast:** every reference, byte and table control runs before any timing; FAIL exits 1 before
+    timing.
+
+**Results** (`point5`, PASS exit 0, 260 min, one run in one session, `R-104` item 1; Windows
+10.0.26300 X64, 16 cores pinned to one, .NET 8.0.32, clock 100 ns). Every reference check equal
+(sparse and dense everywhere on P-12 and one place per type; sparse and dense market groups per type
+under both readings; the P-12 market places under both readings), rationing binding, `RoutedUnranked`,
+`IgnoreRouted` and `DropLast` red in each control. Bytes counted equal bytes recomputed: sparse
+everywhere 3,945,144; dense everywhere 300,656,000; sparse market places 3,952,744; dense market
+places 300,663,600. The table recomputed from its printed cells: equal; a cost edited by 1 us and a
+day edited by 1 ns caught.
+
+| Layout | ms per day: recomputed / timed p99 | MB | P-01 10 ms | NFR-07 50 MB |
+|---|---|---|---|---|
+| sparse, everywhere | 2.671 / 4.26 | 3.945 | within (and 5 ms) | within |
+| dense, everywhere | 204.05 / not timed (20 ms or more) | 300.656 | over | over |
+| sparse, market places, every routed row ranked | 5.156 / 6.62 | 3.953 | within (over 5 ms) | within |
+| sparse, market places, one entry per village | 2.463 / 3.70 | 3.953 | within | within |
+| dense, market places, every row ranked | 2774.61 | 300.664 | over | over |
+| dense, market places, one entry per village | 73.37 | 300.664 | over | over |
+
+Per-type cells are in `SQ-023`, "The measurement owed, 2026-10-16" (e.g. sparse everywhere village
+5.4 us, metropolis 1024.7 us). The dense cells are read on, not timed directly (`R-104` item 4). The
+dense market-places every-row-ranked cell (about 192,000 us per market update at every type) is
+`R-104`'s predicted O(n^2) over masked slots: the stand-in ranks all 41 x 300 slots, masked included,
+820 entries per good with its selection sort; a dense layout skipping goods no entry holds would cost
+less, not measured.
+
+**Faults, introduced by hand by the orchestrator** (`mutate.ps1` cannot reach `bench/`), each run to
+FAIL exit 1 in about 70 to 87 s, before any timing, undone, tree-state hash equal before and after
+(2a12e101...): `RoutedUnranked` (`Market.cs`, `sortN = nOwn`); the dense walk dropping its last good
+(`gi < m.Goods - 1`), red where the last good is live (metropolis, P-12 mix); `DropLast` made
+unconditional, red everywhere; a cell edited after the day is computed (`Table.cs` line 50,
+`Us(n + 1000)`), the synthetic-table recomputation DIFFERENT; the day not derived from the cells
+(`DayMs(c.TotalNs + 1000)`), DIFFERENT. Points 1 to 4 rerun PASS; point 1 failed once on the coder's
+run at ratio 6.00 against its ceiling 5.8, passed on two reruns (5.45, 5.19) and in the
+orchestrator's run, `StandIn` untouched: noise near the bound, as `R-103` noted the drift. `git diff
+core/` empty.
+
+**The check is shallow, as the plan itself declares; it ran and passed as written, and was not
+rewritten.** Faults it would miss, recorded beside it (code-reviewer):
+- (A) The timed worlds are built from `Cfg` fields separately from the checked worlds (`Table.cs`
+  about 127-137 against 173, 181, 192, 198): replacing `c.PerVillage` or `c.Dense` with `false` in
+  the timed build leaves every check green while the table mislabels a cell. Verifiable weakness,
+  accepted, **not fixed**: a fix needs a rerun of the 4h20 table, and `R-104` item 1 wants the table
+  from the code committed.
+- (B) Cells swapped among types are invisible to `Verify`: it is a consistency check, not provenance.
+  Accepted as a limit.
+- (C) A hand edit of the `SQ-023` transcription after the run is outside the runner's reach;
+  inherent in the frozen check, a question.
+Whether this makes the criterion defective (`R-005`, case 1) is for the decider.
+
+**Findings and their resolution.**
+- Code-reviewer: the dense every-row-ranked cell is not a bug but `R-104`'s predicted O(n^2) over
+  masked slots, an upper bound under the selection sort: accepted, a sentence added to `SQ-023`. The
+  1.07 K figure copied from `D-124` without saying so: accepted, `SQ-023` says it is from point 4's
+  run. The unknown-argument message omits `point5-smoke`: taste, **rejected**, the code not changed
+  after the run. Items 1 to 7 of `R-104` held in code (the reviewer checked each). (A) to (C) above.
+- Coder's doubts, open: point 4's sparse numbers not reproduced exactly (decision 1); whether `Cur`
+  should count; whether p99 over 19 is the right village cost; whether dense market places should sort
+  dead rows (`R-104` describes it so; followed).
+
+**Agents (`R-067`).** Dispatched: tester (twice, step 2 baseline; no step-4 dispatch, the
+orchestrator ran the declared check, the faults and points 1 to 4 because each full run takes 4h20
+and pins the core), coder (two rounds), code-reviewer, documenter, committer. Not run: the
+revisioners, `Core: no` held at step 5 (`core/` and `docs/` empty in the diff); `mutate.ps1`; no
+tester-written test. The decider ran before this point (`R-104`). This outcome does not claim
+`R-046`'s check.
+
+**What `docs/` says:** P-01's 10 ms, NFR-05, NFR-07's 50 MB, P-12's mix, `SQ-023`, `SQ-024`; nothing
+on the layouts' costs, the unit of a megabyte, or the bench.
+**Would overturn it:** see decisions 1 to 11.
+**Not verified:** the dense cells timed directly (all 20 ms or more, `R-104` item 4); routing and
+reassignment cost; point 1's bound, near the noise; the costs on another machine or core; faults (A)
+to (C).

@@ -708,6 +708,63 @@ variant's class has a market. The eight goods of `R-063` all have a market of
 their own. The order of magnitude of clearings per place is answered through
 `SQ-024`'s market places.
 
+**The measurement owed, 2026-10-16** — point 5 of the cost measurement plan on
+`misura-costi`, under `R-104`; the register entry of that point records how it
+was taken. Copied from one run of `dotnet run -c Release --project bench --
+point5`, which measured every cell in the same run by the plan's method and
+recomputed the days from the cells itself. Machine: Microsoft Windows
+10.0.26300, X64, 16 logical cores, pinned to one; runtime .NET 8.0.32; clock
+Stopwatch 10,000,000 Hz, resolution 100 ns. The stand-in is not the simulator
+(`SQ-004`): five passes, calibrated to P-63.
+
+Per type, p99 µs per update (median of 3 runs). At market places, borgo to
+metropolis is a market place of that type with its 19 villages routed; village is
+one village that does no clearing. Day = sum over types of count × cost ÷ 7,
+count = 1,900 / 60 / 30 / 8 / 2.
+
+| layout | village (us) | borgo (us) | cittadina (us) | city (us) | metropolis (us) | day, recomputed (ms) |
+|---|---|---|---|---|---|---|
+| sparse, clearing everywhere | 5.400 | 19.900 | 80.400 | 347.700 | 1024.700 | 2.671000 |
+| dense, clearing everywhere | 709.600 | 741.700 | 859.100 | 964.400 | 1053.200 | 204.048086 |
+| sparse, market places, every routed row ranked | 1.174 | 262.300 | 343.300 | 642.000 | 1343.100 | 5.155686 |
+| sparse, market places, one entry per village | 1.179 | 81.400 | 146.900 | 431.200 | 1129.800 | 2.462900 |
+| dense, market places, every routed row ranked | 134.526 | 191595.400 | 191597.900 | 192353.800 | 192105.900 | 2774.614657 |
+| dense, market places, one entry per village | 115.605 | 2897.600 | 3005.600 | 2977.700 | 3032.400 | 73.365700 |
+
+"Day read on" is the higher of the recomputed day and the day timed directly in
+the same run (p99 of days); 5 ms is P-01 with P-17's allowance for the phases the
+stand-in does not run. World state is the P-12 mix, bytes counted by `R-102`'s
+rule (1 MB = 10^6 bytes); the market-places rows count 4 bytes of assignment per
+routed village.
+
+| layout | day, recomputed (ms) | day, timed directly, p99 (ms) | day read on (ms) | vs P-01 10 ms | vs 5 ms | world state (MB) | vs NFR-07 50 MB |
+|---|---|---|---|---|---|---|---|
+| sparse, clearing everywhere | 2.671000 | 4.26 | 4.26 | within | within | 3.945 | within |
+| dense, clearing everywhere | 204.048086 | not timed | 204.05 | over | over | 300.656 | over |
+| sparse, market places, every routed row ranked | 5.155686 | 6.62 | 6.62 | within | over | 3.953 | within |
+| sparse, market places, one entry per village | 2.462900 | 3.70 | 3.70 | within | within | 3.953 | within |
+| dense, market places, every routed row ranked | 2774.614657 | not timed | 2774.61 | over | over | 300.664 | over |
+| dense, market places, one entry per village | 73.365700 | not timed | 73.37 | over | over | 300.664 | over |
+
+The measurement inputs it rests on (`R-104` item 7):
+
+- sizes per type (goods, rows): village 15, 6; borgo 30, 10; cittadina 60, 18;
+  city 150, 30; metropolis 300, 41; dense = the catalogue's 300 goods and 41
+  rows, absent ones masked;
+- 19 villages per market place by a fixed assignment (the village's ordinal
+  modulo 100), the same for every market type; 100 market places of 2,000;
+- both readings of routed demand, `SQ-024` item 4 being open: every routed row
+  one entry of the ranking, or one entry per routed village;
+- goods variants: one class good can carry K variants; every cell of this table
+  is K = 1. At one borgo market with its 19 villages, point 4's run (`D-124`), not
+  this one, measured K = 16 at 1.07 times K = 1;
+- the stand-in is five passes, calibrated to P-63 (5 of 12 phases).
+
+The dense rows at market places rank every slot of the 41 × 300 dense arrays,
+masked ones included, with the stand-in's selection sort: 820 entries per good
+at a market whatever its type, hence a cost about equal across types. A dense
+layout that skipped goods no entry holds would cost less; it was not measured.
+
 ### SQ-024 — markets held by market places: five settlement types, and villages that trade at the nearest market
 
 **Raised:** 2026-10-05, by the user, following `SQ-023`.
