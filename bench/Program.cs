@@ -225,7 +225,7 @@ static class Program
             p.PriorityClass = ProcessPriorityClass.High;
         }
         catch (Exception e) { Console.WriteLine("pinning failed: " + e.Message); return 2; }
-        return args.Length > 0 && args[0] == "point1" ? PointOne() : args.Length > 0 && args[0] == "point3" ? PointThree() : PointTwo();
+        return args.Length > 0 && args[0] == "point1" ? PointOne() : args.Length > 0 && args[0] == "point3" ? PointThree() : args.Length > 0 && args[0] == "point4" ? PointFour.Run() : PointTwo();
     }
 
     // Point 1's check (9 and 27 rows, 7 goods, its bounds): `dotnet run -c Release --project bench -- point1`.

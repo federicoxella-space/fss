@@ -4130,3 +4130,121 @@ MB; nothing on how a sparse layout is held or on the stand-in.
 **Not verified:** the costs on another machine or core; that `stock` stays within
 int range in the timed run; a width error shared by `ExpectedBytes` and the
 layouts; `World` and `Supply` against an independent copy.
+
+### D-124 · Point 4 · Market places and goods variants: routed demand in the ranking, the split, and a served check that cannot see the ranking
+**Ruling:** R-103 (5e1d9b2) — point 4 owes a reference check where routed demand is rationed.
+
+**Owed and acted on:** `R-103`, items 1 to 3 (read in `RULINGS.md`, "### R-103"): item 1, every
+configuration's checksum, engine against an independent reference, with rationing binding where
+routed rows ask; item 2, the faults "routed demand served outside the ranking" and "split drops a
+variant" seen red; item 3, how routed demand enters the ranking, decided and recorded below.
+
+**Built** (`bench/Market.cs` new; `bench/Program.cs` one line, `point4` in `Main`'s dispatch).
+`Layout`, `Fault` enum, `Mkt` (engine), `MktRef` (independent reference), `PointFour.Run`.
+Check: `dotnet run -c Release --project bench -- point4`.
+
+**Decided (`docs/` silent on all unless noted; each a measurement input).**
+1. **How routed demand enters the ranking (R-103 item 3).** Both readings built and measured.
+   Headline: every routed row ranked as its own entry beside the market's own rows (closest to
+   `SIM-ECON` §Rationing ranking cohorts; at most 155 entries). Second: one entry per village, key =
+   village cash + stock summed, demand = sum of row wants, take dealt to rows in ascending row order.
+   *Would overturn it:* a ruling on `SQ-024` item 4.
+2. **Ranking key** cash + stock (summed over variants for a class) x 1024 minus entry position;
+   position = own rows first, then routed villages ascending id, then row; at most 1023 entries, the
+   constructor throws beyond. *Would overturn it:* a `SIM-ECON` tie rule.
+3. **Variant split.** Class good id 20 (held by every type) has K variant columns; the class clears
+   once; its take is dealt one unit at a time from a per-row per-good cursor (a remainder
+   accumulator, in the checksum); ranking uses stock summed over variants. *Would overturn it:* a
+   rule on `SQ-023`'s open split.
+4. **K applies to the one class good only**, measured on one borgo market with its 19 villages, not
+   on the whole mix; the 1.07 ratio is the marginal cost of one class. *Would overturn it:* a plan
+   meaning every class at K.
+5. **Market places** = ids multiple of 20, types spread evenly; villages routed round-robin by
+   ordinal mod 100, 19 each, a fixed assignment standing in for "nearest" (no geography; a real
+   nearest assignment would be uneven and move the tail). Village goods nested in every market's
+   goods. *Would overturn it:* a generator or assignment rule (`SQ-024` items 2, 5).
+6. **Routed demand served on the market's tick** from the village's state then, goods and cash
+   returned at once; no transport delay, no out-of-reach case (`SQ-024` item 3, open).
+7. **One simulated day** = the places of one bucket (id % 7, FR-T-06) in ascending id; p99 is over
+   days (heaviest bucket), the mean printed beside it; point 5's division by 7 matches the mean.
+8. **"Clearing everywhere"** = all 2,000 places each its own market, no routed villages, same engine,
+   sparse layout. No dense layout measured at market places.
+9. **Check sizes:** 140 days / 2,000 group updates / 400 days for the per-type cells against the
+   reference (slow); timing 10,000 days or 20,000 group updates, 3,000 ms warm-up, 3 runs, median
+   p99, cells interleaved.
+10. **Ample** = 1,000,000 per clearing; the served check compares against the reference's own demand
+    count.
+11. **Supply per good** unchanged from earlier points (every third good scarce); in K groups the class
+    supply is 100 against about 300 demand, so the class is short.
+
+**Results** (final clean run, PASS exit 0; Windows 10.0.26300 X64, 16 cores pinned to one, .NET
+8.0.32, clock 100 ns).
+- Reference checks (item 1), engine = reference in each, rationing binding where routed rows ask:
+  everywhere 2,000 places (own rows only, 226,000 rationed); market places every routed row ranked
+  4228107983477594576; one entry per village 2067131547714935750 (routed rationed 10,000); K=1
+  862733947654604921, K=4 -7056809336188606516, K=16 -4720438308575769582, the class good short with
+  routed rows asking in 2,000 of 2,000 updates; per-type timed cells borgo 2098642222544587508,
+  cittadina -2439787191266033681, city 3928472434974790030, metropolis -4282660321334963018.
+- Ample supply: village demand 8,128,546 units, served 8,128,546, reference 8,128,546; ignoring routed
+  rows serves 0 (caught).
+- p99 ms per simulated day (sparse layout): everywhere 3.18; at market places 5.53 with every routed
+  row ranked, 3.04 with one entry per village; P-01 10 ms. Mean 2.22, 4.51, 2.05. Earlier runs:
+  3.25/6.18/3.43 and 3.28/5.75/3.10, drift about 10%.
+- Variants, one borgo market with its 19 villages, p99 us/update: K=1 267.1, K=4 271.2, K=16 285.4
+  (K=16/K=1 1.07).
+- Per type, market with 19 routed villages (every row ranked) / village without clearing, p99 us:
+  borgo 253.7/0.93, cittadina 323.8/0.94, city 609.5/0.93, metropolis 1278.3/0.96.
+- Points 1, 2, 3 rerun PASS. Core build 0 warnings; core suites Release 52/52, Debug 53/53 (no core
+  change). Point 1 near its bounds (2.00 us vs floor 1.6; ratio 5.65 vs ceiling 5.8), the drift
+  `R-103` noted.
+
+**Faults, introduced by the orchestrator** in the production path of `bench/Market.cs` (`mutate.ps1`
+cannot reach `bench/`), each run to FAIL exit 1 and undone, tree-state hash equal before and after
+(71be9136...). The code also keeps each as a permanent negative control checked red inside the run.
+- The Fails-when, `IgnoreRouted` (line 169, `if (false)`): every routed configuration's checksum
+  differs; the ample check reports 0 served of 8,128,546.
+- `R-103`, "routed demand served outside the ranking", `RoutedUnranked` (line 178, `sortN = nOwn`):
+  red in every routed configuration, the four per-type cells included.
+- `R-103`, "split drops a variant", `DropVariant` (line 248, fall-through `kk > 1 ? kk - 1 : kk`): red
+  at K=4 and K=16, n/a at K=1 (no variant to drop).
+
+**The criterion is defective (`R-005`, case 1), and was not rewritten.** Correct code passes it, but
+the "Closed by" served-when-ample check runs where nothing is rationed, so it cannot see the ranking:
+a market that serves routed rows outside the ranking, or a split that drops a variant, serves every
+unit and passes it. **The missing check, beside it:** the reference checks of `R-103`, built and run
+here; they caught `RoutedUnranked` and `DropVariant`, which the served check alone would not.
+
+**Findings and their resolution.**
+- Tester (step 4): `DropVariant` hit every good (kv=0 for single-variant goods), so its red proved
+  nothing: accepted, fixed (restricted to kk > 1, n/a at K=1). The class good never short in K groups:
+  accepted, fixed (`ClassSupply`). The "everywhere" line mislabelled "binds": accepted, relabelled.
+  Dense x market places not measured though point 5's table asks for four layouts: **not fixed**, the
+  "Closed by" does not ask it; point 5 will meet it; open for the decider. Per-type market cells added
+  at the orchestrator's request so point 5 can recompute a day from per-type cells.
+- Code-reviewer (step 6): (a) per-type timed cells never checked against the reference: accepted,
+  fixed (a reference check per timed type, `RoutedUnranked` red in each). (b) Routing geometry
+  (ordinal mod 100) hits engine and reference alike: accepted as a declared limit, no change. (c)
+  `binds` requires only some rationing with routed rows present, not that a routed row is
+  short-changed; the ranking deciding is shown only by the fault turning red: taste/question, **not
+  applied**, open for the human or decider. (d) Tie-break order not pinned, nothing counts ties at the
+  supply boundary: question outside `R-103`'s set, **not applied**. (e) The reference retypes the
+  same formulas (ability, want, price, spoilage, supply) from one author, so it shares a misreading
+  but not a typo; independent of the engine's update code and indexing: accepted as a limit. (f)
+  `MktRef.RationedClass` a public static mutable side channel: taste, **rejected** for a
+  single-threaded bench.
+- Coder's doubts, open: p99 or mean for a day; whether point 5 needs dense at market places; whether K
+  applies to every class; whether a control of 16 separate goods against 16 variants is wanted;
+  whether 19 villages per market regardless of type is realistic.
+
+**Agents (`R-067`).** Dispatched: tester (twice), coder (three rounds), code-reviewer, documenter,
+committer. Not run: the revisioners, `Core: no` held at step 5 (`git diff` of `core/` empty);
+`mutate.ps1`, `bench/` outside its reach, so the orchestrator introduced the faults; no
+tester-written test. This outcome does not claim `R-046`'s check.
+
+**What `docs/` says:** `SQ-024` the five types, P-12's 100 market places of 2,000 and the open items
+on routing; `SIM-ECON` §Rationing the ranking of cohorts; nothing on how routed demand enters it, on
+the variant split (`SQ-023` open), or on the bench.
+**Would overturn it:** see decisions 1 to 6.
+**Not verified:** the costs on another machine or core; dense layout at market places; a real nearest
+assignment or any geography; the formulas shared by engine and reference against a second author; ties
+at the supply boundary.

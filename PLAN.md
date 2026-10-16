@@ -121,6 +121,26 @@ faults; no tester-written test. This outcome does not claim `R-046`'s check.
   routed to it, which is cheaper and leaves village demand unserved.
 - **Core:** no — the diff touches only `bench/`.
 
+*Outcome:* 2026-10-16. Closed, *criterion defective* (`R-005`, case 1): the
+check ran PASS, every configuration matching the independent reference with
+rationing binding where routed rows ask (everywhere, market places with every
+routed row ranked and with one entry per village, K = 1, 4 and 16, the four
+timed per-type cells), and with supply ample every unit a village demands
+served, 8,128,546 of 8,128,546 (`R-103`, items 1 to 3); p99 per simulated day
+3.18 ms clearing everywhere, 5.53 ms at market places with every routed row
+ranked and 3.04 ms with one entry per village, against P-01's 10 ms, and
+K = 16 at 1.07 times K = 1; the Fails-when fault (routed rows ignored) went red,
+as did "routed demand served outside the ranking" and "split drops a variant".
+The "Closed by" served check runs where nothing is rationed, so it cannot see
+the ranking, and the two `R-103` faults leave it green. The missing check,
+beside it: the reference checks, built and run here. The criterion is not
+rewritten. `D-124`. Agents (`R-067`): tester, coder, code-reviewer, documenter
+and committer dispatched; the code-reviewer's findings resolved in `D-124`, one
+rejected, three left open for the human. Not run: the revisioners, `Core: no`
+held at step 5; `mutate.ps1`, `bench/` outside its reach, so the orchestrator
+introduced the faults; no tester-written test. This outcome does not claim
+`R-046`'s check.
+
 ## 5. The table, read against the budget
 
 - **Does:** the results gathered in one table — µs per update per type, ms per
