@@ -231,7 +231,7 @@ capped by origin stock, with `k < 1`.
 
 ### DEC-019 — The trade graph has capped degree and is rewired, not grown
 
-Village degree ≤ 3, town and city degree ≤ 6. The generator builds the initial graph. Merchant activity promotes candidate routes into links and lets unprofitable links dissolve, with a creation threshold strictly above the dissolution threshold. A new link at a saturated node evicts the weakest one.
+Village degree ≤ 3, every other type degree ≤ 6 (P-06). The generator builds the initial graph. Merchant activity promotes candidate routes into links and lets unprofitable links dissolve, with a creation threshold strictly above the dissolution threshold. A new link at a saturated node evicts the weakest one.
 
 **Rationale.** Capped degree keeps edge count linear in settlements, so trade cost scales with the world instead of squaring with it, and the hierarchy produces basins as a derived structure. Rewiring under that cap lets commerce follow where value actually moves without letting the cost grow over a campaign. Hysteresis is what stops a link from erasing, through its own flow, the differential that justified it and oscillating.
 
@@ -266,6 +266,14 @@ Each good declares one of the two. The variants of a class share one clearing, a
 **Rationale.** Rationing is the term of the update that grows with the square of the rows (SIM-ECON), and it runs once per clearing. Hundreds of goods each on a market of its own would make hundreds of rankings in every settlement. Important goods, grain, iron, wool, still form their own price; minor goods are alternatives within a class that differ in quality, and pricing them by their value in the class keeps the clearings in the tens while the goods run to hundreds. Equal shares in a long clearing mean that every seller of a class faces the same market, so no variant is starved of buyers by its id or its size.
 
 **Cost.** A variant has no price of its own: one short while its siblings abound is bought out with no price signal, and its producers read the class's price. Which goods can signal scarcity is the author's choice, good by good, and AC-09 and AC-10 read clearings, so a variant's own scarcity is never tested. Quality is expressed only through value per unit in the class, which for food is nutrition: two foods of one nutrition and different refinement cost the same per unit unless the author gives them their own markets. Each settlement that clears a class carries a remainder per variant.
+
+### DEC-103 — Prices form at market places, and every other settlement trades there
+
+Settlements are five types that follow population with hysteresis. Each type trades the groups of goods from it downward, and a village none. A settlement's rows trade each group they have no market for at the market place with the cheapest route within reach, an assignment kept as state that moves only by a margin; those rows enter that market's ranking one by one, and bear the transit loss of their route. Labour, consumption, credit and hunger stay at home. A good in no group is cleared only where it is held. Where no market place is in reach, a settlement clears the group itself.
+
+**Rationale.** Medieval exchange gathered at markets, and higher-order goods were found only in larger places. Forming prices where markets are puts the most expensive phase where there are markets, about a hundred places in the generated world rather than two thousand, and gives a place's rise and fall a consequence its neighbours feel. Ranking routed rows one by one keeps the rationing rule whole: the poor of a village compete with the poor of the market town, and nobody buys cloth there while someone routed to it cannot buy bread and could pay. Clearing locally where no market is in reach keeps exchange alive in a cut-off place, so that isolation shows as hardship and not as an economy that stops.
+
+**Cost.** The ranking at a market place holds its catchment's rows. On the stand-in of the cost measurement, five of the twelve phases, that put a simulated day at 6.62 ms: within P-01, and over it once P-17's allowance for the unmeasured phases is taken. A village's price is its market's, so a village's own scarcity shows in rationing and hunger rather than in price. A market place writes rows of settlements whose update is not its own, and the assignment, the types and their thresholds are state and parameters to tune. Routed trade needs no haulage within reach, so a market place's import ceiling includes its catchment. A good in no group can be used only where it is held, which ties every recipe that takes it to its site.
 
 ---
 
@@ -767,7 +775,7 @@ A city's sustainable size is bounded by what its links can bring in. Attractiven
 
 **Rationale.** Import cost acting through price cannot hold this loop, because price stops at its clamp and the signal dies exactly where the pressure is highest. The caps already in the trade formula, origin surplus and haulage capacity, are an absolute bound instead of a saturating signal, so they hold. Crowding mortality adds a second brake that does not run through price at all, and makes a city what a medieval city was: a place that grows only because people keep arriving.
 
-**Cost.** Maximum city size is largely set by the basin the generator placed around it, so something that looks emergent is partly authored. Rewiring moves the ceiling, which softens this without removing it.
+**Cost.** Maximum city size is largely set by the basin the generator placed around it, so something that looks emergent is partly authored. Rewiring moves the ceiling, which softens this without removing it. A market place also takes the surplus of the rows routed to it without haulage, so its ceiling is its links plus its catchment within reach (DEC-103), higher than its links alone and bounded all the same.
 
 ### DEC-072 — Buildings are an explicit stock, gated by site attributes
 

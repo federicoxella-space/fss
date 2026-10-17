@@ -21,7 +21,9 @@ The simulator advances a fantasy-medieval world from a generated initial state. 
 |---|---|
 | **Tick** | One logical day of world time. The smallest unit the simulator advances. |
 | **Cadence** | How often a given simulation level updates, expressed in ticks. |
-| **Settlement** | A village, town, or city. The unit at which markets, production, and population live. |
+| **Settlement** | A village, borgo, cittadina, city or metropolis (FR-M-16). The unit at which production and population live. |
+| **Group** | A set of goods traded together, static content, with the lowest settlement type that trades it (FR-M-16). |
+| **Market place** | A settlement whose type trades a group, a borgo or larger: prices for that group form there, and rationing runs there for its own rows and the rows routed to it (FR-M-18, FR-M-19). |
 | **Cohort** | A population group inside a settlement, described by statistics rather than individuals. |
 | **Climate index** | A continuous fixed-point value per settlement driving weekly climate modifiers and crop dates. |
 | **Crop calendar** | Per-crop sowing and harvest dates, shifted per settlement by its climate index. |
@@ -132,7 +134,7 @@ dayOfMonth = dayOfYear % 28
 
 **FR-D-13** — Crowding raises baseline mortality (P-50), independently of contagion. A dense settlement is a demographic sink that grows only by immigration.
 
-**FR-D-14** — A settlement's sustainable population is bounded by what it can import: the sum over its links of origin surplus and haulage capacity. The bound is not a rule of its own; it falls out of the caps already in FR-M-03, and rewiring under FR-M-09 can move it.
+**FR-D-14** — A settlement's sustainable population is bounded by what it can import: the sum over its links of origin surplus and haulage capacity, and at a market place the surplus of the rows routed to it, which reach bounds (FR-M-18). The bound is not a rule of its own; it falls out of the caps already in FR-M-03 and of P-79, and rewiring under FR-M-09 can move it.
 
 ---
 
@@ -353,7 +355,7 @@ price = reference_price × f(desired_stock / actual_stock)
 flow = k × max(0, price_dest − price_orig − transport_cost)
 ```
 
-capped by available stock at origin and by haulage capacity on the link, with `k < 1`.
+capped by available stock at origin and by haulage capacity on the link, with `k < 1`. A good in no group (FR-M-16) does not flow.
 
 **FR-M-03a** — With no caravanners at the origin, outbound flow is zero. Trade is a service someone performs, not a property of the price difference.
 
@@ -361,9 +363,9 @@ capped by available stock at origin and by haulage capacity on the link, with `k
 
 | Settlement type | Links |
 |---|---|
-| Village | 1 hub (nearest town or city by transport cost) + 0–2 neighbouring villages. Degree ≤ 3. |
-| Town | 2–4 towns + 1–2 cities. Degree ≤ 6. |
-| City | 3–6 cities, including cross-kingdom. Degree ≤ 6. |
+| Village | 1 hub (nearest borgo or larger by transport cost) + 0–2 neighbouring villages. Degree ≤ 3. |
+| Borgo, cittadina | 2–4 borghi or cittadine + 1–2 cities or metropolises. Degree ≤ 6. |
+| City, metropolis | 3–6 cities or metropolises, including cross-kingdom. Degree ≤ 6. |
 
 **FR-M-05** — Goods leaving a settlement arrive somewhere or are explicitly lost to spoilage or banditry. Nothing evaporates.
 
@@ -386,6 +388,16 @@ capped by available stock at origin and by haulage capacity on the link, with `k
 **FR-M-15** — A ruin raises danger on the links near it. Abandonment, banditry, and isolation reinforce one another; resettlement under FR-D-07 is the brake.
 
 **FR-M-07** — Prices, stocks, and currency are integers in smallest units. Rounding behaviour is defined at every division.
+
+**FR-M-16** — A settlement is a village, a borgo, a cittadina, a city or a metropolis. Each good with a market of its own, and each class that holds a market (FR-P-03d), belongs to at most one group, static content, and a variant trades in its class's group; each group names the lowest type that trades it. A settlement trades every group of its type and of the types below it, and a village trades none. Within a settlement a good has one price. How many markets a place shows is derived from its type and population for presentation, and moves no price and no quantity.
+
+**FR-M-17** — Type follows population. A settlement's type is the highest whose threshold (P-77) its population reaches; it falls only when its population drops below P-78 of its current type's threshold, and then to the highest type whose threshold the population reaches. Type is reassessed every 28 ticks (P-07), in phase 12 of the settlement's own update. A settlement that falls a type evicts its weakest links by volume down to the new cap (FR-M-10) and stops clearing the groups it no longer trades.
+
+**FR-M-18** — For each group its type does not trade, a settlement's rows trade at a market place for the group: the one whose route, the cheapest path over trade links summed by transport cost, costs least, within reach (P-79), ties by id. The search is bounded by reach and never walks every settlement (AC-07). The assignment, the market place and the route to it, is state and is reassessed with the type (FR-M-17); it moves only when the current market place no longer trades the group or lies beyond reach, or when another's route costs less than the current one's by more than P-80 of it. A settlement with no market place for a group within reach clears that group itself, among its own rows, as a market place does, and so does one whose market place no longer trades the group or whose route has lost a link, until its next reassessment. A good in no group is cleared only where it is held, among that settlement's rows, and never leaves it by trade.
+
+**FR-M-19** — A market place clears each clearing of a group it trades over its own rows and every row routed to it for the group, all in one ranking, each routed row one entry ranked by its own ability to pay (FR-C-04). A routed row's demand and supply are computed when the market place clears, from its holdings and currency as they stand, and what it buys or sells is settled then. The goods it trades travel its route: transit loss of P-21 per link of the route is taken from the routed row's own holdings, through its carry, so that the market trades whole quantities, and is recorded under A-04; the route's links count the shipment in their volume. Labour, own consumption, credit, destitution, spoilage, the seed reserve and the hunger deficit stay with the row's own settlement, in its own update.
+
+**FR-M-20** — A settlement's price for a good it trades at a market place is that place's price. Attractiveness (FR-D-04), price knowledge (FR-I-05) and expected return (FR-P-15) read it so.
 
 ---
 
@@ -512,7 +524,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 ## 14. World generation
 
-**FR-G-01** — The generator produces the initial state at tick 0: terrain, settlements, trade graph, kingdoms, initial populations and stocks. Initial populations include each settlement's destitute row, read from the wealth curves, and in a configuration with several wealth bands the generator divides each mestiere's population among them by its wealth tendency.
+**FR-G-01** — The generator produces the initial state at tick 0: terrain, settlements, trade graph, kingdoms, initial populations and stocks. Each settlement takes the type its initial population reaches (FR-M-17), in the mix of P-12; borghi are placed where villages are dense, so that every village starts within reach of a borgo or larger; and each settlement's market assignments are computed under FR-M-18. Initial populations include each settlement's destitute row, read from the wealth curves, and in a configuration with several wealth bands the generator divides each mestiere's population among them by its wealth tendency.
 
 **FR-G-01a** — The generator assigns each settlement a `climateIndex` varying continuously across the map, plus the land area available to it.
 
@@ -563,7 +575,7 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-03 | Inhabited fraction of map | 15% | Decided |
 | P-04 | Map extent | 1,000 km per side | Decided |
 | P-05 | Hot agent cap | ~300 | Decided |
-| P-06 | Trade degree caps | 3 / 6 / 6 | Decided |
+| P-06 | Trade degree caps, village / borgo / cittadina / city / metropolis | 3 / 6 / 6 / 6 / 6 | Decided |
 | P-07 | Cadences | 1 / 7 / 28 / 364 | Decided |
 | P-08 | Calendar | 364 days, 13 × 28, week of 7 | Decided |
 | P-13 | Season length | 91 ticks, presentation only | Decided |
@@ -631,10 +643,14 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-74 | Most goods a rules file may declare, FR-A-05 | TBD | Open; set after the Phase 4 measurement of P-17, so that no rules file takes the core past P-01 |
 | P-75 | Most mestieri a rules file may declare, FR-A-05 | TBD | Open; as P-74 |
 | P-76 | Most recipes a rules file may declare, FR-A-05 | TBD | Open; as P-74 |
+| P-77 | Population at which a settlement reaches each type, FR-M-17: borgo / cittadina / city / metropolis | 250 / 1,000 / 5,000 / 25,000 | Provisional, the user's order of magnitude; replaced in Phase 6 |
+| P-78 | Share of its type's threshold below which a settlement falls a type, FR-M-17 | 80% | Provisional; replaced in Phase 6 |
+| P-79 | Reach: the highest route cost at which a settlement trades at a market place, FR-M-18 | TBD | Open; Provisional from the point that builds routing, replaced in Phase 6 |
+| P-80 | Share of the current route cost by which another market place must undercut it to take a group, FR-M-18 | TBD | Open; Provisional from the point that builds routing, replaced in Phase 6 |
 | P-09 | Goods in the base rules' catalogue; a settlement holds only those present (DEC-101) | 8 | Decided |
 | P-10 | Price bounds | 0.25× to 4× reference | Decided |
 | P-11 | Trade damping `k` | TBD by sweep | Open |
-| P-12 | Settlement mix | 8 cities / 75 towns / 1,917 villages at 2,000 total | Decided |
+| P-12 | Settlement mix at tick 0 | 2 metropolises / 8 cities / 30 cittadine / 60 borghi / 1,900 villages at 2,000 total; types then follow population (FR-M-17) | Decided |
 
 ---
 
@@ -807,7 +823,7 @@ Each phase has an exit gate. No phase starts before the previous gate is green.
 |---|---|---|
 | Production | 5, 9, 12 for realignment; sowing, harvest, allocation adjustment, construction | FR-P, save FR-P-03b; FR-J-01 to FR-J-03, FR-J-21, FR-J-22; FR-C-01, FR-C-02, FR-C-06. Before it, the rules file and the generator: FR-A-05; FR-G-01, FR-G-01a, FR-G-02, with the buried stock of FR-J-14 and FR-J-15 |
 | Needs | 6; the end of 7 for the hunger deficit | FR-C-03, FR-P-03b, FR-D-03a; SIM-ECON §Demand, tiers and the hunger deficit |
-| Market | 1 for goods, 2 for prices, 7, 10 | FR-M-01 to FR-M-07; FR-C-04, FR-C-10, FR-C-11; FR-C-12 to FR-C-18, FR-C-21; FR-J-04, FR-J-05; FR-I-05 to FR-I-06a |
+| Market | 1 for goods, 2 for prices, 7, 10, 12 for type and assignment | FR-M-01 to FR-M-07, FR-M-16 to FR-M-20; FR-C-04, FR-C-10, FR-C-11; FR-C-12 to FR-C-18, FR-C-21; FR-J-04, FR-J-05; FR-I-05 to FR-I-06a |
 | Labour and income | 2 for the wage, 3, 4, 8, 8a; taxation | FR-C-05, FR-J-19, FR-J-20, FR-C-07 to FR-C-09, FR-C-19, FR-C-20, FR-C-22 to FR-C-30; FR-X-01, FR-X-06, FR-X-07 for the convoy |
 | Demography | 11 for births and deaths | FR-D-01 to FR-D-03, FR-D-13 |
 | Mobility | 1 for migrants, 11 for migration | FR-D-04, FR-D-04a, FR-D-05, FR-D-07 to FR-D-12, FR-D-14; FR-M-08 to FR-M-15; FR-J-06 to FR-J-10; FR-X-02, FR-X-03 |
@@ -824,7 +840,7 @@ All remaining items depend on measurement and close in the phase named.
 | Item | Closes in | Procedure |
 |---|---|---|
 | P-11, trade damping `k` | Phase 6 | Sweep `k` against transport cost; accept on AC-09 and AC-04 |
-| P-17, settlement ceiling | Phase 4 | Measure the full settlement update, all its phases, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach. P-63 and P-64 were measured on 9 and 27 rows and seven goods, dense; the measurement runs on sparse state (DEC-101), counts the destitute and day-labourer rows and three wealth bands in CI, and the clearings the content fixes |
+| P-17, settlement ceiling | Phase 4 | Measure the full settlement update, all its phases, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach. P-63 and P-64 were measured on 9 and 27 rows and seven goods, dense; the measurement runs on sparse state (DEC-101), counts the destitute and day-labourer rows and three wealth bands in CI, and the clearings the content fixes; it runs at market places on the P-12 mix, every routed row ranked (FR-M-19), on the base rules and on a rules file at the local sizes the architecture is meant to carry, goods and rows per settlement: village 15 and 6, borgo 30 and 10, cittadina 60 and 18, city 150 and 30, metropolis 300 and 41 |
 | P-18, prior history length | Phase 6 | Measure cost per simulated year, set against the acceptable wait |
 | AC-04 bounds | Phase 6 | Long runs across seeds, bounds set from observed envelopes, replacing the provisional bounds of Phase 4 |
 | AC-09 X and Y per clearing | Phase 6 | Shock injection per clearing, values recorded against the intent table |

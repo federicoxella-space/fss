@@ -38,7 +38,8 @@ Always simulated. Roughly 2,000 rows.
 
 | Field | Type | Notes |
 |---|---|---|
-| id, position, type | | type drives degree caps |
+| id, position, type | | type: village, borgo, cittadina, city or metropolis; follows population, FR-M-17; drives degree caps and the groups traded |
+| marketAssignment | bounded record[] | per group the settlement's type does not trade: the market place its rows trade the group at and the links of the route to it, bounded by reach, or none when none is in reach, FR-M-18; state because the hysteresis of P-80 reads it and routed trade travels the route |
 | climateIndex | fixed | 0–10000, from the generator |
 | land | int | fixed, feeds B1 |
 | allocationVector | fixed[] | sums to one |

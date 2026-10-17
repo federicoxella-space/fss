@@ -185,6 +185,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   entry left stored; FR-P-03d's declaration and refusal in the rules file; its
   price and split with `variantCarry` in market clearing, a check naming a
   variant offer that never sells.
+- **`R-108`**, from the phase 4 plan: five types and assignments at
+  generation, no village out of reach; every routed row one entry of its
+  market's ranking, read without walking every settlement; type and assignment
+  hysteresis both ways and eviction on a fall; P-79 and P-80 proposed.
 
 ## Escalated to the user
 
@@ -5587,3 +5591,141 @@ by reading `SIM-ECON`, not for credit and demography. That building types and
 crops stay small. `RULINGS.md` was read in its state, owed actions, `R-001`,
 `R-050` to `R-053`, `R-063` to `R-065`, `R-084` and the rulings from `R-103`
 on, not whole.
+
+### R-108 — Prices form at market places: five types that follow population, villages routed per group, every routed row in the ranking; DEC-103
+
+**Date:** 2026-10-17   **Origin:** SQ-024
+**Verdict:** promoted as DEC-103, with FR-M-16 to FR-M-20 specified — the
+direction, the types, the thresholds, the mix and the groups the user's, the
+rules the decider's
+**docs/:** `SIM-REQ` glossary, Settlement, and Group and Market place new;
+FR-D-14; FR-M-03 one sentence; FR-M-04's table for five types; FR-M-16 to
+FR-M-20 new; FR-G-01 one sentence; P-06 and P-12 for five types; P-77 to P-80
+new; §18's Market row; §19's P-17 row. `SIM-STATE` §Settlement `type` and
+`marketAssignment`. `SIM-ECON` phases 2, 7 and 12, the paragraph on phase 7's
+cost, and one on routed rows. `SIM-DEC` DEC-103 new; DEC-019's caps; DEC-071's
+cost. `SIM-LOOPS` B3a, R13 new with B13a and B13b, the gate check. Revisions to
+today.
+
+`SQ-024` proposed that prices form at market places. The user answered the
+direction on 2026-10-17, "si ai market places"; the five types, their
+populations and the hysteresis at about 80%, the mix at tick 0 and the
+generator's placing of borghi on 2026-10-05; the groups on 2026-10-17. Point 4,
+how routed demand enters the ranking, and points 3, 5 and 6 were the decider's.
+The grep of step 1 covered `town`, `type`, `hub`, `market`, `degree`, `P-06`,
+`P-12`, `FR-M-04`, `import`, and the identifiers the entry cites. `SIM-OBS`
+speaks of towns and cities in prose; it is reserve 3 and was not touched, and
+nothing in it reads otherwise under five types.
+
+**The content approved by the user, recorded here as `R-063` was**, since it goes
+to the rules file of `R-065`, not to `docs/`. Every value Provisional under
+`R-050`. Nine groups, each traded from the type named, a place trading every
+group from its type and below:
+
+| Group | Contents | Phase 4 goods | From |
+|---|---|---|---|
+| G1 Provisions | grain, flour, bread, ale, salt, meat | grain, flour, bread | borgo |
+| G2 Countryside | wool, hides, timber, flax | wool, timber | borgo |
+| G3 Common manufactures | coarse cloth, shoes, pottery, candles | cloth | borgo |
+| G4 Iron and tools | bar iron, tools, nails | iron, tools | borgo |
+| G5 Small livestock | pigs, sheep, poultry | — | borgo |
+| G6 Large livestock | oxen, horses | — | cittadina |
+| G7 Fine manufactures | dyed cloth, worked leather, cutlery | — | cittadina |
+| G8 Metals and arms | iron wholesale, weapons, armour | — | city |
+| G9 Luxury | spices, silk, fine wine, jewellery | — | metropolis |
+
+Ore is on no group. The number of markets a place shows is informational only.
+
+**The rules, and why each.**
+
+1. **Routed rows enter the ranking one by one (point 4).** The user preferred
+   it, "il povero compete col povero"; the decider's reason is the rationing
+   rule of `SIM-ECON`: "nobody buys cloth while another cohort in the same
+   settlement cannot buy bread and could pay for it." One entry per village would
+   rank a village by its mean, and its poor would be served before the market
+   town's rich whenever the village as a whole could pay more. The measured cost,
+   6.62 ms a stand-in day, within P-01 and over it with P-17's allowance, is
+   named in DEC-103 and goes to the P-17 measurement, which now runs on this
+   reading at the sizes the catalogue is meant to carry.
+2. **When and where (point 3).** A routed row is settled when its market place
+   clears, from its state as it stands; no queue, no delay. Settlement updates
+   are weekly, and a market within reach is days away, so a delay would be
+   below the resolution of the update, and a queue would be state that a market
+   place holds for others. The market place therefore writes rows of
+   settlements in other buckets; `SIM-ECON` now says so, and where the row's
+   hunger deficit is written. Transport cost is a transit loss on the route,
+   P-21 per link, borne by the routed row: FR-C-11 says it is never a currency
+   term, and putting it on the row leaves the market's quantities whole. Routed
+   shipments count in their links' volume, or a village's link to its market,
+   carrying no price difference, would dissolve and cut it off.
+3. **Out of reach.** A settlement with no market place within reach clears the
+   group itself. The alternative, no exchange at all, would starve day labourers
+   beside a farmer's grain in every cut-off village, the unbraked spiral
+   DEC-043 was written against. A good in no group, ore, is cleared where it is
+   held and never traded away: that is the user's "used where it is mined", and
+   it lets a miner sell ore to a bloomery in the same place.
+4. **What stays local (point 4).** Labour, own consumption, credit,
+   destitution, spoilage, the seed reserve and the hunger deficit, each by its
+   own phase in its own settlement. Rationing by ability to pay runs at the
+   market, by rule 1.
+5. **Assignment (point 5).** State, since hysteresis reads the current choice:
+   the market place and the route's links, bounded by reach. Reassessed with the
+   type every 28 ticks, in phase 12 of the settlement's own update; moved only
+   when the current place stops trading the group, falls out of reach, or is
+   beaten by more than P-80; ties by id. The search is bounded by reach, so that
+   no update walks every settlement (AC-07). Between reassessments a broken
+   route or a market lost sends the group to local clearing, so no row is left
+   trading at a place that does not clear it.
+6. **Type.** The highest type whose threshold the population reaches; down only
+   below P-78 of the current type's, as the user set. A settlement that falls a
+   type evicts links over its new cap, the weakest first, as FR-M-10 does, or A-06
+   would fail on the day it falls.
+7. **The rest of the model (point 6).** A settlement's price for a good it trades
+   at a market place is that place's (FR-M-20): attractiveness, knowledge and
+   expected return read it. Caps for five types map the old three, town to borgo
+   and cittadina, city to city and metropolis, so P-06's decided values carry
+   over unchanged. The import bound of FR-D-14 and B3a gains the catchment: routed
+   trade needs no haulage, peasants carry their own goods to market, and reach
+   bounds what it can bring.
+8. **A new loop, R13.** A place that rises draws its neighbours' trade and
+   grows, and one that falls loses it. `SIM-LOOPS` requires a named brake: the
+   ceilings of R3 for the rise, land per capita for the fall. The hysteresis of
+   P-78 is named as what keeps the loop from oscillating, not as its brake.
+
+Each of these would have held before the stand-in existed; the stand-in's
+nineteen villages per market and its fixed assignment are measurement inputs and
+entered nothing here.
+
+**Cost.** Phase 7 at a market place ranks its catchment. A market place writes
+rows it does not own, so a point that builds it must order those writes by
+bucket and id. Five types, four thresholds, a reach and a margin to tune. A
+village's own scarcity reaches its people through rationing and hunger, not
+through a price of its own. Ore and any good in no group tie their recipes to
+their site. Existing code: none in `core/`; the stand-in's routing in `bench/`
+is not the simulator.
+**Owed by the implementer:** from the phase 4 plan, cite `R-108`:
+1. the generator point builds five types from P-12 and P-77, borghi placed where
+   villages are dense, and each settlement's assignment, with a check that every
+   village starts within reach of a borgo or larger, its `Fails when:` naming a
+   village generated out of reach;
+2. the market point ranks every routed row as one entry (FR-M-19), with a check
+   on a state where rationing binds at a market for a good routed rows ask for,
+   its `Fails when:` naming routed demand merged per settlement or served outside
+   the ranking; and it reads the rows routed to a market place without walking
+   every settlement;
+3. the point that builds type and assignment checks the hysteresis both ways and
+   the eviction on a fall, its `Fails when:` naming a settlement that oscillates
+   across a threshold or keeps more links than its new cap;
+4. P-79 and P-80 proposed as Provisional values in the point that builds routing
+   (`R-050`).
+**Would overturn it:** the P-17 measurement on this reading putting the full
+update over P-01 at the sizes of §19, which would bring back one entry per
+village or a cheaper ranking; a cut-off place found to need no exchange, which
+would drop rule 3's local clearing; the user changing any content above.
+**Not verified:** that phase 10, run in a village's own update, cannot export
+food its rows will want at the next clearing of their market; the "surplus" of
+FR-M-03 was read as protecting needs, not checked against routed timing. Which
+measure FR-M-09's dissolution reads, volume or the candidate's profitability,
+is not stated in `docs/`; rule 2's volume credit assumes volume. That the
+generator can meet P-12 and P-77 together on every seed. `RULINGS.md` was read
+as for `R-107`.
