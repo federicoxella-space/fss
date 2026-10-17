@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-125 — audited by `R-105`. The next audit starts at the
+**Register watermark:** D-126 — audited by `R-106`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -75,9 +75,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   simulator change; the first point of the phase 4 plan is run by the agents,
   and its criterion carries the design's point 6 check and fault. **`R-067`**:
   it stays there, and no earlier plan carries it.
-- **`R-067`**, in the cost measurement plan: each outcome line names the agents
+- ~~**`R-067`**, in the cost measurement plan: each outcome line names the agents
   dispatched and those that do not apply to a `bench/` diff, with the reason, and
-  none claims `R-046`'s check.
+  none claims `R-046`'s check.~~ **Done in `93ef064` to `853e342`**, checked by
+  `R-106`.
 - **`R-047`**, within the process plan point that rewires `/plan-next` and
   `reviewers.md`: the reviewers' brief quotes the `Fails when:` line and asks for
   missing faults. And every moment-one request carries the `Fails when:` lines.
@@ -174,15 +175,19 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   5 ms; the MB column the world's total by `R-102`'s rule, recomputed
   independently; the measurement inputs named.~~ **Done in `853e342`**, checked
   by `R-105`.
-- **`R-105`**, before the cost measurement plan is archived: a line under point
+- ~~**`R-105`**, before the cost measurement plan is archived: a line under point
   5's outcome, never in its place, reading *criterion defective* (`R-005`, case
-  1) and naming `R-105`, in a commit without a `Plan-point:` trailer.
+  1) and naming `R-105`, in a commit without a `Plan-point:` trailer.~~ **Done in
+  `c24e818`**, checked by `R-106`.
 
 ## Escalated to the user
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-*None.* `R-082` was answered by `R-091`, `R-089` by `R-092`, `R-093` by `R-094`.
+- **`R-106`, decision 1 of `D-126`**: whether an implementer session may
+  dispatch the decider as an agent at the user's instruction. Reserve 1.
+
+`R-082` was answered by `R-091`, `R-089` by `R-092`, `R-093` by `R-094`.
 
 ---
 
@@ -5422,3 +5427,53 @@ a check owed before that run.
 the controls, not the figures. (A) and (B) were read, not mutated. `RULINGS.md`
 was read in its state, owed actions, `R-001`, `R-005`, `R-009` to `R-011` and the
 rulings from `R-101` on, not whole.
+
+### R-106 — `D-126` is ratified, save decision 1, which is the user's; the watermark reaches `D-126`
+
+**Date:** 2026-10-17   **Origin:** register audit, `D-126`
+**Verdict:** ratified, decisions 2 to 4; decision 1 escalated, reserve 1 of `R-001`
+**docs/:** unchanged
+
+`D-126` records how the implementer session ran points 4 and 5 of the cost
+measurement plan under the user's instruction of 2026-10-16. Process, so
+ratified or rejected, never promoted (`D-011`). Read against `AGENTS.md`,
+`R-001`, `R-048`, `R-067`, the plan's outcome lines and the commits it names
+(`b18b267`, `c12b061`, `853e342`, `c24e818`).
+
+- **Decision 2, `main` merged into the plan branch rather than the branch
+  recut.** Stands. `R-048` asks that the branch be cut from `main` for the plan
+  and that one commit install `PLAN.md` on it; both hold at `c12b061`. A recut
+  would have rewritten the installing commit, and with it the record the frozen
+  criteria are read against. Merging keeps the record and brings the workflow
+  in.
+- **Decision 3, point 5's step 4 run by the session that dispatched the
+  agents.** Stands, on the reason given: a four-hour run that pins a core was
+  run once, faults first, with `tree-state` equal before and after. The outcome
+  line says so, as `R-067` asks.
+- **Decision 4, the table transcribed into `SQ-023` by that session.** Stands.
+  `SPEC-QUESTIONS.md` is the implementer's file, and `R-105` recomputed the
+  transcription from its cells.
+- **Decision 1, the decider run as an agent dispatched by an implementer
+  session.** Not ruled. It is the split between the two roles, reserve 1 of
+  `R-001`, and the user gave the instruction, on 2026-10-16 and again on
+  2026-10-17 for this session. The decider cannot ratify its own mode of
+  dispatch. **Recommendation:** keep it, on two conditions that would have
+  held before any session ran it: the brief the implementer gives is facts
+  only, never a proposed answer, and is kept where the user can read it; and
+  the dispatched decider reads `R-001` and its procedure itself, as this one
+  did. If the user wants it as a standing practice, it is an `AGENTS.md` rule
+  by the user's permission; until then it holds instruction by instruction.
+
+**`R-067` and `R-105` are done.** Every outcome line of the cost measurement
+plan names the agents dispatched and those that do not apply, and none claims
+`R-046`'s check (points 1 to 5, `93ef064` to `853e342`). `R-105`'s line under
+point 5's outcome is in `c24e818`, without a `Plan-point:` trailer.
+
+**Cost.** None beyond the user's answer on decision 1.
+**Owed by the implementer:** nothing.
+**Would overturn it:** the user declining decision 1, which would make each
+decider session one the user opens; a brief found to carry a proposed answer.
+**Not verified:** the briefs given to the decider agents of `R-103` to `R-105`
+are not in the repository, so their being facts only rests on `D-126`'s word.
+`RULINGS.md` was read in its state, owed actions, `R-001`, `R-050`, `R-052`,
+`R-053`, `R-063` to `R-065` and the rulings from `R-103` on, not whole.
