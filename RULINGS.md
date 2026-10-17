@@ -5570,8 +5570,8 @@ holds cohort rows or goods yet; the stand-in in `bench/` is not the simulator.
    DEC-101 and checks A-18 every tick, its `Fails when:` naming a zero entry left
    stored, so that two worlds with the same values hash apart;
 2. the point that builds the rules file carries FR-P-03d's declaration and its
-   refusal, with a `Fails when:` naming a variant whose class holds no market
-   accepted at load;
+   two refusals, with a `Fails when:` naming a variant whose class holds no
+   market, or that names a class it does not belong to, accepted at load;
 3. the point that builds market clearing builds FR-P-03d's price and split, with
    `variantCarry`, and a check where a long clearing holds a variant offering
    less than one unit's share in an update, its `Fails when:` naming that offer
