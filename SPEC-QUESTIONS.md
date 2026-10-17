@@ -765,6 +765,12 @@ masked ones included, with the stand-in's selection sort: 820 entries per good
 at a market whatever its type, hence a cost about equal across types. A dense
 layout that skipped goods no entry holds would cost less; it was not measured.
 
+**The user's answers after the measurement, 2026-10-17.**
+
+- **The direction: state sparse per settlement.** "Confermo lo sparso".
+- **AC-09 and AC-10 are read per clearing**, a principal good or a class, not
+  per good: reserve 2 of `R-001`, the user's. "AC-09 e AC-10 per clearing".
+
 ### SQ-024 — markets held by market places: five settlement types, and villages that trade at the nearest market
 
 **Raised:** 2026-10-05, by the user, following `SQ-023`.
@@ -856,3 +862,52 @@ within P-01. Not measured.
   population, so P-12 describes the generated world only.
 - **The generator places borghi where villages are dense**, so that no village
   starts too far from its food market.
+
+**The user's answer after the measurement, 2026-10-17.** The direction: **yes
+to market places**, the measured cost no longer being the reason for them
+(`SQ-023`'s table: sparse 4.26 ms a day clearing everywhere, 3.70 or 6.62 at
+market places). "Si ai market places". Point 1, the groups of goods per market,
+is to be defined with the user now; point 4 is under discussion.
+
+**The user's preference on point 4, 2026-10-17**, given to the decider, whose
+rule it is: **every routed row enters the market's ranking** (reading A of
+`R-103`), "il povero compete col povero". The cost measured for it, 6.62 ms a
+day, is an upper bound on the stand-in's selection sort, not the cost of the
+reading.
+
+**The user's answers on point 1, the groups of goods, 2026-10-17.** Reached
+from the needs of a realistic village around 1300 and upward by type; static
+content under `R-050`, the user's, every value Provisional.
+
+- **A market trades several groups, more as the settlement grows.** "Un mercato
+  per più gruppi, crescendo con la dimensione dell'insediamento."
+- **The number of markets is informational only.** Within a settlement a good
+  has one price, so what a place trades is the set of its groups; how they are
+  spread over its markets moves no price and no quantity. "Solo informativo."
+- **Nine groups, each traded from the type named:** "ok i gruppi".
+
+  | Group | Contents | Phase 4 goods | From |
+  |---|---|---|---|
+  | G1 Provisions | grain, flour, bread, ale, salt, meat | grain, flour, bread | borgo |
+  | G2 Countryside | wool, hides, timber, flax | wool, timber | borgo |
+  | G3 Common manufactures | coarse cloth, shoes, pottery, candles | cloth | borgo |
+  | G4 Iron and tools | bar iron, tools, nails | iron, tools | borgo |
+  | G5 Small livestock | pigs, sheep, poultry | — | borgo |
+  | G6 Large livestock | oxen, horses | — | cittadina |
+  | G7 Fine manufactures | dyed cloth, worked leather, cutlery | — | cittadina |
+  | G8 Metals and arms | iron wholesale, weapons, armour | — | city |
+  | G9 Luxury | spices, silk, fine wine, jewellery | — | metropolis |
+
+  A place trades every group from its type and every type below it. Ore is on
+  no market: it is used where it is mined. Every phase 4 good is therefore
+  traded at the borgo, and the types above it differ only in goods the phase 4
+  catalogue does not yet hold.
+- **The forge is split in two**, changing the content `R-063` approved: "sì,
+  separa la forgia". A bloomery near ore and forest, ore + timber → iron; a
+  smithy anywhere, a village included, iron → tools. Bar iron becomes a good,
+  class Material, traded in G4. A village smith working bought bar iron is
+  credible around 1300; iron was made near the mines and travelled as bars.
+  For the decider, as a revision of `R-063`: the good, the two recipes and
+  buildings, which of them requires Tools, and the mestieri, the smith of the
+  eleven becoming the smithy's and the bloomery taking one of its own, are not
+  yet set; the user approved the structure.
