@@ -784,6 +784,7 @@ where rationing runs is the shape of the market subsystem and of its state.
 **Status:** open — the direction and the content are the user's; the rules are
 the decider's.
 **Status:** **closed 2026-10-17 by R-108**, save the forge split, a revision of `R-063`'s content.
+**Status:** the forge split's structure **closed 2026-10-17 by R-109**; its details escalated to the user there.
 
 **What the user proposes.** Prices form at market places, not in every
 settlement. Settlement types become five, each with a number of markets:

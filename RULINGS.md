@@ -196,6 +196,8 @@ Rulings with verdict `escalated` or `pending`, until the user answers.
 
 - **`R-106`, decision 1 of `D-126`**: whether an implementer session may
   dispatch the decider as an agent at the user's instruction. Reserve 1.
+- **`R-109`, the forge's details**: the bloomery's site, which of the two recipes
+  requires Tools, and the mestieri. Static content, `R-050`.
 
 `R-082` was answered by `R-091`, `R-089` by `R-092`, `R-093` by `R-094`.
 
@@ -5729,3 +5731,47 @@ measure FR-M-09's dissolution reads, volume or the candidate's profitability,
 is not stated in `docs/`; rule 2's volume credit assumes volume. That the
 generator can meet P-12 and P-77 together on every seed. `RULINGS.md` was read
 as for `R-107`.
+
+### R-109 — The forge is split into bloomery and smithy, with bar iron between them: `R-063` revised in structure, its details left to the user
+
+**Date:** 2026-10-17   **Origin:** SQ-024, the user's answer on point 1
+**Verdict:** resolved, the structure the user approved under `R-050`; the details
+escalated, static content the user's
+**docs/:** `SIM-REQ` FR-P-04, Bar iron in the set and the chain
+Ore+Timber→Bar iron→Tools; P-09 from 8 to 9. Revision already today's.
+
+The user approved, on 2026-10-17, "sì, separa la forgia": a bloomery near ore
+and forest, ore + timber → iron; a smithy anywhere, a village included,
+iron → tools; bar iron a good, class Material, traded in G4. This revises the
+row "Ore + Timber → Tools | Forge | requires Tools | yes" of `R-063`, which binds
+until revised; this ruling names it. Two consequences follow from rules already
+in force and are applied, not chosen: P-09 counts nine goods, and by `R-063`'s
+rule that a grade counts processing steps, bar iron is grade 1 and Tools become
+grade 2. No need reads Material or Implement, so no need changes.
+
+What the user did not set, and `R-050` makes the user's since recipes, building
+types and occupations are static content, is left open with a proposal:
+
+| Item | Proposal | Alternatives |
+|---|---|---|
+| Bloomery site | ore only; timber is bought, being in G2 | ore and forest, as the user's "near ore and forest" reads literally |
+| Bloomery and Tools | improved by Tools, so no crude variant is needed (DEC-073 binds only durable-requiring recipes) | requires Tools, with a crude variant; or independent |
+| Smithy and Tools | requires Tools, with a crude variant, the forge's row as it was | improved by Tools only |
+| Mestieri | the smith works the smithy; a new mestiere, the bloomer, works the bloomery: twelve in the vector and thirteen rows at most; mean wealth with the crafts, below the smith, spread middling | none other: FR-J-01 gives a mestiere one activity, so either recipe left without its own mestiere has no one to run it |
+
+Why the proposal: ore is in no group (`R-108`), so the bloomery must stand where
+ore is mined, and requiring forest as well would leave every ore site without
+woodland unable to smelt, though timber travels in G2. A bloomery that needs
+tools to make the iron that tools are made of would need a crude variant to
+break the circle; "improved by" breaks it without one. The smithy keeps the
+forge's terms, which the user approved in `R-063`.
+
+**Cost.** One good and one recipe more; a thirteenth row where a place holds both
+crafts. `SIM-STATE` §Cohort's "at most 12" stands until the user answers on the
+mestieri.
+**Owed by the implementer:** the content as approved, in the rules file of
+`R-065`; nothing of the open items until the user answers. Cite `R-109`.
+**Would overturn it:** the user revising the structure, or answering the open
+items otherwise.
+**Not verified:** that FR-P-03c admits the new chain with the values the
+implementer will propose; nothing is numbered.
