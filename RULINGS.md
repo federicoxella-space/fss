@@ -180,6 +180,12 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   1) and naming `R-105`, in a commit without a `Plan-point:` trailer.~~ **Done in
   `c24e818`**, checked by `R-106`.
 
+- **`R-107`**, from the phase 4 plan: state sparse under DEC-101 with A-18
+  checked every tick, the first point building rows or holdings naming a zero
+  entry left stored; FR-P-03d's declaration and refusal in the rules file; its
+  price and split with `variantCarry` in market clearing, a check naming a
+  variant offer that never sells.
+
 ## Escalated to the user
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
@@ -5477,3 +5483,107 @@ decider session one the user opens; a brief found to carry a proposed answer.
 are not in the repository, so their being facts only rests on `D-126`'s word.
 `RULINGS.md` was read in its state, owed actions, `R-001`, `R-050`, `R-052`,
 `R-053`, `R-063` to `R-065` and the rulings from `R-103` on, not whole.
+
+### R-107 — State is sparse per settlement, and a good clears on its own market or as a variant of its class: DEC-101, DEC-102, FR-P-03d
+
+**Date:** 2026-10-17   **Origin:** SQ-023
+**Verdict:** promoted as DEC-101 and DEC-102, with FR-P-03d specified — the
+direction and the reading of AC-09 and AC-10 the user's (reserve 2 of `R-001`),
+the rules the decider's
+**docs/:** `SIM-DEC` DEC-101 and DEC-102 new; DEC-085 its example and cost,
+DEC-054 and DEC-099 their cost. `SIM-REQ` FR-W-08 one sentence; FR-P-03d new;
+FR-C-04 its opening and step 4; AC-09 and AC-10 per clearing; P-09; §19's rows
+for P-17 and AC-09. `SIM-STATE` §Rule a paragraph; §Settlement `variantCarry`;
+§Cohort its key note, `goods`, `durables`; §Trade link `flowAccumulator`,
+`lossCarry`; A-18 new. `SIM-ECON` phases 2 and 7, the paragraph on phase 7's
+cost, "Choice within a class". Every revision line to today.
+
+`SQ-023` asked what the architecture must carry for a catalogue of hundreds of
+goods and tens of mestieri, when `SIM-STATE` laid every row out over the whole
+catalogue. The measurement it owed is the table of 2026-10-16. The user chose
+the direction on 2026-10-17, state sparse per settlement, and read AC-09 and
+AC-10 per clearing; on 2026-10-05 the user had set that each good declares a
+market of its own or that it is a variant of a named class, validation checking
+that the class has a market. What was left to the decider is the rules. The
+grep of step 1 covered `per good`, `one per good`, `each good`, `clearing`,
+`12 rows`, and the identifiers the entry cites.
+
+**Sparse as "absent reads as zero" (DEC-101).** The user's words are a row only
+for the mestieri present and holdings only for the goods present. Read as a
+storage rule that changes no meaning, the update is defined on the values, and a
+missing entry is a zero. Two other readings were set aside. A row created and
+removed by its own rule, say when a mestiere's share in the vector becomes
+non-zero, would give the state a second meaning beside its values, and a row
+whose members died while it held goods or claims would lose them, against A-04
+and A-02. A canonical form is also what keeps NFR-01 honest: if a zero could be
+stored or not, two worlds holding the same values would hash apart by history,
+the failure DEC-088 closed for capacity. Hence A-18, which a test can check
+every tick. The rule is written for cohort rows and per-good fields, the two the
+user named and the measurement covered. Building types and crops stay laid out
+over the catalogue: they are tens, not hundreds, and nothing yet says otherwise.
+
+**A clearing is a good or a class (DEC-102, FR-P-03d).** Three rules were the
+decider's.
+
+1. **The variant's class is one it belongs to.** A variant's price is the class's
+   price per unit of value times its value in the class, and a value exists only
+   in a class the good belongs to (FR-P-03a). The user's "validation checks only
+   that the class has a market" is kept, and one refusal joins it, a variant
+   naming a class it does not belong to: without membership the price is not
+   defined.
+2. **Price by value per unit.** "Their price differs by quality, not by market"
+   needs a measure of quality the content already has. Value per unit in the
+   class is that measure, and DEC-099 already buys "at the lowest price per unit
+   of value". A separate quality factor per variant would be a second number with
+   no other reader. The cost is named in DEC-102: for food, value is nutrition.
+3. **Shares in a long clearing, with a carry.** When supply is short every offer
+   sells whole, and rationing is on the buyers. When it is long, which variant
+   sells is the split. Taking variants in id order would let the first starve the
+   rest of buyers, and their producers would leave through the allocation
+   vector; a split by largest remainders in each update would leave a small offer
+   beside a large one at zero for ever, the integer trap of `SIM-ECON`. So each
+   sells the same share of its offer and the fraction carries, at the clearing,
+   per variant. `R-105` foresaw a carry per row and class good from the stand-in's
+   even split of each buyer's purchase; the carry here is the sellers', so it sits
+   at the clearing. The buyers' side is a split within one update and leaves no
+   carry, under the rule `SIM-ECON` already has for such splits.
+
+None of this rests on the stand-in's code. It would have held before it: a
+storage rule that changes meaning is a second model, a price needs a defined
+unit, and a recurring proportional split on small integers needs a carry.
+
+**AC-09 and AC-10.** Applied as the user decided. The intent table's rows were by
+good; a clearing takes the row of the most urgent need one of its goods meets,
+which is the old rule for a consumable widened to a clearing, and nothing else.
+
+**Not decided here.** `SQ-024`'s market places, the groups and the types: `R-108`.
+The P-17 measurement on the sizes the catalogue is meant to carry: `R-108`, with
+the types it is stated in.
+
+**Cost.** Every per-good and per-row access becomes a search by id, and pools
+grow and compact inside the update. A variant's own scarcity shows in no price,
+and the author's choice of market or variant decides what can signal scarcity.
+One carry per variant per clearing settlement. Existing code: none in `core/`
+holds cohort rows or goods yet; the stand-in in `bench/` is not the simulator.
+**Owed by the implementer:** from the phase 4 plan, cite `R-107`:
+1. the point that first builds cohort rows or holdings builds them sparse under
+   DEC-101 and checks A-18 every tick, its `Fails when:` naming a zero entry left
+   stored, so that two worlds with the same values hash apart;
+2. the point that builds the rules file carries FR-P-03d's declaration and its
+   refusal, with a `Fails when:` naming a variant whose class holds no market
+   accepted at load;
+3. the point that builds market clearing builds FR-P-03d's price and split, with
+   `variantCarry`, and a check where a long clearing holds a variant offering
+   less than one unit's share in an update, its `Fails when:` naming that offer
+   never selling.
+**Would overturn it:** a measurement of the full update showing that searches by
+id cost more than the dense layout saves at the sizes the user gave; content in
+which a minor good needs its own scarcity signal, which is a market of its own
+and needs no rule; a need for quality apart from value, which would add a factor
+per variant.
+**Not verified:** that every phase of the update can run on "absent reads as
+zero" without a phase that must write a zero entry; checked for phases 5 to 9
+by reading `SIM-ECON`, not for credit and demography. That building types and
+crops stay small. `RULINGS.md` was read in its state, owed actions, `R-001`,
+`R-050` to `R-053`, `R-063` to `R-065`, `R-084` and the rulings from `R-103`
+on, not whole.

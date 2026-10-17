@@ -2,7 +2,7 @@
 
 **Document:** SIM-REQ
 **Status:** Draft 1
-**Revision:** 2026-10-07
+**Revision:** 2026-10-17
 **Scope:** Headless simulation core, runnable outside the game
 
 ---
@@ -50,7 +50,7 @@ The simulator advances a fantasy-medieval world from a generated initial state. 
 
 **FR-W-07** — The simulator references no game engine, rendering, input, or asset API, and knows nothing about the host that drives it.
 
-**FR-W-08** — A cohort is keyed by a tuple. The shipping configuration uses `(mestiere, wealthBand)` with a single wealth band value. No code may assume one cohort per mestiere, and none may index cohorts by mestiere alone.
+**FR-W-08** — A cohort is keyed by a tuple. The shipping configuration uses `(mestiere, wealthBand)` with a single wealth band value. No code may assume one cohort per mestiere, and none may index cohorts by mestiere alone. A settlement holds rows only for the keys present in it (DEC-101).
 
 **FR-W-09** — CI runs the full suite against a configuration with three wealth bands. It is not shipped; it exists to break any code that assumed a single row per mestiere.
 
@@ -157,6 +157,8 @@ A good's record says whether it is durable. A good that is not takes the consuma
 **FR-P-03b** — A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day. Any good of the class or of its subclasses, at or above the minimum grade, meets it in proportion to its value. Tier 0 holds exactly one need, on the food class, and validation at load refuses a needs table that holds another. Needs add: each is a quantity of its own, and a unit consumed meets one need only.
 
 **FR-P-03c** — Processing creates no food. Every good carries an embodied food value: a good of the food class, the class the tier 0 need names, carries its value there; another good that recipes produce carries the least food value that any recipe producing it consumes per unit, each input counted at its own embodied food value; any other good carries zero. No recipe yields more food value than its inputs embody, and validation at load refuses a recipe table that breaks this or that passes food value around a cycle.
+
+**FR-P-03d** — A good declares either a market of its own or that it is a variant of a class it belongs to. A class that variants name holds a market, and carries the reference price per unit of value and the desired stock that FR-M-01 reads; validation at load refuses a variant whose class holds none, or that names a class it does not belong to. The variants of a class clear together, on one price per unit of value, formed from their stock summed in the class's units; a variant's price per unit is that price times its value per unit in the class, so that variants differ in price by quality, not by market. Demand that a need places on the class is served only by the variants that meet the need (FR-P-03b). Where the clearing's supply exceeds what is bought, the variants able to serve the same demand sell the same share of what they offer, with no size threshold: the fraction of a unit a variant's share leaves is carried at the clearing, and what is bought equals what is sold in every update. Which buyer receives which variant is derived from the rationing order and good id within the update, and leaves no carry.
 
 **FR-P-04** — Baseline goods set *(approved by the user; classes, values and grades under FR-P-03a)*: Grain, Flour, Bread, Ore, Timber, Tools, Wool, Cloth. Three chains: Grain→Flour→Bread, Ore+Timber→Tools, Wool→Cloth.
 
@@ -266,12 +268,12 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-C-03** — Consumption order is fixed: a cohort meets its needs from its own holdings first, lowest grade first, then buys the remainder at market.
 
-**FR-C-04** — Each settlement update runs a clearing pass per good, the goods that meet one need taken in the order of DEC-099:
+**FR-C-04** — Each settlement update runs a clearing pass per clearing, a good with a market of its own or a class whose variants share one (FR-P-03d), the clearings that meet one need taken in the order of DEC-099:
 
 1. Cohorts consume from their own holdings, the seed reserve excepted under FR-P-10d.
 2. Unmet need becomes demand for the goods that meet it, chosen under DEC-099, capped by the cohort's currency, which includes what it borrowed this update.
 3. Holdings above the cohort's own needs and its seed reserve become supply.
-4. If supply is short, it is allocated in descending order of ability to pay, the currency per member, demand that meets a need before demand that only raises its grade; the share of a cohort able to pay is read from its wealth curve under FR-J-22. Demand rationed out of one good falls to the other goods that meet the same need, within the update.
+4. If supply is short, it is allocated in descending order of ability to pay, the currency per member, demand that meets a need before demand that only raises its grade; the share of a cohort able to pay is read from its wealth curve under FR-J-22. Demand rationed out of one clearing falls to the other clearings that meet the same need, within the update.
 5. Currency moves from buyers to sellers within the settlement.
 6. Price is recomputed from the resulting settlement stock for the next update.
 
@@ -629,7 +631,7 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-74 | Most goods a rules file may declare, FR-A-05 | TBD | Open; set after the Phase 4 measurement of P-17, so that no rules file takes the core past P-01 |
 | P-75 | Most mestieri a rules file may declare, FR-A-05 | TBD | Open; as P-74 |
 | P-76 | Most recipes a rules file may declare, FR-A-05 | TBD | Open; as P-74 |
-| P-09 | Goods count | 8 | Decided |
+| P-09 | Goods in the base rules' catalogue; a settlement holds only those present (DEC-101) | 8 | Decided |
 | P-10 | Price bounds | 0.25× to 4× reference | Decided |
 | P-11 | Trade damping `k` | TBD by sweep | Open |
 | P-12 | Settlement mix | 8 cities / 75 towns / 1,917 villages at 2,000 total | Decided |
@@ -671,9 +673,9 @@ Each carries a hard bound that fails the test and a soft band that raises a warn
 
 **AC-08 — Long-run degradation.** ms/tick and save size measured at 1, 10, and 40 simulated years follow a non-superlinear curve.
 
-**AC-09 — Shock response.** Removing 30% of a region's stock of a good moves its local price within X ticks and returns it to band within Y ticks. X and Y are measured in Phase 6 against this intent:
+**AC-09 — Shock response.** Removing 30% of a region's stock of a clearing's goods (FR-P-03d) moves its local price within X ticks and returns it to band within Y ticks. X and Y are measured in Phase 6 against this intent:
 
-| Good | X, first price move | Y, return to band |
+| Clearing | X, first price move | Y, return to band |
 |---|---|---|
 | Consumable, tier 0 | short, within two settlement updates | long, up to the next harvest |
 | Consumable, tier 1 | medium | within the season |
@@ -681,9 +683,9 @@ Each carries a hard bound that fails the test and a soft band that raises a warn
 | Input | medium | within the season |
 | Durable | long | long |
 
-A consumable takes the row of the most urgent need it can meet.
+A clearing takes the row of the most urgent need one of its goods can meet; one whose goods meet no need takes the row of their role.
 
-**AC-10 — No inert goods.** Over a long run, every good reaches scarcity somewhere at least once.
+**AC-10 — No inert goods.** Over a long run, every clearing reaches scarcity somewhere at least once: each good with a market of its own, and each class whose variants share one (FR-P-03d).
 
 **AC-11 — Causal chains.** Every high-importance chronicle entry traces back to an exogenous root or a player action.
 
@@ -822,10 +824,10 @@ All remaining items depend on measurement and close in the phase named.
 | Item | Closes in | Procedure |
 |---|---|---|
 | P-11, trade damping `k` | Phase 6 | Sweep `k` against transport cost; accept on AC-09 and AC-04 |
-| P-17, settlement ceiling | Phase 4 | Measure the full settlement update, all its phases, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach. P-63 and P-64 were measured on 9 and 27 rows and seven goods; the measurement counts the destitute and day-labourer rows, 12 per settlement in the shipping configuration and 36 in CI, eight goods, and the food markets the content fixes |
+| P-17, settlement ceiling | Phase 4 | Measure the full settlement update, all its phases, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach. P-63 and P-64 were measured on 9 and 27 rows and seven goods, dense; the measurement runs on sparse state (DEC-101), counts the destitute and day-labourer rows and three wealth bands in CI, and the clearings the content fixes |
 | P-18, prior history length | Phase 6 | Measure cost per simulated year, set against the acceptable wait |
 | AC-04 bounds | Phase 6 | Long runs across seeds, bounds set from observed envelopes, replacing the provisional bounds of Phase 4 |
-| AC-09 X and Y per good | Phase 6 | Shock injection per good, values recorded against the intent table |
+| AC-09 X and Y per clearing | Phase 6 | Shock injection per clearing, values recorded against the intent table |
 | P-01 validity | Phase 4 | Confirm the per-entity cost against a real settlement update. The measured subset is in P-63 and P-64; what is unconfirmed is the factor of two carried for the phases left unmeasured, eight since phase 8a |
 
 ---

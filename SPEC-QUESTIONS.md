@@ -657,6 +657,7 @@ the save format and the hash. Dense per-good arrays written there would need a
 format migration to become sparse (NFR-08).
 **Status:** open — the direction is the user's; the requirements are the
 decider's; AC-09 and AC-10 are reserve 2 of `R-001`.
+**Status:** **closed 2026-10-17 by R-107.**
 
 **What the user wants.** A catalogue of hundreds of goods and tens of mestieri.
 `R-063` approved 8 goods for phase 4 as starting content; the question is what

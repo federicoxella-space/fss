@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-10-06
+**Revision:** 2026-10-17
 **Companion:** SIM-REQ
 
 ---
@@ -53,11 +53,11 @@ Population, currency, and goods each belong to exactly one simulation level. Lev
 
 ### DEC-085 — State arrays hold values, never arrays
 
-A state field is a value or one contiguous array of values. A per-row quantity of fixed width `w`, such as a treasury of four denominations or one stock per good, is stored as one array of `rows × w`. A per-row quantity of variable length is stored either at a fixed capacity, which is then its width, or in one shared pool addressed by a per-row offset and count. No array holds arrays, and no composite value inside state holds an array.
+A state field is a value or one contiguous array of values. A per-row quantity of fixed width `w`, such as a treasury of four denominations, is stored as one array of `rows × w`. A per-row quantity of variable length, such as the goods a row holds under DEC-101, is stored either at a fixed capacity, which is then its width, or in one shared pool addressed by a per-row offset and count. No array holds arrays, and no composite value inside state holds an array.
 
 **Rationale.** An array of arrays is an object graph under another name: each inner array is a reference, which NFR-10 excludes, and each is a separate allocation that DEC-003's bulk serialise, copy and hash cannot cover in one pass. Widths come from the core's logic or from the rules file the world carries (DEC-100), so `rows × w` is known whenever the state is.
 
-**Cost.** Every access to a wide field computes an index. A width the logic sets, the four denominations for instance, changes only with the logic, and reshapes the arrays that carry it inside the migration of NFR-08. A width the content sets, one stock per good for instance, never changes within a world, since an existing world cannot take new content (DEC-100). A pooled field needs a compaction rule, and that rule orders by id or it becomes a determinism hole of its own.
+**Cost.** Every access to a wide field computes an index. A width the logic sets, the four denominations for instance, changes only with the logic, and reshapes the arrays that carry it inside the migration of NFR-08. A width the content sets, the catalogue of goods for instance, never changes within a world, since an existing world cannot take new content (DEC-100); how many of its entries a settlement stores does, and is held in a pool (DEC-101). A pooled field needs a compaction rule, and that rule orders by id or it becomes a determinism hole of its own.
 
 ### DEC-088 — Only the rows in use are state
 
@@ -66,6 +66,14 @@ A column may be sized beyond the rows it holds. Its capacity is not state: a cou
 **Rationale.** Growing by doubling is how an append-only table stays cheap, and the capacity it reaches depends on the history of its growth, not on what the world holds. Counted by capacity, two worlds holding the same entries would hash differently, and a save would carry rows nothing wrote, so a world loaded into columns of another length would save to other bytes and AC-03 would fail on a correct world.
 
 **Cost.** Every growable table carries its count in state, and every walk of it stops at the count. A walk that reads to the array's length passes every test run on a world whose arrays happen to be exactly full, so that capacity reaches neither the hash nor the save needs a check of its own. A row released inside the count, by a retention policy or a compaction, is not settled here: DEC-085's compaction rule and SIM-STATE's open item 3 decide it.
+
+### DEC-101 — State is sparse per settlement: what is zero is not stored
+
+A settlement holds a cohort row only for a key present in it, and a row holds a per-good field only for the goods it has. A row that holds nothing is not stored, and an entry whose value and carry are zero is not stored; what is not stored reads as zero. Stored entries are kept in id order, in pools under DEC-085, and the hash and the save cover them alone.
+
+**Rationale.** The catalogue is meant to run to hundreds of goods and tens of mestieri, while a village has a few of each and a city many. Laid out over the catalogue, every settlement pays for every good and every row: measured on a stand-in of five of the twelve phases at 300 goods and 41 rows, a dense world took some 300 MB against NFR-07's 50, and some 200 ms a simulated day against P-01's 10; held sparsely, the same world took about 4 MB and 3 to 7 ms. Cost then follows what is local, not what the content declares. Defining absence as zero keeps one meaning for the state whichever way it is stored, and a canonical form, nothing zero stored, makes the hash a function of the values rather than of their history, as DEC-088 does for capacity.
+
+**Cost.** Every access to a per-good or per-row quantity is a search by id rather than an index. An entry appears when a good first arrives in a row and goes when it reaches zero, so pools grow and compact within the update, and compaction orders by id or it is a determinism hole. A row whose members are gone but which still holds goods, buildings or claims stays stored until it holds nothing. A width the catalogue sets is still fixed for a world; what a settlement stores of it is not.
 
 ---
 
@@ -249,7 +257,15 @@ Needs add: each is a quantity of its own, and a unit consumed meets one need. A 
 
 **Rationale.** Adding needs keeps the survival minimum apart from the ordinary meal. An ordinary year eats the minimum and the tier 1 share, so a shortfall first takes the share, which is deferrable, and only then the minimum: a famine tightens belts before it kills, and stays a season. One ration made better by grade would leave no such margin, and every unit short would be hunger. The plate then shows wealth: within one mestiere the poorer eat grain and the better-off bread, and in a famine bread leaves the poorer tables first. Reading the better grade through the wealth curve rather than the cohort's mean keeps a small price move from switching a whole cohort between goods. Ranking it after every need keeps the rationing rule of SIM-ECON: nobody eats better while another cannot eat and could pay.
 
-**Cost.** Every food is one more market to ration in the most expensive phase, so the number of foods is set after a measurement. The markets of a class acquire an order, derived from grade, price and good id, and demand falling between them may cross them more than once in an update. In ordinary years the plate is mixed, and the quantities of the needs table are tuned so that the total is plausible. A need's demand goes whole to its cheapest good, so two foods of one grade at nearly equal prices can take turns from one update to the next.
+**Cost.** Every food with a market of its own is one more market to ration in the most expensive phase, so the number of such foods is set after a measurement; a minor food clears as a variant of its class (DEC-102). The markets of a class acquire an order, derived from grade, price and good id, and demand falling between them may cross them more than once in an update. In ordinary years the plate is mixed, and the quantities of the needs table are tuned so that the total is plausible. A need's demand goes whole to its cheapest good, so two foods of one grade at nearly equal prices can take turns from one update to the next.
+
+### DEC-102 — A good clears on a market of its own, or as a variant of its class
+
+Each good declares one of the two. The variants of a class share one clearing, at one price per unit of value, and a variant's price is that price times its value per unit in the class. Demand on the class is served by the variants that meet the need; when the clearing is long, those variants sell the same share of their offers, the fraction carried at the clearing.
+
+**Rationale.** Rationing is the term of the update that grows with the square of the rows (SIM-ECON), and it runs once per clearing. Hundreds of goods each on a market of its own would make hundreds of rankings in every settlement. Important goods, grain, iron, wool, still form their own price; minor goods are alternatives within a class that differ in quality, and pricing them by their value in the class keeps the clearings in the tens while the goods run to hundreds. Equal shares in a long clearing mean that every seller of a class faces the same market, so no variant is starved of buyers by its id or its size.
+
+**Cost.** A variant has no price of its own: one short while its siblings abound is bought out with no price signal, and its producers read the class's price. Which goods can signal scarcity is the author's choice, good by good, and AC-09 and AC-10 read clearings, so a variant's own scarcity is never tested. Quality is expressed only through value per unit in the class, which for food is nutrition: two foods of one nutrition and different refinement cost the same per unit unless the author gives them their own markets. Each settlement that clears a class carries a remainder per variant.
 
 ---
 
@@ -615,7 +631,7 @@ A settlement's caravanner population supplies capacity to its outbound links. Wi
 
 **Rationale.** Deciding the wealth axis after measuring the clearing cost is only possible if adding it stays a data change. Shipping the general path from the start, with a degenerate value, means the code that would assume one row per mestiere never gets written, and the CI configuration catches whatever slips through anyway.
 
-**Cost.** Every cohort lookup is slightly more verbose than it needs to be for the shipping configuration, and CI runs the suite twice. Measurement puts the three-band configuration at roughly 4.8 times the cost of the shipping one rather than 3, because rationing sorts the cohorts of a settlement and that term grows with the square of their number. Whether the axis can be afforded in Phase 6 depends on that sort being cheap, not on the axis itself.
+**Cost.** Every cohort lookup is slightly more verbose than it needs to be for the shipping configuration, and is a search by key, since a settlement holds only the rows present (DEC-101); CI runs the suite twice. Measurement puts the three-band configuration at roughly 4.8 times the cost of the shipping one rather than 3, because rationing sorts the cohorts of a settlement and that term grows with the square of their number. Whether the axis can be afforded in Phase 6 depends on that sort being cheap, not on the axis itself.
 
 ### DEC-055 — Sampled transients are trajectories derived from flow
 
