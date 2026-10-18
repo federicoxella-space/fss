@@ -982,3 +982,9 @@ words):
    is a new cause in phase 11, beside hunger and crowding.
 4. The mill's site: wind or water, and whether a windmill differs from a
    watermill in output or cost.
+
+**The user's answer on water, 2026-10-19.** "Esplicita: se si ha modo si estrae
+sennò si compra." Water is an explicit good: drawn where a place has the means
+(a well, a river, a spring), bought where it has not. Its site, recipe, group,
+class and whether it spoils or travels are not set; the user's as content where
+`R-050` makes them so, the decider's otherwise.
