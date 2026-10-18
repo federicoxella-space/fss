@@ -914,3 +914,71 @@ content under `R-050`, the user's, every value Provisional.
   buildings, which of them requires Tools, and the mestieri, the smith of the
   eleven becoming the smithy's and the bloomery taking one of its own, are not
   yet set; the user approved the structure.
+
+**The user's answers on `R-109`'s forge details, 2026-10-18.**
+
+- **The decider's proposals approved:** the bloomery improved by Tools, with no
+  crude variant; the smithy requiring Tools, with a crude variant; the smith
+  working the smithy. "Va bene".
+- **The bloomery's fuel is charcoal, made by a charcoal burner**, a mestiere of
+  its own: "A e se la ferriera brucia carbone, ci serve anche un carbonaio". The
+  chain becomes timber → charcoal → (with ore) bar iron → tools. Charcoal is a
+  good; the charcoal burner works a recipe timber → charcoal; the bloomery takes
+  ore + charcoal. The bloomer proposed by `R-109` stands beside him.
+- **Where the wood comes from: reading A**, from the woodcutter, not gathered by
+  the charcoal burner or the bloomery itself. The user's rule: "if there is wood
+  it is taken directly, otherwise it is bought". **For the decider:** under
+  `R-108` a place served by a market sends its surplus and demand to the market,
+  so nothing passes directly between two rows of one village. Taking wood
+  directly needs a rule for exchange within a place before its rows are routed,
+  which `R-108` and `SIM-ECON` phase 7 do not hold. Whether it applies to
+  timber and charcoal only or to every good is not set.
+- **Not set, the user's as content:** charcoal's group and class, whether the
+  smithy burns charcoal too, the charcoal burner's site (forest, as the
+  woodcutter's) and his mean wealth.
+
+**The user's answer on exchange within a place, 2026-10-18.** "Scambio locale
+potenzialmente per tutti i beni, ma comunque con circolazione di moneta":
+exchange within a place may apply to every good, not to timber and charcoal
+only, and it is always a sale, currency moving buyer to seller, never a
+transfer. The rule, its phase and how it meets `R-108`'s routing are the
+decider's.
+
+**The user's answers on the review of the chains, 2026-10-19.** The implementer
+reviewed every chain of phase 4's content for credibility and proposed changes;
+the user answered:
+
+- **Approved:** grain farming improved by Tools; the charcoal burner as
+  proposed (forest site, improved by Tools, poor like the woodcutter); the
+  bloomery and the smithy burning a fuel; spinning folded into the weaver;
+  draught animals and sheep implicit until livestock goods exist; salt left out
+  of phase 4.
+- **Windmills as well as watermills:** the mill no longer requires a water site
+  only. "Va bene ma anche mulini a vento."
+- **Fuel instead of charcoal alone:** "introdurrei il concetto di carburante:
+  stoppe, legnetti, carbone, ecc. con alcune ricette che ne richiedono di
+  specifici". A class Fuel, with tow, kindling, charcoal and others; some
+  recipes take any fuel, some require a specific one (the bloomery charcoal, for
+  instance). Charcoal: G2, class Fuel, grade 1 (the user's "ok" to its details,
+  the class now Fuel rather than Material).
+- **Bread = flour + water + fuel.** "Pane = Farina + Acqua + Carburante."
+- **A fuel need, tier 1, following season and temperature, and cold kills:**
+  "Si, dipendente dalla stagione + temperatura (in inverno senza riscaldamento
+  si muore di freddo)".
+
+**For the decider, from the implementer's reading** (not ruled, not the user's
+words):
+1. Fuel fits `R-107`'s classes and variants, but a recipe requiring one variant
+   is demand for a variant inside its class's clearing, which `R-107`'s split
+   does not cover; or charcoal becomes a principal good of class Fuel with its
+   own market, the lesser fuels its variants.
+2. Water as an input: a good, with state and a market, or a property every
+   place has. The implementer would read it as the latter unless drought is
+   wanted; the user has not said.
+3. "Following the season" meets FR-T-05, "seasons carry no mechanical effect".
+   FR-P-08's weekly climate curves already govern mortality and are read per
+   `climateIndex`: a fuel need and cold mortality as climate modifiers would
+   follow season and temperature without the season itself acting. Cold death
+   is a new cause in phase 11, beside hunger and crowding.
+4. The mill's site: wind or water, and whether a windmill differs from a
+   watermill in output or cost.
