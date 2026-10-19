@@ -6199,6 +6199,7 @@ permission for that change, and `.claude/agents/` the same (`D-087`); the answer
 grants the practice, not an edit. Until the user asks for one, this ruling is
 where the permission lives, and an implementer session dispatching the decider
 cites `R-116`.
+Written there by `R-117`, at the user's request.
 
 **Cost.** A question can be raised and ruled within one implementer session, so
 the user sees the ruling only in the log; the commit of each ruling remains the
@@ -6212,3 +6213,29 @@ answer.
 the yes: the words approve the practice and name no condition; they are read in
 because the answer is to that recommendation. Where a kept brief should live is
 not fixed.
+
+### R-117 — `R-116` is written into `AGENTS.md`
+
+**Date:** 2026-10-19   **Origin:** user: "sì, scrivilo in AGENTS.md"
+**Verdict:** resolved — the user's permission for this edit, reserve 1 of `R-001`, recorded here as `AGENTS.md` asks of a decider session
+**docs/:** unchanged
+
+**The permission.** Granted by Federico Xella on 2026-10-19, in answer to the
+decider's report on `R-116`, for one change to `AGENTS.md`: writing `R-116` as a
+rule. It covers nothing else in the file, and nothing in `.claude/agents/` or
+`.claude/skills/`; no decider agent definition is written.
+
+**The rule added**, a paragraph closing "The decider answers what this file sends
+to a human": an implementer session may dispatch the decider as an agent, as it
+dispatches the coder; the agent is a decider session, reads `R-001` and its
+procedure itself, and works under them; the dispatching session writes no ruling
+and edits no `docs/` on its behalf; the brief holds facts only and is kept where
+the human can read it. It states `R-116` and its two conditions and adds nothing
+to them. The sentence before it, "An implementer session never … plays the
+decider", stands: dispatching the decider is not playing it.
+
+**Cost.** None beyond `R-116`'s.
+**Owed by the implementer:** nothing new; the rule binds from `AGENTS.md`.
+**Would overturn it:** the user withdrawing `R-116`.
+**Not verified:** where a kept brief lives is still not fixed, so "kept where the
+human can read it" binds without saying where.

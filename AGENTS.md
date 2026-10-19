@@ -51,6 +51,12 @@ as `docs/` does. Before writing a plan and before each point, read "Owed by the
 implementer" in `RULINGS.md`, and name the `R-NNN` in the commit that acts on
 one.
 
+You may dispatch the decider as an agent, as you dispatch the coder (`R-116`).
+The agent is a decider session, not yours: it reads `R-001` and
+`.claude/skills/decide/SKILL.md` itself and works under them, and you write no
+ruling and edit no `docs/` on its behalf. Its brief holds facts only, never a
+proposed answer, and is kept where the human can read it.
+
 ## This file changes only with permission, and the permission is recorded
 
 An agent edits `AGENTS.md` only with a human's permission for that change.
