@@ -55,7 +55,8 @@ You may dispatch the decider as an agent, as you dispatch the coder (`R-116`).
 The agent is a decider session, not yours: it reads `R-001` and
 `.claude/skills/decide/SKILL.md` itself and works under them, and you write no
 ruling and edit no `docs/` on its behalf. Its brief holds facts only, never a
-proposed answer, and is kept where the human can read it.
+proposed answer, and is appended verbatim to `DECIDER-BRIEFS.md`, beside the
+register, before the agent runs.
 
 ## This file changes only with permission, and the permission is recorded
 

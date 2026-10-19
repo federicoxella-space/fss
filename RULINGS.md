@@ -6239,3 +6239,31 @@ decider", stands: dispatching the decider is not playing it.
 **Would overturn it:** the user withdrawing `R-116`.
 **Not verified:** where a kept brief lives is still not fixed, so "kept where the
 human can read it" binds without saying where.
+
+### R-118 — A decider brief is kept in `DECIDER-BRIEFS.md`, beside the register
+
+**Date:** 2026-10-19   **Origin:** user: "il brief va in un file accanto al registro", answering what `R-117` left unverified
+**Verdict:** resolved — the user's decision, reserve 1 of `R-001`; the user's permission for one more change to `AGENTS.md`, recorded here
+**docs/:** unchanged
+
+`R-116` and `R-117` required the brief given to a dispatched decider to be "kept
+where the human can read it", and left where unfixed. The user fixed it: a file
+beside the register. The file is `DECIDER-BRIEFS.md` at the repository root,
+created by this ruling; the name is the decider's, the place the user's. Each
+brief is appended verbatim, before the agent runs, under a heading giving the
+date, the branch and the items sent; entries are never edited, as the
+register's are not.
+
+**The permission.** The user's answer is read as permission for the one change
+it needs in `AGENTS.md`: the clause "is kept where the human can read it" of the
+paragraph `R-117` added becomes "is appended verbatim to `DECIDER-BRIEFS.md`,
+beside the register, before the agent runs". Nothing else in the file changes.
+
+**Cost.** One more file at the root; a dispatch writes to it first.
+**Owed by the implementer:** a session that dispatches the decider appends the
+brief to `DECIDER-BRIEFS.md` before the agent runs, and commits it with or before
+the rulings it led to. Cite `R-118`.
+**Would overturn it:** the user moving the briefs elsewhere.
+**Not verified:** that the user's sentence was meant as permission to edit
+`AGENTS.md` as well as a choice of place; it answers a gap in the rule just
+written there, and is read so.
