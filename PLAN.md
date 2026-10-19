@@ -51,6 +51,22 @@ rewritten one, which is read afresh at each invocation.
 - **Core:** no — the diff touches only `.claude/skills/plan-explain/` and
   `.claude/hooks/`.
 
+*Outcome:* 2026-10-20. Closed: `criteria-cite.ps1 -SelfTest` ran 10 cases, 0
+failed, and the script on the real checklist exits 0; the code-reviewer read
+every citation against `R-101` to `R-105` and found none that says something
+else. The faults went red: `K1` citing `R-999` (exit 1), `K4` citing nothing
+(exit 1), the script's body emptied (self-test 7 of 10 failed), and the planted
+`K2` citing `R-102` was reported by the code-reviewer while the script gives it
+exit 0, as the point expects. The code-reviewer's two verifiable findings
+(a `K` rule at another heading level, a duplicate `K1`) and one inference in
+`K3` are applied; the rest are taste or answered, rejected in `D-129`. The check
+misses a citation that exists and says something else, and a rule drifting from
+its ruling with the citation right; recorded beside it. `D-129`. Agents
+(`R-067`): tester, code-reviewer, documenter and committer dispatched. Not run:
+the coder, the files being in `.claude/`; the revisioners, `Core: no` held at
+step 5; the tester at step 4, the orchestrator ran the self-test and the faults.
+This outcome does not claim `R-046`'s check.
+
 ## 2. Criteria attacked before they freeze (review A)
 
 - **Does:** `/plan-explain -Draft` reads every point of a draft, not the first

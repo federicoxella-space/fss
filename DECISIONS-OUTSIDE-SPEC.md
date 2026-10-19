@@ -4451,3 +4451,82 @@ the request quotes what it found and what changed.
 it.
 **Not verified:** the second version of the draft was not read blind again;
 whether a project settings hook reaches subagents.
+
+## 2026-10-20 — The workflow review plan
+
+### D-129 · Point 1 · The criteria checklist: six rules, each tied to its ruling, and a script that checks the ties exist
+
+**Built** (by the orchestrator, not the coder: `.claude/skills/` and
+`.claude/hooks/` are not the coder's, `R-010`, `D-087`; the point names both
+folders, which is the permission): `.claude/skills/plan-explain/criteria.md`,
+rules `K1` to `K6`, each a `###` heading citing `R-101` to `R-105`; and
+`.claude/hooks/criteria-cite.ps1` with `-SelfTest`. `core/`, `docs/` and
+`AGENTS.md` untouched.
+
+**Decided (`docs/` silent: process work).**
+1. **The checklist lives in `.claude/skills/plan-explain/`**, beside the skill
+   that will read it (point 2 wires the reading). *Would overturn it:* a ruling
+   placing it elsewhere.
+2. **The script exits 2 when a file cannot be read**, apart from 1 for a
+   violation. *Would overturn it:* a convention for hook exit codes that
+   differs.
+3. **A rule is a `###` heading and nothing else.** A `K` rule at another level
+   (`## K7`) or a second `### K1` is refused, with self-test cases `level.md` and
+   `twice.md`; prose such as `**K7**` or `- K7` is not caught, the guard covering
+   lines that begin with `K<n>`. *Would overturn it:* a checklist form that
+   needs another shape.
+4. **The six rules' wording, each narrowed to what its ruling says.** `K3`'s last
+   clause ("an independent recount of the wrong quantity is still wrong") was an
+   inference `R-102` does not state and is removed. `K5`'s "or built from the
+   same objects the check uses" is kept: `R-105`'s own "Cost" names that
+   construction as what a rerun would first need. *Would overturn it:* a ruling
+   that a rule misreads its citation.
+
+**Results.** `criteria-cite.ps1 -SelfTest`: 10 cases, 0 failed. The script on
+the real checklist: exit 0, "every rule cites only identifiers that exist".
+
+**Faults (`Fails when`), introduced by the orchestrator** on copies and on the
+script (`mutate.ps1` cannot reach `.claude/`), tree-state hash equal before and
+after: `K1` citing `R-999` in a copy, exit 1 "K1 cites R-999, which has no
+heading"; `K4` stripped of its citation in a copy, exit 1 "K4 cites nothing"; a
+planted wrong citation, `K2` citing `R-102`, in a copy given to the code-reviewer
+as a second candidate version without saying what differed: the reviewer
+reported it ("R-102 is about the bytes column ... says nothing about paths that
+share code or geometry"), while the script gives it exit 0, as the point
+expects; the script's body emptied (`Get-Problems` returning no problems),
+self-test 7 of 10 cases failed.
+
+**Findings and their resolution.**
+- Code-reviewer: every citation of `criteria.md` checked against `R-101` to
+  `R-105`; each says what the rule claims.
+- Verifiable, **applied** (one round): a `K` rule at another heading level was
+  skipped uncounted, and a duplicate `### K1` hid the first; both refused now
+  (decision 3).
+- `K3`'s last clause an inference `R-102` does not state (table C2, C4):
+  **applied**, removed.
+- `K5`'s "or built from the same objects the check uses": **rejected**, kept,
+  for the reason in decision 4.
+- Taste, **rejected**: `**K7**` or `- K7` in prose not caught, since the guard
+  covers lines beginning with `K<n>`; the identifier pattern ignoring malformed
+  ids such as `R-10`.
+- Questions answered: the hooks run under pwsh 7, as every hook here, and
+  `GetFullPath(string, string)` is pwsh 7's; `criteria.md`'s "read by the blind
+  reader" is wired by point 2 of this plan.
+
+**Faults the check misses, recorded beside it:** a citation that exists and says
+something else (by design the code-reviewer's part, the point's third fault);
+a rule's text drifting from its ruling with the citation still right.
+
+**Agents (`R-067`).** Dispatched: tester (step 2, the check as it stood: red,
+exit 64, the script absent), code-reviewer, documenter, committer. Not run: the
+coder (the files are in `.claude/`, the orchestrator's); the revisioners, `Core:
+no` held at step 5 (no path under `core/`, `docs/` or `AGENTS.md` in the diff);
+the tester at step 4, the check being a script self-test that the orchestrator
+ran with the faults.
+
+**What `docs/` says:** nothing; process work. `R-101` to `R-105` are the
+citations the rules rest on.
+**Would overturn it:** a ruling that a rule misreads its citation.
+**Not verified:** that each rule's wording stays equal to its ruling over time;
+that the blind reader applies the checklist (point 2); the script under a shell
+other than pwsh 7.
