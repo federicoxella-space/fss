@@ -172,6 +172,29 @@ the tester, the check being a script self-test run by the orchestrator; the
 coder, the file being in `.claude/hooks/`; the revisioners, `Core: no` held. This
 outcome does not claim `R-046`'s check.
 
+## 9. A record opens at a paragraph, not at any line (added after point 3)
+
+Added on 2026-10-20 with the user's approval, "sì, aggiungi il punto 3a e
+procedi", under `D-014`: point 3's outcome wraps onto a line that begins with
+`*Ruled:*`, and `plan-state` read it as a new record, cutting the outcome
+paragraph before its *left open*; `deciderDue` came out false. Numbered 9 so
+that `plan-state` reads it, and placed here so that it runs before point 4
+(`R-074`).
+
+- **Does:** in `plan-state.ps1`, a line that begins with a record marker opens
+  a record only when it starts a paragraph — the first line of the section, or a
+  line after a blank one — both where a point's frozen text is read and where
+  `deciderDue` reads the outcome paragraph. A fixture plan whose outcome
+  paragraph wraps onto a line beginning with `*Ruled:*` and carries *left open*
+  after it. Edits `.claude/hooks/`.
+- **Closed by:** `plan-state -SelfTest` green with the new fixture: `deciderDue`
+  true, and the fixture's point not reported changed against an installed copy
+  in the fixture repository; and `plan-state` on the live `PLAN.md` reads
+  `deciderDue` true, point 3's outcome carrying *left open*.
+- **Fails when:** a marker at the start of any line opens a record, as before
+  this point: the new fixture's `deciderDue` goes false.
+- **Core:** no — the diff touches only `.claude/hooks/`.
+
 ## 4. The register written insert-only by a hook (review P1)
 
 - **Does:** a project `.claude/settings.json` wires `path-guard` to every
