@@ -4616,3 +4616,99 @@ not dispatched, the check is a skill run, not a test.
 point's `shallow` note); a reader that reads the register and cites only `K`
 numbers; the skill under a draft whose block heading is neither of the two
 known.
+
+### D-131 · Point 3 · `plan-state` reads a point's frozen text: record paragraphs, not lines, and the archive count by headings
+
+**Built** (by the orchestrator, not the coder: `.claude/hooks/` is not the
+coder's, `R-010`, `D-087`; the point says it edits `.claude/hooks/`):
+`.claude/hooks/plan-state.ps1` gains `Get-Install` (the oldest commit in the
+plan's range that adds `PLAN.md`, read only for the live `PLAN.md`),
+`Get-Sections`, and `Get-FrozenText` (a point's section without its record
+paragraphs). Per point: `recorded`, `added`, `changed` (heading or frozen text
+differs from the installing commit). At plan level: `install`, `gone`,
+`deciderDue`. `git show` is read as UTF-8. New fixtures
+`.claude/hooks/fixtures/plan-state/decider-defective.md`, `decider-ruled.md`,
+`decider-italian.md`. `core/`, `docs/` and `AGENTS.md` untouched.
+
+**Decided (`docs/` silent: process work).**
+1. **A record is a paragraph, not a line.** The point says "the lines that begin
+   with an outcome marker". An outcome wraps over several lines, so dropping only
+   the first line leaves the rest in the frozen text and every closed point reads
+   as changed, which is the point's own second fault. `Get-FrozenText` drops the
+   paragraph a marker (`*Outcome:*`, `*Esito:*`, `*Ruled:*`, `*Reserve
+   discharged:*`, `*Riserva sciolta:*`) opens, to the next blank line; blank
+   ends are dropped and CR ignored. *Would overturn it:* a ruling that an outcome
+   is one line.
+2. **`deciderDue` reads the last closed point's status for FAILED, and its
+   outcome paragraph alone for *criterion defective*, *criterio difettoso* and
+   *left open***, asterisks and underscores ignored. FAILED is read from the
+   status as `Read-Point` reads it, not matched in prose: a clean outcome saying
+   "failed" in passing must not trigger the decider. The three phrase markers
+   are still matched anywhere in the outcome paragraph, the plan saying the line
+   "carries" them. *Would overturn it:* a ruling that the markers have a fixed
+   position.
+3. **`git show` is read as UTF-8**, the archives and plans holding non-ASCII
+   text; the console's default code page garbled it. *Would overturn it:* a
+   plan restricted to ASCII.
+4. **Section keys are strings** (the point number as text), so `changed`,
+   `added` and `gone` compare headings and numbers alike. *Would overturn it:*
+   a need to order points numerically across the comparison.
+5. **The new fields exist only for the live `PLAN.md`;** for any other path
+   they are null. *Would overturn it:* a use of `-Path` on a plan with its own
+   history.
+6. **The self-test's archive count is by headings.** The self-test pinned "31
+   points closed" across the archives and was red before this point (44
+   found). It now counts the archives' `## n.` headings. That is outside the
+   point's text, was needed to turn the self-test green, and is weaker: a
+   deleted archive no longer turns it red. **Left to the decider.** *Would
+   overturn it:* a ruling that the count stays pinned, with the number it
+   should be.
+
+**Results.** `plan-state -SelfTest`: 84 cases, 0 failed, on a fixture
+repository: a plan installed; point 1 closed with reserve, a *Ruled:* line and a
+*Reserve discharged:* line; point 2's "Closed by" edited in a later commit;
+point 3 deleted; point 4 added; point 5 closed with *Esito:*; point 6's heading
+edited. `changed` = 2 and 6, `gone` = 3, `added` = 4, `recorded` = 1 and 5.
+`deciderDue` true for `decider-defective.md`, false for `decider-ruled.md` (a
+clean outcome with "failed" in prose, then a *Ruled:* criterion defective line),
+true for `decider-italian.md` (**criterio difettoso**), false with nothing
+closed (the draft fixture, all open), true for a FAILED-status point. Live:
+install `a9ee621`, points 1 and 2 recorded, none changed, `gone` empty,
+`deciderDue` false.
+
+**Faults (`Fails when`), introduced by the orchestrator** (`mutate.ps1` cannot
+reach `.claude/`), each red and restored, tree-state hash equal before and after:
+the baseline taken as the latest commit touching `PLAN.md`: 4 failures, point 2
+not reported changed (`Fails when`); record paragraphs not excluded: points 1
+and 5 reported changed (`Fails when`); *Ruled:* dropped from the record markers:
+point 1 changed; the heading comparison removed: point 6 not changed. Before the
+review, also `deciderDue` reading past the outcome paragraph: the Ruled fixture
+true. First-round faults were seen red before the review; after the review's
+findings were applied in one round, all were re-run red.
+
+**Findings and their resolution.**
+- Code-reviewer: the check is satisfied as written.
+- Verifiable, **applied** (one round): *Ruled:*, *Reserve discharged:* and
+  *Esito:* never exercised on the changed path (fixture points 1 and 5 added);
+  the heading comparison untested (point 6); the "nothing closed" case vacuous
+  (now the draft fixture, all open); FAILED matched anywhere in prose (now read
+  from the status, a FAILED-status case added, decision 2); a comment said
+  "line" where the code drops paragraphs (reworded, table C2).
+- **Recorded, not changed:** the reading of "lines" as paragraphs (decision 1);
+  the archive count change (decision 6, a question for the decider); "left open"
+  and "criterion defective" still matched anywhere in the outcome paragraph (the
+  plan says the line "carries" the marker, decision 2); a delete and re-add of
+  `PLAN.md` within a range keeps the first install as the baseline, untested.
+  No finding was rejected.
+
+**Agents (`R-067`).** Dispatched: code-reviewer, documenter, committer. Not run:
+the tester (the check is a script self-test, run by the orchestrator); the
+coder (the file is in `.claude/hooks/`, the orchestrator's); the revisioners
+(`Core: no` held: only `.claude/hooks/` in the diff).
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** a ruling that an outcome is one line, or that the archive
+count stays pinned.
+**Not verified:** a delete and re-add of `PLAN.md` within one range; `deciderDue`
+where a marker appears in the outcome paragraph as quoted prose; the script under
+a shell other than pwsh 7.

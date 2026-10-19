@@ -146,6 +146,32 @@ dispatched, the check being a skill run, not a test. This outcome does not claim
   closing a point marks it changed: point 1 is reported.
 - **Core:** no — the diff touches only `.claude/hooks/`.
 
+*Outcome:* 2026-10-20. Closed: `plan-state -SelfTest` ran 84 cases, 0 failed,
+on a fixture repository (point 1 closed with reserve, a *Ruled:* line and a
+*Reserve discharged:* line; point 2's "Closed by" edited later; point 3 deleted;
+point 4 added; point 5 closed with *Esito:*; point 6's heading edited): changed
+= points 2 and 6, gone = 3, added = 4, recorded = 1 and 5; `deciderDue` true for
+the defective and the Italian fixtures, false for the Ruled one, false with
+nothing closed, true for a FAILED point. Live: install `a9ee621`, points 1 and 2
+recorded, none changed, none gone, `deciderDue` false. The faults went red: the
+baseline taken as the latest commit touching `PLAN.md` (4 failures, point 2 not
+reported), record paragraphs not excluded (points 1 and 5 reported changed),
+*Ruled:* dropped from the markers (point 1 changed), the heading comparison
+removed (point 6 not changed); also `deciderDue` reading past the outcome
+paragraph (the Ruled fixture true). Tree hash equal around each. Review:
+code-reviewer, the check satisfied as written; the verifiable findings applied in
+one round (record markers and the heading unexercised, a vacuous "nothing closed"
+case, FAILED read from the status, a comment's wording). *Left open*, for the
+decider: the archive count in the self-test, pinned at 31 points and red with 44
+found, now counts the archives' `## n.` headings, outside the point's text and
+weaker (a deleted archive no longer turns it red); and the reading of "lines that
+begin with an outcome marker" as the paragraphs those lines open, since an
+outcome wraps and the literal reading marks every closed point changed. `D-131`.
+Agents (`R-067`): code-reviewer, documenter and committer dispatched. Not run:
+the tester, the check being a script self-test run by the orchestrator; the
+coder, the file being in `.claude/hooks/`; the revisioners, `Core: no` held. This
+outcome does not claim `R-046`'s check.
+
 ## 4. The register written insert-only by a hook (review P1)
 
 - **Does:** a project `.claude/settings.json` wires `path-guard` to every
