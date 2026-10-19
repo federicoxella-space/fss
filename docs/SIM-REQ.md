@@ -273,9 +273,9 @@ A good's record says whether it is durable. A good that is not takes the consuma
 **FR-C-04** — Each settlement update runs a clearing pass per clearing, a good with a market of its own or a class whose variants share one (FR-P-03d), the clearings that meet one need taken in the order of DEC-099:
 
 1. Cohorts consume from their own holdings, the seed reserve excepted under FR-P-10d.
-2. Unmet need becomes demand for the goods that meet it, chosen under DEC-099, capped by the cohort's currency, which includes what it borrowed this update.
-3. Holdings above the cohort's own needs and its seed reserve become supply.
-4. If supply is short, it is allocated in descending order of ability to pay, the currency per member, demand that meets a need before demand that only raises its grade; the share of a cohort able to pay is read from its wealth curve under FR-J-22. Demand rationed out of one clearing falls to the other clearings that meet the same need, within the update.
+2. Unmet need becomes demand for the goods that meet it, chosen under DEC-099, capped by the cohort's currency, which includes what it borrowed this update. A cohort whose activity is a recipe also demands its inputs: for each, what the activity consumes in one update at its capacity, the capacity of the buildings the cohort owns or, for an activity that needs none, the labour of the cohort's working members, less what it holds of the input. An input on a class is placed as a need is. Inputs are paid from the currency left once the cohort's needs of tiers 0 and 1 are met (DEC-104).
+3. Holdings above the cohort's own needs, its seed reserve and its inputs for one update at capacity become supply.
+4. If supply is short, it is allocated in descending order of ability to pay, the currency per member, demand that meets a need of tier 0 or 1 first, then demand for inputs, then the rest, demand that meets a need before demand that only raises its grade; the share of a cohort able to pay is read from its wealth curve under FR-J-22. Demand rationed out of one clearing falls to the other clearings that meet the same need, within the update.
 5. Currency moves from buyers to sellers within the settlement.
 6. Price is recomputed from the resulting settlement stock for the next update.
 

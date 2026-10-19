@@ -275,6 +275,14 @@ Settlements are five types that follow population with hysteresis. Each type tra
 
 **Cost.** The ranking at a market place holds its catchment's rows. On the stand-in of the cost measurement, five of the twelve phases, that put a simulated day at 6.62 ms: within P-01, and over it once P-17's allowance for the unmeasured phases is taken. A village's price is its market's, so a village's own scarcity shows in rationing and hunger rather than in price. A market place writes rows of settlements whose update is not its own, and the assignment, the types and their thresholds are state and parameters to tune. Routed trade needs no haulage within reach, so a market place's import ceiling includes its catchment. A good in no group can be used only where it is held, which ties every recipe that takes it to its site.
 
+### DEC-104 — A producer buys its inputs after the needs of tiers 0 and 1
+
+A cohort whose activity is a recipe demands at market what its activity consumes in one update at capacity, less what it holds: the capacity of its buildings, or of its own working members where the activity needs no building. Inputs are paid from the currency left once its needs of tiers 0 and 1 are met, and in rationing they rank after those needs and before every other demand. What a producer holds of its inputs up to that quantity is not offered for sale.
+
+**Rationale.** Without input demand no recipe whose input is made elsewhere would run, and a miller's grain would be sold as surplus. Capacity rather than this update's labour, because labour expires with the update and a row routed to a market place is cleared in another update than its own; buildings and members are state, so the quantity is the same whenever it is read, and a producer with nothing on hand still asks for its inputs. After the needs, because a recipe's output serves needs only later: in a shortage grain is eaten before it is milled, and fuel warms a house before it feeds a forge. Before tier 2 and before a better grade, because they are preference and the trade is a living.
+
+**Cost.** A producer that cannot staff its capacity buys more than it will use; what is left counts against its next demand, and spoils if perishable. A poor craftsman eats before he buys, so in lean years crafts stop before people go hungry, and a craft that stops earns nothing to restart with but credit against its buildings.
+
 ---
 
 ## Events

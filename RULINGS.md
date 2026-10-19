@@ -189,6 +189,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   and the crop record's relation to durables (FR-P-10, FR-P-20).
 - **`R-111`**, in the points that build recipes and the rules file: inputs on a
   class, taken lowest grade first; an input naming a variant refused at load.
+- **`R-112`**, in the point that builds market clearing: input demand for one
+  update at capacity, withheld from supply, ranked after tiers 0 and 1.
 - **`R-108`**, from the phase 4 plan: five types and assignments at
   generation, no village out of reach; every routed row one entry of its
   market's ranking, read without walking every settlement; type and assignment
@@ -5920,3 +5922,70 @@ natural reading, and the second is stricter. AC-56 is an acceptance criterion,
 and choosing the looser reading of one is reserve 2 of `R-001`, so it is not
 chosen here; no class in phase 4's content holds such a material, so nothing
 waits on it.
+
+### R-112 — A producer demands its inputs for one update at capacity, after the needs of tiers 0 and 1: DEC-104
+
+**Date:** 2026-10-19   **Origin:** SQ-024, found ruling the user's answer on exchange within a place
+**Verdict:** promoted as DEC-104, with FR-C-04 specified
+**docs/:** `SIM-REQ` FR-C-04 steps 2 to 4. `SIM-ECON` phase 7; §Demand, a paragraph "Inputs" and a sentence under "Rationing". `SIM-DEC` DEC-104 new. Revisions already today's.
+
+The user's case for exchange within a place is the charcoal burner taking the
+woodcutter's timber. Reading what that exchange would run on, the grep of step 1
+over `input`, `inputs`, `demand` and FR-C-04 found that **no text makes a recipe's
+inputs demand**. FR-C-04 step 2 turns unmet *need* into demand; step 3 offers
+"holdings above the cohort's own needs and its seed reserve" as supply. A miller
+therefore never bids for grain, and the grain a miller holds is sold. Only an
+activity whose inputs are its own produce could run. Phase 3 lends "for inputs",
+FR-P-15 subtracts "input cost" and AC-09 has an Input row, so the intent was
+always that inputs are bought; the rule was never written. It must be before the
+phase 4 plan builds the market, and the exchange of `R-113` is meaningless
+without it, so it is ruled here rather than left to an entry.
+
+**Three choices, each on the merits.**
+
+1. **How much.** What the activity consumes in one update at capacity, less what
+   the cohort holds: capacity being the buildings it owns, or where the activity
+   needs none, its own working members. The obvious alternative, the labour
+   phase 4 assigned in this update, is scratch: labour expires with the update
+   (FR-C-05), and a routed row is cleared at its market place in another update
+   than its own (FR-M-19), when that labour no longer exists. Buildings and
+   members are state, so the quantity is the same whenever it is read. And a
+   producer with no inputs on hand, whose phase 5 ran nothing, still asks.
+2. **What is withheld from supply.** The same quantity. Otherwise a producer
+   would sell in step 3 what it bids for in step 2.
+3. **Where it ranks, and what pays for it.** After tiers 0 and 1, before tier 2
+   and before a better grade, in spending and in rationing alike. The rationing
+   rule of `SIM-ECON` extends to it: nobody buys grain to mill while another
+   cannot buy grain to eat and could pay. A recipe's output meets needs only
+   later, so in a shortage grain is eaten before it is milled, and DEC-099 sends
+   bread's buyers back to grain. Before tier 1 would let a bloomery's charcoal
+   outbid a house's fuel, which `R-114` makes lethal. After tier 2 and the better
+   grade would starve the crafts whenever the rich buy comfort, and those are
+   preferences while a trade is a living.
+
+An input on a class is placed as a need is (`R-111`): on the cheapest good per
+unit of value that meets it, falling to the others when rationed.
+
+None of this rests on code; no market exists in `core/`.
+
+**Cost.** A producer that cannot staff its capacity overbuys; the excess counts
+against its next demand and spoils if perishable. A poor craftsman eats before he
+buys, so in a lean year crafts stop before people go hungry, and a stopped craft
+restarts on credit against its buildings or not at all; that is a path into
+destitution beside R12, braked as R12 is and by B2. Phase 7 ranks one more class
+of demand.
+**Owed by the implementer:** the point that builds market clearing: input demand
+and its withholding from supply under FR-C-04, with a check where a producer's
+input is made by another row, its `Fails when:` naming a producer whose held
+input is offered as supply, or whose input demand outranks a tier 1 need. Cite
+`R-112`.
+**Would overturn it:** a sweep in which crafts collapse every lean year and never
+recover, which would argue for inputs ranking with tier 1; a measurement in which
+buying for capacity leaves large idle stocks, which would argue for a demand read
+from the last update's output, at the price of storing it.
+**Not verified:** that durables are bought: FR-P-23 calls wear "the demand for
+durable goods" and FR-C-04 states no such demand either. Nor how sellers share a
+long clearing of a good with a market of its own: FR-P-03d says it for variants,
+and FR-C-04 says nothing. Both are gaps of the same kind, found beside this one
+and not ruled here; each needs a ruling of its own before the point that builds
+the market.
