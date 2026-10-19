@@ -786,6 +786,7 @@ the decider's.
 **Status:** **closed 2026-10-17 by R-108**, save the forge split, a revision of `R-063`'s content.
 **Status:** the forge split's structure **closed 2026-10-17 by R-109**; its details escalated to the user there.
 **Status:** the forge's details, the review of the chains and water **closed 2026-10-19 by R-110** as content, save what it escalates.
+**Status:** fuel as a recipe input **closed 2026-10-19 by R-111**.
 
 **What the user proposes.** Prices form at market places, not in every
 settlement. Settlement types become five, each with a number of markets:

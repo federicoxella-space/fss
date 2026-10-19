@@ -187,6 +187,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   variant offer that never sells.
 - **`R-110`**, in the rules file of `R-065`: the content of `R-110` as approved,
   and the crop record's relation to durables (FR-P-10, FR-P-20).
+- **`R-111`**, in the points that build recipes and the rules file: inputs on a
+  class, taken lowest grade first; an input naming a variant refused at load.
 - **`R-108`**, from the phase 4 plan: five types and assignments at
   generation, no village out of reach; every routed row one entry of its
   market's ranking, read without walking every settlement; type and assignment
@@ -5861,3 +5863,60 @@ chains with the values the implementer will propose; that the generator places e
 be supplied with charcoal, which travels in G2 but loses 2% a hop. `RULINGS.md`
 was read in its state, owed actions, `R-001`, `R-050`, `R-056` to `R-065` and
 the rulings from `R-106` on, not whole.
+
+### R-111 — A recipe input names a good with a market of its own, or a class; never a variant
+
+**Date:** 2026-10-19   **Origin:** SQ-024, the user's answer on fuel of 2026-10-19, and the implementer's reading 1 recorded beside it
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-02, inputs on a class and the refusal; FR-P-03c, how an input on a class counts. `SIM-ECON` phase 5. `SIM-DEC` DEC-015, one clause; DEC-102's cost, one sentence. Revisions to today.
+
+The user introduced Fuel as a class, "stoppe, legnetti, carbone, ecc.", "con
+alcune ricette che ne richiedono di specifici": some recipes take any fuel, some
+one fuel in particular. FR-P-02 let a recipe's inputs be goods only. Two things
+were missing: an input that any good of a class meets, and a rule for an input
+that wants one good of a class whose goods may clear together.
+
+**An input on a class.** It is written as a need is (FR-P-03b): a quantity in
+the class's units, met by any good of the class in proportion to its value, so
+that "any fuel" is one input and adding a fuel needs no recipe change. From
+holdings it takes the lowest grade first, as a cohort feeding itself does
+(FR-C-03), which keeps a better good for whatever names it. It carries no
+minimum grade: a recipe wanting a better good names that good. How such an input
+is bought is `R-112`'s.
+
+**An input on one good must name a good with a market of its own.** The
+implementer's reading 1 saw the alternative: a recipe naming a variant is demand
+for that variant inside its class's clearing. FR-P-03d derives which buyer
+receives which variant from the rationing order and good id, so a bloomery
+wanting charcoal could be handed kindling; steering it would take demand per
+variant, a price per variant, and a split per variant, which is a market of its
+own by another name. So validation refuses an input that names a variant, and an
+author who wants one fuel in particular gives it a market (DEC-102's cost now
+says so). Charcoal has one under `R-110`.
+
+**Food value.** FR-P-03c counts each input at its embodied food value. An input
+on a class is met by whichever goods are held, so it counts at the least
+embodied food value per unit of the class's value among the goods that can meet
+it: the rule must hold on the path that consumes least, `R-056`'s reason for
+"the least". Fuel embodies none, so the oven's guarantee rests on flour, as it
+did.
+
+None of this rests on code; no recipe exists in `core/`.
+
+**Cost.** A good named by any recipe is one more clearing in every settlement
+that clears its group, so an author's wish for a specific input costs a ranking.
+Validation gains one refusal and one rule in the food-value pass.
+**Owed by the implementer:** the point that builds recipes: inputs on a class,
+taken lowest grade first; the point that builds the rules file: the refusal,
+its `Fails when:` naming a recipe input on a variant accepted at load. Cite
+`R-111`.
+**Would overturn it:** content in which many recipes each need one minor good of
+a large class, so that markets multiply; that would argue for demand per variant
+inside the class clearing, at its cost.
+**Not verified, and left open:** how FR-K-15's dependency check (AC-56) reads an
+input on a class. A recipe depends on a dungeon-only material through it either
+when every good that can meet it does, or when any one does; the first is the
+natural reading, and the second is stricter. AC-56 is an acceptance criterion,
+and choosing the looser reading of one is reserve 2 of `R-001`, so it is not
+chosen here; no class in phase 4's content holds such a material, so nothing
+waits on it.

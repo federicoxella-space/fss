@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-10-17
+**Revision:** 2026-10-19
 **Companion:** SIM-REQ
 
 ---
@@ -191,7 +191,7 @@ An entity's state at tick T is computed directly, not by replaying T ticks. Attr
 
 ### DEC-015 — A good is a data record and a recipe is a data record
 
-Unit weight, reference value, perishability, whether durable, classes, at most one per class tree, with a value in each, processing grade. Recipes carry inputs, output, labour, building. No good and no recipe requires code.
+Unit weight, reference value, perishability, whether durable, classes, at most one per class tree, with a value in each, processing grade. Recipes carry inputs, output, labour, building; an input names a good with a market of its own, or a class whose goods all meet it. No good and no recipe requires code.
 
 **Rationale.** The plan is to start with the goods of P-09 and grow. That only works if growth costs data entry rather than branches.
 
@@ -265,7 +265,7 @@ Each good declares one of the two. The variants of a class share one clearing, a
 
 **Rationale.** Rationing is the term of the update that grows with the square of the rows (SIM-ECON), and it runs once per clearing. Hundreds of goods each on a market of its own would make hundreds of rankings in every settlement. Important goods, grain, iron, wool, still form their own price; minor goods are alternatives within a class that differ in quality, and pricing them by their value in the class keeps the clearings in the tens while the goods run to hundreds. Equal shares in a long clearing mean that every seller of a class faces the same market, so no variant is starved of buyers by its id or its size.
 
-**Cost.** A variant has no price of its own: one short while its siblings abound is bought out with no price signal, and its producers read the class's price. Which goods can signal scarcity is the author's choice, good by good, and AC-09 and AC-10 read clearings, so a variant's own scarcity is never tested. Quality is expressed only through value per unit in the class, which for food is nutrition: two foods of one nutrition and different refinement cost the same per unit unless the author gives them their own markets. Each settlement that clears a class carries a remainder per variant.
+**Cost.** A variant has no price of its own: one short while its siblings abound is bought out with no price signal, and its producers read the class's price. Which goods can signal scarcity is the author's choice, good by good, and AC-09 and AC-10 read clearings, so a variant's own scarcity is never tested. Quality is expressed only through value per unit in the class, which for food is nutrition: two foods of one nutrition and different refinement cost the same per unit unless the author gives them their own markets. Each settlement that clears a class carries a remainder per variant. A recipe that needs one particular good, and no other of its class, needs that good to have a market of its own.
 
 ### DEC-103 — Prices form at market places, and every other settlement trades there
 
