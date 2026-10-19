@@ -193,6 +193,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   update at capacity, withheld from supply, ranked after tiers 0 and 1.
 - **`R-113`**, in the market point: each place exchanges among its own rows
   before the market's ranking, at the market's price, with no transit loss.
+- **`R-114`**, in the needs subsystem's point: a tier 1 need following the
+  warmth curve and lethal when unmet, the curves, P-81 proposed.
 - **`R-108`**, from the phase 4 plan: five types and assignments at
   generation, no village out of reach; every routed row one entry of its
   market's ranking, read without walking every settlement; type and assignment
@@ -6061,3 +6063,71 @@ take part in the ranking without a first claim on their own supply.
 **Not verified:** how the first pass orders its writes against the ranking's when
 a routed row's settlement and the market place share a bucket; `SIM-ECON` asks
 writes ordered by bucket and id and that was not worked through for two passes.
+
+### R-114 — Heating is a tier 1 need that follows the warmth curve and kills when left unmet: DEC-105
+
+**Date:** 2026-10-19   **Origin:** SQ-024, the user's answer of 2026-10-19 on a fuel need, and the implementer's reading 3 recorded beside it
+**Verdict:** promoted as DEC-105, with FR-P-03b, FR-P-08 and FR-D-03 specified — tier 1 and lethality the user's, the rules the decider's
+**docs/:** `SIM-REQ` FR-P-03b, two declarations a tier 1 need may carry; FR-P-08, a sixth modifier, warmth; FR-D-03, cold; P-81 new. `SIM-ECON` the tier table, phase 11, the paragraph on routed rows. `SIM-DEC` DEC-037, the modifiers and their count; DEC-105 new. `SIM-LOOPS` R14 new, the gate check. Revisions to today.
+
+The user: "Si, dipendente dalla stagione + temperatura (in inverno senza
+riscaldamento si muore di freddo)", for a fuel need at tier 1. Three things in
+that answer meet text already in `docs/`. FR-T-05 and DEC-006b: seasons "carry no
+mechanical effect of their own". The tier table of `SIM-ECON`: tier 1 is
+deferrable and its shortfall raises discontent, not deaths. FR-P-03b: tier 0
+holds exactly one need, on food. The user set tier 1 and death by cold; the
+decider's part is how both hold with the rest.
+
+**Following season and temperature: a sixth climate modifier, warmth.** The
+implementer's reading 3 is right. Climate already acts through a pair of weekly
+curves per modifier, interpolated on `climateIndex` (FR-P-08, DEC-037), which
+renders season and temperature together, week by week and place by place,
+without the season itself acting. A need may declare that its quantity is the
+record's times the warmth modifier for the week, which may be zero. FR-T-05
+stands unchanged, and no seam appears on the map. Six pairs of curves instead of
+five; they are content the user approves (`R-064`).
+
+**Killing at tier 1: a lethal need, read in the update, not kept.** A tier 1
+need may be lethal: what is left of it unmet per member once own consumption and
+the market have run raises the death rate in phase 11 of the same update by P-81
+per unit. Three alternatives were set aside.
+- *A second tier 0 need.* The user said tier 1, and rightly: a household eats
+  before it heats. And tier 0's one need is what the hunger deficit, the seed
+  reserve, FR-P-03c's "the class the tier 0 need names" and B5c are written
+  about; a second would reopen every one.
+- *A deficit, as hunger has.* Hunger kills over weeks as reserves run out;
+  exposure kills in days, and an update is a week. A deficit would add a field
+  per row, a decay parameter, and the averaging of FR-D-03a on every move, for a
+  lag the phenomenon does not have.
+- *Reading the share left unmet.* A mild week entirely unheated would then kill
+  as a January does. Reading the quantity, which the curve already scales, makes
+  a small need a small risk.
+
+The value is read as FR-D-03a reads the tier 0 need, so a routed row's is written
+from what its phase 6 left unmet, at the end of its own phase 7, and phase 11 of
+the same update reads it. It does not outlive the update, so it is not state.
+
+**A loop, R14.** Fuel short in winter → deaths → fewer hands making timber and
+charcoal → fuel shorter. `SIM-LOOPS` requires a named brake: fewer hearths, as
+B5a, and the weather turning, which stops the loop where the curve reaches zero
+and only slackens it where it never does.
+
+**Cost.** Within tier 1, rationing runs by ability to pay, so the better-off's
+bread above the minimum can outrank a poorer row's fuel; DEC-105 says so. Cold
+deaths and the mortality modifier both rise in winter and are tuned together.
+Six curves to author, 624 numbers. A fuel shortage in a cold place now kills,
+so timber and charcoal enter what the generator's initial stocks must cover
+(`R-063`'s "a season" of tier 0, now beside fuel).
+**Owed by the implementer:** the needs subsystem's point: the two declarations
+on the need record, the warmth curves, and P-81 proposed (`R-050`), with a check
+in a cold settlement whose fuel runs out, its `Fails when:` naming a lethal need
+unmet that kills nobody, or one that kills in a week whose warmth is zero. Cite
+`R-114`.
+**Would overturn it:** a sweep in which cold deaths come in one-week spikes the
+player reads as noise, which would argue for a short deficit; the user moving
+the need to tier 0, which reopens FR-P-03b's single tier 0 need.
+**Not verified:** that the generator's initial stocks and the woodcutters' output
+can carry a northern winter at all on phase 4's content; that a lethal tier 1
+need sits well with `SIM-OBS`, reserve 3 and unchanged: only its five headings
+were read, and OBS-3, scarcity reaching people unequally, is the one cold
+feeds.

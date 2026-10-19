@@ -369,6 +369,14 @@ Fewer people means more land each, which raises output per worker, which raises 
 
 ---
 
+### DEC-105 — Cold kills through a need that follows the weather, not through the season
+
+A need of tier 1 may follow the warmth modifier, so that its quantity is set week by week by the climate curves, and may be lethal, so that what is left of it unmet in an update raises that update's deaths. Fuel for heating is such a need. Nothing is kept from one update to the next: exposure acts in the update it happens.
+
+**Rationale.** The season has no mechanical effect of its own (DEC-006b); climate acts through weekly curves interpolated on the index (DEC-037), so a need that follows a curve is heavy in a northern January, light in a southern one and nothing in summer, with no seam between the two. Lethal at tier 1 rather than a second tier 0: a household eats before it heats, the one tier 0 need stays the food the hunger deficit, the seed reserve and the conservation rule are written about, and the deferrable needs keep their order. No deficit as hunger has: hunger kills over weeks as the body's reserves run out, cold in days, and an update is a week.
+
+**Cost.** Within tier 1 the shortfall is rationed by ability to pay, so the better-off's share of bread above the minimum can outrank a poorer row's fuel. Cold deaths and the mortality modifier both rise in winter and must be tuned together, or winter is counted twice. A mild week left unheated kills little only because the curve makes the need small; the curves carry that weight.
+
 ## Integration and operations
 
 ### DEC-030 — Commands in, events out, snapshot for reading
@@ -471,11 +479,11 @@ The generator assigns each settlement a fixed-point `climateIndex` on 0–10000.
 
 ### DEC-037 — Climate acts through pairs of 52-entry weekly curves, interpolated
 
-Each modifier has an authored pair of curves, `cold` and `warm`, giving a weekly value each; a settlement interpolates between the pair on its `climateIndex` in integer arithmetic. The modifiers govern travel cost, mortality, livestock growth, timber yield, and construction labour.
+Each modifier has an authored pair of curves, `cold` and `warm`, giving a weekly value each; a settlement interpolates between the pair on its `climateIndex` in integer arithmetic. The modifiers govern travel cost, mortality, livestock growth, timber yield, construction labour, and warmth, the quantity of a need that follows it.
 
 **Rationale.** Weekly resolution turns climate into a ramp rather than four jumps a year, so prices drift instead of stepping. Two curves plus interpolation cover the whole map in a few kilobytes and stay fully authorable without code. A pair per modifier, rather than one pair for all, lets a winter stop building sites without also raising mortality.
 
-**Cost.** Tuning happens across 104 authored numbers per modifier, 520 for the five, rather than a handful of constants, which needs a curve editor or a spreadsheet import before Phase 6.
+**Cost.** Tuning happens across 104 authored numbers per modifier, 624 for the six, rather than a handful of constants, which needs a curve editor or a spreadsheet import before Phase 6.
 
 ### DEC-038 — Crops are dated events, not continuous production
 

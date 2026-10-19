@@ -2,7 +2,7 @@
 
 **Document:** SIM-LOOPS
 **Status:** Draft
-**Revision:** 2026-10-17
+**Revision:** 2026-10-19
 **Gate:** No flow without a source and a sink. Every reinforcing loop has a named balancing loop.
 
 ---
@@ -113,6 +113,14 @@ More destitute → more labour offered → lower wage → more members below the
 
 B12a fails once the day-labourer share is near zero. B12b acts only where a neighbour is more attractive by more than the hysteresis band of FR-D-09. In a region poor throughout nobody leaves, and the loop stops at the lower clamp of the wage (DEC-045), which bounds it without braking it, and at hunger (R5).
 
+### R14 — Cold
+Fuel short in winter → deaths → labour lost → less timber and charcoal made → fuel shorter.
+**B14a — Fewer hearths.** Population loss reduces demand against the same stock, as B5a.
+**B14b — The weather turns.** The need follows the warmth curve, so the loop slackens as the weeks warm and stops where the curve reaches zero.
+*FR-P-03b, FR-P-08, FR-D-03, DEC-105. Tuned by P-81 and the warmth curves.*
+
+Where the warmth curve never reaches zero, B14b only slackens the loop, and B14a holds it.
+
 ### R8 — Treasure age
 Rich hoards → adventurer income high → share of the mestiere grows → hoards deplete faster → income falls.
 This one is balancing on its own, but it terminates: the stock does not return.
@@ -158,7 +166,7 @@ The return path from kingdom treasury to cohorts is the one that can be forgotte
 | Requirement of the gate | Status |
 |---|---|
 | Every flow has a source and a sink | Met, with land declared as a fixed stock |
-| Every reinforcing loop has a named balancing loop | Met for R1, R2, R4 to R7, R9 to R13; R3 below; R8 balances itself and terminates |
+| Every reinforcing loop has a named balancing loop | Met for R1, R2, R4 to R7, R9 to R14; R3 below; R8 balances itself and terminates |
 | Brakes are implemented by a requirement, not assumed | Met |
 | Brakes have a tuning parameter | Met, several still Open, save B7, an order of phases with nothing to tune |
 | R3 | Braked by B3a and B3b. Neither runs through price, which is what makes them hold. Verify in Phase 4 that the ceiling binds before starvation does |

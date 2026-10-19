@@ -44,14 +44,14 @@ Runs at settlement cadence, every 7 ticks, on the staggered bucket of FR-T-06. E
 | 8a | Destitution | Cohort members whose wealth falls below the threshold enter the destitute row. Destitute members above the exit threshold leave for their destinations: for agricultural activities only in an update holding a crop's sowing date. | FR-J-19, FR-J-20, FR-D-03a |
 | 9 | Spoilage | Perishability applied to all held goods, with remainder carry. | FR-P-13 |
 | 10 | Export | Outbound flow computed per link from the price differential, capped by surplus stock and by haulage capacity. Goods leave and enter transit. | FR-M-03, FR-M-03a, FR-J-04 |
-| 11 | Demography | Births, deaths including hunger and crowding mortality, migration decisions under the hysteresis band. Emigrants are drawn from the destitute row first and leave with their share under FR-D-04a, as migrants in transit; destitute emigrants raise danger on the link they take (FR-M-13). | FR-D-01 to FR-D-13, FR-M-13 |
+| 11 | Demography | Births, deaths including hunger, cold and crowding mortality, migration decisions under the hysteresis band. Emigrants are drawn from the destitute row first and leave with their share under FR-D-04a, as migrants in transit; destitute emigrants raise danger on the link they take (FR-M-13). | FR-D-01 to FR-D-13, FR-M-13 |
 | 12 | Bookkeeping | Fragility metrics updated. Chronicle entries emitted. Knowledge table refreshed for neighbours and aged for rumours. `changeCapacity` recomputed. Mestiere shares are realigned to the allocation vector for the activities that adjusted in this update, members carrying their hunger deficit. Every 28 ticks, type and market assignments are reassessed. | FR-E-03, FR-I-01, FR-I-05, FR-C-16, FR-J-03, FR-D-03a, FR-M-17, FR-M-18 |
 
 Phase 7 dominates the cost of the update and is the only part of it that grows with the square of the rows it ranks, routed rows included, because short supply is allocated in order of ability to pay. The ordering key must be computed once per cohort per clearing and then sorted, never recomputed inside the comparison: doing the division in the comparison turns a sort of a few dozen entries into a few thousand integer divisions per settlement update. This is the first thing to optimise and the thing that decides whether the wealth axis of DEC-054 fits the budget.
 
 Phases 3 and 8 are the two halves of credit: borrowing before the market, settlement after it.
 
-A market place's phase 7 writes the holdings and currency of the rows routed to it, whose own updates fall in other buckets (FR-T-06). A routed row therefore buys and sells between two of its own updates, and consumes what it bought in its next phase 6; its hunger deficit is written at the end of its own phase 7, from the tier 0 need its phase 6 left unmet.
+A market place's phase 7 writes the holdings and currency of the rows routed to it, whose own updates fall in other buckets (FR-T-06). A routed row therefore buys and sells between two of its own updates, and consumes what it bought in its next phase 6; its hunger deficit is written at the end of its own phase 7, from the tier 0 need its phase 6 left unmet, and what a lethal need left unmet is read the same way.
 
 ---
 
@@ -76,7 +76,7 @@ A need is defined per goods class, minimum grade and tier, per person per day (F
 | Tier | Name | Deferrable | Unmet consequence |
 |---|---|---|---|
 | 0 | Survival | no | hunger accumulates, mortality rises |
-| 1 | Basic | yes | discontent rises, feeding fragility |
+| 1 | Basic | yes | discontent rises, feeding fragility; a lethal need left unmet also raises mortality in the same update (FR-P-03b) |
 | 2 | Comfort | yes | no direct consequence |
 
 Tiers belong to needs, not goods.

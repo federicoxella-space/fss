@@ -108,7 +108,7 @@ dayOfMonth = dayOfYear % 28
 
 **FR-D-02** — Birth rate responds to food availability per capita and crowding.
 
-**FR-D-03** — Death rate is per age band and responds to hunger, disease, and violence.
+**FR-D-03** — Death rate is per age band and responds to hunger, cold, disease, and violence. Cold is a lethal need left unmet (FR-P-03b).
 
 **FR-D-03a** — Unmet tier 0 need accumulates as a hunger deficit per member of each cohort, in units of nutrition, and decays by P-70 per update when the need is met. It is updated once per update, after market clearing, from the tier 0 need still unmet once own consumption and the market have run (SIM-ECON phase 7). When members move from one row to another, the receiving row's deficit becomes the average of its own and that of the row they leave, weighted by count; the row they leave keeps its own. The death rate's response to hunger in FR-D-03 reads this deficit.
 
@@ -156,7 +156,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-03a** — A goods class is a data record with a name and an optional parent class. A good belongs to one or more classes, at most one in each class tree, and carries a value per unit in each, nutrition for food, and one processing grade. Belonging to a subclass is belonging to every class above it, for the needs that read them (FR-P-03b). Classes and memberships are added or changed without code change. A subclass measures in its parent's units: a good's value is in the units of its tree's root, and validation at load refuses a good that names two classes of one tree.
 
-**FR-P-03b** — A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day. Any good of the class or of its subclasses, at or above the minimum grade, meets it in proportion to its value. Tier 0 holds exactly one need, on the food class, and validation at load refuses a needs table that holds another. Needs add: each is a quantity of its own, and a unit consumed meets one need only.
+**FR-P-03b** — A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day. Any good of the class or of its subclasses, at or above the minimum grade, meets it in proportion to its value. Tier 0 holds exactly one need, on the food class, and validation at load refuses a needs table that holds another. Needs add: each is a quantity of its own, and a unit consumed meets one need only. A need of tier 1 may declare two things more. Its quantity may follow the warmth modifier of FR-P-08, the record's quantity times the modifier for the week, which may be zero. And it may be lethal: what is left of it unmet per member once own consumption and the market have run in an update, read as FR-D-03a reads the tier 0 need, raises the death rate in phase 11 of the same update by P-81 per unit (FR-D-03); it is not kept beyond the update. The tier 0 need declares neither, its shortfall acting through the hunger deficit.
 
 **FR-P-03c** — Processing creates no food. Every good carries an embodied food value: a good of the food class, the class the tier 0 need names, carries its value there; another good that recipes produce carries the least food value that any recipe producing it consumes per unit, each input counted at its own embodied food value, an input on a class at the least embodied food value per unit of the class's value among the goods that can meet it; any other good carries zero. No recipe yields more food value than its inputs embody, and validation at load refuses a recipe table that breaks this or that passes food value around a cycle.
 
@@ -170,7 +170,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-07** — Each settlement carries a `climateIndex`, a fixed-point value on 0–10000 assigned by the generator. The simulator consumes it without knowing what produced it.
 
-**FR-P-08** — Each climate modifier has its own pair of authored 52-entry weekly curves, `cold` and `warm`. A settlement's modifier for week *w* interpolates between the pair on its `climateIndex`, in integer arithmetic. Climate modifiers govern travel cost, mortality, livestock growth, timber yield, and available construction labour.
+**FR-P-08** — Each climate modifier has its own pair of authored 52-entry weekly curves, `cold` and `warm`. A settlement's modifier for week *w* interpolates between the pair on its `climateIndex`, in integer arithmetic. Climate modifiers govern travel cost, mortality, livestock growth, timber yield, available construction labour, and warmth, the quantity of a need that follows it (FR-P-03b).
 
 **FR-P-09** — Named climate bands (3–4) group `climateIndex` ranges for presentation only. No simulation rule reads a band.
 
@@ -647,6 +647,7 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-78 | Share of its type's threshold below which a settlement falls a type, FR-M-17 | 80% | Provisional; replaced in Phase 6 |
 | P-79 | Reach: the highest route cost at which a settlement trades at a market place, FR-M-18 | TBD | Open; Provisional from the point that builds routing, replaced in Phase 6 |
 | P-80 | Share of the current route cost by which another market place must undercut it to take a group, FR-M-18 | TBD | Open; Provisional from the point that builds routing, replaced in Phase 6 |
+| P-81 | Rise in the death rate per unit of a lethal need left unmet per member in an update, FR-P-03b | TBD by sweep | Open; Provisional from the point that builds it, replaced in Phase 6 |
 | P-09 | Goods in the base rules' catalogue; a settlement holds only those present (DEC-101) | 11 | Decided |
 | P-10 | Price bounds | 0.25× to 4× reference | Decided |
 | P-11 | Trade damping `k` | TBD by sweep | Open |
