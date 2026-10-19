@@ -790,6 +790,7 @@ the decider's.
 **Status:** inputs as demand, a gap found ruling exchange within a place, **specified 2026-10-19 by R-112**.
 **Status:** exchange within a place **closed 2026-10-19 by R-113**.
 **Status:** the fuel need **closed 2026-10-19 by R-114**. `SQ-024` is closed save the content `R-110` escalated to the user.
+**Status:** that content approved by the user and **closed 2026-10-19 by R-115**; `SQ-024` is closed.
 
 **What the user proposes.** Prices form at market places, not in every
 settlement. Settlement types become five, each with a number of markets:

@@ -58,7 +58,7 @@ Always simulated. Roughly 2,000 rows.
 
 ## Cohort
 
-Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the shipping configuration, three in CI. A settlement holds a row only for a key present in it (DEC-101): at most 14 per settlement at Phase 4, thirteen mestieri in the allocation vector and the destitute row.
+Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the shipping configuration, three in CI. A settlement holds a row only for a key present in it (DEC-101): at most 15 per settlement at Phase 4, fourteen mestieri in the allocation vector and the destitute row.
 
 | Field | Type | Notes |
 |---|---|---|

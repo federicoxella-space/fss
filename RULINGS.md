@@ -187,6 +187,7 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   variant offer that never sells.
 - **`R-110`**, in the rules file of `R-065`: the content of `R-110` as approved,
   and the crop record's relation to durables (FR-P-10, FR-P-20).
+- **`R-115`**, in the rules file of `R-065`: the content `R-115` approves.
 - **`R-111`**, in the points that build recipes and the rules file: inputs on a
   class, taken lowest grade first; an input naming a variant refused at load.
 - **`R-112`**, in the point that builds market clearing: input demand for one
@@ -206,11 +207,8 @@ Rulings with verdict `escalated` or `pending`, until the user answers.
 
 - **`R-106`, decision 1 of `D-126`**: whether an implementer session may
   dispatch the decider as an agent at the user's instruction. Reserve 1.
-- **`R-110`, content not yet set**: what the poor burn, the smithy's fuel, who
-  draws water and where, the mill's site. Static content, `R-050`.
-
 `R-082` was answered by `R-091`, `R-089` by `R-092`, `R-093` by `R-094`, `R-109`
-by `R-110`.
+by `R-110`, `R-110` by `R-115`.
 
 ---
 
@@ -6131,3 +6129,43 @@ can carry a northern winter at all on phase 4's content; that a lethal tier 1
 need sits well with `SIM-OBS`, reserve 3 and unchanged: only its five headings
 were read, and OBS-3, scarcity reaching people unequally, is the one cold
 feeds.
+
+### R-115 — `R-110`'s proposals on the content left open are approved
+
+**Date:** 2026-10-19   **Origin:** user, answering `R-110`'s escalation: "approvo le proposte di R-110 sui contenuti"
+**Verdict:** resolved — static content the user's under `R-050`
+**docs/:** `SIM-STATE` §Cohort at most 15 rows. Revision already today's.
+
+The user approved the four proposals `R-110` escalated, as written there. They
+are recorded here and go to the rules file of `R-065`; every value Provisional.
+
+- **What the poor burn.** Timber also belongs to class Fuel, grade 0, and keeps
+  its market of its own. The heating need of `R-114` is met by timber and by
+  charcoal, and the oven's "a fuel" by either. No good is added; P-09 stays at
+  eleven.
+- **The smithy's fuel.** Charcoal, named: Bar iron + Charcoal → Tools, Smithy,
+  requires Tools, with a crude variant. A named input on a good with a market of
+  its own, as `R-111` requires.
+- **Water.** A recipe → Water, no building, site water, independent of Tools,
+  worked by a new mestiere, the water carrier, poor, with a low spread as the
+  day labourer's. Water belongs to a class no need reads, grade 0; flour's
+  Ingredient is the one the content has. It is in G1 with a market of its own,
+  and imperishable. A place without a water site buys it at its borgo.
+- **The mill.** The Mill requires no site; the hand quern stays as its crude
+  variant.
+
+**Mestieri.** Fourteen in the allocation vector with the water carrier, and the
+destitute row: fifteen rows at most, which `SIM-STATE` §Cohort now says.
+
+**Cost.** One mestiere and one clearing more in G1, at every borgo. Every place
+bakes on water it draws or buys, so a borgo without a water site carries its
+villages' water and its own over the road. With no mill site, the quern matters
+only where nobody has built a mill.
+**Owed by the implementer:** the content as approved, in the rules file of
+`R-065`. Cite `R-115`.
+**Would overturn it:** the user revising any item.
+**Not verified:** that water's class is Ingredient: the proposal said "a class
+no need reads", and Ingredient is named here as the only such class the content
+holds, not as the user's word. The water carrier's wealth spread was not in the
+proposal; "low, as the day labourer's" follows from "poor" and is
+Provisional with the rest.
