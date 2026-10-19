@@ -362,14 +362,18 @@ rewritten one, which is read afresh at each invocation.
 
 ## What I need from you
 
-1. **The draft**, approved, amended, or rejected. In particular the eight
-   `Fails when:` lines, and the `Check: shallow` markers on points 2, 6 and 8.
-2. **The committer.** Review P1 retired documenter and committer; the draft
+1. **Answered by the user, 2026-10-20: "approvo la bozza"** — approved as
+   written. ~~**The draft**, approved, amended, or rejected. In particular the eight
+   `Fails when:` lines, and the `Check: shallow` markers on points 2, 6 and 8.~~
+2. **Answered by the user, 2026-10-20: "teniamo il committer"** — kept, as the
+   draft has it. ~~**The committer.** Review P1 retired documenter and committer; the draft
    retires the documenter only. `git-guard`, the committer's hook, admits only
    the commands of a commit (`status`, `diff`, `log`, `show`, `add` with paths,
    `commit -F`), so it cannot be wired to the orchestrator, which also switches,
    merges and moves files; without the committer it would guard nothing. Keep
    the committer (the draft), or retire it and leave the commit rules to the
-   skill's text.
-3. **The *left open* marker** in outcome lines, which the decider's dispatch
-   reads (point 3): approve it, or name another trigger.
+   skill's text.~~
+3. **Answered by the user, 2026-10-20: "ok left open"** — approved.
+   ~~**The *left open* marker** in outcome lines, which the decider's dispatch
+   reads (point 3): approve it, or name another trigger.~~
+4. Then the plan is installed on `workflow-review` and point 1 starts.
