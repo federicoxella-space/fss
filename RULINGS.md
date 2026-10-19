@@ -191,6 +191,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   class, taken lowest grade first; an input naming a variant refused at load.
 - **`R-112`**, in the point that builds market clearing: input demand for one
   update at capacity, withheld from supply, ranked after tiers 0 and 1.
+- **`R-113`**, in the market point: each place exchanges among its own rows
+  before the market's ranking, at the market's price, with no transit loss.
 - **`R-108`**, from the phase 4 plan: five types and assignments at
   generation, no village out of reach; every routed row one entry of its
   market's ranking, read without walking every settlement; type and assignment
@@ -5989,3 +5991,73 @@ long clearing of a good with a market of its own: FR-P-03d says it for variants,
 and FR-C-04 says nothing. Both are gaps of the same kind, found beside this one
 and not ruled here; each needs a ruling of its own before the point that builds
 the market.
+
+### R-113 — Exchange within a place comes first: each place clears among its own rows at the market's price, and what is left meets in the market's ranking
+
+**Date:** 2026-10-19   **Origin:** SQ-024, the user's answers of 2026-10-18 on where the charcoal burner's wood comes from and on exchange within a place
+**Verdict:** specified, the direction the user's; `R-108`'s rule 1 refined, not reversed
+**docs/:** `SIM-REQ` FR-M-19, two passes. `SIM-ECON` phase 7. `SIM-DEC` DEC-103, decision, rationale and cost. Revisions already today's.
+
+The user set two things: "if there is wood it is taken directly, otherwise it is
+bought", and "scambio locale potenzialmente per tutti i beni, ma comunque con
+circolazione di moneta" — exchange within a place for every good, always a sale.
+The rule, its phase and how it meets `R-108`'s routing were left to the decider.
+Under `R-108` nothing passed between two rows of a village: each row's surplus
+and demand went to its market place, and met there in one ranking with the whole
+catchment, paying transit loss both ways on what never left the village.
+
+**The rule.** A market place clears each clearing of a group in two passes.
+First each place taking part, the market place itself and every settlement routed
+to it for the group, clears among its own rows, under FR-C-04, at the market's
+price and with no transit loss; currency moves buyer to seller, as in any
+clearing. Then what the first passes leave, unmet demand and unsold supply,
+meets in the one ranking of FR-M-19, routed rows bearing their route's loss on
+what they trade there.
+
+**Why at the market place's clearing, not in the village's own phase 7.** A
+village's own update falls in another bucket (FR-T-06). Run there, the local
+exchange would come before the market's clearing in some weeks and after it in
+others, depending on the two places' buckets, so whether the wood was "taken
+directly" would depend on settlement ids rather than on the user's rule. Run as
+the first pass of the market's clearing, it always comes first, it needs no
+state, and phase 7 still runs only where markets are, which is what `R-108`
+bought. A group a settlement clears itself, out of reach or in no group
+(FR-M-18), is already exchange within that place and gains nothing.
+
+**Why the market place too.** The user's reason, wood taken where it is, holds in
+a borgo as in a village. Exempting the market place would give its rows no first
+claim on their own supply while every village's had one. It is also the
+principle `SIM-ECON` already states for exports: a place serves itself before
+its goods leave.
+
+**At the market's price.** FR-M-20 makes a settlement's price for a good the
+market place's, and a village has no price of its own to trade at. No transit
+loss, because nothing travels.
+
+**What this refines in `R-108`.** Rule 1 ranked every routed row one by one so
+that a village's poor would not be served before the market town's rich. That
+holds for what reaches the ranking. What it gives up is that a village's surplus
+reaches the town's buyers only after the village's own, which is the user's
+rule. DEC-103's rationale now says both.
+
+The rule would have held before any code: a priority that depends on bucket
+offsets is a rule nobody chose, and an exchange that pays a road it never takes
+is a cost nobody bears in the world.
+
+**Cost.** Phase 7 at a market place runs one small clearing per place taking part
+before the ranking, and the ranking holds only rows with something left; whether
+the sum is cheaper or dearer than `R-108`'s single ranking is not measured, and
+P-17's measurement now runs on this reading. A village's scarcity reaches the
+town later, through less surplus offered, not through any price. How sellers
+share a long clearing, local or not, is the gap `R-112` named.
+**Owed by the implementer:** the market point builds the two passes, with a check
+where a village holds both a seller and a buyer of one good and its market place
+rations it, its `Fails when:` naming the local exchange skipped, so that the
+village's buyer goes short while its own seller's goods leave, or charged
+transit loss. Cite `R-113`.
+**Would overturn it:** the P-17 measurement putting the two passes over P-01
+where one ranking was within it; the user preferring that a market town's rows
+take part in the ranking without a first claim on their own supply.
+**Not verified:** how the first pass orders its writes against the ranking's when
+a routed row's settlement and the market place share a bucket; `SIM-ECON` asks
+writes ordered by bucket and id and that was not worked through for two passes.

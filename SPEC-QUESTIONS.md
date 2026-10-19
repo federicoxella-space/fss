@@ -788,6 +788,7 @@ the decider's.
 **Status:** the forge's details, the review of the chains and water **closed 2026-10-19 by R-110** as content, save what it escalates.
 **Status:** fuel as a recipe input **closed 2026-10-19 by R-111**.
 **Status:** inputs as demand, a gap found ruling exchange within a place, **specified 2026-10-19 by R-112**.
+**Status:** exchange within a place **closed 2026-10-19 by R-113**.
 
 **What the user proposes.** Prices form at market places, not in every
 settlement. Settlement types become five, each with a number of markets:
