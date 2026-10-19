@@ -4358,6 +4358,7 @@ to (C).
 
 ### D-126 · Orchestration of points 4 and 5 · how this session ran the decider and the long runs
 **Ruling:** R-106 — ratified, decisions 2 to 4; decision 1 escalated to the user, reserve 1 of `R-001`.
+**Ruling:** R-116 — decision 1 answered by the user: an implementer session may dispatch the decider as an agent.
 
 Task: the user's instruction of 2026-10-16, "Lancia /plan-next e /decide quando necessario fino al
 termine dello sviluppo o finché il decider non necessita di una mia decisione".

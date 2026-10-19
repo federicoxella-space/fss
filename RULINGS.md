@@ -205,10 +205,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-- **`R-106`, decision 1 of `D-126`**: whether an implementer session may
-  dispatch the decider as an agent at the user's instruction. Reserve 1.
+None open.
+
 `R-082` was answered by `R-091`, `R-089` by `R-092`, `R-093` by `R-094`, `R-109`
-by `R-110`, `R-110` by `R-115`.
+by `R-110`, `R-110` by `R-115`, `R-106` by `R-116`.
 
 ---
 
@@ -6169,3 +6169,46 @@ no need reads", and Ingredient is named here as the only such class the content
 holds, not as the user's word. The water carrier's wealth spread was not in the
 proposal; "low, as the day labourer's" follows from "poor" and is
 Provisional with the rest.
+
+### R-116 — An implementer session may dispatch the decider as an agent, as it dispatches the coder
+
+**Date:** 2026-10-19   **Origin:** user, answering `R-106`'s escalation of decision 1 of `D-126`: "si, può, così come può lanciare il coder"
+**Verdict:** resolved — the user's decision, reserve 1 of `R-001`
+**docs/:** unchanged
+
+`R-106` left to the user whether an implementer session may dispatch the decider
+as an agent, since it is the split between the two roles, and recommended
+keeping it on two conditions. The user answered yes, and as a standing
+permission rather than instruction by instruction: an implementer session may
+dispatch the decider as it dispatches the coder.
+
+**What holds with it.** The answer is to `R-106`'s recommendation, so its two
+conditions are read as part of what was approved:
+1. the brief the implementer gives the decider is facts only, never a proposed
+   answer, and is kept where the user can read it;
+2. the dispatched decider reads `R-001` and `.claude/skills/decide/SKILL.md`
+   itself, and works under them as a session opened by the user would.
+
+The split itself stands. The dispatched agent is a decider session: it writes
+`docs/` and `RULINGS.md`, never code; the session that dispatched it writes no
+ruling and edits no `docs/`. Nothing in `R-001`'s reserves moves: a dispatched
+decider escalates what a user-opened one would.
+
+**Not written into `AGENTS.md`.** `AGENTS.md` changes only with the user's
+permission for that change, and `.claude/agents/` the same (`D-087`); the answer
+grants the practice, not an edit. Until the user asks for one, this ruling is
+where the permission lives, and an implementer session dispatching the decider
+cites `R-116`.
+
+**Cost.** A question can be raised and ruled within one implementer session, so
+the user sees the ruling only in the log; the commit of each ruling remains the
+review. A model that writes the code briefs the model that judges it, which is
+why condition 1 is there.
+**Owed by the implementer:** a session that dispatches the decider keeps the
+brief where the user can read it, and cites `R-116`.
+**Would overturn it:** the user withdrawing it; a brief found to carry a proposed
+answer.
+**Not verified:** that the user meant the two conditions of `R-106` to come with
+the yes: the words approve the practice and name no condition; they are read in
+because the answer is to that recommendation. Where a kept brief should live is
+not fixed.
