@@ -4383,3 +4383,31 @@ termine dello sviluppo o finché il decider non necessita di una mia decisione".
 
 **What `docs/` says:** nothing; these are process choices. **Not verified:** whether the user
 reads (1) as within the instruction; the decider was not asked.
+
+## 2026-10-19 — The cost measurement plan, archived
+
+### D-127 · Closing the cost measurement plan · The archive and the promotion pass
+
+`plan-state` read `state: finished`, `reservesOpen` empty, the register audited
+to `D-126` (`R-106`). `R-105`'s owed line under point 5 landed in `c24e818`.
+`SQ-023` and `SQ-024`, which the plan's table was owed to, are closed by the
+decider (`R-107` to `R-115`). The user, on the plan's archive: "Ne discutiamo
+dopo l'archiviazione del plan".
+
+**Decided.**
+- **The archive's name** is `2026-10-07-misura-costi.md`: the date the plan was
+  installed (`c12b061`) and its branch, as `D-120` named the last one. The
+  archive commit adds exactly one file under `.claude/plans/`.
+- **The pass runs over `D-121` to `D-126`**, the 2026-10-07 pass having ended at
+  `D-120`. No candidates: process plan, `D-011`.
+- **`REVIEW-REQUEST.md` is not touched.** Its current request, the plan's moment
+  one, is answered in it; archiving the plan writes nothing there, as `D-120`
+  did not.
+- **No merge into `main`** in this commit. It is the next step, `--no-ff`, and
+  touches `main`: asked of the user first.
+
+**What `docs/` says:** nothing; process work. `R-048`, `R-105`, `D-011`.
+**Would overturn it:** the decider finding an entry in the range that constrains
+the simulator's code.
+`plan-state -Path` on the archived file reads `finished`; on the tree, `none`.
+**Not verified:** nothing beyond what the plan's own entries list.
