@@ -1,6 +1,6 @@
 ---
 name: plan-explain
-description: Use when asked what comes next, what the current development still owes, what a point requires, what a draft plan in a review request would start with, or before deciding whether to start the next point.
+description: Use when asked what comes next, what the current development still owes, what a point requires, before deciding whether to start the next point, or to read a draft plan whole, point by point, before moment one.
 ---
 
 # /plan-explain
@@ -18,8 +18,9 @@ pwsh -NoProfile -File .claude/hooks/plan-state.ps1
 ```
 
 `PLAN.md` by default. With `-Draft` it reads the fenced block under `## Draft
-plan` in `REVIEW-REQUEST.md`, when the question is about a plan at moment one;
-with `-Path <file>`, another plan or request. Its JSON is the plan's state:
+plan` in `REVIEW-REQUEST.md`, when the question is about a plan at moment one,
+and this skill then reads the draft whole: see "A draft, read whole" below.
+With `-Path <file>`, another plan or request. Its JSON is the plan's state:
 whether the plan exists, `kind`, `abandoned`, each point's `status`, `check`,
 `core`, `coreReason` and `serves`, then `state` — `none`, `abandoned`,
 `stopped`, `finished` or `running` — `next`, `stoppedAt` and `reservesOpen`.
@@ -56,7 +57,49 @@ explanation. Undoing the change is the human's call.
 it. Quote its objections rather than restating them — an objection softened in
 the retelling is an objection that did not happen.
 
+## A draft, read whole
+
+Before moment one, a draft is read point by point by a reader that knows
+nothing of why the author wrote it as written: a criterion is cheapest to fix
+before it freezes, and the author is the one reader who cannot see what a check
+leaves out (`AGENTS.md`, "Criteria are frozen when written"). Every point is
+read, not the first only.
+
+1. **Find the draft.** `plan-state -Draft`, with `-Path <file>` for a request
+   other than `REVIEW-REQUEST.md`. If it reports `exists: false` on a file that
+   holds a draft, the request predates `R-096` and names its block `## The draft
+   plan`: take the fenced block under that heading. With neither, there is no
+   draft: say so and stop.
+2. **Dispatch one read-only agent** — `Plan`, or `Explore` if that is
+   unavailable — with, and only with:
+   - the draft's text, verbatim, the fenced block alone: not the request around
+     it, which holds the author's reasoning, decisions and doubts;
+   - `.claude/skills/plan-explain/criteria.md`, to read whole;
+   - leave to read the repository's files that the draft names, and `AGENTS.md`;
+   - the instruction not to read `RULINGS.md`, `DECISIONS-OUTSIDE-SPEC.md`,
+     `PROMOTIONS.md` or anything under `.claude/plans/`: what earlier rulings
+     found is in the checklist, and a reader who looks the answer up proves
+     nothing about the draft;
+   - the instruction to name the checklist's rules by their `K` number and to
+     cite no `R-` or `D-` identifier: the checklist carries them as provenance,
+     and a report that cites one is either repeating the checklist or has
+     read what it was told not to;
+   - the questions, for every point: which fault the check would miss, a
+     concrete change that breaks the "Does" and leaves the "Closed by" green;
+     which parts of the "Does" nothing checks; whether the `Fails when:` fault is
+     the likely one or a convenient one; which rule of the checklist applies and
+     whether the point meets it; whether the point can be done as written
+     against the files as they are. Then, over the whole draft: what a later
+     point relies on that an earlier one does not deliver, and any decision the
+     draft makes without saying so.
+3. **Hash the tree around the agent**, as above.
+4. **Relay the report whole**, one entry per point, quoted. The author puts it
+   into the request beside the draft, quoted, with what the draft did with each
+   finding; amending the draft or not is the user's answer at moment one.
+
 ## Procedure
+
+Without `-Draft`, on a plan that is running:
 
 1. **Act on `state`.**
    - `none`: no plan. Say so and stop. Work here starts from a written plan;
@@ -118,8 +161,7 @@ the retelling is an objection that did not happen.
    moment one of `REVIEW-REQUEST.md`. This skill is often what someone runs
    before deciding to start, which makes it the last cheap place to say that the
    plan has not been shown to anyone. Say it is owed; writing it is not this
-   skill's business, and neither is writing it for the human. Read with
-   `-Draft`, the plan is at moment one and the request is the one being read.
+   skill's business, and neither is writing it for the human.
 
 4. **Read the point critically, and say so if it does not hold.** A criterion
    that can be read two ways, a check that cannot actually be run, a point that

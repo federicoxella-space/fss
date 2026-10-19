@@ -92,6 +92,11 @@ belongs to `/plan-next`, `/plan-explain` and `/plan-status`, and the reasoning t
   answer, one commit installs `PLAN.md` on the plan's branch, cut from `main`
   for it; the commit cites the answer and says whether the plan matches the
   draft as amended. `main` never carries a live `PLAN.md` (`R-048`).
+  Before moment one the draft is read whole, point by point, by
+  `/plan-explain -Draft`: a reader told nothing of the author's reasoning, and
+  working against `.claude/skills/plan-explain/criteria.md`, answers which fault
+  each check would miss. Its answers go into the request, quoted, beside the
+  draft, with what the draft did with each; the user amends the draft or not.
 - **A point is one commit with a runnable check.** The commit carries the record
   with it: the register entry and the plan's own outcome line are written first
   and committed together with the code. The check names at least one fault it

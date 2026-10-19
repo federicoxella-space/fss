@@ -4530,3 +4530,89 @@ citations the rules rest on.
 **Not verified:** that each rule's wording stays equal to its ruling over time;
 that the blind reader applies the checklist (point 2); the script under a shell
 other than pwsh 7.
+
+### D-130 · Point 2 · A draft read whole by a blind reader: the skill learns the old heading, and the check forbids what the checklist itself says
+
+**Built** (by the orchestrator, not the coder: `.claude/` and `AGENTS.md` are not
+the coder's, `R-010`, `D-087`; the point names `.claude/skills/plan-explain/`,
+`AGENTS.md` and `REVIEW-REQUEST.md`, which is the permission):
+`.claude/skills/plan-explain/SKILL.md` gains the section "A draft, read whole"
+(`-Draft` reads every point; with `-Path`, a draft in another file; one
+read-only Plan agent, given only the fenced draft, the checklist, leave to read
+the files the draft names and `AGENTS.md`, told not to read `RULINGS.md`,
+`DECISIONS-OUTSIDE-SPEC.md`, `PROMOTIONS.md` or `.claude/plans/`; the tree
+hashed around the reading; the report relayed whole and quoted into the
+request); the running-plan procedure is unchanged, now headed "Without
+`-Draft`"; the description line is updated. `AGENTS.md`, "Criteria are frozen
+when written", gains the rule that before moment one the draft is read whole by
+`/plan-explain -Draft` and the answers quoted into the request beside the
+draft. `REVIEW-REQUEST.md`, "What a request holds", names the answers. New
+fixture `.claude/hooks/fixtures/plan-explain/misura-costi.md`, equal byte for
+byte to `git show 64147ba:REVIEW-REQUEST.md`. `core/` and `docs/` untouched.
+
+**Decided (`docs/` silent: process work).**
+1. **The fixture is kept byte for byte, so the skill learns the pre-`R-096`
+   heading.** The fixture's block is "## The draft plan", and `plan-state`
+   reports `exists:false` for it; the skill takes that block in that case.
+   *Would overturn it:* a ruling that the fixture may be edited, or that old
+   requests are not read.
+2. **One reader per draft, not one per point.** *Would overturn it:* a draft the
+   reader cannot read whole in one context, which would need one reader per
+   point.
+3. **The reader's brief holds the fenced block only, not the request around
+   it.** *Would overturn it:* evidence that the request's other parts are
+   something a blind reader needs.
+4. **The reader names rules by `K` number and cites no `R-` or `D-`
+   identifier.** The first run of the check failed on this: the report cited
+   `R-103` ("This is the `R-103` case"), which the criterion forbids. The
+   reader had obeyed its brief: `R-103` is in the checklist's `K1` as
+   provenance, and the reader repeated it. Correct behaviour could therefore
+   fail the check by echoing the checklist. It is resolved in the skill, not in
+   the criterion (a criterion is frozen): the brief asks for rules by `K` number
+   and for no identifier (one round). *Would overturn it:* a ruling that the
+   criterion's wording was defective (`R-005`).
+
+**Results.** First run (`/plan-explain -Draft -Path` on the fixture):
+`plan-state` reported `exists:false`, the skill took the "## The draft plan"
+block; five entries, one per point; point 4's names supply ample as the state
+where order is unseen ("With supply ample, everyone is served whatever the order");
+but the report cited `R-103`: red on the identifier, fixed as decision 4. Second
+run: five entries; point 4's: "routed village demand served after, or before,
+all local demand regardless of ability to pay. With supply ample everything is
+served, so the check stays green" and "K1, the exact blind spot it names:
+'served' with supply ample cannot see the order of routed demand"; no `R-` or
+`D-` identifier cited. Greps: "plan-explain -Draft" found in `AGENTS.md` (1) and
+`REVIEW-REQUEST.md` (3). Tree-state hash equal before and after each reading.
+The reader also found, of the fixture, what the cost plan's rulings found: `K1`
+for points 1 and 4; `K2` for point 3; `K3` for point 2's bytes; `K4`, `K5`, `K6`
+for point 5; and that point 5's `Fails when` premise was false at drafting. Both
+runs noted that `bench/` already exists, a fact of the tree, not of the draft.
+
+**Faults (`Fails when`), introduced by the orchestrator as reader briefs,
+read-only agents, tree hash equal:** (a) the skill's old behaviour, the first
+point only: one entry, point 1, point 4's missing: red. (b) a reader handed the
+register, `RULINGS.md`, `DECISIONS-OUTSIDE-SPEC.md` and the archived plan: its
+report cites `R-101` to `R-105` and `D-121` to `D-125` throughout: red. Note on
+(b): its brief also asked it to cite what it read, the strong form of the fault.
+
+**Findings and their resolution.**
+- The blindness test misses a reader that reads the register but cites only `K`
+  numbers: **recorded, not fixed**; the check is `shallow`, as the point
+  declares, and the criterion is not rewritten.
+- The criterion's "cites no `R-` identifier" depends on the brief's ban on
+  citing provenance (decision 4): recorded beside the check.
+- No code-reviewer: the point touches no code (a skill, `AGENTS.md`, a request,
+  a fixture), and its `Closed by` asks for none. No finding exists to reject.
+
+**Agents (`R-067`).** Dispatched: Plan readers (two check runs, two fault runs),
+documenter, committer. Not run: the coder (the files are the orchestrator's);
+the code-reviewer (no code); the revisioners (`Core: no` held: no path under
+`core/` or `docs/` in the diff; `AGENTS.md` is named by the point); the tester:
+not dispatched, the check is a skill run, not a test.
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** a draft the reader cannot read whole in one context.
+**Not verified:** that the reader finds a gap the checklist does not name (the
+point's `shallow` note); a reader that reads the register and cites only `K`
+numbers; the skill under a draft whose block heading is neither of the two
+known.

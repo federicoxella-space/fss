@@ -98,6 +98,23 @@ This outcome does not claim `R-046`'s check.
 - **Core:** no — the diff touches only `.claude/skills/plan-explain/`,
   `.claude/hooks/fixtures/`, `AGENTS.md` and `REVIEW-REQUEST.md`.
 
+*Outcome:* 2026-10-20. Closed: `/plan-explain -Draft -Path` on the fixture
+returned five entries, one per point; point 4's names supply ample as the state
+where the ranking is not seen ("With supply ample everything is served, so the
+check stays green"); no `R-` or `D-` identifier cited; the rule is found in
+`AGENTS.md` and the line in `REVIEW-REQUEST.md` (greps). The first run cited
+`R-103`, the reader echoing the checklist's provenance; resolved in the skill's
+brief (rules by `K` number), not in the criterion. The faults went red: the
+first point only gave one entry, point 4's missing; a reader handed the register
+cited `R-101` to `R-105` and `D-121` to `D-125`. Tree hash equal around every
+reading. Recorded: the blindness test misses a reader that reads the register
+and cites only `K` numbers; the check is `shallow`, as declared. `D-130`.
+Review: no code-reviewer, the point touches no code; revisioners not run, `Core:
+no` held. Agents (`R-067`): Plan readers, documenter and committer dispatched.
+Not run: the coder, the files being the orchestrator's; the tester, not
+dispatched, the check being a skill run, not a test. This outcome does not claim
+`R-046`'s check.
+
 ## 3. `plan-state` reads a point's frozen text and whether the decider is due (review P1, P4)
 
 - **Does:** `plan-state.ps1` finds the commit that installed `PLAN.md`, the

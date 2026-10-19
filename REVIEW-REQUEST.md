@@ -46,7 +46,8 @@ from the repository by someone willing to look; what was *not* done leaves no
 trace, and only the author knows it.
 
 A request at moment one carries the draft whole in one fenced block under
-`## Draft plan`, which `plan-state -Draft` reads (`R-096`).
+`## Draft plan`, which `plan-state -Draft` reads (`R-096`), and beside it the
+answers of `/plan-explain -Draft`, quoted, with what the draft did with each.
 
 ---
 
