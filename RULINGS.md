@@ -185,6 +185,8 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   entry left stored; FR-P-03d's declaration and refusal in the rules file; its
   price and split with `variantCarry` in market clearing, a check naming a
   variant offer that never sells.
+- **`R-110`**, in the rules file of `R-065`: the content of `R-110` as approved,
+  and the crop record's relation to durables (FR-P-10, FR-P-20).
 - **`R-108`**, from the phase 4 plan: five types and assignments at
   generation, no village out of reach; every routed row one entry of its
   market's ranking, read without walking every settlement; type and assignment
@@ -196,10 +198,11 @@ Rulings with verdict `escalated` or `pending`, until the user answers.
 
 - **`R-106`, decision 1 of `D-126`**: whether an implementer session may
   dispatch the decider as an agent at the user's instruction. Reserve 1.
-- **`R-109`, the forge's details**: the bloomery's site, which of the two recipes
-  requires Tools, and the mestieri. Static content, `R-050`.
+- **`R-110`, content not yet set**: what the poor burn, the smithy's fuel, who
+  draws water and where, the mill's site. Static content, `R-050`.
 
-`R-082` was answered by `R-091`, `R-089` by `R-092`, `R-093` by `R-094`.
+`R-082` was answered by `R-091`, `R-089` by `R-092`, `R-093` by `R-094`, `R-109`
+by `R-110`.
 
 ---
 
@@ -5775,3 +5778,86 @@ mestieri.
 items otherwise.
 **Not verified:** that FR-P-03c admits the new chain with the values the
 implementer will propose; nothing is numbered.
+
+### R-110 — The forge's details, the reviewed chains and water are approved content; crops may be improved by a durable
+
+**Date:** 2026-10-19   **Origin:** SQ-024, the user's answers of 2026-10-18 and 2026-10-19 on `R-109`'s open items, the review of the chains, and water
+**Verdict:** resolved — static content the user's under `R-050`, answering `R-109`'s escalation; one rule specified so that the content can be written
+**docs/:** `SIM-REQ` FR-P-04, the set and the chains; FR-P-10 and FR-P-20, a crop's relation to durables; P-09 from 9 to 11. `SIM-STATE` §Cohort at most 14 rows. Revisions to today.
+
+The user answered `R-109`'s three open items, "va bene" to the proposals, and in
+the same exchange added a charcoal burner, reviewed every chain of phase 4's
+content, and made water a good. Content is the user's (`R-050`), so it is
+recorded here, as `R-063` and `R-108` recorded theirs, and goes to the rules file
+of `R-065`. Every value Provisional. This revises `R-063`'s tables where they
+differ, and `R-109`'s escalation is answered.
+
+**Goods added.** Charcoal: G2, class Fuel, grade 1, a market of its own, since a
+recipe names it (`R-111`). Water: an explicit good, "se si ha modo si estrae
+sennò si compra"; its class, grade, group, site, recipe and perishability are not
+set. Fuel is a class: tow, kindling, charcoal "and others", of which phase 4's
+catalogue holds charcoal. P-09 counts eleven goods.
+
+**Recipes, changed or added.**
+
+| Recipe | Building | Durable | Crude variant |
+|---|---|---|---|
+| Grain → Flour | Mill, by water or wind | independent | yes: the hand quern |
+| Flour + Water + fuel → Bread | Oven | independent | no |
+| Timber → Charcoal | none, site forest | improved by Tools | — |
+| Ore + Charcoal → Bar iron | Bloomery, site ore | improved by Tools | — |
+| Bar iron + a fuel → Tools | Smithy, any site | requires Tools | yes |
+
+"Fuel" in the oven's row is a recipe input on the class (`R-111`); which fuel
+the smithy burns is escalated below. Grain farming is improved by
+Tools. Spinning is folded into the weaver; draught animals and sheep are
+implicit until livestock goods exist; salt stays out of phase 4.
+
+**Mestieri.** Thirteen in the allocation vector: farmer, miller, baker, miner,
+woodcutter, charcoal burner, bloomer, smith, shepherd, weaver, caravanner,
+merchant, day labourer; and the destitute row. The smith works the smithy, the
+bloomer the bloomery, with mean wealth among the crafts below the smith and a
+middling spread (`R-109`'s proposal, approved); the charcoal burner is poor, as
+the woodcutter. Fourteen rows at most where a place holds every one, which
+`SIM-STATE` §Cohort now says.
+
+**One rule, so that "farming improved by Tools" can be written.** FR-P-20 put
+the relation to durables on the recipe record only, and a crop is not a recipe
+(FR-P-10). The crop record now carries it, improved by or independent of: a
+crop that required a durable would need a crude variant, and FR-P-21 has none
+for crops. What "improved by" changes was stated nowhere, for recipes either
+(FR-P-03 says only that a durable "raises productivity"). For a crop it lowers
+the labour per unit of land and never raises the yield per unit of land: B1 and
+B3a assume yield per unit of land fixed (`SIM-LOOPS` open item 4), and tools are
+labour-saving in a field, not fertiliser. How much it lowers is a value for §16
+when the point that builds crops proposes it.
+
+**Escalated: what the user has not set.** Static content, `R-050`. Each with the
+decider's proposal:
+
+| Item | Proposal | Why |
+|---|---|---|
+| What the poor burn | Timber also in class Fuel, grade 0, keeping its market; no new good | with charcoal the only fuel, heating needs a charcoal burner in reach, and the poor would buy a grade 1 fuel to keep warm; firewood is what a household burned |
+| The smithy's fuel | charcoal, named | a smith's hearth burned charcoal around 1300; the alternative is any fuel |
+| Water: who draws it, and where | a recipe → Water, no building, site water, worked by a new mestiere, the water carrier, poor; class none read by a need, grade 0, G1, a market of its own, imperishable | FR-J-01 gives a recipe to a mestiere, so someone must draw; site water is the generator's existing attribute; G1 lets a place without it buy at its borgo, as the user's "sennò si compra" asks |
+| The mill's site | the Mill requires no site | a windmill stands anywhere; an "either water or wind" site would need FR-P-19 to accept two attributes, and the two mills differ in nothing the user has named. The quern stays for places without a mill |
+| Values | proposed by the implementer in the point that first needs each | `R-050` |
+
+Water taking a mestiere would make fourteen in the vector and fifteen rows at
+most; `SIM-STATE` §Cohort is then edited again.
+
+**Cost.** Two goods, two recipes and two mestieri more than `R-109`; P-17's
+measurement counts them. Every bread needs water and fuel, so an oven without
+either stops, and bread follows two supply chains it did not before.
+**Owed by the implementer:** the content as approved, in the rules file of
+`R-065`; FR-P-10's relation on the crop record. Nothing of the escalated items
+until the user answers. Cite `R-110`.
+**Would overturn it:** the user answering the escalated items otherwise, or
+revising any item above.
+**Not verified:** that the bloomery's site, ore only, is inside the user's "va
+bene": `R-109` made four proposals and the implementer's record of the answer
+lists three, so the site is read as approved with them. That FR-P-03c admits the
+chains with the values the implementer will propose; that the generator places enough forest near ore for bloomeries to
+be supplied with charcoal, which travels in G2 but loses 2% a hop. `RULINGS.md`
+was read in its state, owed actions, `R-001`, `R-050`, `R-056` to `R-065` and
+the rulings from `R-106` on, not whole.

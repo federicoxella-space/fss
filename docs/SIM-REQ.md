@@ -2,7 +2,7 @@
 
 **Document:** SIM-REQ
 **Status:** Draft 1
-**Revision:** 2026-10-17
+**Revision:** 2026-10-19
 **Scope:** Headless simulation core, runnable outside the game
 
 ---
@@ -162,7 +162,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-03d** — A good declares either a market of its own or that it is a variant of a class it belongs to. A class that variants name holds a market, and carries the reference price per unit of value and the desired stock that FR-M-01 reads; validation at load refuses a variant whose class holds none, or that names a class it does not belong to. The variants of a class clear together, on one price per unit of value, formed from their stock summed in the class's units; a variant's price per unit is that price times its value per unit in the class, so that variants differ in price by quality, not by market. Demand that a need places on the class is served only by the variants that meet the need (FR-P-03b). Where the clearing's supply exceeds what is bought, the variants able to serve the same demand sell the same share of what they offer, with no size threshold: the fraction of a unit a variant's share leaves is carried at the clearing, and what is bought equals what is sold in every update. Which buyer receives which variant is derived from the rationing order and good id within the update, and leaves no carry.
 
-**FR-P-04** — Baseline goods set *(approved by the user; classes, values and grades under FR-P-03a)*: Grain, Flour, Bread, Ore, Timber, Bar iron, Tools, Wool, Cloth. Three chains: Grain→Flour→Bread, Ore+Timber→Bar iron→Tools, Wool→Cloth.
+**FR-P-04** — Baseline goods set *(approved by the user; classes, values and grades under FR-P-03a)*: Grain, Flour, Water, Bread, Timber, Charcoal, Ore, Bar iron, Tools, Wool, Cloth. Three chains: Grain→Flour, then Flour+Water+fuel→Bread; Timber→Charcoal, Ore+Charcoal→Bar iron→Tools; Wool→Cloth.
 
 **FR-P-05** — Weight-to-value ratio governs how far a good travels. Heavy cheap goods stay in their basin; light valuable goods cross kingdoms. This falls out of transport cost and needs no per-good code.
 
@@ -174,7 +174,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-09** — Named climate bands (3–4) group `climateIndex` ranges for presentation only. No simulation rule reads a band.
 
-**FR-P-10** — Crops are not produced continuously. A crop is a data record carrying sowing date, maturation length, harvest date, harvest window length in updates, its planting good and the amount needed per unit of land, yield per unit of land, and labour per unit of land for sowing, for harvest, and for growth at normal care and at full care.
+**FR-P-10** — Crops are not produced continuously. A crop is a data record carrying sowing date, maturation length, harvest date, harvest window length in updates, its planting good and the amount needed per unit of land, yield per unit of land, and labour per unit of land for sowing, for harvest, and for growth at normal care and at full care, and its relation to durables under FR-P-20. A durable a crop is improved by lowers its labour per unit of land and never raises its yield per unit of land.
 
 **FR-P-10a** — Sowing consumes the planting good from the sowing cohort's holdings. Land sown is the least of the land allocated, the land the planting good held can sow, and the land the cohort's own and hired sowing labour can sow. Land without seed or hands lies fallow.
 
@@ -206,7 +206,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-19** — A building type may require a site attribute placed by the generator: an ore deposit, flowing water, standing forest. Where the attribute is absent the building cannot exist. Comparative advantage between settlements comes from here, and without it settlements converge on identical economies and trade disappears.
 
-**FR-P-20** — A recipe declares its relation to durables: required, improved by, or independent of. The field lives on the recipe record.
+**FR-P-20** — A recipe declares its relation to durables: required, improved by, or independent of. The field lives on the recipe record, and on the crop record (FR-P-10), where it is improved by or independent of.
 
 **FR-P-21** — Every recipe that requires a durable has a crude variant requiring none, at a much worse input-to-output ratio (P-52). Iron can be worked with a stone, badly. This breaks the bootstrap circle with data rather than with a special case in code.
 
@@ -647,7 +647,7 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-78 | Share of its type's threshold below which a settlement falls a type, FR-M-17 | 80% | Provisional; replaced in Phase 6 |
 | P-79 | Reach: the highest route cost at which a settlement trades at a market place, FR-M-18 | TBD | Open; Provisional from the point that builds routing, replaced in Phase 6 |
 | P-80 | Share of the current route cost by which another market place must undercut it to take a group, FR-M-18 | TBD | Open; Provisional from the point that builds routing, replaced in Phase 6 |
-| P-09 | Goods in the base rules' catalogue; a settlement holds only those present (DEC-101) | 9 | Decided |
+| P-09 | Goods in the base rules' catalogue; a settlement holds only those present (DEC-101) | 11 | Decided |
 | P-10 | Price bounds | 0.25× to 4× reference | Decided |
 | P-11 | Trade damping `k` | TBD by sweep | Open |
 | P-12 | Settlement mix at tick 0 | 2 metropolises / 8 cities / 30 cittadine / 60 borghi / 1,900 villages at 2,000 total; types then follow population (FR-M-17) | Decided |
