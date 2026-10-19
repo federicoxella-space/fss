@@ -195,6 +195,29 @@ that `plan-state` reads it, and placed here so that it runs before point 4
   this point: the new fixture's `deciderDue` goes false.
 - **Core:** no — the diff touches only `.claude/hooks/`.
 
+*Outcome:* 2026-10-20. Closed, *criterion defective* (`R-005`, case 1):
+`plan-state -SelfTest` ran 87 cases, 0 failed; live `PLAN.md` reads `deciderDue`
+true (point 3's *left open*), no point changed. The "Closed by" half "the
+fixture's point not reported changed against an installed copy" cannot fail for
+the reason it exists: under the old reading a wrapped marker opens the same
+record, so a point whose outcome wraps is not changed either way; correct code
+passes it, it proves less. The missing check, beside it, built and run: fixture
+point 7, an edit after a wrapped marker line, reported changed, red under the
+fault. Faults, restored, tree hash equal: a marker at the start of any line
+opens a record (`Fails when`), `decider-wrapped` `deciderDue` false and point 7
+not reported changed (2 failures), live `deciderDue` false; the
+paragraph-start guard on the outcome dropped, `decider-midline` true (1
+failure). Review: code-reviewer; the outcome opening mid-paragraph untested,
+applied (`decider-midline.md`); a section's first line as paragraph start
+untested, rejected (harmless, taste). *Left open*, for the decider: a record
+directly after a bullet with no blank line is now part of the point's text; a
+`*Ruled:*` line directly after an outcome with no blank line now belongs to the
+outcome paragraph, so its *left open* would count. `D-132`. Agents (`R-067`):
+code-reviewer, documenter and committer dispatched. Not run: the tester, the
+check being a script self-test run by the orchestrator; the coder, the file being
+in `.claude/hooks/`; the revisioners, `Core: no` held. This outcome does not
+claim `R-046`'s check.
+
 ## 4. The register written insert-only by a hook (review P1)
 
 - **Does:** a project `.claude/settings.json` wires `path-guard` to every

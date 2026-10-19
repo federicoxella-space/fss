@@ -4712,3 +4712,67 @@ count stays pinned.
 **Not verified:** a delete and re-add of `PLAN.md` within one range; `deciderDue`
 where a marker appears in the outcome paragraph as quoted prose; the script under
 a shell other than pwsh 7.
+
+### D-132 · Point 9 · A record opens at a paragraph, not at any line: the criterion's second half proves less, and two readings are left to the decider
+
+**Origin.** Point 3 closed (`fbed774`) and its outcome wrapped onto a line
+beginning `*Ruled:*`. `plan-state` took that line for a new record and cut the
+outcome paragraph before its *left open*, so `deciderDue` read false. The user
+approved adding the point ("sì, aggiungi il punto 3a e procedi"), added in
+`d842fd1` under `D-014`, numbered 9 so that `plan-state` reads it (`R-074`).
+
+**Built** (by the orchestrator: `.claude/hooks/` is not the coder's, `D-087`; the
+point says it edits `.claude/hooks/`): in `.claude/hooks/plan-state.ps1`,
+`Get-FrozenText` opens a record only where a paragraph starts (the section's
+first line, or a line after a blank one), and the `deciderDue` loop opens the
+outcome only at a paragraph start and ends it at the blank line, no longer at a
+line beginning with a marker. New fixtures `decider-wrapped.md` (outcome wrapped
+onto `*Ruled:*`, *Left open* after it) and `decider-midline.md` (a Does line
+wrapping onto `*Outcome:* ... left open`, the real outcome clean). The fixture
+repository gains point 7 (a Does wrapped onto a line beginning `*Ruled:*`, a
+word after it edited in a later commit), and point 5's Esito wraps onto
+`*Ruled:*`. `core/`, `docs/` and `AGENTS.md` untouched.
+
+**Decided (`docs/` silent: process work).**
+1. **"Paragraph start" is the first line of the section or a line after a blank
+   one.** The outcome paragraph ends only at a blank line. *Would overturn it:*
+   a record written without a blank line before it.
+2. **The criterion's half "the fixture's point not reported changed against an
+   installed copy" is defective** (`R-005`, case 1: correct code passes it, it
+   proves less). Under the old reading a wrapped marker opens the same record, so
+   a point whose outcome wraps is not changed either way; the half cannot fail
+   for the reason it exists. It was not rewritten. The missing check, beside it,
+   was built and run: fixture point 7, an edit after a wrapped marker line
+   reported changed, red under the fault. *Would overturn it:* a ruling that the
+   half does catch the fault.
+
+**Results.** `plan-state -SelfTest`: 87 cases, 0 failed. Live `PLAN.md`:
+`deciderDue` true (point 3's *left open* read), no point changed. Faults, by the
+orchestrator, restored, tree hash equal: a marker at the start of any line opens
+a record (`Fails when`): `decider-wrapped` `deciderDue` false and point 7 not
+reported changed (2 failures), live `deciderDue` false; the paragraph-start guard
+on the outcome dropped (found by the reviewer): `decider-midline` true, 1
+failure.
+
+**Findings and their resolution.**
+- Code-reviewer, the deviation above: recorded as the criterion defect
+  (decision 2).
+- Outcome opening mid-paragraph untested: **applied**, `decider-midline.md`,
+  fault seen red.
+- A section's first line as paragraph start untested: **rejected**, harmless,
+  sections begin with a heading; taste.
+- **Questions, recorded for the decider, not changed.** (a) A record directly
+  after a bullet with no blank line is now part of the point's text; every record
+  in the repository follows a blank line. (b) A `*Ruled:*` line directly after an
+  outcome with no blank line now belongs to the outcome paragraph, so its *left
+  open* would count.
+
+**Agents (`R-067`).** Dispatched: code-reviewer, documenter, committer. Not run:
+the tester (the check is a script self-test, run by the orchestrator); the coder
+(`.claude/hooks/`); the revisioners (`Core: no` held).
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** a record written without a blank line before it; a ruling
+on questions (a) and (b).
+**Not verified:** a record after a bullet with no blank line; a `*Ruled:*` line
+directly after an outcome; the script under a shell other than pwsh 7.

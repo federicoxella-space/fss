@@ -31,9 +31,14 @@ $DeciderMarkers = '(criterion defective|criterio difettoso|left open)'
 function Get-FrozenText([string[]]$sec) {
     $kept = @()
     $inRecord = $false
+    # A marker opens a record only where a paragraph starts: a wrapped line that
+    # happens to begin with one is still the paragraph it belongs to (point 9).
+    $paraStart = $true
     foreach ($l in $sec) {
-        if ($l -match $Record) { $inRecord = $true; continue }
-        if ($inRecord) { if ($l.Trim() -eq '') { $inRecord = $false }; continue }
+        $blank = $l.Trim() -eq ''
+        if ($paraStart -and $l -match $Record) { $inRecord = $true; $paraStart = $false; continue }
+        $paraStart = $blank
+        if ($inRecord) { if ($blank) { $inRecord = $false }; continue }
         $kept += $l.TrimEnd("`r")
     }
     return (($kept -join "`n").Trim("`n", ' '))
@@ -231,9 +236,14 @@ function Get-PlanState([string]$Repo, [string]$Path, [bool]$Draft) {
     if ($lastClosed.Count) {
         $para = @()
         $in = $false
+        $paraStart = $true
         foreach ($l in $now[[string]$lastClosed[0].number].sec) {
-            if ($l -match $Outcome) { $in = $true }
-            elseif ($in -and ($l.Trim() -eq '' -or $l -match $Record)) { break }
+            # The outcome opens where a paragraph starts, and ends at the blank
+            # line that closes it; a wrapped line beginning with a marker is
+            # still inside it (point 9).
+            if (-not $in -and $paraStart -and $l -match $Outcome) { $in = $true }
+            elseif ($in -and $l.Trim() -eq '') { break }
+            $paraStart = $l.Trim() -eq ''
             if ($in) { $para += $l }
         }
         $text = ($para -join ' ') -replace '[*_]', ''
@@ -322,6 +332,8 @@ if ($SelfTest) {
     $s = Of 'request-with-draft.md' $true
     Expect 'deciderDue: nothing closed' (-not $s.deciderDue -and -not @($s.points | Where-Object { $_.status -ne 'open' }).Count)
     Expect 'deciderDue: a FAILED point' ((Of 'failed-then-open.md').deciderDue)
+    Expect 'deciderDue: an outcome wrapped onto a line beginning *Ruled:*' ((Of 'decider-wrapped.md').deciderDue)
+    Expect 'deciderDue: a wrapped line of the point beginning *Outcome:* is not the outcome' (-not (Of 'decider-midline.md').deciderDue)
 
     # A point's frozen text, against the commit that installed the plan: a
     # repository where point 1 is closed, point 2's "Closed by" edited in a
@@ -331,15 +343,16 @@ if ($SelfTest) {
     git -C $repo init -q
     git -C $repo config user.email t@t
     git -C $repo config user.name t
+    $p7 = { param($w) "## 7. Point 7`n`n- **Does:** a thing that wraps onto a line`n*Ruled:* beginning with a marker, then $w.`n- **Closed by:** check seven.`n- **Core:** no — fixture.`n" }
     $pt = { param($n, $closedBy) "## $n. Point $n`n`n- **Does:** thing $n.`n- **Closed by:** $closedBy`n- **Core:** no — fixture.`n" }
-    $installed = "# Plan — fixture`n`n**Kind:** process`n`n" + (& $pt 1 'check one.') + "`n" + (& $pt 2 'check two.') + "`n" + (& $pt 3 'check three.') + "`n" + (& $pt 5 'check five.') + "`n" + (& $pt 6 'check six.')
+    $installed = "# Plan — fixture`n`n**Kind:** process`n`n" + (& $pt 1 'check one.') + "`n" + (& $pt 2 'check two.') + "`n" + (& $pt 3 'check three.') + "`n" + (& $pt 5 'check five.') + "`n" + (& $pt 6 'check six.') + "`n" + (& $p7 'a word')
     Set-Content -NoNewline -Encoding utf8 (Join-Path $repo 'PLAN.md') $installed
     git -C $repo add PLAN.md
     git -C $repo commit -q -m 'install'
     $later = "# Plan — fixture`n`n**Kind:** process`n`n" + (& $pt 1 'check one.') +
         "`n*Outcome:* 2026-10-20. Closed with reserve — a push`nawaits the human.`n`n*Ruled:* 2026-10-21 — criterion defective.`n`n*Reserve discharged:* 2026-10-22 — pushed.`n`n" +
         (& $pt 2 'check two, edited.') + "`n" + (& $pt 4 'check four.') + "`n" + (& $pt 5 'check five.') +
-        "`n*Esito:* 2026-09-20. Chiuso, il test`ne verde.`n`n" + ((& $pt 6 'check six.') -replace 'Point 6', 'Point six, renamed')
+        "`n*Esito:* 2026-09-20. Chiuso, il test`ne verde, e il fixture va a capo`n*Ruled:* su una riga che comincia con un marcatore.`n`n" + ((& $pt 6 'check six.') -replace 'Point 6', 'Point six, renamed') + "`n" + (& $p7 'another word')
     Set-Content -NoNewline -Encoding utf8 (Join-Path $repo 'PLAN.md') $later
     git -C $repo commit -q -am 'point 1 and an edit'
     $s = Get-PlanState $repo (Join-Path $repo 'PLAN.md') $false
@@ -348,6 +361,7 @@ if ($SelfTest) {
     Expect 'frozen text: point 1 recorded, ruled, discharged, not changed' ((Pt 1).recorded -and -not (Pt 1).changed)
     Expect 'frozen text: point 5 closed in Italian, not changed' ((Pt 5).recorded -and -not (Pt 5).changed)
     Expect 'frozen text: point 6 heading edited, changed' ((Pt 6).changed)
+    Expect 'frozen text: point 7 edited after a wrapped line beginning *Ruled:*, changed' ((Pt 7).changed)
     Expect 'frozen text: point 2 changed' ((Pt 2).changed -and -not (Pt 2).recorded)
     Expect 'frozen text: point 4 added, not changed' ((Pt 4).added -and -not (Pt 4).changed)
     Expect 'frozen text: point 3 gone' (@($s.gone) -contains 3 -and @($s.gone).Count -eq 1)
