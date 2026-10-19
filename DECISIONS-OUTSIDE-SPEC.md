@@ -3714,3 +3714,700 @@ constrains the simulator's code.
 **Not verified:** that the hooks fire for an agent run in the background (the
 probe ran in the foreground, as `R-098` left open); the probe exercised the
 coder's `Write` only, not `Edit`, and no other role's hook.
+
+## 2026-10-07 — The cost of a settlement update, measured on a stand-in
+
+### D-121 · Point 1 · The stand-in and its calibration: what the point left open, and a check that under-covers
+**Ruling:** R-101 — ratified; decision 3 ruled; point 2 owes a reference check on a state where rationing binds.
+
+**R-100's result, before the point:** the probe owed again was run with `coder`
+dispatched in the background (the harness default). Asked to `Write`
+`docs/probe.md`, it was denied by its frontmatter hook: "PreToolUse:Write hook
+error: [pwsh -NoProfile -File "$CLAUDE_PROJECT_DIR/.claude/hooks/path-guard.ps1"
+-Role coder]: path-guard: the coder may not write docs/probe.md". The file was
+not created; `tree-state` over the whole tree was equal before and after.
+Green: frontmatter hooks fire for a background coder (the open item of `D-120`,
+for `Write` only).
+
+**Built.** `bench/Sim.Bench.csproj` and `bench/Program.cs`, a console project
+on net8.0 (`Optimize` true, `TieredCompilation` false), added to `Sim.sln`. CI
+builds and tests by project path and never uses `Sim.sln`, and `core/Tests`
+references only `Sim.Core`, so `bench/` is outside the test run and CI. Five
+passes — production, own consumption, clearing per good with a selection sort by
+descending (cash + stock of the good), prices as their own pass over the
+residual supply, spoilage with a remainder carry per row and good — integer
+only, over dense per-good arrays; a checksum of stock and prices is folded into
+every update and printed. Check: `dotnet run -c Release --project bench/Sim.Bench.csproj`;
+exit 0 PASS, 1 FAIL, 2 pinning failed.
+
+**Decided (`docs/` silent on all of it).**
+1. **Ranking by selection sort**, n(n-1)/2 comparisons whatever the data, as
+   `DEC-054`'s "grows with the square" reads. The coder tried alternatives
+   against the bounds: insertion sort gave ratios 3.5 to 4.9, a selection sort
+   comparing through the index array up to 6.3; the kept version compares keys
+   directly. This is calibrating the stand-in's shape against the criterion; the
+   bounds stayed verbatim. *Would overturn it:* the decider judging that a
+   stand-in tuned to the bound no longer "means what it resembles" (`SQ-004`).
+2. **Measurement:** 3,000 ms time-based warm-up over both cells; 100,000 timed
+   updates per cell per run (the plan asks at least 10,000; at 20,000 the 9-row
+   p99 was too noisy); the cells interleaved in chunks of 500 updates so drift
+   lands on both sides of the ratio (whole-cell interleaving 9,27,9,27,9,27 was
+   tried: 1 FAIL in 12, ratio 5.87). The plan's header says every cell is
+   measured the same way and names only "a warm-up"; chunking is outside it.
+   *Would overturn it:* a measurement that stays stable without it.
+3. **The thread is pinned because the process is** (a one-bit affinity mask, core
+   2 when there are more than 2, High priority); no `SetThreadAffinityMask`
+   P/Invoke. Logical core 2 on an SMT machine may share a physical core with a
+   busy sibling. Not settled; open for the human, as a question of measurement
+   quality on this machine. *Would overturn it:* an explicit requirement to pin
+   the thread or to pick an idle physical core.
+4. **Stand-in devices:** cash refilled by 600 per row per update, supply per good
+   1000 + 37g, price floor 50, initial values from an LCG seeded 12345.
+   Measurement inputs, no P-number (`R-050`).
+5. `TieredCompilation` off, so the JIT is fully optimised before the warm-up;
+   `Optimize` true also makes a Debug build optimised.
+6. `SupportedOSPlatform("windows")` and `("linux")` on `Program`, with a
+   comment, so that CA1416 is quiet without a suppression.
+7. **The criterion's numbers:** "1.6" is below half of P-63 (1.65) and "3.8 to
+   5.8" a little wider than 4.8 within a fifth (3.84 to 5.76). The written
+   numbers were used, verbatim; the measured values fell nowhere near the
+   difference.
+
+**Verification.** Step 2: the check did not exist. First verification:
+unstable, 8 runs with 2 FAIL on the ratio's upper bound (7.74, 6.14), each when
+the 9-row cost dropped; all 9-row runs executed before any 27-row run, and
+prices was folded into the clearing loop. After round 1 (interleaving, warm-up,
+prices as its own pass): coder 14/14 PASS, ratio 5.18 to 5.60; tester 8/8 PASS,
+9 rows 3.20 to 4.40 us, ratio 4.84 to 5.57. After round 2 (a comment only): 5/5
+PASS, 9 rows 3.50 to 3.80 us, 27 rows 19.20 to 20.50 us, ratio 5.33 to 5.49. The
+ratio sits near 5.4, above `DEC-054`'s 4.8, with 0.3 to 0.5 of headroom under
+5.8; the 27-row cost is 19 to 20 us against P-64's 15.8. The printed checksum
+differs between runs, since the time-based warm-up runs a variable number of
+updates; this point does not ask for it to repeat, point 2 does.
+`dotnet build Sim.sln -c Release`, core and harness: 0 warnings, 0 errors;
+`core/Tests` Release 52/52, Debug 53/53 (one test is `#if DEBUG`, pre-existing).
+
+**Faults, introduced by the orchestrator** (`bench/` lies outside
+`mutate.ps1`'s reach). `tree-state` over the whole tree equal before and after
+both (2fc6528b...), the source restored byte-identical each time.
+- Linear ranking, the inner comparison loop bounded to one step: red, ratio
+  2.85, exit 1.
+- The work removed, `return;` at the top of `Update`: red, 9 rows 0.10 us,
+  ratio 1.00, checksum 0, exit 1.
+- **Incident:** the restore by file copy kept the source's old mtime, so the
+  incremental build kept the faulted DLL, and the code-reviewer saw FAIL at
+  0.10 us on the working tree. Fixed by deleting `bench/bin` and `bench/obj`
+  (git-ignored) and rebuilding: PASS, ratio 5.54. Not a code defect; a hazard of
+  restoring by copy that a future fault on `bench/` must avoid.
+
+**The criterion under-covers the point (`R-005`, case 1), and was not
+rewritten.** Correct code passes it, but it reads only the 9-row cost and the
+ratio and cannot see what the five passes compute. The code-reviewer named
+faults it misses (`R-047`): (a) spoilage without the carry, a few percent of
+cost and no change of ratio; (b) deleting pass 1, 2 or 4, each linear and small
+next to the sort; (c) ranking on a constant or a wrong key, or never reading
+`order`: the same quadratic comparisons, no ranking by ability to pay; (d)
+replacing clearing with any quadratic loop of similar weight; (e) a degenerated
+state, such as prices pinned at the floor of 50 after thousands of updates, so
+that trade and price movement stop (not tested whether it happens); (f) a Debug
+build, not refused by the check since `Optimize` is true. **The missing check:**
+the checksum of each cell's outputs, at a fixed update count, against a plain
+reference implementation of the five passes. It catches (a) to (d). Not run
+here; point 2 introduces checksums against a reference loop for its own cells.
+
+**Findings and their resolution** (code-reviewer, one dispatch; tester).
+- Stale binary on the working tree: accepted, the orchestrator's error, above.
+- The faults the check misses: recorded above, criterion unchanged.
+- Pinning failure exits 2 against a declared 0/1 contract: **rejected.** A
+  pinning failure is not a measurement, and keeping it apart from FAIL is
+  informative; PASS is still exit 0 only.
+- Core 2 hard-coded, possibly an SMT sibling: not settled, decision 3.
+- Interleaving in chunks is a choice outside `docs/`: accepted, decision 2.
+- `SupportedOSPlatform` unexplained (C7, C10): accepted, one comment line in
+  round 2.
+- Cash refill and supply constants invented: accepted, decision 4.
+- Tester: the ratio's headroom and the run-varying checksum, recorded above; its
+  question whether n log n against n squared was covered was answered by
+  `DEC-054` ("grows with the square"), so the brief asked for a quadratic
+  ranking.
+
+**Agents (`R-067`).** Dispatched: tester (step 2, step 4, two re-verifications),
+coder (implementation, two rounds, and the R-100 probe), code-reviewer (once),
+documenter, committer. Not run: the two revisioners, since `Core: no` held at
+step 5 (`git diff --name-only HEAD -- core/` empty); `mutate.ps1`, since `bench/`
+lies outside `core/Runtime/` and `harness/`. The tester wrote no test: the check
+is a run of `bench/`, not a test under `core/Tests/`. No outcome of this plan
+claims `R-046`'s check, which stays with phase 4's first point. The coder's
+denylist hashed before and after each coder dispatch: unchanged; the tree
+outside `core/Tests` around each tester dispatch: unchanged; the whole tree
+around the code-reviewer: unchanged.
+
+**What `docs/` says:** `DEC-054` that the clearing's cost grows with the square
+of the rows; P-63 and P-64 the costs measured; nothing on the stand-in's
+passes, its measurement method or its devices.
+**Would overturn it:** see decisions 1 to 3; and a reference checksum per cell
+showing that the stand-in computes something other than the five passes.
+**Not verified:** that the ratio holds on another machine or another core;
+that the SMT sibling of core 2 was idle; the faults (a) to (e).
+
+### D-122 · Point 2 · Dense state, scaled: the devices, the sweep, and a check that under-covers the bytes
+**Ruling:** R-102 — ratified, save decision 8, rejected; the regime question ruled; point 3 owes the bytes column at `SIM-STATE`'s widths.
+
+**Owed and acted on:** `R-101`, items 1 to 4: each cell's checksum at a fixed
+update count compared against a plain reference implementation of the five
+passes; every cell run on a state where rationing binds, so that the ranking
+reaches the checksum; faults (a) and (c) of `D-121` seen red against it; point
+1's check rerun after any change to the stand-in's devices.
+
+**Built** (`bench/Program.cs` only). `StandIn` takes (rows, goods); `Bytes` sums
+`Buffer.ByteLength` over its arrays. A class `Reference` shares no code with
+`StandIn`: 2-D arrays, a comparison insertion sort, every good and every row, no
+early exit; it returns a checksum and a `denied` count (update, good pairs where
+demand exceeded supply), and has a `rank=false` mode clearing in row-id order.
+`Main` pins the process, then dispatches: no argument runs point 2, `point1` runs
+point 1's check. Exit 0 PASS, 1 FAIL, 2 pinning failed. Point 2's check, per
+cell: the checksum on a fresh state after 2000 updates against `Reference`;
+`denied` above 0; the `rank=false` checksum different from the ranked one. Timing:
+a 1 s time-based warm-up per cell, three runs of 20,000 timed updates, the p99 of
+each, the median reported; machine, runtime and clock printed. The array `paid`,
+written and never read, deleted (S1). The comment at line 91 narrowed (C4,
+code-reviewer finding).
+
+**Decided (`docs/` silent on all; each a measurement input, no P-number, `R-050`).**
+1. **Scarcity device:** Supply(g) = 4 when g % 3 == 0, else 1000 + 37g, so
+   rationing binds (`R-101` item 2). *Would overturn it:* a ruling fixing another
+   device.
+2. **Ranking key a total order:** (cash + stock) * 1024 + (1023 - r), ties to the
+   lower row id, so the reference need not copy the selection sort's tie order.
+   Limits the check to fewer than 1024 rows; the key sits in the measured path.
+   *Would overturn it:* a cell above 1023 rows.
+3. **Wants:** 1 + ((cash >> 6) & 3) units per row and good. Before, cash/(p*40)
+   was 0 for dear goods, so in the 100-goods cells the last good never reached
+   the checksum and the Fails-when fault was invisible there (coder's round 1,
+   below). Wants no longer depend on price. *Would overturn it:* a device that
+   makes dear goods unaffordable again.
+4. **Cash refill** 1000 + (cash & 4095); the old += 600 ran cash negative without
+   bound. *Would overturn it:* any bounded refill preferred.
+5. **Measurement:** the checksum at a fixed 2000 updates on a fresh instance, not
+   on the timed one; 1 s warm-up; 20,000 timed updates per run (the plan asks at
+   least 10,000); cells measured one after another, not interleaved in chunks as
+   in point 1 (`D-121` decision 2).
+6. **The 12 x 100 cell belongs to both sweeps** and is measured twice, giving
+   seven rows and six distinct cells, read as the plan's "seven cells". Its two
+   timings show the noise (71.2 against 77.6 us in one run).
+7. **The check is stricter than `R-101`:** `rank=false` must give a different
+   checksum, so fault (c) is caught by the check itself.
+8. **Bytes counts every array of `StandIn`,** including the scratch arrays
+   `order`, `key` and `residual`. Open for the human: whether "bytes of state per
+   settlement" means held state only.
+
+**Results.** Tester step 2: the check absent (point 1's output only; the checksum
+varied with the time-based warm-up). Coder round 1: the Fails-when fault
+(clearing loop to Goods-1) left the three 100-goods cells matching; sent back,
+devices changed (decisions 3 and 4), then all seven red. Tester step 4, two runs:
+exit 0 PASS, all seven cells match the reference, rationing binds, the ranking
+reaches the checksum; the checksums are identical across runs: 12x8
+-1821865995186469365, 12x30 5323051988096353993, 12x100 9171567396557610401,
+12x300 8280033743768488591, 24x100 -2873913667248244111, 41x100
+-7943819900709430484. Medians (us), run 1: 5.50, 20.60, 71.20, 192.90, 77.60,
+237.10, 416.00; run 2: 6.60, 25.10, 76.70, 234.90, 86.20, 209.90, 459.20. Bytes:
+4208, 15120, 49840, 149040, 49840, 98080, 166420. Machine Windows 10.0.26300 X64,
+16 logical cores, pinned to one; .NET 8.0.31; clock 100 ns. The spread between
+runs reaches 22% (12x300). `dotnet build Sim.sln -c Release` 0 warnings, 0
+errors; `core/Tests` Release 52/52, Debug 53/53. After the comment fix: PASS,
+checksums unchanged, build clean.
+
+**`R-101` item 4.** Point 1's check, rerun on the changed devices, PASS every
+time: coder 3.10/15.50 us, ratio 5.00, and 3.10/14.80, 4.77; tester 3.90/19.80,
+5.08, and 3.10/15.00, 4.84; code-reviewer, 9 rows 3.70, ratio 5.30. Green, so
+nothing goes to the decider for item 4.
+
+**Faults, introduced by the orchestrator** in the working tree (`bench/` lies
+outside `mutate.ps1`'s reach), each rebuilt from clean `bin/obj`, the source
+restored byte-identical (`cmp`), `tree-state` over the whole tree equal before
+and after (9104499f...).
+- The Fails-when fault, clearing loop `g < Goods - 1` (line 62): exit 1, 7 of 7
+  cells mismatch. Its cost was not reliably lower (within noise, 54.8 us against
+  71 to 77 at 12x100): the "costs less" half of the Fails-when is not observable
+  and the checksum alone makes it red.
+- `D-121` (a), spoilage without the carry (`carry[i] = 0`): exit 1, 7/7 mismatch.
+- `D-121` (c), a constant ranking key (`key[r] = 1023 - r`): exit 1, 7/7 mismatch.
+The tester also faulted copies in the scratchpad (one good fewer in clearing,
+spoilage over fewer elements, an empty `Update()`): all red. The coder faulted
+them in its own rounds.
+
+**The criterion under-covers the point (`R-005`, case 1), and was not
+rewritten.** Correct code passes it, but the bytes per settlement are in the
+"Does" and nothing checks them. **The missing check:** the bytes per cell
+recomputed independently from the array sizes and compared. Not run here.
+
+**Findings and their resolution** (code-reviewer, one dispatch).
+- C4, the line 91 comment overclaimed "state stays in range": accepted, narrowed
+  by the coder, re-verified.
+- Bytes unchecked (dropping or double-counting an array leaves the check green):
+  accepted as a fault the check misses; it is the missing check above.
+- The checksum comes from a fresh instance, not the timed one, so a fault that
+  shows only after many updates, or drift in the timed run, is not compared:
+  accepted as a fault the check misses, recorded; criterion unchanged.
+- Scarce goods' prices grow without bound (residual 0, +1/+2 per update) and cash
+  goes negative before the refill: the timed run sits in a different regime from
+  the checked one. Recorded, a degenerate state of the kind `D-121`'s (e) named;
+  not changed, the criterion does not ask about it. Open for the decider whether
+  it affects what the costs mean (`SQ-004`).
+- "A rerun gives the same checksums" holds by construction (fixed seed, no
+  randomness); nothing in one run turns red if it stopped holding. It was
+  verified by rerunning (coder, tester, faults). Recorded.
+- The duplicated 12x100 cell: recorded, decision 6.
+- Bytes counting the scratch arrays: interpretation, open for the human
+  (decision 8).
+- `Supply` public static, read only in `StandIn`: taste, **rejected** (not
+  applied), left for the human.
+- `R-101` item 3 unconfirmed by the reviewer: answered with the fact, faults (a)
+  and (c) run red by the orchestrator above.
+
+**Agents (`R-067`).** Dispatched: tester (step 2, step 4, re-verification), coder
+(three rounds: implementation, devices and `paid`, the comment), code-reviewer
+(once), documenter, committer. Not run: the two revisioners, `Core: no` held at
+step 5 (`git diff --name-only HEAD -- core/` empty); `mutate.ps1`, `bench/` lies
+outside its reach, so the orchestrator introduced the faults; no tester-written
+test, the check is a run of `bench/`. The coder's denylist hashed before and
+after each coder dispatch: unchanged; the tree outside `core/Tests` around the
+tester: unchanged; the whole tree around the code-reviewer: unchanged. This
+outcome does not claim `R-046`'s check.
+
+**What `docs/` says:** `DEC-054` that the clearing's cost grows with the square
+of the rows; P-63 and P-64 the costs measured; nothing on the stand-in's
+devices, the sweep's measurement or what the bytes of state include.
+**Would overturn it:** see decisions 1 to 4 and 8.
+**Not verified:** that the costs hold on another machine or core; that the SMT
+sibling was idle; the bytes column against an independent count; that the timed
+instance computes what the checked instance does after more than 2000 updates.
+
+### D-123 · Point 3 · Sparse state per settlement type: the world, the dense reading, and a check that cannot fail where it matters
+**Ruling:** R-103 — ratified; decision 5, left to the human, ruled; point 4 owes a reference check where routed demand is rationed.
+
+**Owed and acted on:** `R-102`, items 1 and 2 (quoted from `RULINGS.md`, "Owed by
+the implementer"): "the bytes column, for point 2's cells and point 3's, counts
+the settlement state of `SIM-STATE` at its widths — the arrays standing for
+`goods`, `goodsCarry`, `currency` and the per-good price, and any index a layout
+holds — and leaves out content-derived rates and scratch; the figure recomputed
+independently from the sizes and compared, with an array dropped or counted twice
+seen red." Point 2's `StandIn.Bytes` and check changed accordingly (`bytesOk`
+against `ExpectedBytes`); point 3's bytes are counted the same way.
+
+**Built** (`bench/Program.cs` only). `World`, a static id-based world definition
+(`Cash(rid)`, `Cell(rid,gid)`, `Price0(gid)`), no update code. `Settlement`, one
+class for both layouts: sparse holds arrays sized to the present rows and goods
+plus an index `rowId[nr]`, `goodId[ng]`; dense allocates 41 x 300 and masks absent
+rows and goods with `rowOn`/`goodOn`, absent goods getting supply 0. `RefWorld.Run`,
+a plain reference of the five passes over the type's present rows and goods: 2-D
+arrays, insertion sort, no masks, no early exit; it shares only `World` and
+`StandIn.Supply`. `ExpectedBytes`, from sizes alone: rows x goods x 12 + rows x 8
++ goods x 8 + (sparse ? (rows + goods) x 4 : 0). Mode `point3`, per type:
+checksum at 2000 updates on fresh states, sparse = dense = reference required;
+rationing binds and the unranked run differs (`R-101` practice); the bytes of both
+layouts equal `ExpectedBytes`; the timed pair, built apart from the checked
+instances, must be the layout it is labelled and at its expected bytes (added at
+step 7, see findings); timing per point 2's header (1 s warm-up, three runs of
+20,000 updates, p99 each, median). `StandIn`'s update code is unchanged.
+
+**Decided (`docs/` silent on all; each a measurement input, no P-number, `R-050`).**
+1. **Which goods and rows a type holds:** ids spread evenly, good k of ng is id
+   k x 300 / ng, row k of nr is id k x 41 / nr, so the scarce pattern (id % 3 == 0)
+   and the id tie-break vary within each type. *Would overturn it:* a content
+   definition of which goods each type holds (`SQ-024` point 1, the user's,
+   deferred).
+2. **"The same world" in the dense layout:** dense holds 41 x 300 with only the
+   present cells filled; absent goods supply 0, absent rows are skipped in the
+   take loop, absent cells and rows are skipped in the checksum. So "the dense
+   cost of the same type" is the dense layout running that type's world, and it
+   varies by type (about 1.0 to 1.5 ms) because live cells do real takes; the
+   41-row sort still runs for every good, absent ones included. *Would overturn
+   it:* a reading of the plan as one fixed dense 300 x 41 figure, or a dense
+   layout that physically stores absent goods with zero stock.
+3. **One update code for both layouts;** only data and masks differ. The sparse
+   layout runs the same mask checks with every flag true, so its cost carries those
+   branches. Masks, `sup` and the `Sparse` flag are world definition, not state,
+   and lie outside the bytes. *Would overturn it:* a sparse path without masks
+   (slightly faster sparse).
+4. **Checksum:** h x 31 + stock over present cells in row-id then good-id order,
+   then h x 31 + price over present goods in id order; the same sequence in both
+   layouts.
+5. **`R-102` mapping:** stock to `goods` (4 bytes), carry to `goodsCarry` (8), cash
+   to `currency` (8), price to the per-good price (8); the sparse index `rowId` +
+   `goodId` at 4 bytes each; left out: `prod`, `need`, `spoilNum` (rates), `order`,
+   `key`, `residual`, `sup` (scratch), the masks. Dense counts no index: its ids
+   are positions (the dense layout allocates `rowId`/`goodId`, but they are
+   positions). *Would overturn it:* a narrower id width (2 bytes would do for
+   300 x 41), or the decider counting the dense masks (341 bytes, 0.2%) as an
+   index.
+6. **`ExpectedBytes` is independent of the layouts' own counting** (sizes only).
+   Limit: both formulas are by one author, so a width error shared by both would
+   not show.
+7. **`World` and `StandIn.Supply` are shared** by the layouts and the reference; a
+   wrong formula there moves all checksums together. Judged a smaller risk than a
+   second copy drifting. *Would overturn it:* a reference with its own copy.
+
+**Results.** Tester step 2: no point-3 mode existed. Coder round 1: sparse == dense
+only; the Fails-when off-by-one was invisible at the metropolis (sparse and dense
+coincide in geometry and share the update code), and the coder had injected it
+only below 300 goods. Round 2 (sent by the orchestrator): `RefWorld` added, sparse
+and dense each compared with it. Tester step 4, `point3` twice: PASS, exit 0, all
+five types at the approved sizes; checksums sparse = dense = reference and
+identical across runs: village 7988148488481991243, borgo -5091104827290509539,
+cittadina -7667466961022978001, city -5224349151507211922, metropolis
+-1623290518230209804. Bytes: sparse 1332, 4080, 13896, 56160, 151692; dense 150328
+each; all equal `ExpectedBytes`. Median p99 (us), run 1 / run 2: sparse village
+6.10/7.40, borgo 58.30/28.60, cittadina 105.7/104.0, city 462.3/478.2, metropolis
+1457.7/1450.0; dense 992.2/1140.1, 3324.2/1163.3, 1353.9/1299.4, 1306.6/1366.0,
+1466.5/1454.5; dense/sparse about 154-163, 41-57, 12.5-12.8, 2.83-2.86,
+1.00-1.01. Borgo run 1 was a factor 2 to 3 noisier than run 2; the others within
+about 15%. Point 2: PASS, bytes now per `R-102`: 12x8 1312, 12x30 4656, 12x100
+15296, 12x300 45696, 24x100 29792, 41x100 50328. Point 1: PASS (9 rows 5.20 us,
+ratio 5.00). `dotnet build Sim.sln -c Release` 0 warnings, 0 errors; `core/Tests`
+Release 52/52, Debug 53/53. Re-verification after step 7: `point3` PASS, same
+checksums, timed pair ok in all five types; sparse us 7.10, 22.00, 102.30, 479.80,
+1437.60; dense 1258.10, 1070.00, 1268.10, 1368.20, 1454.40; ratios 177.2, 48.6,
+12.4, 2.85, 1.01. Point 2 PASS. Point 1 PASS: 9 rows 5.70 us (bound 6.6), 27 rows
+27.60, ratio 4.84; the machine ran slower today and the 9-row cost sits under a
+tenth from its upper bound.
+
+**Faults, introduced by the orchestrator** in the working tree (`bench/` lies
+outside `mutate.ps1`'s reach), each rebuilt from clean `bin/obj`, the source
+restored byte-identical (`cmp`), `tree-state` over the whole tree equal before and
+after (40126f83...).
+- The Fails-when, the walk drops the last local good (market pass `g < Goods - 1`):
+  exit 1, all five types red. Village to city: sparse differs from dense and from
+  the reference. Metropolis: sparse = dense (-5829897961147613837), only the
+  reference differs.
+- The Fails-when, the walk drops the last row (`k < rows - 1`): exit 1, all five
+  red; at the metropolis again sparse = dense (5566991724587269817), caught by the
+  reference only.
+- Bytes, price array dropped: exit 1, MISMATCH in all five types, both layouts.
+- Bytes, carry counted twice: exit 1, MISMATCH in all five, both layouts.
+- Coder, at step 7: the timed dense built as sparse: FAIL, "WRONG LAYOUT" in all
+  five types (the exit code was not read, the pipe hid it).
+"Faster" is not observable: the faults' cost lies within the noise. The checksum
+alone makes them red.
+
+**The criterion is defective (`R-005`, case 1), and was not rewritten.** Correct
+code passes it, but the check as written, that sparse and dense give the same
+checksum, cannot fail for the reason it exists at the metropolis: both layouts
+have the same geometry and run the same code, so the Fails-when off-by-one leaves
+them equal. **The missing check, beside it:** each layout's checksum against an
+independent reference of the five passes on the type's world. It was built and run
+here (`RefWorld`) and caught both off-by-ones at every type.
+
+**Findings and their resolution** (code-reviewer, one dispatch).
+- The timed instances were never checked (the wrong layout timed, all green):
+  accepted, applied at step 7 (the timed-pair check), fault seen red, re-verified.
+- Which cost "dense at 300 goods and 41 rows" means, absent goods skipping the
+  take loop but not the sort: accepted, decision 2.
+- Timing is not gated (a sparse slower than or equal to dense passes): a limit,
+  recorded; the criterion sets no threshold.
+- Dense id arrays not counted, the comment silent on why: taste, left for the
+  human (decision 5).
+- `stock` counted at 4 bytes while a `long[]` in the stand-in, its int range over
+  the timed run unverified: recorded as not verified.
+- Nested ternary in `Main`: taste, **rejected** (not applied).
+- The coder's own doubt, the `Sparse` accessor redundant with the bytes comparison
+  (sparse and dense bytes differ in every type): taste, **rejected**, kept.
+
+**Agents (`R-067`).** Dispatched: tester (step 2, step 4, re-verification), coder
+(three rounds: implementation, reference, timed-pair check), code-reviewer (once),
+documenter, committer. Not run: the two revisioners, `Core: no` held at step 5
+(`git diff --name-only HEAD -- core/` empty); `mutate.ps1`, `bench/` lies outside
+its reach, so the orchestrator introduced the faults; no tester-written test, the
+check is a run of `bench/`. The coder's denylist hashed before and after each
+coder dispatch: unchanged; the tree outside `core/Tests` around the tester:
+unchanged; the whole tree around the code-reviewer: unchanged. This outcome does
+not claim `R-046`'s check.
+
+**What `docs/` says:** `SQ-024` the five types and the sizes the user approved;
+`SIM-STATE` §Rule and §Cohort the state and widths `R-102` applies; NFR-07 the 50
+MB; nothing on how a sparse layout is held or on the stand-in.
+**Would overturn it:** see decisions 1 to 5 and 7.
+**Not verified:** the costs on another machine or core; that `stock` stays within
+int range in the timed run; a width error shared by `ExpectedBytes` and the
+layouts; `World` and `Supply` against an independent copy.
+
+### D-124 · Point 4 · Market places and goods variants: routed demand in the ranking, the split, and a served check that cannot see the ranking
+**Ruling:** R-104 — ratified; the open items ruled; point 5 owes four layouts on one update code in one run, the dense layout at market places measured.
+**Ruling:** R-103 (5e1d9b2) — point 4 owes a reference check where routed demand is rationed.
+
+**Owed and acted on:** `R-103`, items 1 to 3 (read in `RULINGS.md`, "### R-103"): item 1, every
+configuration's checksum, engine against an independent reference, with rationing binding where
+routed rows ask; item 2, the faults "routed demand served outside the ranking" and "split drops a
+variant" seen red; item 3, how routed demand enters the ranking, decided and recorded below.
+
+**Built** (`bench/Market.cs` new; `bench/Program.cs` one line, `point4` in `Main`'s dispatch).
+`Layout`, `Fault` enum, `Mkt` (engine), `MktRef` (independent reference), `PointFour.Run`.
+Check: `dotnet run -c Release --project bench -- point4`.
+
+**Decided (`docs/` silent on all unless noted; each a measurement input).**
+1. **How routed demand enters the ranking (R-103 item 3).** Both readings built and measured.
+   Headline: every routed row ranked as its own entry beside the market's own rows (closest to
+   `SIM-ECON` §Rationing ranking cohorts; at most 155 entries). Second: one entry per village, key =
+   village cash + stock summed, demand = sum of row wants, take dealt to rows in ascending row order.
+   *Would overturn it:* a ruling on `SQ-024` item 4.
+2. **Ranking key** cash + stock (summed over variants for a class) x 1024 minus entry position;
+   position = own rows first, then routed villages ascending id, then row; at most 1023 entries, the
+   constructor throws beyond. *Would overturn it:* a `SIM-ECON` tie rule.
+3. **Variant split.** Class good id 20 (held by every type) has K variant columns; the class clears
+   once; its take is dealt one unit at a time from a per-row per-good cursor (a remainder
+   accumulator, in the checksum); ranking uses stock summed over variants. *Would overturn it:* a
+   rule on `SQ-023`'s open split.
+4. **K applies to the one class good only**, measured on one borgo market with its 19 villages, not
+   on the whole mix; the 1.07 ratio is the marginal cost of one class. *Would overturn it:* a plan
+   meaning every class at K.
+5. **Market places** = ids multiple of 20, types spread evenly; villages routed round-robin by
+   ordinal mod 100, 19 each, a fixed assignment standing in for "nearest" (no geography; a real
+   nearest assignment would be uneven and move the tail). Village goods nested in every market's
+   goods. *Would overturn it:* a generator or assignment rule (`SQ-024` items 2, 5).
+6. **Routed demand served on the market's tick** from the village's state then, goods and cash
+   returned at once; no transport delay, no out-of-reach case (`SQ-024` item 3, open).
+7. **One simulated day** = the places of one bucket (id % 7, FR-T-06) in ascending id; p99 is over
+   days (heaviest bucket), the mean printed beside it; point 5's division by 7 matches the mean.
+8. **"Clearing everywhere"** = all 2,000 places each its own market, no routed villages, same engine,
+   sparse layout. No dense layout measured at market places.
+9. **Check sizes:** 140 days / 2,000 group updates / 400 days for the per-type cells against the
+   reference (slow); timing 10,000 days or 20,000 group updates, 3,000 ms warm-up, 3 runs, median
+   p99, cells interleaved.
+10. **Ample** = 1,000,000 per clearing; the served check compares against the reference's own demand
+    count.
+11. **Supply per good** unchanged from earlier points (every third good scarce); in K groups the class
+    supply is 100 against about 300 demand, so the class is short.
+
+**Results** (final clean run, PASS exit 0; Windows 10.0.26300 X64, 16 cores pinned to one, .NET
+8.0.32, clock 100 ns).
+- Reference checks (item 1), engine = reference in each, rationing binding where routed rows ask:
+  everywhere 2,000 places (own rows only, 226,000 rationed); market places every routed row ranked
+  4228107983477594576; one entry per village 2067131547714935750 (routed rationed 10,000); K=1
+  862733947654604921, K=4 -7056809336188606516, K=16 -4720438308575769582, the class good short with
+  routed rows asking in 2,000 of 2,000 updates; per-type timed cells borgo 2098642222544587508,
+  cittadina -2439787191266033681, city 3928472434974790030, metropolis -4282660321334963018.
+- Ample supply: village demand 8,128,546 units, served 8,128,546, reference 8,128,546; ignoring routed
+  rows serves 0 (caught).
+- p99 ms per simulated day (sparse layout): everywhere 3.18; at market places 5.53 with every routed
+  row ranked, 3.04 with one entry per village; P-01 10 ms. Mean 2.22, 4.51, 2.05. Earlier runs:
+  3.25/6.18/3.43 and 3.28/5.75/3.10, drift about 10%.
+- Variants, one borgo market with its 19 villages, p99 us/update: K=1 267.1, K=4 271.2, K=16 285.4
+  (K=16/K=1 1.07).
+- Per type, market with 19 routed villages (every row ranked) / village without clearing, p99 us:
+  borgo 253.7/0.93, cittadina 323.8/0.94, city 609.5/0.93, metropolis 1278.3/0.96.
+- Points 1, 2, 3 rerun PASS. Core build 0 warnings; core suites Release 52/52, Debug 53/53 (no core
+  change). Point 1 near its bounds (2.00 us vs floor 1.6; ratio 5.65 vs ceiling 5.8), the drift
+  `R-103` noted.
+
+**Faults, introduced by the orchestrator** in the production path of `bench/Market.cs` (`mutate.ps1`
+cannot reach `bench/`), each run to FAIL exit 1 and undone, tree-state hash equal before and after
+(71be9136...). The code also keeps each as a permanent negative control checked red inside the run.
+- The Fails-when, `IgnoreRouted` (line 169, `if (false)`): every routed configuration's checksum
+  differs; the ample check reports 0 served of 8,128,546.
+- `R-103`, "routed demand served outside the ranking", `RoutedUnranked` (line 178, `sortN = nOwn`):
+  red in every routed configuration, the four per-type cells included.
+- `R-103`, "split drops a variant", `DropVariant` (line 248, fall-through `kk > 1 ? kk - 1 : kk`): red
+  at K=4 and K=16, n/a at K=1 (no variant to drop).
+
+**The criterion is defective (`R-005`, case 1), and was not rewritten.** Correct code passes it, but
+the "Closed by" served-when-ample check runs where nothing is rationed, so it cannot see the ranking:
+a market that serves routed rows outside the ranking, or a split that drops a variant, serves every
+unit and passes it. **The missing check, beside it:** the reference checks of `R-103`, built and run
+here; they caught `RoutedUnranked` and `DropVariant`, which the served check alone would not.
+
+**Findings and their resolution.**
+- Tester (step 4): `DropVariant` hit every good (kv=0 for single-variant goods), so its red proved
+  nothing: accepted, fixed (restricted to kk > 1, n/a at K=1). The class good never short in K groups:
+  accepted, fixed (`ClassSupply`). The "everywhere" line mislabelled "binds": accepted, relabelled.
+  Dense x market places not measured though point 5's table asks for four layouts: **not fixed**, the
+  "Closed by" does not ask it; point 5 will meet it; open for the decider. Per-type market cells added
+  at the orchestrator's request so point 5 can recompute a day from per-type cells.
+- Code-reviewer (step 6): (a) per-type timed cells never checked against the reference: accepted,
+  fixed (a reference check per timed type, `RoutedUnranked` red in each). (b) Routing geometry
+  (ordinal mod 100) hits engine and reference alike: accepted as a declared limit, no change. (c)
+  `binds` requires only some rationing with routed rows present, not that a routed row is
+  short-changed; the ranking deciding is shown only by the fault turning red: taste/question, **not
+  applied**, open for the human or decider. (d) Tie-break order not pinned, nothing counts ties at the
+  supply boundary: question outside `R-103`'s set, **not applied**. (e) The reference retypes the
+  same formulas (ability, want, price, spoilage, supply) from one author, so it shares a misreading
+  but not a typo; independent of the engine's update code and indexing: accepted as a limit. (f)
+  `MktRef.RationedClass` a public static mutable side channel: taste, **rejected** for a
+  single-threaded bench.
+- Coder's doubts, open: p99 or mean for a day; whether point 5 needs dense at market places; whether K
+  applies to every class; whether a control of 16 separate goods against 16 variants is wanted;
+  whether 19 villages per market regardless of type is realistic.
+
+**Agents (`R-067`).** Dispatched: tester (twice), coder (three rounds), code-reviewer, documenter,
+committer. Not run: the revisioners, `Core: no` held at step 5 (`git diff` of `core/` empty);
+`mutate.ps1`, `bench/` outside its reach, so the orchestrator introduced the faults; no
+tester-written test. This outcome does not claim `R-046`'s check.
+
+**What `docs/` says:** `SQ-024` the five types, P-12's 100 market places of 2,000 and the open items
+on routing; `SIM-ECON` §Rationing the ranking of cohorts; nothing on how routed demand enters it, on
+the variant split (`SQ-023` open), or on the bench.
+**Would overturn it:** see decisions 1 to 6.
+**Not verified:** the costs on another machine or core; dense layout at market places; a real nearest
+assignment or any geography; the formulas shared by engine and reference against a second author; ties
+at the supply boundary.
+
+### D-125 · Point 5 · The table, read against the budget: four layouts on one update code, and a recomputation that checks the table against itself
+**Ruling:** R-105 — ratified; the criterion defective under `R-005`'s case 1, the table standing; decisions 3 and 6 ruled; one line owed under point 5's outcome.
+**Ruling:** R-104 (5d6ed85) — items 1 to 7 owed and acted on (read in `RULINGS.md`, "### R-104").
+
+**Built** (`bench/Table.cs` new: `PointFive`, the cells, the table, the recomputation `Verify`, the
+synthetic-table control, the edit controls; `bench/Market.cs`: dense layout through `RowOn`/`GoodOn`
+masks, `Layout.One`, `Layout.AssignmentBytes`, `Fault.DropLast`, `Mkt.Bytes`, every control before any
+timing; `bench/Program.cs`: explicit dispatch `point1` to `point5` and `point5-smoke`, no argument
+still runs point 2, an unknown argument exits 64, `ExpectedBytes` internal). Check:
+`dotnet run -c Release --project bench -- point5`. `core/` and `docs/` untouched.
+
+**Decided (`docs/` silent on all; each a measurement input).**
+1. **One update code for every layout**, masks `RowOn`/`GoodOn` in every loop; sparse village p99
+   about 1.15 us against 0.94 in point 4, so point 4's sparse numbers are not reproduced exactly.
+   *Would overturn it:* a layout-specific fast path.
+2. **Assignment counted as 4 bytes per routed village**; the market's `Routed` list and `Loc` are
+   derived and not counted. *Would overturn it:* another representation.
+3. **`Cur` (the K-split cursor) not counted in the bytes**, `R-102`'s list naming four arrays; it is
+   state, and 0 at K=1. *Would overturn it:* a ruling that it counts.
+4. **`DropLast` skips the last live good the place holds**; point 3's literal `Goods - 1` is red only
+   where good 299 is live. *Would overturn it:* a ruling for the literal form.
+5. **Dense at market places is checked on the market-with-19-villages group worlds at 40 days**, not
+   on P-12 (too slow); dense everywhere on P-12 and one place per type; K=4 and K=16 not repeated,
+   the table being K=1. *Would overturn it:* a ruling that the dense market check run on P-12.
+6. **The village cell at market places = the borgo group's p99 of 19 village updates divided by 19**
+   (a p99 of a sum, not 19 p99s). *Would overturn it:* a per-village timing at a market.
+7. **The day printed to the ns**, so a 1 us edit at the metropolis moves it.
+8. **The recomputation re-reads the printed Markdown in decimal**; costs printed in integers.
+9. **1 MB = 10^6 bytes.** *Would overturn it:* NFR-07 read in MiB.
+10. **`point5-smoke`** added: exit 3 on all-pass so it never reads as a pass, exit 1 on failure.
+11. **Fail-fast:** every reference, byte and table control runs before any timing; FAIL exits 1 before
+    timing.
+
+**Results** (`point5`, PASS exit 0, 260 min, one run in one session, `R-104` item 1; Windows
+10.0.26300 X64, 16 cores pinned to one, .NET 8.0.32, clock 100 ns). Every reference check equal
+(sparse and dense everywhere on P-12 and one place per type; sparse and dense market groups per type
+under both readings; the P-12 market places under both readings), rationing binding, `RoutedUnranked`,
+`IgnoreRouted` and `DropLast` red in each control. Bytes counted equal bytes recomputed: sparse
+everywhere 3,945,144; dense everywhere 300,656,000; sparse market places 3,952,744; dense market
+places 300,663,600. The table recomputed from its printed cells: equal; a cost edited by 1 us and a
+day edited by 1 ns caught.
+
+| Layout | ms per day: recomputed / timed p99 | MB | P-01 10 ms | NFR-07 50 MB |
+|---|---|---|---|---|
+| sparse, everywhere | 2.671 / 4.26 | 3.945 | within (and 5 ms) | within |
+| dense, everywhere | 204.05 / not timed (20 ms or more) | 300.656 | over | over |
+| sparse, market places, every routed row ranked | 5.156 / 6.62 | 3.953 | within (over 5 ms) | within |
+| sparse, market places, one entry per village | 2.463 / 3.70 | 3.953 | within | within |
+| dense, market places, every row ranked | 2774.61 | 300.664 | over | over |
+| dense, market places, one entry per village | 73.37 | 300.664 | over | over |
+
+Per-type cells are in `SQ-023`, "The measurement owed, 2026-10-16" (e.g. sparse everywhere village
+5.4 us, metropolis 1024.7 us). The dense cells are read on, not timed directly (`R-104` item 4). The
+dense market-places every-row-ranked cell (about 192,000 us per market update at every type) is
+`R-104`'s predicted O(n^2) over masked slots: the stand-in ranks all 41 x 300 slots, masked included,
+820 entries per good with its selection sort; a dense layout skipping goods no entry holds would cost
+less, not measured.
+
+**Faults, introduced by hand by the orchestrator** (`mutate.ps1` cannot reach `bench/`), each run to
+FAIL exit 1 in about 70 to 87 s, before any timing, undone, tree-state hash equal before and after
+(2a12e101...): `RoutedUnranked` (`Market.cs`, `sortN = nOwn`); the dense walk dropping its last good
+(`gi < m.Goods - 1`), red where the last good is live (metropolis, P-12 mix); `DropLast` made
+unconditional, red everywhere; a cell edited after the day is computed (`Table.cs` line 50,
+`Us(n + 1000)`), the synthetic-table recomputation DIFFERENT; the day not derived from the cells
+(`DayMs(c.TotalNs + 1000)`), DIFFERENT. Points 1 to 4 rerun PASS; point 1 failed once on the coder's
+run at ratio 6.00 against its ceiling 5.8, passed on two reruns (5.45, 5.19) and in the
+orchestrator's run, `StandIn` untouched: noise near the bound, as `R-103` noted the drift. `git diff
+core/` empty.
+
+**The check is shallow, as the plan itself declares; it ran and passed as written, and was not
+rewritten.** Faults it would miss, recorded beside it (code-reviewer):
+- (A) The timed worlds are built from `Cfg` fields separately from the checked worlds (`Table.cs`
+  about 127-137 against 173, 181, 192, 198): replacing `c.PerVillage` or `c.Dense` with `false` in
+  the timed build leaves every check green while the table mislabels a cell. Verifiable weakness,
+  accepted, **not fixed**: a fix needs a rerun of the 4h20 table, and `R-104` item 1 wants the table
+  from the code committed.
+- (B) Cells swapped among types are invisible to `Verify`: it is a consistency check, not provenance.
+  Accepted as a limit.
+- (C) A hand edit of the `SQ-023` transcription after the run is outside the runner's reach;
+  inherent in the frozen check, a question.
+Whether this makes the criterion defective (`R-005`, case 1) is for the decider.
+
+**Findings and their resolution.**
+- Code-reviewer: the dense every-row-ranked cell is not a bug but `R-104`'s predicted O(n^2) over
+  masked slots, an upper bound under the selection sort: accepted, a sentence added to `SQ-023`. The
+  1.07 K figure copied from `D-124` without saying so: accepted, `SQ-023` says it is from point 4's
+  run. The unknown-argument message omits `point5-smoke`: taste, **rejected**, the code not changed
+  after the run. Items 1 to 7 of `R-104` held in code (the reviewer checked each). (A) to (C) above.
+- Coder's doubts, open: point 4's sparse numbers not reproduced exactly (decision 1); whether `Cur`
+  should count; whether p99 over 19 is the right village cost; whether dense market places should sort
+  dead rows (`R-104` describes it so; followed).
+
+**Agents (`R-067`).** Dispatched: tester (twice, step 2 baseline; no step-4 dispatch, the
+orchestrator ran the declared check, the faults and points 1 to 4 because each full run takes 4h20
+and pins the core), coder (two rounds), code-reviewer, documenter, committer. Not run: the
+revisioners, `Core: no` held at step 5 (`core/` and `docs/` empty in the diff); `mutate.ps1`; no
+tester-written test. The decider ran before this point (`R-104`). This outcome does not claim
+`R-046`'s check.
+
+**What `docs/` says:** P-01's 10 ms, NFR-05, NFR-07's 50 MB, P-12's mix, `SQ-023`, `SQ-024`; nothing
+on the layouts' costs, the unit of a megabyte, or the bench.
+**Would overturn it:** see decisions 1 to 11.
+**Not verified:** the dense cells timed directly (all 20 ms or more, `R-104` item 4); routing and
+reassignment cost; point 1's bound, near the noise; the costs on another machine or core; faults (A)
+to (C).
+
+### D-126 · Orchestration of points 4 and 5 · how this session ran the decider and the long runs
+**Ruling:** R-106 — ratified, decisions 2 to 4; decision 1 escalated to the user, reserve 1 of `R-001`.
+**Ruling:** R-116 — decision 1 answered by the user: an implementer session may dispatch the decider as an agent.
+
+Task: the user's instruction of 2026-10-16, "Lancia /plan-next e /decide quando necessario fino al
+termine dello sviluppo o finché il decider non necessita di una mia decisione".
+
+1. **The decider ran as a separate agent, dispatched by this implementer session.** `AGENTS.md`
+   says an implementer session never plays the decider, and `/plan-next` step 10 says this session
+   does not run `/decide`. The user asked for both in one instruction. Each decider run (`R-103`,
+   `R-104`, `R-105`) was a fresh general-purpose agent briefed only with facts and told to follow
+   `.claude/skills/decide/SKILL.md` and to leave every reserve of `R-001` to the user; this session
+   wrote no ruling. `docs/` says nothing on who may dispatch a decider. Overturned by the user or a
+   ruling requiring a decider session the user opens.
+2. **`misura-costi` was brought up to date by merging `main` into it** (`b18b267`), not recut, so
+   the installing commit `c12b061` and its frozen criteria stayed as they were. Overturned by a
+   ruling that a plan branch is recut from `main` instead.
+3. **Point 5's step 4 was run by this session, not by a tester dispatch**, because the full check
+   takes 4h20 and pins the core: the five faults first, then the full run, then points 1 to 4, in
+   one background script with `tree-state.ps1` equal before and after. Overturned by a ruling that
+   step 4 is always a tester's.
+4. **The table was transcribed into `SQ-023` by this session**, the coder's denylist covering
+   `SPEC-QUESTIONS.md`; the two added sentences (the K figure's run, the dense ranking over masked
+   slots) are the code-reviewer's findings, accepted.
+
+**What `docs/` says:** nothing; these are process choices. **Not verified:** whether the user
+reads (1) as within the instruction; the decider was not asked.
+
+## 2026-10-19 — The cost measurement plan, archived
+
+### D-127 · Closing the cost measurement plan · The archive and the promotion pass
+
+`plan-state` read `state: finished`, `reservesOpen` empty, the register audited
+to `D-126` (`R-106`). `R-105`'s owed line under point 5 landed in `c24e818`.
+`SQ-023` and `SQ-024`, which the plan's table was owed to, are closed by the
+decider (`R-107` to `R-115`). The user, on the plan's archive: "Ne discutiamo
+dopo l'archiviazione del plan".
+
+**Decided.**
+- **The archive's name** is `2026-10-07-misura-costi.md`: the date the plan was
+  installed (`c12b061`) and its branch, as `D-120` named the last one. The
+  archive commit adds exactly one file under `.claude/plans/`.
+- **The pass runs over `D-121` to `D-126`**, the 2026-10-07 pass having ended at
+  `D-120`. No candidates: process plan, `D-011`.
+- **`REVIEW-REQUEST.md` is not touched.** Its current request, the plan's moment
+  one, is answered in it; archiving the plan writes nothing there, as `D-120`
+  did not.
+- **No merge into `main`** in this commit. It is the next step, `--no-ff`, and
+  touches `main`: asked of the user first.
+
+**What `docs/` says:** nothing; process work. `R-048`, `R-105`, `D-011`.
+**Would overturn it:** the decider finding an entry in the range that constrains
+the simulator's code.
+`plan-state -Path` on the archived file reads `finished`; on the tree, `none`.
+**Not verified:** nothing beyond what the plan's own entries list.

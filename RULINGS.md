@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-120 — audited by `R-100`. The next audit starts at the
+**Register watermark:** D-126 — audited by `R-106`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -75,9 +75,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   simulator change; the first point of the phase 4 plan is run by the agents,
   and its criterion carries the design's point 6 check and fault. **`R-067`**:
   it stays there, and no earlier plan carries it.
-- **`R-067`**, in the cost measurement plan: each outcome line names the agents
+- ~~**`R-067`**, in the cost measurement plan: each outcome line names the agents
   dispatched and those that do not apply to a `bench/` diff, with the reason, and
-  none claims `R-046`'s check.
+  none claims `R-046`'s check.~~ **Done in `93ef064` to `853e342`**, checked by
+  `R-106`.
 - **`R-047`**, within the process plan point that rewires `/plan-next` and
   `reviewers.md`: the reviewers' brief quotes the `Fails when:` line and asks for
   missing faults. And every moment-one request carries the `Fails when:` lines.
@@ -134,16 +135,80 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   *Reserve discharged* line goes under point 4's outcome; red with trust
   accepted, the result goes to the register and the decider, and the reserve
   stays open.~~ **Done in `2801c19`**, checked by `R-100`.
-- **`R-100`**, before the first plan point dispatches the coder: point 4's live
+- ~~**`R-100`**, before the first plan point dispatches the coder: point 4's live
   probe run again with `coder` dispatched in the background, the harness's
   default. Green, recorded in the register; red, the register and the decider,
-  and no point dispatches the coder until the decider has ruled.
+  and no point dispatches the coder until the decider has ruled.~~ **Done in
+  `93ef064`**, green, checked by `R-101`.
+- ~~**`R-101`**, within point 2 of the cost measurement plan, beside its
+  criterion: each cell's checksum at a fixed update count compared against a
+  plain reference implementation of the five passes; every cell run on a state
+  where rationing binds, so that the ranking reaches the checksum; faults (a)
+  and (c) of `D-121` seen red against it; point 1's check rerun after any change
+  to the stand-in's devices. Red on the last: the register and the decider
+  before point 3.~~ **Done in `9c3a0b8`**, checked by `R-102`.
+- ~~**`R-102`**, within point 3 of the cost measurement plan, beside its
+  criterion: the bytes column, for point 2's cells and point 3's, counts the
+  settlement state of `SIM-STATE` at its widths — the arrays standing for
+  `goods`, `goodsCarry`, `currency` and the per-good price, and any index a
+  layout holds — and leaves out content-derived rates and scratch; the figure
+  recomputed independently from the sizes and compared, with an array dropped
+  or counted twice seen red.~~ **Done in `385e713`**, checked by `R-103`.
+- ~~**`R-103`**, within point 4 of the cost measurement plan, beside its
+  criterion: each configuration's checksum — clearing at market places with
+  the villages routed to them, and K = 1, 4 and 16 — at a fixed update count
+  against an independent reference of the same clearing, on a state where
+  rationing binds at a market for a good that routed demand asks for; routed
+  demand left out of the market's ranking, and a split that drops a variant,
+  seen red against it; the register stating how routed demand enters the
+  ranking, and if as fewer entries than the cohort rows it comes from, the cost
+  with every routed row ranked measured beside it.~~ **Done in `1faa5c0`**,
+  checked by `R-104`.
+- ~~**`R-104`**, within point 5 of the cost measurement plan, beside its
+  criterion: every cell of the table from one run, in one session, on `Mkt`'s
+  update code for all four layouts; the dense layout at market places measured
+  under both readings of routed demand, every new configuration checked against
+  `MktRef` where rationing binds, `RoutedUnranked` and a dense walk dropping its
+  last good seen red; both readings in the table with per-type cells; beside each
+  recomputed day the directly timed p99 of a day for every sparse layout and any
+  dense one under 20 ms, the verdict on the higher; each day against 10 ms and
+  5 ms; the MB column the world's total by `R-102`'s rule, recomputed
+  independently; the measurement inputs named.~~ **Done in `853e342`**, checked
+  by `R-105`.
+- ~~**`R-105`**, before the cost measurement plan is archived: a line under point
+  5's outcome, never in its place, reading *criterion defective* (`R-005`, case
+  1) and naming `R-105`, in a commit without a `Plan-point:` trailer.~~ **Done in
+  `c24e818`**, checked by `R-106`.
+
+- **`R-107`**, from the phase 4 plan: state sparse under DEC-101 with A-18
+  checked every tick, the first point building rows or holdings naming a zero
+  entry left stored; FR-P-03d's declaration and refusal in the rules file; its
+  price and split with `variantCarry` in market clearing, a check naming a
+  variant offer that never sells.
+- **`R-110`**, in the rules file of `R-065`: the content of `R-110` as approved,
+  and the crop record's relation to durables (FR-P-10, FR-P-20).
+- **`R-115`**, in the rules file of `R-065`: the content `R-115` approves.
+- **`R-111`**, in the points that build recipes and the rules file: inputs on a
+  class, taken lowest grade first; an input naming a variant refused at load.
+- **`R-112`**, in the point that builds market clearing: input demand for one
+  update at capacity, withheld from supply, ranked after tiers 0 and 1.
+- **`R-113`**, in the market point: each place exchanges among its own rows
+  before the market's ranking, at the market's price, with no transit loss.
+- **`R-114`**, in the needs subsystem's point: a tier 1 need following the
+  warmth curve and lethal when unmet, the curves, P-81 proposed.
+- **`R-108`**, from the phase 4 plan: five types and assignments at
+  generation, no village out of reach; every routed row one entry of its
+  market's ranking, read without walking every settlement; type and assignment
+  hysteresis both ways and eviction on a fall; P-79 and P-80 proposed.
 
 ## Escalated to the user
 
 Rulings with verdict `escalated` or `pending`, until the user answers.
 
-*None.* `R-082` was answered by `R-091`, `R-089` by `R-092`, `R-093` by `R-094`.
+None open.
+
+`R-082` was answered by `R-091`, `R-089` by `R-092`, `R-093` by `R-094`, `R-109`
+by `R-110`, `R-110` by `R-115`, `R-106` by `R-116`.
 
 ---
 
@@ -4841,3 +4906,1364 @@ hooks fire in both modes alike, quoted from the page, not summarised; or
 rerun. That the harness's default is the background was taken from this
 session's tool description, not from documentation. Who asked for the merge in
 `1b10a00` was not established.
+
+### R-101 — `D-121` is ratified; the stand-in's market never rations, so point 2 owes a reference check on a state where it does
+
+**Date:** 2026-10-08   **Origin:** register audit, `D-121`
+**Verdict:** ratified; decision 3, left to the human, ruled here; one action owed
+**docs/:** unchanged
+
+Point 1 of the cost measurement plan, the stand-in. Process, so ratified or
+rejected, never promoted (`D-011`). The entry was read against point 1's frozen
+text, the plan's header, `DEC-054`, P-63 and P-64, and its claims against
+`93ef064`, `bench/Program.cs` read whole. CI was grepped: it builds and tests by
+project path and never names `Sim.sln` or `bench/`. Point 1's check was run in
+this session: PASS, 9 rows 2.60 µs, 27 rows 14.90 µs, ratio 5.73.
+
+- **Decision 1, the selection sort.** Stands. `DEC-054` says the clearing's cost
+  "grows with the square" because rationing sorts the cohorts; a sort whose
+  comparisons do not depend on the data is the plainest reading of that, and
+  choosing it against the bounds is what a calibration point is for. What it
+  entails is recorded, not faulted: the ratio check now holds by construction,
+  so it shows that a quadratic term of this weight reproduces P-63 and P-64 over
+  rows, and nothing about cost per good, which the draft's own "What was not
+  verified" already said. The stand-in's row slope runs above `DEC-054`'s 4.8
+  (5.3 to 5.7), so the row terms of points 2 to 5 err on the expensive side.
+- **Decision 2, cells interleaved in chunks.** Stands. "Every cell is measured
+  the same way" is met when the cells measured together are measured alike.
+- **Decision 3, the thread pinned through the process, to logical core 2.**
+  Ruled here; it falls in no reserve of `R-001`. The plan asks for "one thread
+  pinned to one core", and a one-bit process mask meets it more strictly, since
+  the runtime's own threads share the core. A busy SMT sibling adds noise, and
+  noise shows in the spread of the three p99s the method prints. The question
+  `SQ-023` brings to this plan is one of order of magnitude against P-01, which
+  the estimate puts a hundred times over; noise of a tenth does not move it.
+  Ratified, with no action.
+- **Decisions 4 to 7.** Stand: the devices are measurement inputs (`R-050`, as
+  `R-076` read it for `D-109`); `TieredCompilation` off, the platform
+  attributes, and the criterion's numbers used as written, which a frozen
+  criterion requires.
+- **The incident, and the rejected finding.** Stand as recorded. A fault on
+  `bench/` restored by copy can leave a stale build; it fails loudly either way.
+
+**The criterion under-covers, and the missing check is blind too.** The point
+closed under `R-005`'s case 1 with the missing check named — a checksum per
+cell against a plain reference of the five passes — and deferred to point 2.
+The code-reviewer claimed that check catches faults (a) to (d). It does not
+catch (c), and the reason is fault (e), which the entry marks "not tested
+whether it happens". It happens. The stand-in was ported to a script in the
+scratchpad and run for 3,000 updates at 9, 27 and 41 rows: supply never ran
+out, the least residual was 918 of about 1,000 units, the even goods' prices
+sat at the floor of 50 and the odd goods' never moved from 110, 130 and 150.
+Refilled at 600 per update, a row buys a handful of units across seven goods;
+supply is a thousand per good. So every row is served whatever its rank, and
+the order the sort computes never reaches stock, cash or prices. A ranking on a
+constant key, or one never read, gives the same checksum as the real one, and
+costs less: no swaps and a perfectly predicted branch.
+
+That matters beyond point 1. Points 2 and 3 rewrite the stand-in for new
+layouts, and the key is indexed by row and good, `stock[r * Goods + g]`, which
+is exactly what a sparse layout re-indexes. Point 3's "same checksum, sparse
+and dense" cannot see a key read from the wrong good. The table those points
+produce is the evidence `SQ-023` is ruled on, so a check that cannot see the
+term `DEC-054` is about would leave that ruling resting on numbers no one has
+shown to come from a working market. This would have held before any code was
+written: a checksum proves only what reaches it.
+
+**Cost.** Point 2 grows by a reference implementation and a change to the
+devices, so that some good runs short. That changes point 1's calibration a
+little, since the allocation loop then stops early. The ratio already sits close
+to its bound: 5.73 against 5.8 in this session's run, with the 9-row figure at
+26 ticks of a 100 ns clock. A rerun may go red for that reason alone.
+**Owed by the implementer:** within point 2, beside its criterion, under
+`R-005`'s case 1 as `D-121` names it:
+1. each cell's checksum at a fixed update count compared against a plain
+   reference implementation of the five passes;
+2. every cell run on a state where rationing binds for at least one good within
+   the counted updates, so that the ranking reaches the checksum;
+3. faults (a) and (c) of `D-121`, spoilage without its carry and a ranking on a
+   constant key, seen red against it;
+4. point 1's check rerun after any change to the stand-in's devices, and its
+   result recorded.
+
+If the last is red, the result goes to the register and the decider before
+point 3 runs. Cite `R-101`.
+**Would overturn it:** a layout whose cost per simulated day lands within the
+spread of its runs of P-01, where noise could decide the verdict; then that
+layout is measured again on an idle physical core, which reopens decision 3.
+**Not verified:** the port was written from `Program.cs` by reading, not
+generated from it, and was not checked against the C# checksum. `R-100`'s probe
+was taken from `D-121`'s quoted hook message, not rerun. That the faults (a),
+(b) and (d) are caught by a reference check once rationing binds was reasoned,
+not run. The SMT topology of this machine was not examined.
+
+### R-102 — `D-122` is ratified, save decision 8: the bytes column counts the settlement state of `SIM-STATE`, at its widths
+
+**Date:** 2026-10-08   **Origin:** register audit, `D-122`
+**Verdict:** ratified; decision 8, left to the human, rejected; the open regime
+question ruled; one action owed
+**docs/:** unchanged
+
+Point 2 of the cost measurement plan, the dense sweep. Process, so ratified or
+rejected, never promoted (`D-011`). The entry was read against point 2's frozen
+text, `R-101`, NFR-07, `SIM-STATE` §Rule and §Cohort, and DEC-001; its claims
+against `9c3a0b8`, `bench/Program.cs` read whole. Point 2's check was run in this
+session: PASS, the seven checksums equal to the reference and to those `D-122`
+records, rationing binding in every cell.
+
+- **`R-101`'s four items** are met, and decision 7 goes further: the check
+  itself turns red when the ranking does not reach the checksum. `R-101` is
+  marked done.
+- **Decisions 1 to 4, the devices.** Stand. They make every good move stock and
+  cash and every third good ration, which is what `R-101` asked for. Demand no
+  longer depends on price, which costs the stand-in a resemblance to a market
+  and costs the measurement nothing: the work per update does not read it.
+- **Decisions 5 to 7.** Stand. Cells measured one after another trade drift
+  protection for simplicity. The cost shows: the 12 × 100 cell, measured twice
+  in one run, gave 61.8 and 52.8 µs here, and 71.2 and 77.6 in `D-122`'s. Every
+  figure of this sweep carries a noise of about a fifth, which `R-101`'s
+  overturning condition already covers. Reading the duplicated cell as the
+  plan's seventh is the plain reading of a sweep that lists it twice.
+- **The "costs less" half of the `Fails when:`** was not observable: one good in
+  a hundred is a percent of the work, inside the noise. The checksum caught the
+  fault, which is what the check is for.
+- **The rejected finding on `Supply`'s visibility** stands. It is taste and
+  nothing for the human.
+
+**The regime question, left to the decider.** The code-reviewer found that the
+timed instance runs far longer than the checked one, with scarce goods' prices
+rising by one or two every update without bound. Does that change what the
+costs mean? No. The work per update is fixed by loop counts, and those are the
+same in both regimes. The sort makes n(n − 1)/2 comparisons whatever the keys. A
+scarce good's supply of 4 runs out within four rows whatever the prices. A
+plentiful good's thousand units are never exhausted by at most 41 × 4 wants. So
+the longer run changes values and branch outcomes, not how much is done.
+Branch prediction differs, and that is inside the noise above. One part of the
+finding is wrong: cash is negative only inside an update. The refill,
+`1000 + (cash & 4095)`, puts it back in 1000 to 5095 every time. A fault that
+shows only after 2,000 updates stays a limit of the check, as the entry
+records.
+
+**Decision 8, rejected.** The bytes column exists to be read against NFR-07:
+"Settlement state stays under 50 MB". And `SIM-STATE` §Rule says what state is:
+what influences a future tick and cannot be derived from what is listed.
+`D-122` counts every array of the stand-in, and three kinds are not state:
+
+- **Scratch.** `order`, `key` and `residual` are written before they are read
+  in every update. In the simulator they belong to the thread, not to each of
+  2,000 settlements.
+- **Rates derived from content.** `prod`, `need` and `spoilNum` stand for what
+  the update derives from the rules file, the allocation and the count. None
+  is a field of §Cohort.
+- **Width.** The stand-in holds everything in `long`. §Cohort gives `goods` as
+  `int`, so a holding is 4 bytes, while its carry is fixed point over `long`
+  (DEC-001), 8 bytes. `currency` is `int64`.
+
+At 12 × 100 the column reads 49,840 bytes. The state it stands for is 15,296:
+4,800 of goods, 9,600 of carry, 96 of currency and 800 of prices. That is a
+third, and the bytes are the half of `SQ-023` that the estimate said fails
+first. An overstatement by three would reach the ruling on the shape of state
+as a verdict.
+
+The price per good is counted though §Cohort and §Settlement list no price
+field. The stand-in carries it across updates, and where prices live is
+`SQ-024`'s question.
+
+This would have held before any code: NFR-07 caps a quantity `SIM-STATE`
+defines, and a measurement read against it counts that quantity. The question
+was put to the human as one of meaning, and `SIM-STATE` answers it, so it is
+not a reserve.
+
+**Cost.** Point 3 recomputes point 2's column as well as its own, and states
+which arrays of each layout stand for which field. A sparse layout's index
+(offsets, the ids of the goods present) is state under §Rule, since the layout
+cannot be read without it, and counts.
+**Owed by the implementer:** within point 3, beside its criterion:
+1. the bytes column, for point 2's cells and point 3's, counts the settlement
+   state of `SIM-STATE` at its widths: the arrays standing for `goods` (4 bytes
+   each), `goodsCarry` (8), `currency` (8) and the per-good price (8), and any
+   index the layout holds. Content-derived rates and scratch are left out, or
+   printed apart;
+2. the figure is recomputed independently from the sizes and compared, the
+   missing check `D-122` names, with an array dropped or counted twice seen
+   red.
+
+Cite `R-102`.
+**Would overturn it:** a field of §Cohort that the stand-in's rates stand for
+after all, such as an allocation held per row and good, which would bring that
+array back into the count at its width.
+**Not verified:** whether `SIM-STATE` should list prices, and where. That
+belongs to `SQ-024`, and `SIM-ECON` was not read for whether a price carries
+over from one update to the next. The run-to-run spread was observed in one run
+here and taken from the entry for the rest.
+
+### R-103 — `D-123` is ratified; point 4's served check runs where nothing is rationed, so it owes a reference check where routed demand is
+
+**Date:** 2026-10-16   **Origin:** register audit, `D-123`
+**Verdict:** ratified; decision 5, left to the human, ruled; one action owed
+**docs/:** unchanged
+
+Point 3 of the cost measurement plan, sparse state per settlement type. Process,
+so ratified or rejected, never promoted (`D-011`). The entry was read against
+point 3's frozen text, `R-102`, `SQ-024`'s five types and sizes, `SIM-STATE`
+§Rule and §Cohort, `SIM-ECON` phase 7 and §Rationing; its claims against
+`385e713`, `bench/Program.cs` from `StandIn.Bytes` to the end, and the diff from
+`9c3a0b8`, which leaves `StandIn`'s update code untouched. Point 3's check was run
+in this session: PASS, exit 0, the five checksums sparse = dense = reference and
+equal to those `D-123` records, the bytes equal to `ExpectedBytes` in every
+type, rationing binding and reaching the checksum, the timed pair the layouts
+they are labelled. The costs came out at about half of `D-123`'s (sparse 3.0,
+13.2, 72.5, 280.6 and 832.4 µs; dense 618 to 1,016), the ratios close to its.
+
+- **`R-102`'s two items** are met. `ExpectedBytes` follows `R-102`'s widths: 12
+  bytes per cell, 8 per row, 8 per good, 4 per id of a sparse index. Recomputed
+  here by hand: village 1,332, dense 150,328, point 2's 12 × 100 at 15,296, the
+  figure `R-102` gave. `R-102` is marked done.
+- **Decisions 1 to 4, 6 and 7.** Stand. Ids spread evenly put the scarce pattern
+  and the tie-break inside every type. Running the dense layout on the type's
+  own world is the plain reading of "the dense cost of the same type", and the
+  sort it runs for every absent good is the cost a dense layout pays. One update
+  code for both layouts makes the comparison about data, which is what point 3
+  asks. The shared `World` and `Supply` are a limit the entry names.
+- **Decision 5, left to the human: ruled here**, since it falls in no reserve of
+  `R-001`. It stands. A dense layout holds every good of the catalogue, so its
+  positions are the ids, and its masks exist only so the stand-in can run a
+  smaller world in a dense array. Neither is state under §Rule. The class
+  comment already says the ids are positions; the comment on `Bytes` repeating
+  it is taste, and no action.
+- **`stock` counted at 4 bytes while held in `long`.** Bounded by reasoning, not
+  by run: a cell gains at most 24 − 4 + 4 = 24 units in an update and loses at
+  least a thousandth of its stock to spoilage, so it settles below about 24,000,
+  far inside an `int`.
+- **The criterion is defective** under `R-005`'s case 1, as the entry says, and
+  the missing check was built and run. A criterion of equality between two
+  paths that share their code and their geometry cannot fail where they
+  coincide. The reference is what catches the off-by-one.
+- **The rejected findings** stand, as taste.
+
+**What point 4 inherits.** `R-101` found that a check run where nothing is
+rationed cannot see the ranking. Point 4's "Closed by" asks that, "with supply
+ample, every unit a village demands is served at its market". That is the same
+blind spot. With supply ample, routed demand can be served in any order, or
+outside the ranking altogether, and the check stays green while the cost falls.
+The cost is the thing measured. And the `Fails when:` names a market that
+ignores routed demand, not one that serves it unranked.
+
+The second gap is what the ranking ranks. `SIM-ECON` §Rationing allocates "by
+descending ability to pay", the share of a cohort able to pay read from its
+wealth curve: an order over cohorts. `SQ-024` item 4 leaves where that runs,
+once villages trade at a market, open. The two readings differ by more than the
+noise. Under P-12 as answered, about 1,900 villages share about 100 market
+places. A borgo's market ranking its own 10 rows and 19 villages' 6 rows each
+sorts 124 entries, some 7,600 comparisons per good. Ranking each village as one
+entry gives 29 entries, about 400 comparisons. Ranking its own rows alone gives
+45. Phase 7 is the term `SQ-023` is about, so a table measuring only the cheaper
+reading would decide the question on the reading that is not yet chosen. This
+would have held before any code: a measurement that informs an open question
+measures the readings that question still allows, or says which one it took.
+
+The check is the same as `R-101`'s and `D-123`'s: the checksum against a plain
+reference, on a state where the ranking binds. This is not a ruling on `SQ-024`
+item 4. Point 4 picks a reading as a measurement input and says so.
+
+**Cost.** Point 4 grows by a reference of market clearing with routed demand and
+variants, a device that makes some market good short, and possibly a second timed
+configuration. A second configuration that ranks every routed row may cost a
+large multiple of the first, which is the finding, not a defect.
+**Owed by the implementer:** within point 4, beside its criterion, under
+`R-005`'s case 1:
+1. each configuration's checksum at a fixed update count — clearing at market
+   places with the villages routed to them, and the class with K = 1, 4 and 16
+   variants — against an independent reference of the same clearing, on a state
+   where rationing binds at a market for at least one good that routed demand
+   asks for, so that the order of routed demand reaches the checksum;
+2. two faults seen red against it: routed demand served outside the market's
+   ranking, and a split that drops a variant;
+3. the register stating how routed demand enters the ranking. If it enters as
+   fewer entries than the cohort rows it comes from, the cost with every routed
+   row ranked is measured beside it.
+
+Cite `R-103`.
+**Would overturn it:** a ruling on `SQ-024` item 4 placing rationing before point
+4 runs, which makes item 3 measure that reading only. Or the two readings
+measured to cost within the noise of each other on the P-12 day, which empties
+item 3.
+**Not verified:** the comparison counts are arithmetic on the sizes of `SQ-024`
+and P-12 as answered, not measured; how many villages a market serves per group
+of goods depends on `SQ-024` item 1, which the user deferred. `RULINGS.md` was
+read in its state, owed actions and the rulings from `R-100` on, not whole. The
+run-to-run drift of a factor two between this session and `D-123`'s was observed,
+not explained; point 5 combines figures of different sessions, and whether that
+moves a verdict against P-01 was not checked.
+
+### R-104 — `D-124` is ratified; point 5's table is four layouts on one update code in one run, and the dense layout at market places is measured, not copied
+
+**Date:** 2026-10-16   **Origin:** register audit, `D-124`
+**Verdict:** ratified; the items left open ruled; one action owed
+**docs/:** unchanged
+
+Point 4 of the cost measurement plan, market places and goods variants. Process,
+so ratified or rejected, never promoted (`D-011`). The entry was read against
+point 4's and point 5's frozen text, the plan's header and exit condition,
+`R-103`, `SQ-023`, `SQ-024`, NFR-05, NFR-07, P-01, P-17, P-63 and FR-T-06; its
+claims against `1faa5c0`, `bench/Market.cs` from `Layout` to the end of `Mkt`
+and `PointFour` whole. Point 4's check was run in this session: the eleven
+checksums engine = reference and equal to those `D-124` records, rationing
+binding where routed rows ask, every fault red, the ample check 8,128,546 of
+8,128,546 served; PASS, exit 0. The timed figures came out within a tenth of
+`D-124`'s: p99 per day 3.29 ms everywhere, 5.73 and 3.07 ms at market places
+by the two readings; K = 16 at 1.04 times K = 1; per type, the market with its
+nineteen villages 261.2, 331.4, 621.1 and 1,287.1 µs, a village 0.94 to 0.97 µs.
+
+- **`R-103`'s three items** are met. Every configuration, the four timed
+  per-type cells included, is checked against `MktRef`; `RoutedUnranked` and
+  `DropVariant` go red; decision 1 records both readings of routed demand and
+  measures each. `R-103` is marked done.
+- **Decisions 1 to 3, 5, 6 and 8 to 11.** Stand, as measurement inputs that say
+  what they stand in for. Decision 1 does not rule on `SQ-024` item 4, and the
+  table keeps both readings for that reason.
+- **The code-reviewer's (c), the binding condition.** Answered by the code, no
+  action. `Check` folds every fault's red into the run's verdict, so a run in
+  which routed demand could be served out of order without changing the
+  checksum fails. The ranking deciding is shown by the fault on every run, the
+  practice `R-102` ratified in `D-122`'s decision 7.
+- **The code-reviewer's (d), ties.** Stands, no action. The key is
+  `(cash + stock) × 1024 + (1023 − e)`, and the constructor refuses more than 1023
+  entries, so no two entries share a key and the order is total. How ties fall
+  changes who is served, not how much work is done, and work is what this plan
+  measures.
+- **The coder's doubts.** K on the one class good (decision 4): stands. Point 4
+  asks for "a class with K variants", and the 1.07 is read as the marginal cost
+  of one class, as the entry says. Nineteen villages per market whatever its
+  type (decision 5): stands as a declared limit. `SQ-024` items 1, 2 and 5 are
+  open, so no other assignment has a source. A control of sixteen separate goods
+  against sixteen variants is not asked by the plan. The day's p99 and dense at
+  market places are point 5's, below.
+
+**What point 5 inherits.** Its "Does" asks for one table "for each of the four
+layouts (dense or sparse, clearing everywhere or at market places)", with µs
+per update per type, ms per simulated day and MB of state. The exit condition
+asks for the same 2 × 2. Its `Fails when:` says it "gathers numbers already
+measured". Three cells of the four exist, and not in a form one table can hold:
+
+- **Dense at market places was never measured.** `D-124` decision 8 says so.
+  Nothing else in the record gives it, and a figure derived without a run would
+  be the kind of estimate `SQ-023` was raised against.
+- **The cells come from two update codes.** Dense and sparse clearing
+  everywhere, per type, are point 3's, from `StandIn`. The market places'
+  per-type cells are point 4's, from `Mkt`, which measured sparse clearing
+  everywhere too, but only as a whole day. `R-103` ratified point 3's single
+  update code for both layouts because it "makes the comparison about data".
+  The same holds across the 2 × 2: its two axes are layout and where clearing
+  runs, so the update code is held fixed.
+- **The cells come from sessions a factor two apart.** `R-103` observed that
+  drift and did not explain it. Point 4's figures sit within that factor of
+  P-01. Summed by point 5's own formula from `D-124`'s per-type cells, the sparse
+  layout at market places with every routed row ranked gives
+  (2 × 1,278.3 + 8 × 609.5 + 30 × 323.8 + 60 × 253.7 + 1,900 × 0.93) / 7 ≈ 4.9 ms.
+  Doubled, that is 9.8 ms against a budget of 10. Figures copied from different
+  sessions cannot carry that verdict.
+- **Only one reading has per-type cells.** Point 4 timed per type the market
+  with every routed row ranked; one entry per village only as a whole day.
+  `R-103` held that a measurement informing an open question measures the
+  readings it still allows, so both readings reach the table, each through the
+  criterion's recomputation.
+
+**The day against P-01.** NFR-05 and P-01 put the budget on a simulated day at
+p99. The criterion recomputes a day as the sum over types of count × cost per
+update ÷ 7. That figure is the average bucket at each type's p99. The p99 of
+days falls on the heaviest bucket, and under FR-T-06 the buckets do not hold the
+mix evenly: two metropolises cannot sit in seven buckets. Point 4 measured the
+day directly as well, 5.53 ms against the 4.9 recomputed from its own cells;
+this session's run gives 5.73 against 5.0. The
+criterion is frozen and is computed as written; the direct p99 is printed beside
+it where a verdict can turn on it.
+
+The stand-in is five passes calibrated to P-63, which is "Measured, 5 of 12
+phases". P-17 derives the ceiling at P-01 from that subset with a "2x allowance
+for unmeasured phases", and §19 keeps the factor open until phase 4. A stand-in
+day set against 10 ms alone would read the subset as the whole. The table sets
+it against 10 ms as the plan says, and beside it against 5 ms, the same budget
+with P-17's allowance. The sparse layout at market places with every routed row
+ranked sits on that line in this session's run: 5.0 ms recomputed, 5.73 timed.
+
+**The bytes.** `R-102`'s rule covers point 2's and point 3's cells. Point 4
+computed no bytes, so the market-places layouts have none. The MB column is the
+world's, the sum over the P-12 mix of count × bytes per settlement, which bytes
+per type alone do not give. A sum from `D-123`'s figures puts sparse at about
+3.9 MB and dense at 2,000 × 150,328 bytes, about 301 MB, six times NFR-07
+whatever clearing does. That is the half of `SQ-023` the estimate said fails
+first, and it holds before the dense market cell is run. The cell is owed all
+the same: the "Does" and the exit condition name it, and narrowing a plan the
+user approved is not the decider's.
+
+All of this would have held before any code. A table read against a budget
+compares figures taken alike; a cell it names is measured or marked missing,
+never derived; and a subset is read against the whole only with the allowance
+the specification already carries.
+
+**Cost.** Point 5 is no longer only a gathering. `Mkt` gains a dense layout and
+per-type cells for clearing everywhere and for one entry per village. The dense
+layout at market places with every routed row ranked sorts 41 + 19 × 41 = 820
+entries per good over 300 goods: by the stand-in's selection sort some 10⁸
+comparisons per market update, so its per-type cells, at the plan's 10,000
+updates and three runs, may take hours of wall clock. `StandIn`'s cells from
+points 2 and 3 do not enter the table.
+**Owed by the implementer:** within point 5, beside its criterion, under
+`R-005`'s case 1:
+1. every cell of the table measured in one run of the runner, in one session,
+   by the plan's method, on `Mkt`'s update code for all four layouts, the layouts
+   differing only in what each place holds and where clearing runs; nothing
+   copied from the register or from an earlier run;
+2. the dense layout at market places measured under both readings of routed
+   demand, and each new configuration — dense everywhere, dense at market
+   places, and the per-type cells added — checked against `MktRef` on a state
+   where rationing binds, with `RoutedUnranked` red wherever routed rows exist
+   and the off-by-one of point 3's `Fails when:`, applied to the dense walk so
+   that it drops its last good, red;
+3. the market-places layouts in the table once per reading of routed demand,
+   each with per-type cells and its day recomputed by the criterion's formula;
+4. beside each recomputed day, the p99 of a day timed directly in the same run,
+   for every sparse layout and for any dense layout whose recomputed day is
+   under 20 ms; the verdict against P-01 read on the higher of the two;
+5. each day set against 10 ms and, beside it, against 5 ms, P-01 with P-17's
+   allowance for the phases the stand-in does not run;
+6. the MB column as the world's total over the P-12 mix, from bytes per
+   settlement counted by `R-102`'s rule for every layout, the market-places
+   ones included, with the village-to-market assignment counted if the layout
+   holds it, and recomputed independently;
+7. the table naming the measurement inputs it rests on: nineteen villages per
+   market by a fixed assignment, both readings of routed demand, K on one class.
+
+Cite `R-104`.
+**Would overturn it:** the user waiving the dense cell at market places, a
+change to the plan they approved and theirs to make. Or a ruling on `SQ-024`
+item 4 before point 5 runs, which takes item 3 down to that reading.
+**Not verified:** the hours are arithmetic on the entry count, not a run. The
+3.9 MB and 301 MB are sums of `D-123`'s bytes, not recomputed from the code. That
+the buckets' composition moves the p99 of a day by more than noise was inferred
+from two direct figures, 5.53 against 4.9 and 5.73 against 5.0, on one
+layout. `RULINGS.md` was read in its state,
+owed actions and the rulings from `R-101` on, not whole.
+
+### R-105 — `D-125` is ratified; point 5's criterion is defective under `R-005`'s case 1, and the table it closed on stands
+
+**Date:** 2026-10-16   **Origin:** register audit, `D-125`
+**Verdict:** ratified; the question left to the decider, and decisions 3 and 6,
+ruled; one action owed
+**docs/:** unchanged
+
+Point 5 of the cost measurement plan, the table. Process, so ratified or
+rejected, never promoted (`D-011`). The entry was read against point 5's frozen
+text, the plan's header and exit condition, `R-104`, `R-005`, `R-084`, `SQ-023`
+with its new section, NFR-05, NFR-07, P-01 and P-17; its claims against
+`853e342`, `bench/Table.cs` from `Run` to the table's printing and `Mkt.Bytes`
+and `Cur` in `bench/Market.cs`. The full check takes four hours and was not
+rerun. `point5-smoke` was run in this session: every reference check equal,
+rationing binding, every fault red, bytes counted equal bytes recomputed, the
+synthetic table's controls caught, exit 3 as designed.
+
+- **`R-104`'s seven items** are met, as the code-reviewer found and this reading
+  confirms. `R-104` is marked done.
+- **Decisions 1, 2, 4, 5 and 7 to 11.** Stand, as measurement inputs. Decision
+  5 checks the dense market worlds that are timed, the per-type groups, and the
+  dense P-12 world at market places is never timed, so nothing in the table runs
+  unchecked.
+- **Decision 3, `Cur`.** Stands for this table, on a reason narrower than the
+  entry's. `Cur` is a remainder accumulator for the even split among variants,
+  and at K = 1 it is `(cur + take) % 1`, always 0. A field that never changes
+  influences no future tick, so it is not state under `SIM-STATE` §Rule here.
+  With variants it is, at 4 bytes per row and class good. Counted on every cell,
+  it would add 1.13 MB to the sparse world and 98.4 MB to the dense one, which
+  moves no verdict against NFR-07.
+- **Decision 6, the village cell.** Stands. The day sums costs, and a p99 of the
+  19 villages' sum divided by 19 is the closer figure for a sum than 19 separate
+  p99s. Villages weigh 0.32 ms of the 5.16 ms day at market places; no plausible
+  reading of their cost moves a verdict against 10 ms, and against 5 ms that row
+  is already over on its timed day.
+- **Dense at market places ranking dead slots.** Stands. It is an upper bound,
+  and the dense layouts fail NFR-07 by a factor of six on bytes alone, whatever
+  their cost.
+- **Point 1 failing once at 6.00**, against a ceiling of 5.8, `StandIn`
+  untouched. Noise near the bound, as `R-101` and `R-103` foresaw. No action:
+  point 1 closed, and its figures do not enter the table.
+
+**The criterion is defective, case 1.** The frozen check proves that the day
+column is the sum of the cells. The point's "Does" asks for more: the MB column,
+each figure set against P-01 and NFR-07, and, since `R-104`, cells measured in
+the run rather than gathered. The `Fails when:` rests on "the point gathers
+numbers already measured", which `R-104` made untrue. Correct code passes the
+check, and the check proves less than the point does. That is `R-005`'s case
+1, as for points 1 to 4. The missing checks beside it are the reference checks,
+the bytes recomputation and the table's own controls, all of which ran red when
+broken.
+
+**The three faults it would miss do not touch the table as committed.**
+- (A) Read at `853e342`: every timed world is built from the `Cfg` named in its
+  row (`Layout.One(t, c.Dense)`, `Layout.Group(1, 0, t, true, c.Dense,
+  c.PerVillage)`, `Layout.P12(c.AtMarkets, c.PerVillage)`), and `Spec` gives
+  each row the flags its name states. The figures corroborate it: the borgo,
+  city and metropolis markets with every routed row ranked come out at 262.3,
+  642.0 and 1,343.1 µs, against 261.2, 621.1 and 1,287.1 in point 4's separate
+  run.
+- (B) Read: `Ns[t]` is filled by type index, and the market groups map type `t`
+  to `tt[t - 1]` without a shift. Every sparse row also rises from village to
+  metropolis, as the sizes do.
+- (C) The transcription in `SQ-023` was recomputed here: the six days from its
+  cells by count × cost ÷ 7 (2.671, 204.048, 5.156, 2.463, 2774.615, 73.366
+  ms), and the bytes from the sizes by `R-102`'s rule (3,945,144 and 300,656,000,
+  plus 7,600 of assignment). All equal what the entry and `SQ-023` print.
+
+So the weakness is real, and it matters only for a rerun. The table stands as
+the measurement `SQ-023` was owed. This would have held before any code: a
+check of a table's arithmetic says nothing of its labels, so the labels are
+read, and here they were.
+
+**What the ruling on `SQ-023` inherits**, recorded so that the next session does
+not rediscover it. Neither point is ruled here: `SQ-023`'s direction is the
+user's.
+1. The verdict at 5 ms, P-01 with P-17's allowance, divides the readings of
+   `SQ-024` item 4. With every routed row ranked, the sparse layout at market
+   places is read at 6.62 ms, within 10 and over 5. With one entry per village
+   it is read at 3.70, within both. Sparse clearing everywhere is read at 4.26.
+   Short runs swing far more than that: this session's smoke run, 100 updates
+   and not the plan's method, gave a recomputed day of 8.13 ms for sparse
+   clearing everywhere. Only runs by the method count.
+2. Variants of a class need a remainder accumulator for the split, per row and
+   class good with variants (decision 3). `R-084`'s list of carries has none. If
+   the user takes the sparse direction with variants, `SIM-STATE` gains one.
+
+**Cost.** One line in the archived plan. A rerun of the table for a verdict
+would first need the timed and checked worlds built from the same layout
+objects, which `D-125` declined to do, since the fix meant a rerun.
+**Owed by the implementer:** before the cost measurement plan is archived, a
+line under point 5's outcome, never in its place: *criterion defective*
+(`R-005`, case 1), `R-105`, in a commit without a `Plan-point:` trailer. Cite
+`R-105`.
+**Would overturn it:** a run of `point5` at `853e342` printing a cell more than
+the run-to-run drift away from `SQ-023`'s, which would mean a mislabel that
+reading missed. Or the user asking for the table again, which brings (A) back as
+a check owed before that run.
+**Not verified:** the full `point5` run was not repeated; the smoke run proves
+the controls, not the figures. (A) and (B) were read, not mutated. `RULINGS.md`
+was read in its state, owed actions, `R-001`, `R-005`, `R-009` to `R-011` and the
+rulings from `R-101` on, not whole.
+
+### R-106 — `D-126` is ratified, save decision 1, which is the user's; the watermark reaches `D-126`
+
+**Date:** 2026-10-17   **Origin:** register audit, `D-126`
+**Verdict:** ratified, decisions 2 to 4; decision 1 escalated, reserve 1 of `R-001`
+**docs/:** unchanged
+
+`D-126` records how the implementer session ran points 4 and 5 of the cost
+measurement plan under the user's instruction of 2026-10-16. Process, so
+ratified or rejected, never promoted (`D-011`). Read against `AGENTS.md`,
+`R-001`, `R-048`, `R-067`, the plan's outcome lines and the commits it names
+(`b18b267`, `c12b061`, `853e342`, `c24e818`).
+
+- **Decision 2, `main` merged into the plan branch rather than the branch
+  recut.** Stands. `R-048` asks that the branch be cut from `main` for the plan
+  and that one commit install `PLAN.md` on it; both hold at `c12b061`. A recut
+  would have rewritten the installing commit, and with it the record the frozen
+  criteria are read against. Merging keeps the record and brings the workflow
+  in.
+- **Decision 3, point 5's step 4 run by the session that dispatched the
+  agents.** Stands, on the reason given: a four-hour run that pins a core was
+  run once, faults first, with `tree-state` equal before and after. The outcome
+  line says so, as `R-067` asks.
+- **Decision 4, the table transcribed into `SQ-023` by that session.** Stands.
+  `SPEC-QUESTIONS.md` is the implementer's file, and `R-105` recomputed the
+  transcription from its cells.
+- **Decision 1, the decider run as an agent dispatched by an implementer
+  session.** Not ruled. It is the split between the two roles, reserve 1 of
+  `R-001`, and the user gave the instruction, on 2026-10-16 and again on
+  2026-10-17 for this session. The decider cannot ratify its own mode of
+  dispatch. **Recommendation:** keep it, on two conditions that would have
+  held before any session ran it: the brief the implementer gives is facts
+  only, never a proposed answer, and is kept where the user can read it; and
+  the dispatched decider reads `R-001` and its procedure itself, as this one
+  did. If the user wants it as a standing practice, it is an `AGENTS.md` rule
+  by the user's permission; until then it holds instruction by instruction.
+
+**`R-067` and `R-105` are done.** Every outcome line of the cost measurement
+plan names the agents dispatched and those that do not apply, and none claims
+`R-046`'s check (points 1 to 5, `93ef064` to `853e342`). `R-105`'s line under
+point 5's outcome is in `c24e818`, without a `Plan-point:` trailer.
+
+**Cost.** None beyond the user's answer on decision 1.
+**Owed by the implementer:** nothing.
+**Would overturn it:** the user declining decision 1, which would make each
+decider session one the user opens; a brief found to carry a proposed answer.
+**Not verified:** the briefs given to the decider agents of `R-103` to `R-105`
+are not in the repository, so their being facts only rests on `D-126`'s word.
+`RULINGS.md` was read in its state, owed actions, `R-001`, `R-050`, `R-052`,
+`R-053`, `R-063` to `R-065` and the rulings from `R-103` on, not whole.
+
+### R-107 — State is sparse per settlement, and a good clears on its own market or as a variant of its class: DEC-101, DEC-102, FR-P-03d
+
+**Date:** 2026-10-17   **Origin:** SQ-023
+**Verdict:** promoted as DEC-101 and DEC-102, with FR-P-03d specified — the
+direction and the reading of AC-09 and AC-10 the user's (reserve 2 of `R-001`),
+the rules the decider's
+**docs/:** `SIM-DEC` DEC-101 and DEC-102 new; DEC-085 its example and cost,
+DEC-054 and DEC-099 their cost. `SIM-REQ` FR-W-08 one sentence; FR-P-03d new;
+FR-C-04 its opening and step 4; AC-09 and AC-10 per clearing; P-09; §19's rows
+for P-17 and AC-09. `SIM-STATE` §Rule a paragraph; §Settlement `variantCarry`;
+§Cohort its key note, `goods`, `durables`; §Trade link `flowAccumulator`,
+`lossCarry`; A-18 new. `SIM-ECON` phases 2 and 7, the paragraph on phase 7's
+cost, "Choice within a class". Every revision line to today.
+
+`SQ-023` asked what the architecture must carry for a catalogue of hundreds of
+goods and tens of mestieri, when `SIM-STATE` laid every row out over the whole
+catalogue. The measurement it owed is the table of 2026-10-16. The user chose
+the direction on 2026-10-17, state sparse per settlement, and read AC-09 and
+AC-10 per clearing; on 2026-10-05 the user had set that each good declares a
+market of its own or that it is a variant of a named class, validation checking
+that the class has a market. What was left to the decider is the rules. The
+grep of step 1 covered `per good`, `one per good`, `each good`, `clearing`,
+`12 rows`, and the identifiers the entry cites.
+
+**Sparse as "absent reads as zero" (DEC-101).** The user's words are a row only
+for the mestieri present and holdings only for the goods present. Read as a
+storage rule that changes no meaning, the update is defined on the values, and a
+missing entry is a zero. Two other readings were set aside. A row created and
+removed by its own rule, say when a mestiere's share in the vector becomes
+non-zero, would give the state a second meaning beside its values, and a row
+whose members died while it held goods or claims would lose them, against A-04
+and A-02. A canonical form is also what keeps NFR-01 honest: if a zero could be
+stored or not, two worlds holding the same values would hash apart by history,
+the failure DEC-088 closed for capacity. Hence A-18, which a test can check
+every tick. The rule is written for cohort rows and per-good fields, the two the
+user named and the measurement covered. Building types and crops stay laid out
+over the catalogue: they are tens, not hundreds, and nothing yet says otherwise.
+
+**A clearing is a good or a class (DEC-102, FR-P-03d).** Three rules were the
+decider's.
+
+1. **The variant's class is one it belongs to.** A variant's price is the class's
+   price per unit of value times its value in the class, and a value exists only
+   in a class the good belongs to (FR-P-03a). The user's "validation checks only
+   that the class has a market" is kept, and one refusal joins it, a variant
+   naming a class it does not belong to: without membership the price is not
+   defined.
+2. **Price by value per unit.** "Their price differs by quality, not by market"
+   needs a measure of quality the content already has. Value per unit in the
+   class is that measure, and DEC-099 already buys "at the lowest price per unit
+   of value". A separate quality factor per variant would be a second number with
+   no other reader. The cost is named in DEC-102: for food, value is nutrition.
+3. **Shares in a long clearing, with a carry.** When supply is short every offer
+   sells whole, and rationing is on the buyers. When it is long, which variant
+   sells is the split. Taking variants in id order would let the first starve the
+   rest of buyers, and their producers would leave through the allocation
+   vector; a split by largest remainders in each update would leave a small offer
+   beside a large one at zero for ever, the integer trap of `SIM-ECON`. So each
+   sells the same share of its offer and the fraction carries, at the clearing,
+   per variant. `R-105` foresaw a carry per row and class good from the stand-in's
+   even split of each buyer's purchase; the carry here is the sellers', so it sits
+   at the clearing. The buyers' side is a split within one update and leaves no
+   carry, under the rule `SIM-ECON` already has for such splits.
+
+None of this rests on the stand-in's code. It would have held before it: a
+storage rule that changes meaning is a second model, a price needs a defined
+unit, and a recurring proportional split on small integers needs a carry.
+
+**AC-09 and AC-10.** Applied as the user decided. The intent table's rows were by
+good; a clearing takes the row of the most urgent need one of its goods meets,
+which is the old rule for a consumable widened to a clearing, and nothing else.
+
+**Not decided here.** `SQ-024`'s market places, the groups and the types: `R-108`.
+The P-17 measurement on the sizes the catalogue is meant to carry: `R-108`, with
+the types it is stated in.
+
+**Cost.** Every per-good and per-row access becomes a search by id, and pools
+grow and compact inside the update. A variant's own scarcity shows in no price,
+and the author's choice of market or variant decides what can signal scarcity.
+One carry per variant per clearing settlement. Existing code: none in `core/`
+holds cohort rows or goods yet; the stand-in in `bench/` is not the simulator.
+**Owed by the implementer:** from the phase 4 plan, cite `R-107`:
+1. the point that first builds cohort rows or holdings builds them sparse under
+   DEC-101 and checks A-18 every tick, its `Fails when:` naming a zero entry left
+   stored, so that two worlds with the same values hash apart;
+2. the point that builds the rules file carries FR-P-03d's declaration and its
+   two refusals, with a `Fails when:` naming a variant whose class holds no
+   market, or that names a class it does not belong to, accepted at load;
+3. the point that builds market clearing builds FR-P-03d's price and split, with
+   `variantCarry`, and a check where a long clearing holds a variant offering
+   less than one unit's share in an update, its `Fails when:` naming that offer
+   never selling.
+**Would overturn it:** a measurement of the full update showing that searches by
+id cost more than the dense layout saves at the sizes the user gave; content in
+which a minor good needs its own scarcity signal, which is a market of its own
+and needs no rule; a need for quality apart from value, which would add a factor
+per variant.
+**Not verified:** that every phase of the update can run on "absent reads as
+zero" without a phase that must write a zero entry; checked for phases 5 to 9
+by reading `SIM-ECON`, not for credit and demography. That building types and
+crops stay small. `RULINGS.md` was read in its state, owed actions, `R-001`,
+`R-050` to `R-053`, `R-063` to `R-065`, `R-084` and the rulings from `R-103`
+on, not whole.
+
+### R-108 — Prices form at market places: five types that follow population, villages routed per group, every routed row in the ranking; DEC-103
+
+**Date:** 2026-10-17   **Origin:** SQ-024
+**Verdict:** promoted as DEC-103, with FR-M-16 to FR-M-20 specified — the
+direction, the types, the thresholds, the mix and the groups the user's, the
+rules the decider's
+**docs/:** `SIM-REQ` glossary, Settlement, and Group and Market place new;
+FR-D-14; FR-M-03 one sentence; FR-M-04's table for five types; FR-M-16 to
+FR-M-20 new; FR-G-01 one sentence; P-06 and P-12 for five types; P-77 to P-80
+new; §18's Market row; §19's P-17 row. `SIM-STATE` §Settlement `type` and
+`marketAssignment`. `SIM-ECON` phases 2, 7 and 12, the paragraph on phase 7's
+cost, and one on routed rows. `SIM-DEC` DEC-103 new; DEC-019's caps; DEC-071's
+cost. `SIM-LOOPS` B3a, R13 new with B13a and B13b, the gate check. Revisions to
+today.
+
+`SQ-024` proposed that prices form at market places. The user answered the
+direction on 2026-10-17, "si ai market places"; the five types, their
+populations and the hysteresis at about 80%, the mix at tick 0 and the
+generator's placing of borghi on 2026-10-05; the groups on 2026-10-17. Point 4,
+how routed demand enters the ranking, and points 3, 5 and 6 were the decider's.
+The grep of step 1 covered `town`, `type`, `hub`, `market`, `degree`, `P-06`,
+`P-12`, `FR-M-04`, `import`, and the identifiers the entry cites. `SIM-OBS`
+speaks of towns and cities in prose; it is reserve 3 and was not touched, and
+nothing in it reads otherwise under five types.
+
+**The content approved by the user, recorded here as `R-063` was**, since it goes
+to the rules file of `R-065`, not to `docs/`. Every value Provisional under
+`R-050`. Nine groups, each traded from the type named, a place trading every
+group from its type and below:
+
+| Group | Contents | Phase 4 goods | From |
+|---|---|---|---|
+| G1 Provisions | grain, flour, bread, ale, salt, meat | grain, flour, bread | borgo |
+| G2 Countryside | wool, hides, timber, flax | wool, timber | borgo |
+| G3 Common manufactures | coarse cloth, shoes, pottery, candles | cloth | borgo |
+| G4 Iron and tools | bar iron, tools, nails | iron, tools | borgo |
+| G5 Small livestock | pigs, sheep, poultry | — | borgo |
+| G6 Large livestock | oxen, horses | — | cittadina |
+| G7 Fine manufactures | dyed cloth, worked leather, cutlery | — | cittadina |
+| G8 Metals and arms | iron wholesale, weapons, armour | — | city |
+| G9 Luxury | spices, silk, fine wine, jewellery | — | metropolis |
+
+Ore is on no group. The number of markets a place shows is informational only.
+
+**The rules, and why each.**
+
+1. **Routed rows enter the ranking one by one (point 4).** The user preferred
+   it, "il povero compete col povero"; the decider's reason is the rationing
+   rule of `SIM-ECON`: "nobody buys cloth while another cohort in the same
+   settlement cannot buy bread and could pay for it." One entry per village would
+   rank a village by its mean, and its poor would be served before the market
+   town's rich whenever the village as a whole could pay more. The measured cost,
+   6.62 ms a stand-in day, within P-01 and over it with P-17's allowance, is
+   named in DEC-103 and goes to the P-17 measurement, which now runs on this
+   reading at the sizes the catalogue is meant to carry.
+2. **When and where (point 3).** A routed row is settled when its market place
+   clears, from its state as it stands; no queue, no delay. Settlement updates
+   are weekly, and a market within reach is days away, so a delay would be
+   below the resolution of the update, and a queue would be state that a market
+   place holds for others. The market place therefore writes rows of
+   settlements in other buckets; `SIM-ECON` now says so, and where the row's
+   hunger deficit is written. Transport cost is a transit loss on the route,
+   P-21 per link, borne by the routed row: FR-C-11 says it is never a currency
+   term, and putting it on the row leaves the market's quantities whole. Routed
+   shipments count in their links' volume, or a village's link to its market,
+   carrying no price difference, would dissolve and cut it off.
+3. **Out of reach.** A settlement with no market place within reach clears the
+   group itself. The alternative, no exchange at all, would starve day labourers
+   beside a farmer's grain in every cut-off village, the unbraked spiral
+   DEC-043 was written against. A good in no group, ore, is cleared where it is
+   held and never traded away: that is the user's "used where it is mined", and
+   it lets a miner sell ore to a bloomery in the same place.
+4. **What stays local (point 4).** Labour, own consumption, credit,
+   destitution, spoilage, the seed reserve and the hunger deficit, each by its
+   own phase in its own settlement. Rationing by ability to pay runs at the
+   market, by rule 1.
+5. **Assignment (point 5).** State, since hysteresis reads the current choice:
+   the market place and the route's links, bounded by reach. Reassessed with the
+   type every 28 ticks, in phase 12 of the settlement's own update; moved only
+   when the current place stops trading the group, falls out of reach, or is
+   beaten by more than P-80; ties by id. The search is bounded by reach, so that
+   no update walks every settlement (AC-07). Between reassessments a broken
+   route or a market lost sends the group to local clearing, so no row is left
+   trading at a place that does not clear it.
+6. **Type.** The highest type whose threshold the population reaches; down only
+   below P-78 of the current type's, as the user set. A settlement that falls a
+   type evicts links over its new cap, the weakest first, as FR-M-10 does, or A-06
+   would fail on the day it falls.
+7. **The rest of the model (point 6).** A settlement's price for a good it trades
+   at a market place is that place's (FR-M-20): attractiveness, knowledge and
+   expected return read it. Caps for five types map the old three, town to borgo
+   and cittadina, city to city and metropolis, so P-06's decided values carry
+   over unchanged. The import bound of FR-D-14 and B3a gains the catchment: routed
+   trade needs no haulage, peasants carry their own goods to market, and reach
+   bounds what it can bring.
+8. **A new loop, R13.** A place that rises draws its neighbours' trade and
+   grows, and one that falls loses it. `SIM-LOOPS` requires a named brake: the
+   ceilings of R3 for the rise, land per capita for the fall. The hysteresis of
+   P-78 is named as what keeps the loop from oscillating, not as its brake.
+
+Each of these would have held before the stand-in existed; the stand-in's
+nineteen villages per market and its fixed assignment are measurement inputs and
+entered nothing here.
+
+**Cost.** Phase 7 at a market place ranks its catchment. A market place writes
+rows it does not own, so a point that builds it must order those writes by
+bucket and id. Five types, four thresholds, a reach and a margin to tune. A
+village's own scarcity reaches its people through rationing and hunger, not
+through a price of its own. Ore and any good in no group tie their recipes to
+their site. Existing code: none in `core/`; the stand-in's routing in `bench/`
+is not the simulator.
+**Owed by the implementer:** from the phase 4 plan, cite `R-108`:
+1. the generator point builds five types from P-12 and P-77, borghi placed where
+   villages are dense, and each settlement's assignment, with a check that every
+   village starts within reach of a borgo or larger, its `Fails when:` naming a
+   village generated out of reach;
+2. the market point ranks every routed row as one entry (FR-M-19), with a check
+   on a state where rationing binds at a market for a good routed rows ask for,
+   its `Fails when:` naming routed demand merged per settlement or served outside
+   the ranking; and it reads the rows routed to a market place without walking
+   every settlement;
+3. the point that builds type and assignment checks the hysteresis both ways and
+   the eviction on a fall, its `Fails when:` naming a settlement that oscillates
+   across a threshold or keeps more links than its new cap;
+4. P-79 and P-80 proposed as Provisional values in the point that builds routing
+   (`R-050`).
+**Would overturn it:** the P-17 measurement on this reading putting the full
+update over P-01 at the sizes of §19, which would bring back one entry per
+village or a cheaper ranking; a cut-off place found to need no exchange, which
+would drop rule 3's local clearing; the user changing any content above.
+**Not verified:** that phase 10, run in a village's own update, cannot export
+food its rows will want at the next clearing of their market; the "surplus" of
+FR-M-03 was read as protecting needs, not checked against routed timing. Which
+measure FR-M-09's dissolution reads, volume or the candidate's profitability,
+is not stated in `docs/`; rule 2's volume credit assumes volume. That the
+generator can meet P-12 and P-77 together on every seed. `RULINGS.md` was read
+as for `R-107`.
+
+### R-109 — The forge is split into bloomery and smithy, with bar iron between them: `R-063` revised in structure, its details left to the user
+
+**Date:** 2026-10-17   **Origin:** SQ-024, the user's answer on point 1
+**Verdict:** resolved, the structure the user approved under `R-050`; the details
+escalated, static content the user's
+**docs/:** `SIM-REQ` FR-P-04, Bar iron in the set and the chain
+Ore+Timber→Bar iron→Tools; P-09 from 8 to 9. Revision already today's.
+
+The user approved, on 2026-10-17, "sì, separa la forgia": a bloomery near ore
+and forest, ore + timber → iron; a smithy anywhere, a village included,
+iron → tools; bar iron a good, class Material, traded in G4. This revises the
+row "Ore + Timber → Tools | Forge | requires Tools | yes" of `R-063`, which binds
+until revised; this ruling names it. Two consequences follow from rules already
+in force and are applied, not chosen: P-09 counts nine goods, and by `R-063`'s
+rule that a grade counts processing steps, bar iron is grade 1 and Tools become
+grade 2. No need reads Material or Implement, so no need changes.
+
+What the user did not set, and `R-050` makes the user's since recipes, building
+types and occupations are static content, is left open with a proposal:
+
+| Item | Proposal | Alternatives |
+|---|---|---|
+| Bloomery site | ore only; timber is bought, being in G2 | ore and forest, as the user's "near ore and forest" reads literally |
+| Bloomery and Tools | improved by Tools, so no crude variant is needed (DEC-073 binds only durable-requiring recipes) | requires Tools, with a crude variant; or independent |
+| Smithy and Tools | requires Tools, with a crude variant, the forge's row as it was | improved by Tools only |
+| Mestieri | the smith works the smithy; a new mestiere, the bloomer, works the bloomery: twelve in the vector and thirteen rows at most; mean wealth with the crafts, below the smith, spread middling | none other: FR-J-01 gives a mestiere one activity, so either recipe left without its own mestiere has no one to run it |
+
+Why the proposal: ore is in no group (`R-108`), so the bloomery must stand where
+ore is mined, and requiring forest as well would leave every ore site without
+woodland unable to smelt, though timber travels in G2. A bloomery that needs
+tools to make the iron that tools are made of would need a crude variant to
+break the circle; "improved by" breaks it without one. The smithy keeps the
+forge's terms, which the user approved in `R-063`.
+
+**Cost.** One good and one recipe more; a thirteenth row where a place holds both
+crafts. `SIM-STATE` §Cohort's "at most 12" stands until the user answers on the
+mestieri.
+**Owed by the implementer:** the content as approved, in the rules file of
+`R-065`; nothing of the open items until the user answers. Cite `R-109`.
+**Would overturn it:** the user revising the structure, or answering the open
+items otherwise.
+**Not verified:** that FR-P-03c admits the new chain with the values the
+implementer will propose; nothing is numbered.
+
+### R-110 — The forge's details, the reviewed chains and water are approved content; crops may be improved by a durable
+
+**Date:** 2026-10-19   **Origin:** SQ-024, the user's answers of 2026-10-18 and 2026-10-19 on `R-109`'s open items, the review of the chains, and water
+**Verdict:** resolved — static content the user's under `R-050`, answering `R-109`'s escalation; one rule specified so that the content can be written
+**docs/:** `SIM-REQ` FR-P-04, the set and the chains; FR-P-10 and FR-P-20, a crop's relation to durables; P-09 from 9 to 11. `SIM-STATE` §Cohort at most 14 rows. Revisions to today.
+
+The user answered `R-109`'s three open items, "va bene" to the proposals, and in
+the same exchange added a charcoal burner, reviewed every chain of phase 4's
+content, and made water a good. Content is the user's (`R-050`), so it is
+recorded here, as `R-063` and `R-108` recorded theirs, and goes to the rules file
+of `R-065`. Every value Provisional. This revises `R-063`'s tables where they
+differ, and `R-109`'s escalation is answered.
+
+**Goods added.** Charcoal: G2, class Fuel, grade 1, a market of its own, since a
+recipe names it (`R-111`). Water: an explicit good, "se si ha modo si estrae
+sennò si compra"; its class, grade, group, site, recipe and perishability are not
+set. Fuel is a class: tow, kindling, charcoal "and others", of which phase 4's
+catalogue holds charcoal. P-09 counts eleven goods.
+
+**Recipes, changed or added.**
+
+| Recipe | Building | Durable | Crude variant |
+|---|---|---|---|
+| Grain → Flour | Mill, by water or wind | independent | yes: the hand quern |
+| Flour + Water + fuel → Bread | Oven | independent | no |
+| Timber → Charcoal | none, site forest | improved by Tools | — |
+| Ore + Charcoal → Bar iron | Bloomery, site ore | improved by Tools | — |
+| Bar iron + a fuel → Tools | Smithy, any site | requires Tools | yes |
+
+"Fuel" in the oven's row is a recipe input on the class (`R-111`); which fuel
+the smithy burns is escalated below. Grain farming is improved by
+Tools. Spinning is folded into the weaver; draught animals and sheep are
+implicit until livestock goods exist; salt stays out of phase 4.
+
+**Mestieri.** Thirteen in the allocation vector: farmer, miller, baker, miner,
+woodcutter, charcoal burner, bloomer, smith, shepherd, weaver, caravanner,
+merchant, day labourer; and the destitute row. The smith works the smithy, the
+bloomer the bloomery, with mean wealth among the crafts below the smith and a
+middling spread (`R-109`'s proposal, approved); the charcoal burner is poor, as
+the woodcutter. Fourteen rows at most where a place holds every one, which
+`SIM-STATE` §Cohort now says.
+
+**One rule, so that "farming improved by Tools" can be written.** FR-P-20 put
+the relation to durables on the recipe record only, and a crop is not a recipe
+(FR-P-10). The crop record now carries it, improved by or independent of: a
+crop that required a durable would need a crude variant, and FR-P-21 has none
+for crops. What "improved by" changes was stated nowhere, for recipes either
+(FR-P-03 says only that a durable "raises productivity"). For a crop it lowers
+the labour per unit of land and never raises the yield per unit of land: B1 and
+B3a assume yield per unit of land fixed (`SIM-LOOPS` open item 4), and tools are
+labour-saving in a field, not fertiliser. How much it lowers is a value for §16
+when the point that builds crops proposes it.
+
+**Escalated: what the user has not set.** Static content, `R-050`. Each with the
+decider's proposal:
+
+| Item | Proposal | Why |
+|---|---|---|
+| What the poor burn | Timber also in class Fuel, grade 0, keeping its market; no new good | with charcoal the only fuel, heating needs a charcoal burner in reach, and the poor would buy a grade 1 fuel to keep warm; firewood is what a household burned |
+| The smithy's fuel | charcoal, named | a smith's hearth burned charcoal around 1300; the alternative is any fuel |
+| Water: who draws it, and where | a recipe → Water, no building, site water, worked by a new mestiere, the water carrier, poor; class none read by a need, grade 0, G1, a market of its own, imperishable | FR-J-01 gives a recipe to a mestiere, so someone must draw; site water is the generator's existing attribute; G1 lets a place without it buy at its borgo, as the user's "sennò si compra" asks |
+| The mill's site | the Mill requires no site | a windmill stands anywhere; an "either water or wind" site would need FR-P-19 to accept two attributes, and the two mills differ in nothing the user has named. The quern stays for places without a mill |
+| Values | proposed by the implementer in the point that first needs each | `R-050` |
+
+Water taking a mestiere would make fourteen in the vector and fifteen rows at
+most; `SIM-STATE` §Cohort is then edited again.
+
+**Cost.** Two goods, two recipes and two mestieri more than `R-109`; P-17's
+measurement counts them. Every bread needs water and fuel, so an oven without
+either stops, and bread follows two supply chains it did not before.
+**Owed by the implementer:** the content as approved, in the rules file of
+`R-065`; FR-P-10's relation on the crop record. Nothing of the escalated items
+until the user answers. Cite `R-110`.
+**Would overturn it:** the user answering the escalated items otherwise, or
+revising any item above.
+**Not verified:** that the bloomery's site, ore only, is inside the user's "va
+bene": `R-109` made four proposals and the implementer's record of the answer
+lists three, so the site is read as approved with them. That FR-P-03c admits the
+chains with the values the implementer will propose; that the generator places enough forest near ore for bloomeries to
+be supplied with charcoal, which travels in G2 but loses 2% a hop. `RULINGS.md`
+was read in its state, owed actions, `R-001`, `R-050`, `R-056` to `R-065` and
+the rulings from `R-106` on, not whole.
+
+### R-111 — A recipe input names a good with a market of its own, or a class; never a variant
+
+**Date:** 2026-10-19   **Origin:** SQ-024, the user's answer on fuel of 2026-10-19, and the implementer's reading 1 recorded beside it
+**Verdict:** specified
+**docs/:** `SIM-REQ` FR-P-02, inputs on a class and the refusal; FR-P-03c, how an input on a class counts. `SIM-ECON` phase 5. `SIM-DEC` DEC-015, one clause; DEC-102's cost, one sentence. Revisions to today.
+
+The user introduced Fuel as a class, "stoppe, legnetti, carbone, ecc.", "con
+alcune ricette che ne richiedono di specifici": some recipes take any fuel, some
+one fuel in particular. FR-P-02 let a recipe's inputs be goods only. Two things
+were missing: an input that any good of a class meets, and a rule for an input
+that wants one good of a class whose goods may clear together.
+
+**An input on a class.** It is written as a need is (FR-P-03b): a quantity in
+the class's units, met by any good of the class in proportion to its value, so
+that "any fuel" is one input and adding a fuel needs no recipe change. From
+holdings it takes the lowest grade first, as a cohort feeding itself does
+(FR-C-03), which keeps a better good for whatever names it. It carries no
+minimum grade: a recipe wanting a better good names that good. How such an input
+is bought is `R-112`'s.
+
+**An input on one good must name a good with a market of its own.** The
+implementer's reading 1 saw the alternative: a recipe naming a variant is demand
+for that variant inside its class's clearing. FR-P-03d derives which buyer
+receives which variant from the rationing order and good id, so a bloomery
+wanting charcoal could be handed kindling; steering it would take demand per
+variant, a price per variant, and a split per variant, which is a market of its
+own by another name. So validation refuses an input that names a variant, and an
+author who wants one fuel in particular gives it a market (DEC-102's cost now
+says so). Charcoal has one under `R-110`.
+
+**Food value.** FR-P-03c counts each input at its embodied food value. An input
+on a class is met by whichever goods are held, so it counts at the least
+embodied food value per unit of the class's value among the goods that can meet
+it: the rule must hold on the path that consumes least, `R-056`'s reason for
+"the least". Fuel embodies none, so the oven's guarantee rests on flour, as it
+did.
+
+None of this rests on code; no recipe exists in `core/`.
+
+**Cost.** A good named by any recipe is one more clearing in every settlement
+that clears its group, so an author's wish for a specific input costs a ranking.
+Validation gains one refusal and one rule in the food-value pass.
+**Owed by the implementer:** the point that builds recipes: inputs on a class,
+taken lowest grade first; the point that builds the rules file: the refusal,
+its `Fails when:` naming a recipe input on a variant accepted at load. Cite
+`R-111`.
+**Would overturn it:** content in which many recipes each need one minor good of
+a large class, so that markets multiply; that would argue for demand per variant
+inside the class clearing, at its cost.
+**Not verified, and left open:** how FR-K-15's dependency check (AC-56) reads an
+input on a class. A recipe depends on a dungeon-only material through it either
+when every good that can meet it does, or when any one does; the first is the
+natural reading, and the second is stricter. AC-56 is an acceptance criterion,
+and choosing the looser reading of one is reserve 2 of `R-001`, so it is not
+chosen here; no class in phase 4's content holds such a material, so nothing
+waits on it.
+
+### R-112 — A producer demands its inputs for one update at capacity, after the needs of tiers 0 and 1: DEC-104
+
+**Date:** 2026-10-19   **Origin:** SQ-024, found ruling the user's answer on exchange within a place
+**Verdict:** promoted as DEC-104, with FR-C-04 specified
+**docs/:** `SIM-REQ` FR-C-04 steps 2 to 4. `SIM-ECON` phase 7; §Demand, a paragraph "Inputs" and a sentence under "Rationing". `SIM-DEC` DEC-104 new. Revisions already today's.
+
+The user's case for exchange within a place is the charcoal burner taking the
+woodcutter's timber. Reading what that exchange would run on, the grep of step 1
+over `input`, `inputs`, `demand` and FR-C-04 found that **no text makes a recipe's
+inputs demand**. FR-C-04 step 2 turns unmet *need* into demand; step 3 offers
+"holdings above the cohort's own needs and its seed reserve" as supply. A miller
+therefore never bids for grain, and the grain a miller holds is sold. Only an
+activity whose inputs are its own produce could run. Phase 3 lends "for inputs",
+FR-P-15 subtracts "input cost" and AC-09 has an Input row, so the intent was
+always that inputs are bought; the rule was never written. It must be before the
+phase 4 plan builds the market, and the exchange of `R-113` is meaningless
+without it, so it is ruled here rather than left to an entry.
+
+**Three choices, each on the merits.**
+
+1. **How much.** What the activity consumes in one update at capacity, less what
+   the cohort holds: capacity being the buildings it owns, or where the activity
+   needs none, its own working members. The obvious alternative, the labour
+   phase 4 assigned in this update, is scratch: labour expires with the update
+   (FR-C-05), and a routed row is cleared at its market place in another update
+   than its own (FR-M-19), when that labour no longer exists. Buildings and
+   members are state, so the quantity is the same whenever it is read. And a
+   producer with no inputs on hand, whose phase 5 ran nothing, still asks.
+2. **What is withheld from supply.** The same quantity. Otherwise a producer
+   would sell in step 3 what it bids for in step 2.
+3. **Where it ranks, and what pays for it.** After tiers 0 and 1, before tier 2
+   and before a better grade, in spending and in rationing alike. The rationing
+   rule of `SIM-ECON` extends to it: nobody buys grain to mill while another
+   cannot buy grain to eat and could pay. A recipe's output meets needs only
+   later, so in a shortage grain is eaten before it is milled, and DEC-099 sends
+   bread's buyers back to grain. Before tier 1 would let a bloomery's charcoal
+   outbid a house's fuel, which `R-114` makes lethal. After tier 2 and the better
+   grade would starve the crafts whenever the rich buy comfort, and those are
+   preferences while a trade is a living.
+
+An input on a class is placed as a need is (`R-111`): on the cheapest good per
+unit of value that meets it, falling to the others when rationed.
+
+None of this rests on code; no market exists in `core/`.
+
+**Cost.** A producer that cannot staff its capacity overbuys; the excess counts
+against its next demand and spoils if perishable. A poor craftsman eats before he
+buys, so in a lean year crafts stop before people go hungry, and a stopped craft
+restarts on credit against its buildings or not at all; that is a path into
+destitution beside R12, braked as R12 is and by B2. Phase 7 ranks one more class
+of demand.
+**Owed by the implementer:** the point that builds market clearing: input demand
+and its withholding from supply under FR-C-04, with a check where a producer's
+input is made by another row, its `Fails when:` naming a producer whose held
+input is offered as supply, or whose input demand outranks a tier 1 need. Cite
+`R-112`.
+**Would overturn it:** a sweep in which crafts collapse every lean year and never
+recover, which would argue for inputs ranking with tier 1; a measurement in which
+buying for capacity leaves large idle stocks, which would argue for a demand read
+from the last update's output, at the price of storing it.
+**Not verified:** that durables are bought: FR-P-23 calls wear "the demand for
+durable goods" and FR-C-04 states no such demand either. Nor how sellers share a
+long clearing of a good with a market of its own: FR-P-03d says it for variants,
+and FR-C-04 says nothing. Both are gaps of the same kind, found beside this one
+and not ruled here; each needs a ruling of its own before the point that builds
+the market.
+
+### R-113 — Exchange within a place comes first: each place clears among its own rows at the market's price, and what is left meets in the market's ranking
+
+**Date:** 2026-10-19   **Origin:** SQ-024, the user's answers of 2026-10-18 on where the charcoal burner's wood comes from and on exchange within a place
+**Verdict:** specified, the direction the user's; `R-108`'s rule 1 refined, not reversed
+**docs/:** `SIM-REQ` FR-M-19, two passes. `SIM-ECON` phase 7. `SIM-DEC` DEC-103, decision, rationale and cost. Revisions already today's.
+
+The user set two things: "if there is wood it is taken directly, otherwise it is
+bought", and "scambio locale potenzialmente per tutti i beni, ma comunque con
+circolazione di moneta" — exchange within a place for every good, always a sale.
+The rule, its phase and how it meets `R-108`'s routing were left to the decider.
+Under `R-108` nothing passed between two rows of a village: each row's surplus
+and demand went to its market place, and met there in one ranking with the whole
+catchment, paying transit loss both ways on what never left the village.
+
+**The rule.** A market place clears each clearing of a group in two passes.
+First each place taking part, the market place itself and every settlement routed
+to it for the group, clears among its own rows, under FR-C-04, at the market's
+price and with no transit loss; currency moves buyer to seller, as in any
+clearing. Then what the first passes leave, unmet demand and unsold supply,
+meets in the one ranking of FR-M-19, routed rows bearing their route's loss on
+what they trade there.
+
+**Why at the market place's clearing, not in the village's own phase 7.** A
+village's own update falls in another bucket (FR-T-06). Run there, the local
+exchange would come before the market's clearing in some weeks and after it in
+others, depending on the two places' buckets, so whether the wood was "taken
+directly" would depend on settlement ids rather than on the user's rule. Run as
+the first pass of the market's clearing, it always comes first, it needs no
+state, and phase 7 still runs only where markets are, which is what `R-108`
+bought. A group a settlement clears itself, out of reach or in no group
+(FR-M-18), is already exchange within that place and gains nothing.
+
+**Why the market place too.** The user's reason, wood taken where it is, holds in
+a borgo as in a village. Exempting the market place would give its rows no first
+claim on their own supply while every village's had one. It is also the
+principle `SIM-ECON` already states for exports: a place serves itself before
+its goods leave.
+
+**At the market's price.** FR-M-20 makes a settlement's price for a good the
+market place's, and a village has no price of its own to trade at. No transit
+loss, because nothing travels.
+
+**What this refines in `R-108`.** Rule 1 ranked every routed row one by one so
+that a village's poor would not be served before the market town's rich. That
+holds for what reaches the ranking. What it gives up is that a village's surplus
+reaches the town's buyers only after the village's own, which is the user's
+rule. DEC-103's rationale now says both.
+
+The rule would have held before any code: a priority that depends on bucket
+offsets is a rule nobody chose, and an exchange that pays a road it never takes
+is a cost nobody bears in the world.
+
+**Cost.** Phase 7 at a market place runs one small clearing per place taking part
+before the ranking, and the ranking holds only rows with something left; whether
+the sum is cheaper or dearer than `R-108`'s single ranking is not measured, and
+P-17's measurement now runs on this reading. A village's scarcity reaches the
+town later, through less surplus offered, not through any price. How sellers
+share a long clearing, local or not, is the gap `R-112` named.
+**Owed by the implementer:** the market point builds the two passes, with a check
+where a village holds both a seller and a buyer of one good and its market place
+rations it, its `Fails when:` naming the local exchange skipped, so that the
+village's buyer goes short while its own seller's goods leave, or charged
+transit loss. Cite `R-113`.
+**Would overturn it:** the P-17 measurement putting the two passes over P-01
+where one ranking was within it; the user preferring that a market town's rows
+take part in the ranking without a first claim on their own supply.
+**Not verified:** how the first pass orders its writes against the ranking's when
+a routed row's settlement and the market place share a bucket; `SIM-ECON` asks
+writes ordered by bucket and id and that was not worked through for two passes.
+
+### R-114 — Heating is a tier 1 need that follows the warmth curve and kills when left unmet: DEC-105
+
+**Date:** 2026-10-19   **Origin:** SQ-024, the user's answer of 2026-10-19 on a fuel need, and the implementer's reading 3 recorded beside it
+**Verdict:** promoted as DEC-105, with FR-P-03b, FR-P-08 and FR-D-03 specified — tier 1 and lethality the user's, the rules the decider's
+**docs/:** `SIM-REQ` FR-P-03b, two declarations a tier 1 need may carry; FR-P-08, a sixth modifier, warmth; FR-D-03, cold; P-81 new. `SIM-ECON` the tier table, phase 11, the paragraph on routed rows. `SIM-DEC` DEC-037, the modifiers and their count; DEC-105 new. `SIM-LOOPS` R14 new, the gate check. Revisions to today.
+
+The user: "Si, dipendente dalla stagione + temperatura (in inverno senza
+riscaldamento si muore di freddo)", for a fuel need at tier 1. Three things in
+that answer meet text already in `docs/`. FR-T-05 and DEC-006b: seasons "carry no
+mechanical effect of their own". The tier table of `SIM-ECON`: tier 1 is
+deferrable and its shortfall raises discontent, not deaths. FR-P-03b: tier 0
+holds exactly one need, on food. The user set tier 1 and death by cold; the
+decider's part is how both hold with the rest.
+
+**Following season and temperature: a sixth climate modifier, warmth.** The
+implementer's reading 3 is right. Climate already acts through a pair of weekly
+curves per modifier, interpolated on `climateIndex` (FR-P-08, DEC-037), which
+renders season and temperature together, week by week and place by place,
+without the season itself acting. A need may declare that its quantity is the
+record's times the warmth modifier for the week, which may be zero. FR-T-05
+stands unchanged, and no seam appears on the map. Six pairs of curves instead of
+five; they are content the user approves (`R-064`).
+
+**Killing at tier 1: a lethal need, read in the update, not kept.** A tier 1
+need may be lethal: what is left of it unmet per member once own consumption and
+the market have run raises the death rate in phase 11 of the same update by P-81
+per unit. Three alternatives were set aside.
+- *A second tier 0 need.* The user said tier 1, and rightly: a household eats
+  before it heats. And tier 0's one need is what the hunger deficit, the seed
+  reserve, FR-P-03c's "the class the tier 0 need names" and B5c are written
+  about; a second would reopen every one.
+- *A deficit, as hunger has.* Hunger kills over weeks as reserves run out;
+  exposure kills in days, and an update is a week. A deficit would add a field
+  per row, a decay parameter, and the averaging of FR-D-03a on every move, for a
+  lag the phenomenon does not have.
+- *Reading the share left unmet.* A mild week entirely unheated would then kill
+  as a January does. Reading the quantity, which the curve already scales, makes
+  a small need a small risk.
+
+The value is read as FR-D-03a reads the tier 0 need, so a routed row's is written
+from what its phase 6 left unmet, at the end of its own phase 7, and phase 11 of
+the same update reads it. It does not outlive the update, so it is not state.
+
+**A loop, R14.** Fuel short in winter → deaths → fewer hands making timber and
+charcoal → fuel shorter. `SIM-LOOPS` requires a named brake: fewer hearths, as
+B5a, and the weather turning, which stops the loop where the curve reaches zero
+and only slackens it where it never does.
+
+**Cost.** Within tier 1, rationing runs by ability to pay, so the better-off's
+bread above the minimum can outrank a poorer row's fuel; DEC-105 says so. Cold
+deaths and the mortality modifier both rise in winter and are tuned together.
+Six curves to author, 624 numbers. A fuel shortage in a cold place now kills,
+so timber and charcoal enter what the generator's initial stocks must cover
+(`R-063`'s "a season" of tier 0, now beside fuel).
+**Owed by the implementer:** the needs subsystem's point: the two declarations
+on the need record, the warmth curves, and P-81 proposed (`R-050`), with a check
+in a cold settlement whose fuel runs out, its `Fails when:` naming a lethal need
+unmet that kills nobody, or one that kills in a week whose warmth is zero. Cite
+`R-114`.
+**Would overturn it:** a sweep in which cold deaths come in one-week spikes the
+player reads as noise, which would argue for a short deficit; the user moving
+the need to tier 0, which reopens FR-P-03b's single tier 0 need.
+**Not verified:** that the generator's initial stocks and the woodcutters' output
+can carry a northern winter at all on phase 4's content; that a lethal tier 1
+need sits well with `SIM-OBS`, reserve 3 and unchanged: only its five headings
+were read, and OBS-3, scarcity reaching people unequally, is the one cold
+feeds.
+
+### R-115 — `R-110`'s proposals on the content left open are approved
+
+**Date:** 2026-10-19   **Origin:** user, answering `R-110`'s escalation: "approvo le proposte di R-110 sui contenuti"
+**Verdict:** resolved — static content the user's under `R-050`
+**docs/:** `SIM-STATE` §Cohort at most 15 rows. Revision already today's.
+
+The user approved the four proposals `R-110` escalated, as written there. They
+are recorded here and go to the rules file of `R-065`; every value Provisional.
+
+- **What the poor burn.** Timber also belongs to class Fuel, grade 0, and keeps
+  its market of its own. The heating need of `R-114` is met by timber and by
+  charcoal, and the oven's "a fuel" by either. No good is added; P-09 stays at
+  eleven.
+- **The smithy's fuel.** Charcoal, named: Bar iron + Charcoal → Tools, Smithy,
+  requires Tools, with a crude variant. A named input on a good with a market of
+  its own, as `R-111` requires.
+- **Water.** A recipe → Water, no building, site water, independent of Tools,
+  worked by a new mestiere, the water carrier, poor, with a low spread as the
+  day labourer's. Water belongs to a class no need reads, grade 0; flour's
+  Ingredient is the one the content has. It is in G1 with a market of its own,
+  and imperishable. A place without a water site buys it at its borgo.
+- **The mill.** The Mill requires no site; the hand quern stays as its crude
+  variant.
+
+**Mestieri.** Fourteen in the allocation vector with the water carrier, and the
+destitute row: fifteen rows at most, which `SIM-STATE` §Cohort now says.
+
+**Cost.** One mestiere and one clearing more in G1, at every borgo. Every place
+bakes on water it draws or buys, so a borgo without a water site carries its
+villages' water and its own over the road. With no mill site, the quern matters
+only where nobody has built a mill.
+**Owed by the implementer:** the content as approved, in the rules file of
+`R-065`. Cite `R-115`.
+**Would overturn it:** the user revising any item.
+**Not verified:** that water's class is Ingredient: the proposal said "a class
+no need reads", and Ingredient is named here as the only such class the content
+holds, not as the user's word. The water carrier's wealth spread was not in the
+proposal; "low, as the day labourer's" follows from "poor" and is
+Provisional with the rest.
+
+### R-116 — An implementer session may dispatch the decider as an agent, as it dispatches the coder
+
+**Date:** 2026-10-19   **Origin:** user, answering `R-106`'s escalation of decision 1 of `D-126`: "si, può, così come può lanciare il coder"
+**Verdict:** resolved — the user's decision, reserve 1 of `R-001`
+**docs/:** unchanged
+
+`R-106` left to the user whether an implementer session may dispatch the decider
+as an agent, since it is the split between the two roles, and recommended
+keeping it on two conditions. The user answered yes, and as a standing
+permission rather than instruction by instruction: an implementer session may
+dispatch the decider as it dispatches the coder.
+
+**What holds with it.** The answer is to `R-106`'s recommendation, so its two
+conditions are read as part of what was approved:
+1. the brief the implementer gives the decider is facts only, never a proposed
+   answer, and is kept where the user can read it;
+2. the dispatched decider reads `R-001` and `.claude/skills/decide/SKILL.md`
+   itself, and works under them as a session opened by the user would.
+
+The split itself stands. The dispatched agent is a decider session: it writes
+`docs/` and `RULINGS.md`, never code; the session that dispatched it writes no
+ruling and edits no `docs/`. Nothing in `R-001`'s reserves moves: a dispatched
+decider escalates what a user-opened one would.
+
+**Not written into `AGENTS.md`.** `AGENTS.md` changes only with the user's
+permission for that change, and `.claude/agents/` the same (`D-087`); the answer
+grants the practice, not an edit. Until the user asks for one, this ruling is
+where the permission lives, and an implementer session dispatching the decider
+cites `R-116`.
+Written there by `R-117`, at the user's request.
+
+**Cost.** A question can be raised and ruled within one implementer session, so
+the user sees the ruling only in the log; the commit of each ruling remains the
+review. A model that writes the code briefs the model that judges it, which is
+why condition 1 is there.
+**Owed by the implementer:** a session that dispatches the decider keeps the
+brief where the user can read it, and cites `R-116`.
+**Would overturn it:** the user withdrawing it; a brief found to carry a proposed
+answer.
+**Not verified:** that the user meant the two conditions of `R-106` to come with
+the yes: the words approve the practice and name no condition; they are read in
+because the answer is to that recommendation. Where a kept brief should live is
+not fixed.
+
+### R-117 — `R-116` is written into `AGENTS.md`
+
+**Date:** 2026-10-19   **Origin:** user: "sì, scrivilo in AGENTS.md"
+**Verdict:** resolved — the user's permission for this edit, reserve 1 of `R-001`, recorded here as `AGENTS.md` asks of a decider session
+**docs/:** unchanged
+
+**The permission.** Granted by Federico Xella on 2026-10-19, in answer to the
+decider's report on `R-116`, for one change to `AGENTS.md`: writing `R-116` as a
+rule. It covers nothing else in the file, and nothing in `.claude/agents/` or
+`.claude/skills/`; no decider agent definition is written.
+
+**The rule added**, a paragraph closing "The decider answers what this file sends
+to a human": an implementer session may dispatch the decider as an agent, as it
+dispatches the coder; the agent is a decider session, reads `R-001` and its
+procedure itself, and works under them; the dispatching session writes no ruling
+and edits no `docs/` on its behalf; the brief holds facts only and is kept where
+the human can read it. It states `R-116` and its two conditions and adds nothing
+to them. The sentence before it, "An implementer session never … plays the
+decider", stands: dispatching the decider is not playing it.
+
+**Cost.** None beyond `R-116`'s.
+**Owed by the implementer:** nothing new; the rule binds from `AGENTS.md`.
+**Would overturn it:** the user withdrawing `R-116`.
+**Not verified:** where a kept brief lives is still not fixed, so "kept where the
+human can read it" binds without saying where.
+
+### R-118 — A decider brief is kept in `DECIDER-BRIEFS.md`, beside the register
+
+**Date:** 2026-10-19   **Origin:** user: "il brief va in un file accanto al registro", answering what `R-117` left unverified
+**Verdict:** resolved — the user's decision, reserve 1 of `R-001`; the user's permission for one more change to `AGENTS.md`, recorded here
+**docs/:** unchanged
+
+`R-116` and `R-117` required the brief given to a dispatched decider to be "kept
+where the human can read it", and left where unfixed. The user fixed it: a file
+beside the register. The file is `DECIDER-BRIEFS.md` at the repository root,
+created by this ruling; the name is the decider's, the place the user's. Each
+brief is appended verbatim, before the agent runs, under a heading giving the
+date, the branch and the items sent; entries are never edited, as the
+register's are not.
+
+**The permission.** The user's answer is read as permission for the one change
+it needs in `AGENTS.md`: the clause "is kept where the human can read it" of the
+paragraph `R-117` added becomes "is appended verbatim to `DECIDER-BRIEFS.md`,
+beside the register, before the agent runs". Nothing else in the file changes.
+
+**Cost.** One more file at the root; a dispatch writes to it first.
+**Owed by the implementer:** a session that dispatches the decider appends the
+brief to `DECIDER-BRIEFS.md` before the agent runs, and commits it with or before
+the rulings it led to. Cite `R-118`.
+**Would overturn it:** the user moving the briefs elsewhere.
+**Not verified:** that the user's sentence was meant as permission to edit
+`AGENTS.md` as well as a choice of place; it answers a gap in the rule just
+written there, and is read so.

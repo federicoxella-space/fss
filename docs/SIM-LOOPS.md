@@ -2,7 +2,7 @@
 
 **Document:** SIM-LOOPS
 **Status:** Draft
-**Revision:** 2026-10-06
+**Revision:** 2026-10-19
 **Gate:** No flow without a source and a sink. Every reinforcing loop has a named balancing loop.
 
 ---
@@ -45,11 +45,18 @@ High price at sowing → everyone plants it → glut at harvest → price collap
 
 ### R3 — Urban growth
 City attracts migrants → labour rises → production rises → wages rise → attracts more migrants.
-**B3a — Import ceiling.** A city can import only what its links carry: origin surplus times haulage capacity, over at most six links. Attractiveness reads food actually available, so the city stops drawing migrants as it approaches the ceiling.
+**B3a — Import ceiling.** A city can import only what its links carry, origin surplus times haulage capacity over at most six links, and what the rows routed to it sell, which reach bounds. Attractiveness reads food actually available, so the city stops drawing migrants as it approaches the ceiling.
 **B3b — Crowding mortality.** Density raises baseline deaths above births, so a city holds its size only by continued immigration.
-*FR-M-03, FR-D-12 to FR-D-14, DEC-071. Tuned by P-50.*
+*FR-M-03, FR-D-12 to FR-D-14, FR-M-18, DEC-071. Tuned by P-50 and P-79.*
 
 **B1 does not apply here.** Land per capita raises output per worker for farming, and a city's wage comes from crafts. **Price does not brake this loop either**: it clamps at four times reference under DEC-017, so it saturates exactly where the pressure is greatest. The brake is the ceiling, not the signal.
+
+### R13 — Market places rise and fall
+A place grows past a threshold → rises a type, trades more groups and draws its neighbours' trade → its crafts and wage gain → attracts migrants → grows. In reverse, a place that falls a type loses its market for those groups and the rows routed to it, and its own people trade farther away, at a higher transit loss.
+**B13a — The ceilings of R3.** Growth is held by the import ceiling and crowding mortality, B3a and B3b.
+**B13b — Land per capita**, as B1, holds the decline: fewer people share the same land.
+A place falls only below P-78 of its threshold, so a market lost is not regained by the next small rise. That keeps the loop from oscillating; it is not its brake.
+*FR-M-16 to FR-M-18, FR-D-05, DEC-071, DEC-103. Tuned by P-77 and P-78.*
 
 ### R4 — Poverty, banditry, isolation
 Poverty → displaced people → danger on links → haulage wages rise → trade stops → poverty deepens.
@@ -106,6 +113,14 @@ More destitute → more labour offered → lower wage → more members below the
 
 B12a fails once the day-labourer share is near zero. B12b acts only where a neighbour is more attractive by more than the hysteresis band of FR-D-09. In a region poor throughout nobody leaves, and the loop stops at the lower clamp of the wage (DEC-045), which bounds it without braking it, and at hunger (R5).
 
+### R14 — Cold
+Fuel short in winter → deaths → labour lost → less timber and charcoal made → fuel shorter.
+**B14a — Fewer hearths.** Population loss reduces demand against the same stock, as B5a.
+**B14b — The weather turns.** The need follows the warmth curve, so the loop slackens as the weeks warm and stops where the curve reaches zero.
+*FR-P-03b, FR-P-08, FR-D-03, DEC-105. Tuned by P-81 and the warmth curves.*
+
+Where the warmth curve never reaches zero, B14b only slackens the loop, and B14a holds it.
+
 ### R8 — Treasure age
 Rich hoards → adventurer income high → share of the mestiere grows → hoards deplete faster → income falls.
 This one is balancing on its own, but it terminates: the stock does not return.
@@ -151,7 +166,7 @@ The return path from kingdom treasury to cohorts is the one that can be forgotte
 | Requirement of the gate | Status |
 |---|---|
 | Every flow has a source and a sink | Met, with land declared as a fixed stock |
-| Every reinforcing loop has a named balancing loop | Met for R1, R2, R4 to R7, R9 to R12; R3 below; R8 balances itself and terminates |
+| Every reinforcing loop has a named balancing loop | Met for R1, R2, R4 to R7, R9 to R14; R3 below; R8 balances itself and terminates |
 | Brakes are implemented by a requirement, not assumed | Met |
 | Brakes have a tuning parameter | Met, several still Open, save B7, an order of phases with nothing to tune |
 | R3 | Braked by B3a and B3b. Neither runs through price, which is what makes them hold. Verify in Phase 4 that the ceiling binds before starvation does |

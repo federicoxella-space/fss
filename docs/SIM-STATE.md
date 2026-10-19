@@ -2,7 +2,7 @@
 
 **Document:** SIM-STATE
 **Status:** Draft
-**Revision:** 2026-10-07
+**Revision:** 2026-10-19
 **Gate:** The assert list is executable.
 
 ---
@@ -10,6 +10,8 @@
 ## Rule
 
 Anything that influences a future tick lives here. Anything not listed here must be derivable from what is, or it is a determinism defect.
+
+State is sparse per settlement (DEC-101). A cohort row that holds nothing in any field is not stored, and a field laid out per good stores only the goods whose value or carry is not zero. What is not stored reads as zero. The stored entries are ordered by id, and the hash and the save cover them and nothing else, so that two worlds holding the same values hash alike however they reached them.
 
 Input is not state. A command the host has submitted and the simulator has not yet applied is input, as the rest of the command sequence of NFR-01 is: it sits outside this inventory and outside the state hash. A save carries it all the same (DEC-032).
 
@@ -36,7 +38,8 @@ Always simulated. Roughly 2,000 rows.
 
 | Field | Type | Notes |
 |---|---|---|
-| id, position, type | | type drives degree caps |
+| id, position, type | | type: village, borgo, cittadina, city or metropolis; follows population, FR-M-17; drives degree caps and the groups traded |
+| marketAssignment | bounded record[] | per group the settlement's type does not trade: the market place its rows trade the group at and the links of the route to it, bounded by reach, or none when none is in reach, FR-M-18; state because the hysteresis of P-80 reads it and routed trade travels the route |
 | climateIndex | fixed | 0–10000, from the generator |
 | land | int | fixed, feeds B1 |
 | allocationVector | fixed[] | sums to one |
@@ -49,23 +52,24 @@ Always simulated. Roughly 2,000 rows.
 | guildHall | flag plus record | contract book, escrow int[4], rank distribution int[] |
 | dungeonState | enum plus int | infested, cleared, repopulating; regenerating stock |
 | knownRecipes | bounded set | recipes recovered or learned here |
+| variantCarry | fixed[] | per variant good of each class this settlement clears, sparse: the fraction of a unit the variant's share of a long clearing leaves, FR-P-03d; cleared when the settlement stops clearing the class |
 
 ---
 
 ## Cohort
 
-Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the shipping configuration, three in CI. 12 rows per settlement at Phase 4: eleven mestieri in the allocation vector and the destitute row.
+Keyed `(settlementId, mestiere, wealthBand)`. Wealth band has one value in the shipping configuration, three in CI. A settlement holds a row only for a key present in it (DEC-101): at most 15 per settlement at Phase 4, fourteen mestieri in the allocation vector and the destitute row.
 
 | Field | Type | Notes |
 |---|---|---|
 | count | int | |
 | ageDistribution | int[] | per age band of the rules file |
 | currency | int64 | single integer in smallest units |
-| goods | int[] | one per good |
+| goods | int[] | one per good the row holds, sparse |
 | goodsCarry | fixed[] | laid out as goods: the fraction of a unit each holding carries, in [0, 1). Production, harvest and spoilage add to it or take from it, and a whole unit moves to or from goods when reached |
 | buildings | int[] | per building type, owned by this cohort |
 | buildingsCarry | fixed[] | per building type: decay at P-51 not yet a whole building |
-| durables | int[] | per durable good, with accumulated wear, the carry of P-53 |
+| durables | int[] | per durable good the row holds, sparse, with accumulated wear, the carry of P-53 |
 | debt | int64 plus category | owed, counterparty category only |
 | interestCarry | fixed[2] | interest on debt and on advance not yet a whole smallest unit, one each |
 | credit | int64 plus category | owed to this cohort |
@@ -91,8 +95,8 @@ Edge count bounded by the degree caps.
 | transportCost | fixed | from terrain, fixed |
 | danger | fixed | FR-M-12 |
 | volume | fixed | rolling, drives weakest-edge eviction |
-| flowAccumulator | int[] | per good |
-| lossCarry | fixed[] | per good: transit loss (FR-C-11) on this link's shipments not yet a whole unit; cleared when the link is evicted |
+| flowAccumulator | int[] | per good, sparse |
+| lossCarry | fixed[] | per good, sparse: transit loss (FR-C-11) on this link's shipments not yet a whole unit; cleared when the link is evicted |
 
 ---
 
@@ -192,6 +196,7 @@ Goods, recipes, mestieri, crops, climate curves, event class definitions, goods 
 | A-15 | Buried stock only decreases |
 | A-16 | For every cohort and crop, landInField ≤ sownLand; for every settlement, sownLand summed over its cohorts and crops ≤ land |
 | A-17 | Destitute rows hold no buildings and no durables |
+| A-18 | No stored cohort row is empty in every field, no stored entry of a sparse field is zero with a zero carry, and the stored entries of every sparse field are in id order |
 
 A-02 and A-03 together are the currency invariant. A-01 and A-14 are the population invariant. A-04 is the goods invariant.
 

@@ -36,6 +36,19 @@ here would collide with whatever else is in flight.
 
 ---
 
+## Pass of 2026-10-19 — nothing
+
+Run over `D-121` to `D-126` on archiving the cost measurement plan. No
+candidates. `D-121` to `D-125` close the five points of a `Kind: process` plan,
+and process entries are ratified or rejected, never promoted (`D-011`): their
+decisions are measurement inputs of a stand-in that is not the simulator
+(`SQ-004`). What the measurement taught about the simulated world reached
+`docs/` through the decider's rulings on `SQ-023` and `SQ-024` (`R-107`,
+`R-108` and after), not through this file. `D-126` records how the session ran
+the decider and the long runs, and `D-127` this archive.
+
+---
+
 ## Pass of 2026-10-07 — nothing
 
 Run over `D-107` to `D-120` on archiving the process plan, the agent workflow.

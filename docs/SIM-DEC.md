@@ -2,7 +2,7 @@
 
 **Document:** SIM-DEC
 **Status:** Draft 1
-**Revision:** 2026-10-06
+**Revision:** 2026-10-19
 **Companion:** SIM-REQ
 
 ---
@@ -53,11 +53,11 @@ Population, currency, and goods each belong to exactly one simulation level. Lev
 
 ### DEC-085 — State arrays hold values, never arrays
 
-A state field is a value or one contiguous array of values. A per-row quantity of fixed width `w`, such as a treasury of four denominations or one stock per good, is stored as one array of `rows × w`. A per-row quantity of variable length is stored either at a fixed capacity, which is then its width, or in one shared pool addressed by a per-row offset and count. No array holds arrays, and no composite value inside state holds an array.
+A state field is a value or one contiguous array of values. A per-row quantity of fixed width `w`, such as a treasury of four denominations, is stored as one array of `rows × w`. A per-row quantity of variable length, such as the goods a row holds under DEC-101, is stored either at a fixed capacity, which is then its width, or in one shared pool addressed by a per-row offset and count. No array holds arrays, and no composite value inside state holds an array.
 
 **Rationale.** An array of arrays is an object graph under another name: each inner array is a reference, which NFR-10 excludes, and each is a separate allocation that DEC-003's bulk serialise, copy and hash cannot cover in one pass. Widths come from the core's logic or from the rules file the world carries (DEC-100), so `rows × w` is known whenever the state is.
 
-**Cost.** Every access to a wide field computes an index. A width the logic sets, the four denominations for instance, changes only with the logic, and reshapes the arrays that carry it inside the migration of NFR-08. A width the content sets, one stock per good for instance, never changes within a world, since an existing world cannot take new content (DEC-100). A pooled field needs a compaction rule, and that rule orders by id or it becomes a determinism hole of its own.
+**Cost.** Every access to a wide field computes an index. A width the logic sets, the four denominations for instance, changes only with the logic, and reshapes the arrays that carry it inside the migration of NFR-08. A width the content sets, the catalogue of goods for instance, never changes within a world, since an existing world cannot take new content (DEC-100); how many of its entries a settlement stores does, and is held in a pool (DEC-101). A pooled field needs a compaction rule, and that rule orders by id or it becomes a determinism hole of its own.
 
 ### DEC-088 — Only the rows in use are state
 
@@ -66,6 +66,14 @@ A column may be sized beyond the rows it holds. Its capacity is not state: a cou
 **Rationale.** Growing by doubling is how an append-only table stays cheap, and the capacity it reaches depends on the history of its growth, not on what the world holds. Counted by capacity, two worlds holding the same entries would hash differently, and a save would carry rows nothing wrote, so a world loaded into columns of another length would save to other bytes and AC-03 would fail on a correct world.
 
 **Cost.** Every growable table carries its count in state, and every walk of it stops at the count. A walk that reads to the array's length passes every test run on a world whose arrays happen to be exactly full, so that capacity reaches neither the hash nor the save needs a check of its own. A row released inside the count, by a retention policy or a compaction, is not settled here: DEC-085's compaction rule and SIM-STATE's open item 3 decide it.
+
+### DEC-101 — State is sparse per settlement: what is zero is not stored
+
+A settlement holds a cohort row only for a key present in it, and a row holds a per-good field only for the goods it has. A row that holds nothing is not stored, and an entry whose value and carry are zero is not stored; what is not stored reads as zero. Stored entries are kept in id order, in pools under DEC-085, and the hash and the save cover them alone.
+
+**Rationale.** The catalogue is meant to run to hundreds of goods and tens of mestieri, while a village has a few of each and a city many. Laid out over the catalogue, every settlement pays for every good and every row: measured on a stand-in of five of the twelve phases at 300 goods and 41 rows, a dense world took some 300 MB against NFR-07's 50, and some 200 ms a simulated day against P-01's 10; held sparsely, the same world took about 4 MB and 3 to 7 ms. Cost then follows what is local, not what the content declares. Defining absence as zero keeps one meaning for the state whichever way it is stored, and a canonical form, nothing zero stored, makes the hash a function of the values rather than of their history, as DEC-088 does for capacity.
+
+**Cost.** Every access to a per-good or per-row quantity is a search by id rather than an index. An entry appears when a good first arrives in a row and goes when it reaches zero, so pools grow and compact within the update, and compaction orders by id or it is a determinism hole. A row whose members are gone but which still holds goods, buildings or claims stays stored until it holds nothing. A width the catalogue sets is still fixed for a world; what a settlement stores of it is not.
 
 ---
 
@@ -183,7 +191,7 @@ An entity's state at tick T is computed directly, not by replaying T ticks. Attr
 
 ### DEC-015 — A good is a data record and a recipe is a data record
 
-Unit weight, reference value, perishability, whether durable, classes, at most one per class tree, with a value in each, processing grade. Recipes carry inputs, output, labour, building. No good and no recipe requires code.
+Unit weight, reference value, perishability, whether durable, classes, at most one per class tree, with a value in each, processing grade. Recipes carry inputs, output, labour, building; an input names a good with a market of its own, or a class whose goods all meet it. No good and no recipe requires code.
 
 **Rationale.** The plan is to start with the goods of P-09 and grow. That only works if growth costs data entry rather than branches.
 
@@ -223,7 +231,7 @@ capped by origin stock, with `k < 1`.
 
 ### DEC-019 — The trade graph has capped degree and is rewired, not grown
 
-Village degree ≤ 3, town and city degree ≤ 6. The generator builds the initial graph. Merchant activity promotes candidate routes into links and lets unprofitable links dissolve, with a creation threshold strictly above the dissolution threshold. A new link at a saturated node evicts the weakest one.
+Village degree ≤ 3, every other type degree ≤ 6 (P-06). The generator builds the initial graph. Merchant activity promotes candidate routes into links and lets unprofitable links dissolve, with a creation threshold strictly above the dissolution threshold. A new link at a saturated node evicts the weakest one.
 
 **Rationale.** Capped degree keeps edge count linear in settlements, so trade cost scales with the world instead of squaring with it, and the hierarchy produces basins as a derived structure. Rewiring under that cap lets commerce follow where value actually moves without letting the cost grow over a campaign. Hysteresis is what stops a link from erasing, through its own flow, the differential that justified it and oscillating.
 
@@ -249,7 +257,31 @@ Needs add: each is a quantity of its own, and a unit consumed meets one need. A 
 
 **Rationale.** Adding needs keeps the survival minimum apart from the ordinary meal. An ordinary year eats the minimum and the tier 1 share, so a shortfall first takes the share, which is deferrable, and only then the minimum: a famine tightens belts before it kills, and stays a season. One ration made better by grade would leave no such margin, and every unit short would be hunger. The plate then shows wealth: within one mestiere the poorer eat grain and the better-off bread, and in a famine bread leaves the poorer tables first. Reading the better grade through the wealth curve rather than the cohort's mean keeps a small price move from switching a whole cohort between goods. Ranking it after every need keeps the rationing rule of SIM-ECON: nobody eats better while another cannot eat and could pay.
 
-**Cost.** Every food is one more market to ration in the most expensive phase, so the number of foods is set after a measurement. The markets of a class acquire an order, derived from grade, price and good id, and demand falling between them may cross them more than once in an update. In ordinary years the plate is mixed, and the quantities of the needs table are tuned so that the total is plausible. A need's demand goes whole to its cheapest good, so two foods of one grade at nearly equal prices can take turns from one update to the next.
+**Cost.** Every food with a market of its own is one more market to ration in the most expensive phase, so the number of such foods is set after a measurement; a minor food clears as a variant of its class (DEC-102). The markets of a class acquire an order, derived from grade, price and good id, and demand falling between them may cross them more than once in an update. In ordinary years the plate is mixed, and the quantities of the needs table are tuned so that the total is plausible. A need's demand goes whole to its cheapest good, so two foods of one grade at nearly equal prices can take turns from one update to the next.
+
+### DEC-102 — A good clears on a market of its own, or as a variant of its class
+
+Each good declares one of the two. The variants of a class share one clearing, at one price per unit of value, and a variant's price is that price times its value per unit in the class. Demand on the class is served by the variants that meet the need; when the clearing is long, those variants sell the same share of their offers, the fraction carried at the clearing.
+
+**Rationale.** Rationing is the term of the update that grows with the square of the rows (SIM-ECON), and it runs once per clearing. Hundreds of goods each on a market of its own would make hundreds of rankings in every settlement. Important goods, grain, iron, wool, still form their own price; minor goods are alternatives within a class that differ in quality, and pricing them by their value in the class keeps the clearings in the tens while the goods run to hundreds. Equal shares in a long clearing mean that every seller of a class faces the same market, so no variant is starved of buyers by its id or its size.
+
+**Cost.** A variant has no price of its own: one short while its siblings abound is bought out with no price signal, and its producers read the class's price. Which goods can signal scarcity is the author's choice, good by good, and AC-09 and AC-10 read clearings, so a variant's own scarcity is never tested. Quality is expressed only through value per unit in the class, which for food is nutrition: two foods of one nutrition and different refinement cost the same per unit unless the author gives them their own markets. Each settlement that clears a class carries a remainder per variant. A recipe that needs one particular good, and no other of its class, needs that good to have a market of its own.
+
+### DEC-103 — Prices form at market places, and every other settlement trades there
+
+Settlements are five types that follow population with hysteresis. Each type trades the groups of goods from it downward, and a village none. A settlement's rows trade each group they have no market for at the market place with the cheapest route within reach, an assignment kept as state that moves only by a margin. When the market place clears, each place taking part first exchanges among its own rows, at the market's price and with no transit loss; what is left enters that market's ranking row by row, and bears the transit loss of its route. Labour, consumption, credit and hunger stay at home. A good in no group is cleared only where it is held. Where no market place is in reach, a settlement clears the group itself.
+
+**Rationale.** Medieval exchange gathered at markets, and higher-order goods were found only in larger places. Forming prices where markets are puts the most expensive phase where there are markets, about a hundred places in the generated world rather than two thousand, and gives a place's rise and fall a consequence its neighbours feel. Neighbours deal with each other before they carry goods to market, as a settlement clears locally before it exports: what a village can settle at home it settles there, paying the market's price but no road. Ranking what is left row by row keeps the rationing rule whole: the poor of a village compete with the poor of the market town for what neither place settles at home, and nobody buys cloth there while someone routed to it cannot buy bread and could pay. Clearing locally where no market is in reach keeps exchange alive in a cut-off place, so that isolation shows as hardship and not as an economy that stops.
+
+**Cost.** The ranking at a market place holds its catchment's rows, those with demand or supply left once each place has exchanged at home. On the stand-in of the cost measurement, five of the twelve phases, that put a simulated day at 6.62 ms: within P-01, and over it once P-17's allowance for the unmeasured phases is taken. A village's price is its market's, so a village's own scarcity shows in rationing and hunger rather than in price. Exchange within a place gives a place's buyers the first claim on its own supply, so a market town's buyers reach a village's surplus only after the village has served itself. A market place writes rows of settlements whose update is not its own, and the assignment, the types and their thresholds are state and parameters to tune. Routed trade needs no haulage within reach, so a market place's import ceiling includes its catchment. A good in no group can be used only where it is held, which ties every recipe that takes it to its site.
+
+### DEC-104 — A producer buys its inputs after the needs of tiers 0 and 1
+
+A cohort whose activity is a recipe demands at market what its activity consumes in one update at capacity, less what it holds: the capacity of its buildings, or of its own working members where the activity needs no building. Inputs are paid from the currency left once its needs of tiers 0 and 1 are met, and in rationing they rank after those needs and before every other demand. What a producer holds of its inputs up to that quantity is not offered for sale.
+
+**Rationale.** Without input demand no recipe whose input is made elsewhere would run, and a miller's grain would be sold as surplus. Capacity rather than this update's labour, because labour expires with the update and a row routed to a market place is cleared in another update than its own; buildings and members are state, so the quantity is the same whenever it is read, and a producer with nothing on hand still asks for its inputs. After the needs, because a recipe's output serves needs only later: in a shortage grain is eaten before it is milled, and fuel warms a house before it feeds a forge. Before tier 2 and before a better grade, because they are preference and the trade is a living.
+
+**Cost.** A producer that cannot staff its capacity buys more than it will use; what is left counts against its next demand, and spoils if perishable. A poor craftsman eats before he buys, so in lean years crafts stop before people go hungry, and a craft that stops earns nothing to restart with but credit against its buildings.
 
 ---
 
@@ -336,6 +368,14 @@ Fewer people means more land each, which raises output per worker, which raises 
 **Cost.** Land becomes a required per-settlement quantity, and the balance between it and the migration rate is delicate enough to need a parameter sweep.
 
 ---
+
+### DEC-105 — Cold kills through a need that follows the weather, not through the season
+
+A need of tier 1 may follow the warmth modifier, so that its quantity is set week by week by the climate curves, and may be lethal, so that what is left of it unmet in an update raises that update's deaths. Fuel for heating is such a need. Nothing is kept from one update to the next: exposure acts in the update it happens.
+
+**Rationale.** The season has no mechanical effect of its own (DEC-006b); climate acts through weekly curves interpolated on the index (DEC-037), so a need that follows a curve is heavy in a northern January, light in a southern one and nothing in summer, with no seam between the two. Lethal at tier 1 rather than a second tier 0: a household eats before it heats, the one tier 0 need stays the food the hunger deficit, the seed reserve and the conservation rule are written about, and the deferrable needs keep their order. No deficit as hunger has: hunger kills over weeks as the body's reserves run out, cold in days, and an update is a week.
+
+**Cost.** Within tier 1 the shortfall is rationed by ability to pay, so the better-off's share of bread above the minimum can outrank a poorer row's fuel. Cold deaths and the mortality modifier both rise in winter and must be tuned together, or winter is counted twice. A mild week left unheated kills little only because the curve makes the need small; the curves carry that weight.
 
 ## Integration and operations
 
@@ -439,11 +479,11 @@ The generator assigns each settlement a fixed-point `climateIndex` on 0–10000.
 
 ### DEC-037 — Climate acts through pairs of 52-entry weekly curves, interpolated
 
-Each modifier has an authored pair of curves, `cold` and `warm`, giving a weekly value each; a settlement interpolates between the pair on its `climateIndex` in integer arithmetic. The modifiers govern travel cost, mortality, livestock growth, timber yield, and construction labour.
+Each modifier has an authored pair of curves, `cold` and `warm`, giving a weekly value each; a settlement interpolates between the pair on its `climateIndex` in integer arithmetic. The modifiers govern travel cost, mortality, livestock growth, timber yield, construction labour, and warmth, the quantity of a need that follows it.
 
 **Rationale.** Weekly resolution turns climate into a ramp rather than four jumps a year, so prices drift instead of stepping. Two curves plus interpolation cover the whole map in a few kilobytes and stay fully authorable without code. A pair per modifier, rather than one pair for all, lets a winter stop building sites without also raising mortality.
 
-**Cost.** Tuning happens across 104 authored numbers per modifier, 520 for the five, rather than a handful of constants, which needs a curve editor or a spreadsheet import before Phase 6.
+**Cost.** Tuning happens across 104 authored numbers per modifier, 624 for the six, rather than a handful of constants, which needs a curve editor or a spreadsheet import before Phase 6.
 
 ### DEC-038 — Crops are dated events, not continuous production
 
@@ -615,7 +655,7 @@ A settlement's caravanner population supplies capacity to its outbound links. Wi
 
 **Rationale.** Deciding the wealth axis after measuring the clearing cost is only possible if adding it stays a data change. Shipping the general path from the start, with a degenerate value, means the code that would assume one row per mestiere never gets written, and the CI configuration catches whatever slips through anyway.
 
-**Cost.** Every cohort lookup is slightly more verbose than it needs to be for the shipping configuration, and CI runs the suite twice. Measurement puts the three-band configuration at roughly 4.8 times the cost of the shipping one rather than 3, because rationing sorts the cohorts of a settlement and that term grows with the square of their number. Whether the axis can be afforded in Phase 6 depends on that sort being cheap, not on the axis itself.
+**Cost.** Every cohort lookup is slightly more verbose than it needs to be for the shipping configuration, and is a search by key, since a settlement holds only the rows present (DEC-101); CI runs the suite twice. Measurement puts the three-band configuration at roughly 4.8 times the cost of the shipping one rather than 3, because rationing sorts the cohorts of a settlement and that term grows with the square of their number. Whether the axis can be afforded in Phase 6 depends on that sort being cheap, not on the axis itself.
 
 ### DEC-055 — Sampled transients are trajectories derived from flow
 
@@ -751,7 +791,7 @@ A city's sustainable size is bounded by what its links can bring in. Attractiven
 
 **Rationale.** Import cost acting through price cannot hold this loop, because price stops at its clamp and the signal dies exactly where the pressure is highest. The caps already in the trade formula, origin surplus and haulage capacity, are an absolute bound instead of a saturating signal, so they hold. Crowding mortality adds a second brake that does not run through price at all, and makes a city what a medieval city was: a place that grows only because people keep arriving.
 
-**Cost.** Maximum city size is largely set by the basin the generator placed around it, so something that looks emergent is partly authored. Rewiring moves the ceiling, which softens this without removing it.
+**Cost.** Maximum city size is largely set by the basin the generator placed around it, so something that looks emergent is partly authored. Rewiring moves the ceiling, which softens this without removing it. A market place also takes the surplus of the rows routed to it without haulage, so its ceiling is its links plus its catchment within reach (DEC-103), higher than its links alone and bounded all the same.
 
 ### DEC-072 — Buildings are an explicit stock, gated by site attributes
 

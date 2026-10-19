@@ -2,7 +2,7 @@
 
 **Document:** SIM-REQ
 **Status:** Draft 1
-**Revision:** 2026-10-07
+**Revision:** 2026-10-19
 **Scope:** Headless simulation core, runnable outside the game
 
 ---
@@ -21,7 +21,9 @@ The simulator advances a fantasy-medieval world from a generated initial state. 
 |---|---|
 | **Tick** | One logical day of world time. The smallest unit the simulator advances. |
 | **Cadence** | How often a given simulation level updates, expressed in ticks. |
-| **Settlement** | A village, town, or city. The unit at which markets, production, and population live. |
+| **Settlement** | A village, borgo, cittadina, city or metropolis (FR-M-16). The unit at which production and population live. |
+| **Group** | A set of goods traded together, static content, with the lowest settlement type that trades it (FR-M-16). |
+| **Market place** | A settlement whose type trades a group, a borgo or larger: prices for that group form there, and rationing runs there for its own rows and the rows routed to it (FR-M-18, FR-M-19). |
 | **Cohort** | A population group inside a settlement, described by statistics rather than individuals. |
 | **Climate index** | A continuous fixed-point value per settlement driving weekly climate modifiers and crop dates. |
 | **Crop calendar** | Per-crop sowing and harvest dates, shifted per settlement by its climate index. |
@@ -50,7 +52,7 @@ The simulator advances a fantasy-medieval world from a generated initial state. 
 
 **FR-W-07** — The simulator references no game engine, rendering, input, or asset API, and knows nothing about the host that drives it.
 
-**FR-W-08** — A cohort is keyed by a tuple. The shipping configuration uses `(mestiere, wealthBand)` with a single wealth band value. No code may assume one cohort per mestiere, and none may index cohorts by mestiere alone.
+**FR-W-08** — A cohort is keyed by a tuple. The shipping configuration uses `(mestiere, wealthBand)` with a single wealth band value. No code may assume one cohort per mestiere, and none may index cohorts by mestiere alone. A settlement holds rows only for the keys present in it (DEC-101).
 
 **FR-W-09** — CI runs the full suite against a configuration with three wealth bands. It is not shipped; it exists to break any code that assumed a single row per mestiere.
 
@@ -106,7 +108,7 @@ dayOfMonth = dayOfYear % 28
 
 **FR-D-02** — Birth rate responds to food availability per capita and crowding.
 
-**FR-D-03** — Death rate is per age band and responds to hunger, disease, and violence.
+**FR-D-03** — Death rate is per age band and responds to hunger, cold, disease, and violence. Cold is a lethal need left unmet (FR-P-03b).
 
 **FR-D-03a** — Unmet tier 0 need accumulates as a hunger deficit per member of each cohort, in units of nutrition, and decays by P-70 per update when the need is met. It is updated once per update, after market clearing, from the tier 0 need still unmet once own consumption and the market have run (SIM-ECON phase 7). When members move from one row to another, the receiving row's deficit becomes the average of its own and that of the row they leave, weighted by count; the row they leave keeps its own. The death rate's response to hunger in FR-D-03 reads this deficit.
 
@@ -132,7 +134,7 @@ dayOfMonth = dayOfYear % 28
 
 **FR-D-13** — Crowding raises baseline mortality (P-50), independently of contagion. A dense settlement is a demographic sink that grows only by immigration.
 
-**FR-D-14** — A settlement's sustainable population is bounded by what it can import: the sum over its links of origin surplus and haulage capacity. The bound is not a rule of its own; it falls out of the caps already in FR-M-03, and rewiring under FR-M-09 can move it.
+**FR-D-14** — A settlement's sustainable population is bounded by what it can import: the sum over its links of origin surplus and haulage capacity, and at a market place the surplus of the rows routed to it, which reach bounds (FR-M-18). The bound is not a rule of its own; it falls out of the caps already in FR-M-03 and of P-79, and rewiring under FR-M-09 can move it.
 
 ---
 
@@ -140,7 +142,7 @@ dayOfMonth = dayOfYear % 28
 
 **FR-P-01** — A good is a data record: unit weight, value reference, perishability, whether it is durable (FR-P-03), the classes it belongs to, at most one in each class tree, with a value per unit in each, and its processing grade (FR-P-03a). Adding a good requires no code change.
 
-**FR-P-02** — A recipe is a data record: inputs, output, labour required, building required. Adding a recipe requires no code change.
+**FR-P-02** — A recipe is a data record: inputs, output, labour required, building required. Each input names either a good with a market of its own (FR-P-03d) or a class (FR-P-03a), with a quantity in the class's units that any good of the class or its subclasses meets in proportion to its value; an input on a class takes the goods held lowest grade first, ties by good id. Validation at load refuses an input that names a variant. Adding a recipe requires no code change.
 
 **FR-P-03** — Roles describe how a good behaves in production and over time:
 
@@ -154,11 +156,13 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-03a** — A goods class is a data record with a name and an optional parent class. A good belongs to one or more classes, at most one in each class tree, and carries a value per unit in each, nutrition for food, and one processing grade. Belonging to a subclass is belonging to every class above it, for the needs that read them (FR-P-03b). Classes and memberships are added or changed without code change. A subclass measures in its parent's units: a good's value is in the units of its tree's root, and validation at load refuses a good that names two classes of one tree.
 
-**FR-P-03b** — A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day. Any good of the class or of its subclasses, at or above the minimum grade, meets it in proportion to its value. Tier 0 holds exactly one need, on the food class, and validation at load refuses a needs table that holds another. Needs add: each is a quantity of its own, and a unit consumed meets one need only.
+**FR-P-03b** — A need names a class, a minimum grade, a tier and a quantity in the class's units per person per day. Any good of the class or of its subclasses, at or above the minimum grade, meets it in proportion to its value. Tier 0 holds exactly one need, on the food class, and validation at load refuses a needs table that holds another. Needs add: each is a quantity of its own, and a unit consumed meets one need only. A need of tier 1 may declare two things more. Its quantity may follow the warmth modifier of FR-P-08, the record's quantity times the modifier for the week, which may be zero. And it may be lethal: what is left of it unmet per member once own consumption and the market have run in an update, read as FR-D-03a reads the tier 0 need, raises the death rate in phase 11 of the same update by P-81 per unit (FR-D-03); it is not kept beyond the update. The tier 0 need declares neither, its shortfall acting through the hunger deficit.
 
-**FR-P-03c** — Processing creates no food. Every good carries an embodied food value: a good of the food class, the class the tier 0 need names, carries its value there; another good that recipes produce carries the least food value that any recipe producing it consumes per unit, each input counted at its own embodied food value; any other good carries zero. No recipe yields more food value than its inputs embody, and validation at load refuses a recipe table that breaks this or that passes food value around a cycle.
+**FR-P-03c** — Processing creates no food. Every good carries an embodied food value: a good of the food class, the class the tier 0 need names, carries its value there; another good that recipes produce carries the least food value that any recipe producing it consumes per unit, each input counted at its own embodied food value, an input on a class at the least embodied food value per unit of the class's value among the goods that can meet it; any other good carries zero. No recipe yields more food value than its inputs embody, and validation at load refuses a recipe table that breaks this or that passes food value around a cycle.
 
-**FR-P-04** — Baseline goods set *(approved by the user; classes, values and grades under FR-P-03a)*: Grain, Flour, Bread, Ore, Timber, Tools, Wool, Cloth. Three chains: Grain→Flour→Bread, Ore+Timber→Tools, Wool→Cloth.
+**FR-P-03d** — A good declares either a market of its own or that it is a variant of a class it belongs to. A class that variants name holds a market, and carries the reference price per unit of value and the desired stock that FR-M-01 reads; validation at load refuses a variant whose class holds none, or that names a class it does not belong to. The variants of a class clear together, on one price per unit of value, formed from their stock summed in the class's units; a variant's price per unit is that price times its value per unit in the class, so that variants differ in price by quality, not by market. Demand that a need places on the class is served only by the variants that meet the need (FR-P-03b). Where the clearing's supply exceeds what is bought, the variants able to serve the same demand sell the same share of what they offer, with no size threshold: the fraction of a unit a variant's share leaves is carried at the clearing, and what is bought equals what is sold in every update. Which buyer receives which variant is derived from the rationing order and good id within the update, and leaves no carry.
+
+**FR-P-04** — Baseline goods set *(approved by the user; classes, values and grades under FR-P-03a)*: Grain, Flour, Water, Bread, Timber, Charcoal, Ore, Bar iron, Tools, Wool, Cloth. Three chains: Grain→Flour, then Flour+Water+fuel→Bread; Timber→Charcoal, Ore+Charcoal→Bar iron→Tools; Wool→Cloth.
 
 **FR-P-05** — Weight-to-value ratio governs how far a good travels. Heavy cheap goods stay in their basin; light valuable goods cross kingdoms. This falls out of transport cost and needs no per-good code.
 
@@ -166,11 +170,11 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-07** — Each settlement carries a `climateIndex`, a fixed-point value on 0–10000 assigned by the generator. The simulator consumes it without knowing what produced it.
 
-**FR-P-08** — Each climate modifier has its own pair of authored 52-entry weekly curves, `cold` and `warm`. A settlement's modifier for week *w* interpolates between the pair on its `climateIndex`, in integer arithmetic. Climate modifiers govern travel cost, mortality, livestock growth, timber yield, and available construction labour.
+**FR-P-08** — Each climate modifier has its own pair of authored 52-entry weekly curves, `cold` and `warm`. A settlement's modifier for week *w* interpolates between the pair on its `climateIndex`, in integer arithmetic. Climate modifiers govern travel cost, mortality, livestock growth, timber yield, available construction labour, and warmth, the quantity of a need that follows it (FR-P-03b).
 
 **FR-P-09** — Named climate bands (3–4) group `climateIndex` ranges for presentation only. No simulation rule reads a band.
 
-**FR-P-10** — Crops are not produced continuously. A crop is a data record carrying sowing date, maturation length, harvest date, harvest window length in updates, its planting good and the amount needed per unit of land, yield per unit of land, and labour per unit of land for sowing, for harvest, and for growth at normal care and at full care.
+**FR-P-10** — Crops are not produced continuously. A crop is a data record carrying sowing date, maturation length, harvest date, harvest window length in updates, its planting good and the amount needed per unit of land, yield per unit of land, and labour per unit of land for sowing, for harvest, and for growth at normal care and at full care, and its relation to durables under FR-P-20. A durable a crop is improved by lowers its labour per unit of land and never raises its yield per unit of land.
 
 **FR-P-10a** — Sowing consumes the planting good from the sowing cohort's holdings. Land sown is the least of the land allocated, the land the planting good held can sow, and the land the cohort's own and hired sowing labour can sow. Land without seed or hands lies fallow.
 
@@ -202,7 +206,7 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-P-19** — A building type may require a site attribute placed by the generator: an ore deposit, flowing water, standing forest. Where the attribute is absent the building cannot exist. Comparative advantage between settlements comes from here, and without it settlements converge on identical economies and trade disappears.
 
-**FR-P-20** — A recipe declares its relation to durables: required, improved by, or independent of. The field lives on the recipe record.
+**FR-P-20** — A recipe declares its relation to durables: required, improved by, or independent of. The field lives on the recipe record, and on the crop record (FR-P-10), where it is improved by or independent of.
 
 **FR-P-21** — Every recipe that requires a durable has a crude variant requiring none, at a much worse input-to-output ratio (P-52). Iron can be worked with a stone, badly. This breaks the bootstrap circle with data rather than with a special case in code.
 
@@ -266,12 +270,12 @@ A good's record says whether it is durable. A good that is not takes the consuma
 
 **FR-C-03** — Consumption order is fixed: a cohort meets its needs from its own holdings first, lowest grade first, then buys the remainder at market.
 
-**FR-C-04** — Each settlement update runs a clearing pass per good, the goods that meet one need taken in the order of DEC-099:
+**FR-C-04** — Each settlement update runs a clearing pass per clearing, a good with a market of its own or a class whose variants share one (FR-P-03d), the clearings that meet one need taken in the order of DEC-099:
 
 1. Cohorts consume from their own holdings, the seed reserve excepted under FR-P-10d.
-2. Unmet need becomes demand for the goods that meet it, chosen under DEC-099, capped by the cohort's currency, which includes what it borrowed this update.
-3. Holdings above the cohort's own needs and its seed reserve become supply.
-4. If supply is short, it is allocated in descending order of ability to pay, the currency per member, demand that meets a need before demand that only raises its grade; the share of a cohort able to pay is read from its wealth curve under FR-J-22. Demand rationed out of one good falls to the other goods that meet the same need, within the update.
+2. Unmet need becomes demand for the goods that meet it, chosen under DEC-099, capped by the cohort's currency, which includes what it borrowed this update. A cohort whose activity is a recipe also demands its inputs: for each, what the activity consumes in one update at its capacity, the capacity of the buildings the cohort owns or, for an activity that needs none, the labour of the cohort's working members, less what it holds of the input. An input on a class is placed as a need is. Inputs are paid from the currency left once the cohort's needs of tiers 0 and 1 are met (DEC-104).
+3. Holdings above the cohort's own needs, its seed reserve and its inputs for one update at capacity become supply.
+4. If supply is short, it is allocated in descending order of ability to pay, the currency per member, demand that meets a need of tier 0 or 1 first, then demand for inputs, then the rest, demand that meets a need before demand that only raises its grade; the share of a cohort able to pay is read from its wealth curve under FR-J-22. Demand rationed out of one clearing falls to the other clearings that meet the same need, within the update.
 5. Currency moves from buyers to sellers within the settlement.
 6. Price is recomputed from the resulting settlement stock for the next update.
 
@@ -351,7 +355,7 @@ price = reference_price × f(desired_stock / actual_stock)
 flow = k × max(0, price_dest − price_orig − transport_cost)
 ```
 
-capped by available stock at origin and by haulage capacity on the link, with `k < 1`.
+capped by available stock at origin and by haulage capacity on the link, with `k < 1`. A good in no group (FR-M-16) does not flow.
 
 **FR-M-03a** — With no caravanners at the origin, outbound flow is zero. Trade is a service someone performs, not a property of the price difference.
 
@@ -359,9 +363,9 @@ capped by available stock at origin and by haulage capacity on the link, with `k
 
 | Settlement type | Links |
 |---|---|
-| Village | 1 hub (nearest town or city by transport cost) + 0–2 neighbouring villages. Degree ≤ 3. |
-| Town | 2–4 towns + 1–2 cities. Degree ≤ 6. |
-| City | 3–6 cities, including cross-kingdom. Degree ≤ 6. |
+| Village | 1 hub (nearest borgo or larger by transport cost) + 0–2 neighbouring villages. Degree ≤ 3. |
+| Borgo, cittadina | 2–4 borghi or cittadine + 1–2 cities or metropolises. Degree ≤ 6. |
+| City, metropolis | 3–6 cities or metropolises, including cross-kingdom. Degree ≤ 6. |
 
 **FR-M-05** — Goods leaving a settlement arrive somewhere or are explicitly lost to spoilage or banditry. Nothing evaporates.
 
@@ -384,6 +388,16 @@ capped by available stock at origin and by haulage capacity on the link, with `k
 **FR-M-15** — A ruin raises danger on the links near it. Abandonment, banditry, and isolation reinforce one another; resettlement under FR-D-07 is the brake.
 
 **FR-M-07** — Prices, stocks, and currency are integers in smallest units. Rounding behaviour is defined at every division.
+
+**FR-M-16** — A settlement is a village, a borgo, a cittadina, a city or a metropolis. Each good with a market of its own, and each class that holds a market (FR-P-03d), belongs to at most one group, static content, and a variant trades in its class's group; each group names the lowest type that trades it. A settlement trades every group of its type and of the types below it, and a village trades none. Within a settlement a good has one price. How many markets a place shows is derived from its type and population for presentation, and moves no price and no quantity.
+
+**FR-M-17** — Type follows population. A settlement's type is the highest whose threshold (P-77) its population reaches; it falls only when its population drops below P-78 of its current type's threshold, and then to the highest type whose threshold the population reaches. Type is reassessed every 28 ticks (P-07), in phase 12 of the settlement's own update. A settlement that falls a type evicts its weakest links by volume down to the new cap (FR-M-10) and stops clearing the groups it no longer trades.
+
+**FR-M-18** — For each group its type does not trade, a settlement's rows trade at a market place for the group: the one whose route, the cheapest path over trade links summed by transport cost, costs least, within reach (P-79), ties by id. The search is bounded by reach and never walks every settlement (AC-07). The assignment, the market place and the route to it, is state and is reassessed with the type (FR-M-17); it moves only when the current market place no longer trades the group or lies beyond reach, or when another's route costs less than the current one's by more than P-80 of it. A settlement with no market place for a group within reach clears that group itself, among its own rows, as a market place does, and so does one whose market place no longer trades the group or whose route has lost a link, until its next reassessment. A good in no group is cleared only where it is held, among that settlement's rows, and never leaves it by trade.
+
+**FR-M-19** — A market place clears each clearing of a group it trades in two passes. First, exchange within a place: the market place and each settlement routed to it for the group clear the clearing among their own rows, each settlement apart, under FR-C-04 at the market place's price, with no transit loss, currency moving buyer to seller. Then what those passes leave unmet and unsold, over the market place's own rows and every row routed to it, meets in one ranking, each routed row one entry ranked by its own ability to pay (FR-C-04). A routed row's demand and supply are computed when the market place clears, from its holdings and currency as they stand, and what it buys or sells is settled then. The goods it trades in the ranking travel its route: transit loss of P-21 per link of the route is taken from the routed row's own holdings, through its carry, so that the market trades whole quantities, and is recorded under A-04; the route's links count the shipment in their volume. Labour, own consumption, credit, destitution, spoilage, the seed reserve and the hunger deficit stay with the row's own settlement, in its own update.
+
+**FR-M-20** — A settlement's price for a good it trades at a market place is that place's price. Attractiveness (FR-D-04), price knowledge (FR-I-05) and expected return (FR-P-15) read it so.
 
 ---
 
@@ -510,7 +524,7 @@ Distance enters through travel time and therefore through staleness, never throu
 
 ## 14. World generation
 
-**FR-G-01** — The generator produces the initial state at tick 0: terrain, settlements, trade graph, kingdoms, initial populations and stocks. Initial populations include each settlement's destitute row, read from the wealth curves, and in a configuration with several wealth bands the generator divides each mestiere's population among them by its wealth tendency.
+**FR-G-01** — The generator produces the initial state at tick 0: terrain, settlements, trade graph, kingdoms, initial populations and stocks. Each settlement takes the type its initial population reaches (FR-M-17), in the mix of P-12; borghi are placed where villages are dense, so that every village starts within reach of a borgo or larger; and each settlement's market assignments are computed under FR-M-18. Initial populations include each settlement's destitute row, read from the wealth curves, and in a configuration with several wealth bands the generator divides each mestiere's population among them by its wealth tendency.
 
 **FR-G-01a** — The generator assigns each settlement a `climateIndex` varying continuously across the map, plus the land area available to it.
 
@@ -561,7 +575,7 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-03 | Inhabited fraction of map | 15% | Decided |
 | P-04 | Map extent | 1,000 km per side | Decided |
 | P-05 | Hot agent cap | ~300 | Decided |
-| P-06 | Trade degree caps | 3 / 6 / 6 | Decided |
+| P-06 | Trade degree caps, village / borgo / cittadina / city / metropolis | 3 / 6 / 6 / 6 / 6 | Decided |
 | P-07 | Cadences | 1 / 7 / 28 / 364 | Decided |
 | P-08 | Calendar | 364 days, 13 × 28, week of 7 | Decided |
 | P-13 | Season length | 91 ticks, presentation only | Decided |
@@ -629,10 +643,15 @@ Most values marked `TBD by sweep` close in Phase 6, but Phases 4 and 5 run befor
 | P-74 | Most goods a rules file may declare, FR-A-05 | TBD | Open; set after the Phase 4 measurement of P-17, so that no rules file takes the core past P-01 |
 | P-75 | Most mestieri a rules file may declare, FR-A-05 | TBD | Open; as P-74 |
 | P-76 | Most recipes a rules file may declare, FR-A-05 | TBD | Open; as P-74 |
-| P-09 | Goods count | 8 | Decided |
+| P-77 | Population at which a settlement reaches each type, FR-M-17: borgo / cittadina / city / metropolis | 250 / 1,000 / 5,000 / 25,000 | Provisional, the user's order of magnitude; replaced in Phase 6 |
+| P-78 | Share of its type's threshold below which a settlement falls a type, FR-M-17 | 80% | Provisional; replaced in Phase 6 |
+| P-79 | Reach: the highest route cost at which a settlement trades at a market place, FR-M-18 | TBD | Open; Provisional from the point that builds routing, replaced in Phase 6 |
+| P-80 | Share of the current route cost by which another market place must undercut it to take a group, FR-M-18 | TBD | Open; Provisional from the point that builds routing, replaced in Phase 6 |
+| P-81 | Rise in the death rate per unit of a lethal need left unmet per member in an update, FR-P-03b | TBD by sweep | Open; Provisional from the point that builds it, replaced in Phase 6 |
+| P-09 | Goods in the base rules' catalogue; a settlement holds only those present (DEC-101) | 11 | Decided |
 | P-10 | Price bounds | 0.25× to 4× reference | Decided |
 | P-11 | Trade damping `k` | TBD by sweep | Open |
-| P-12 | Settlement mix | 8 cities / 75 towns / 1,917 villages at 2,000 total | Decided |
+| P-12 | Settlement mix at tick 0 | 2 metropolises / 8 cities / 30 cittadine / 60 borghi / 1,900 villages at 2,000 total; types then follow population (FR-M-17) | Decided |
 
 ---
 
@@ -671,9 +690,9 @@ Each carries a hard bound that fails the test and a soft band that raises a warn
 
 **AC-08 — Long-run degradation.** ms/tick and save size measured at 1, 10, and 40 simulated years follow a non-superlinear curve.
 
-**AC-09 — Shock response.** Removing 30% of a region's stock of a good moves its local price within X ticks and returns it to band within Y ticks. X and Y are measured in Phase 6 against this intent:
+**AC-09 — Shock response.** Removing 30% of a region's stock of a clearing's goods (FR-P-03d) moves its local price within X ticks and returns it to band within Y ticks. X and Y are measured in Phase 6 against this intent:
 
-| Good | X, first price move | Y, return to band |
+| Clearing | X, first price move | Y, return to band |
 |---|---|---|
 | Consumable, tier 0 | short, within two settlement updates | long, up to the next harvest |
 | Consumable, tier 1 | medium | within the season |
@@ -681,9 +700,9 @@ Each carries a hard bound that fails the test and a soft band that raises a warn
 | Input | medium | within the season |
 | Durable | long | long |
 
-A consumable takes the row of the most urgent need it can meet.
+A clearing takes the row of the most urgent need one of its goods can meet; one whose goods meet no need takes the row of their role.
 
-**AC-10 — No inert goods.** Over a long run, every good reaches scarcity somewhere at least once.
+**AC-10 — No inert goods.** Over a long run, every clearing reaches scarcity somewhere at least once: each good with a market of its own, and each class whose variants share one (FR-P-03d).
 
 **AC-11 — Causal chains.** Every high-importance chronicle entry traces back to an exogenous root or a player action.
 
@@ -805,7 +824,7 @@ Each phase has an exit gate. No phase starts before the previous gate is green.
 |---|---|---|
 | Production | 5, 9, 12 for realignment; sowing, harvest, allocation adjustment, construction | FR-P, save FR-P-03b; FR-J-01 to FR-J-03, FR-J-21, FR-J-22; FR-C-01, FR-C-02, FR-C-06. Before it, the rules file and the generator: FR-A-05; FR-G-01, FR-G-01a, FR-G-02, with the buried stock of FR-J-14 and FR-J-15 |
 | Needs | 6; the end of 7 for the hunger deficit | FR-C-03, FR-P-03b, FR-D-03a; SIM-ECON §Demand, tiers and the hunger deficit |
-| Market | 1 for goods, 2 for prices, 7, 10 | FR-M-01 to FR-M-07; FR-C-04, FR-C-10, FR-C-11; FR-C-12 to FR-C-18, FR-C-21; FR-J-04, FR-J-05; FR-I-05 to FR-I-06a |
+| Market | 1 for goods, 2 for prices, 7, 10, 12 for type and assignment | FR-M-01 to FR-M-07, FR-M-16 to FR-M-20; FR-C-04, FR-C-10, FR-C-11; FR-C-12 to FR-C-18, FR-C-21; FR-J-04, FR-J-05; FR-I-05 to FR-I-06a |
 | Labour and income | 2 for the wage, 3, 4, 8, 8a; taxation | FR-C-05, FR-J-19, FR-J-20, FR-C-07 to FR-C-09, FR-C-19, FR-C-20, FR-C-22 to FR-C-30; FR-X-01, FR-X-06, FR-X-07 for the convoy |
 | Demography | 11 for births and deaths | FR-D-01 to FR-D-03, FR-D-13 |
 | Mobility | 1 for migrants, 11 for migration | FR-D-04, FR-D-04a, FR-D-05, FR-D-07 to FR-D-12, FR-D-14; FR-M-08 to FR-M-15; FR-J-06 to FR-J-10; FR-X-02, FR-X-03 |
@@ -822,10 +841,10 @@ All remaining items depend on measurement and close in the phase named.
 | Item | Closes in | Procedure |
 |---|---|---|
 | P-11, trade damping `k` | Phase 6 | Sweep `k` against transport cost; accept on AC-09 and AC-04 |
-| P-17, settlement ceiling | Phase 4 | Measure the full settlement update, all its phases, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach. P-63 and P-64 were measured on 9 and 27 rows and seven goods; the measurement counts the destitute and day-labourer rows, 12 per settlement in the shipping configuration and 36 in CI, eight goods, and the food markets the content fixes |
+| P-17, settlement ceiling | Phase 4 | Measure the full settlement update, all its phases, divide the budget by it. Phase 3 has no settlement to update, and the partial figures in P-63 and P-64 already cover the five phases a stand-in can reach. P-63 and P-64 were measured on 9 and 27 rows and seven goods, dense; the measurement runs on sparse state (DEC-101), counts the destitute and day-labourer rows and three wealth bands in CI, and the clearings the content fixes; it runs at market places on the P-12 mix, every routed row ranked (FR-M-19), on the base rules and on a rules file at the local sizes the architecture is meant to carry, goods and rows per settlement: village 15 and 6, borgo 30 and 10, cittadina 60 and 18, city 150 and 30, metropolis 300 and 41 |
 | P-18, prior history length | Phase 6 | Measure cost per simulated year, set against the acceptable wait |
 | AC-04 bounds | Phase 6 | Long runs across seeds, bounds set from observed envelopes, replacing the provisional bounds of Phase 4 |
-| AC-09 X and Y per good | Phase 6 | Shock injection per good, values recorded against the intent table |
+| AC-09 X and Y per clearing | Phase 6 | Shock injection per clearing, values recorded against the intent table |
 | P-01 validity | Phase 4 | Confirm the per-entity cost against a real settlement update. The measured subset is in P-63 and P-64; what is unconfirmed is the factor of two carried for the phases left unmeasured, eight since phase 8a |
 
 ---

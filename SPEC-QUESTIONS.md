@@ -657,6 +657,7 @@ the save format and the hash. Dense per-good arrays written there would need a
 format migration to become sparse (NFR-08).
 **Status:** open — the direction is the user's; the requirements are the
 decider's; AC-09 and AC-10 are reserve 2 of `R-001`.
+**Status:** **closed 2026-10-17 by R-107.**
 
 **What the user wants.** A catalogue of hundreds of goods and tens of mestieri.
 `R-063` approved 8 goods for phase 4 as starting content; the question is what
@@ -708,6 +709,69 @@ variant's class has a market. The eight goods of `R-063` all have a market of
 their own. The order of magnitude of clearings per place is answered through
 `SQ-024`'s market places.
 
+**The measurement owed, 2026-10-16** — point 5 of the cost measurement plan on
+`misura-costi`, under `R-104`; the register entry of that point records how it
+was taken. Copied from one run of `dotnet run -c Release --project bench --
+point5`, which measured every cell in the same run by the plan's method and
+recomputed the days from the cells itself. Machine: Microsoft Windows
+10.0.26300, X64, 16 logical cores, pinned to one; runtime .NET 8.0.32; clock
+Stopwatch 10,000,000 Hz, resolution 100 ns. The stand-in is not the simulator
+(`SQ-004`): five passes, calibrated to P-63.
+
+Per type, p99 µs per update (median of 3 runs). At market places, borgo to
+metropolis is a market place of that type with its 19 villages routed; village is
+one village that does no clearing. Day = sum over types of count × cost ÷ 7,
+count = 1,900 / 60 / 30 / 8 / 2.
+
+| layout | village (us) | borgo (us) | cittadina (us) | city (us) | metropolis (us) | day, recomputed (ms) |
+|---|---|---|---|---|---|---|
+| sparse, clearing everywhere | 5.400 | 19.900 | 80.400 | 347.700 | 1024.700 | 2.671000 |
+| dense, clearing everywhere | 709.600 | 741.700 | 859.100 | 964.400 | 1053.200 | 204.048086 |
+| sparse, market places, every routed row ranked | 1.174 | 262.300 | 343.300 | 642.000 | 1343.100 | 5.155686 |
+| sparse, market places, one entry per village | 1.179 | 81.400 | 146.900 | 431.200 | 1129.800 | 2.462900 |
+| dense, market places, every routed row ranked | 134.526 | 191595.400 | 191597.900 | 192353.800 | 192105.900 | 2774.614657 |
+| dense, market places, one entry per village | 115.605 | 2897.600 | 3005.600 | 2977.700 | 3032.400 | 73.365700 |
+
+"Day read on" is the higher of the recomputed day and the day timed directly in
+the same run (p99 of days); 5 ms is P-01 with P-17's allowance for the phases the
+stand-in does not run. World state is the P-12 mix, bytes counted by `R-102`'s
+rule (1 MB = 10^6 bytes); the market-places rows count 4 bytes of assignment per
+routed village.
+
+| layout | day, recomputed (ms) | day, timed directly, p99 (ms) | day read on (ms) | vs P-01 10 ms | vs 5 ms | world state (MB) | vs NFR-07 50 MB |
+|---|---|---|---|---|---|---|---|
+| sparse, clearing everywhere | 2.671000 | 4.26 | 4.26 | within | within | 3.945 | within |
+| dense, clearing everywhere | 204.048086 | not timed | 204.05 | over | over | 300.656 | over |
+| sparse, market places, every routed row ranked | 5.155686 | 6.62 | 6.62 | within | over | 3.953 | within |
+| sparse, market places, one entry per village | 2.462900 | 3.70 | 3.70 | within | within | 3.953 | within |
+| dense, market places, every routed row ranked | 2774.614657 | not timed | 2774.61 | over | over | 300.664 | over |
+| dense, market places, one entry per village | 73.365700 | not timed | 73.37 | over | over | 300.664 | over |
+
+The measurement inputs it rests on (`R-104` item 7):
+
+- sizes per type (goods, rows): village 15, 6; borgo 30, 10; cittadina 60, 18;
+  city 150, 30; metropolis 300, 41; dense = the catalogue's 300 goods and 41
+  rows, absent ones masked;
+- 19 villages per market place by a fixed assignment (the village's ordinal
+  modulo 100), the same for every market type; 100 market places of 2,000;
+- both readings of routed demand, `SQ-024` item 4 being open: every routed row
+  one entry of the ranking, or one entry per routed village;
+- goods variants: one class good can carry K variants; every cell of this table
+  is K = 1. At one borgo market with its 19 villages, point 4's run (`D-124`), not
+  this one, measured K = 16 at 1.07 times K = 1;
+- the stand-in is five passes, calibrated to P-63 (5 of 12 phases).
+
+The dense rows at market places rank every slot of the 41 × 300 dense arrays,
+masked ones included, with the stand-in's selection sort: 820 entries per good
+at a market whatever its type, hence a cost about equal across types. A dense
+layout that skipped goods no entry holds would cost less; it was not measured.
+
+**The user's answers after the measurement, 2026-10-17.**
+
+- **The direction: state sparse per settlement.** "Confermo lo sparso".
+- **AC-09 and AC-10 are read per clearing**, a principal good or a class, not
+  per good: reserve 2 of `R-001`, the user's. "AC-09 e AC-10 per clearing".
+
 ### SQ-024 — markets held by market places: five settlement types, and villages that trade at the nearest market
 
 **Raised:** 2026-10-05, by the user, following `SQ-023`.
@@ -719,6 +783,14 @@ their own. The order of magnitude of clearings per place is answered through
 where rationing runs is the shape of the market subsystem and of its state.
 **Status:** open — the direction and the content are the user's; the rules are
 the decider's.
+**Status:** **closed 2026-10-17 by R-108**, save the forge split, a revision of `R-063`'s content.
+**Status:** the forge split's structure **closed 2026-10-17 by R-109**; its details escalated to the user there.
+**Status:** the forge's details, the review of the chains and water **closed 2026-10-19 by R-110** as content, save what it escalates.
+**Status:** fuel as a recipe input **closed 2026-10-19 by R-111**.
+**Status:** inputs as demand, a gap found ruling exchange within a place, **specified 2026-10-19 by R-112**.
+**Status:** exchange within a place **closed 2026-10-19 by R-113**.
+**Status:** the fuel need **closed 2026-10-19 by R-114**. `SQ-024` is closed save the content `R-110` escalated to the user.
+**Status:** that content approved by the user and **closed 2026-10-19 by R-115**; `SQ-024` is closed.
 
 **What the user proposes.** Prices form at market places, not in every
 settlement. Settlement types become five, each with a number of markets:
@@ -799,3 +871,126 @@ within P-01. Not measured.
   population, so P-12 describes the generated world only.
 - **The generator places borghi where villages are dense**, so that no village
   starts too far from its food market.
+
+**The user's answer after the measurement, 2026-10-17.** The direction: **yes
+to market places**, the measured cost no longer being the reason for them
+(`SQ-023`'s table: sparse 4.26 ms a day clearing everywhere, 3.70 or 6.62 at
+market places). "Si ai market places". Point 1, the groups of goods per market,
+is to be defined with the user now; point 4 is under discussion.
+
+**The user's preference on point 4, 2026-10-17**, given to the decider, whose
+rule it is: **every routed row enters the market's ranking** (reading A of
+`R-103`), "il povero compete col povero". The cost measured for it, 6.62 ms a
+day, is an upper bound on the stand-in's selection sort, not the cost of the
+reading.
+
+**The user's answers on point 1, the groups of goods, 2026-10-17.** Reached
+from the needs of a realistic village around 1300 and upward by type; static
+content under `R-050`, the user's, every value Provisional.
+
+- **A market trades several groups, more as the settlement grows.** "Un mercato
+  per più gruppi, crescendo con la dimensione dell'insediamento."
+- **The number of markets is informational only.** Within a settlement a good
+  has one price, so what a place trades is the set of its groups; how they are
+  spread over its markets moves no price and no quantity. "Solo informativo."
+- **Nine groups, each traded from the type named:** "ok i gruppi".
+
+  | Group | Contents | Phase 4 goods | From |
+  |---|---|---|---|
+  | G1 Provisions | grain, flour, bread, ale, salt, meat | grain, flour, bread | borgo |
+  | G2 Countryside | wool, hides, timber, flax | wool, timber | borgo |
+  | G3 Common manufactures | coarse cloth, shoes, pottery, candles | cloth | borgo |
+  | G4 Iron and tools | bar iron, tools, nails | iron, tools | borgo |
+  | G5 Small livestock | pigs, sheep, poultry | — | borgo |
+  | G6 Large livestock | oxen, horses | — | cittadina |
+  | G7 Fine manufactures | dyed cloth, worked leather, cutlery | — | cittadina |
+  | G8 Metals and arms | iron wholesale, weapons, armour | — | city |
+  | G9 Luxury | spices, silk, fine wine, jewellery | — | metropolis |
+
+  A place trades every group from its type and every type below it. Ore is on
+  no market: it is used where it is mined. Every phase 4 good is therefore
+  traded at the borgo, and the types above it differ only in goods the phase 4
+  catalogue does not yet hold.
+- **The forge is split in two**, changing the content `R-063` approved: "sì,
+  separa la forgia". A bloomery near ore and forest, ore + timber → iron; a
+  smithy anywhere, a village included, iron → tools. Bar iron becomes a good,
+  class Material, traded in G4. A village smith working bought bar iron is
+  credible around 1300; iron was made near the mines and travelled as bars.
+  For the decider, as a revision of `R-063`: the good, the two recipes and
+  buildings, which of them requires Tools, and the mestieri, the smith of the
+  eleven becoming the smithy's and the bloomery taking one of its own, are not
+  yet set; the user approved the structure.
+
+**The user's answers on `R-109`'s forge details, 2026-10-18.**
+
+- **The decider's proposals approved:** the bloomery improved by Tools, with no
+  crude variant; the smithy requiring Tools, with a crude variant; the smith
+  working the smithy. "Va bene".
+- **The bloomery's fuel is charcoal, made by a charcoal burner**, a mestiere of
+  its own: "A e se la ferriera brucia carbone, ci serve anche un carbonaio". The
+  chain becomes timber → charcoal → (with ore) bar iron → tools. Charcoal is a
+  good; the charcoal burner works a recipe timber → charcoal; the bloomery takes
+  ore + charcoal. The bloomer proposed by `R-109` stands beside him.
+- **Where the wood comes from: reading A**, from the woodcutter, not gathered by
+  the charcoal burner or the bloomery itself. The user's rule: "if there is wood
+  it is taken directly, otherwise it is bought". **For the decider:** under
+  `R-108` a place served by a market sends its surplus and demand to the market,
+  so nothing passes directly between two rows of one village. Taking wood
+  directly needs a rule for exchange within a place before its rows are routed,
+  which `R-108` and `SIM-ECON` phase 7 do not hold. Whether it applies to
+  timber and charcoal only or to every good is not set.
+- **Not set, the user's as content:** charcoal's group and class, whether the
+  smithy burns charcoal too, the charcoal burner's site (forest, as the
+  woodcutter's) and his mean wealth.
+
+**The user's answer on exchange within a place, 2026-10-18.** "Scambio locale
+potenzialmente per tutti i beni, ma comunque con circolazione di moneta":
+exchange within a place may apply to every good, not to timber and charcoal
+only, and it is always a sale, currency moving buyer to seller, never a
+transfer. The rule, its phase and how it meets `R-108`'s routing are the
+decider's.
+
+**The user's answers on the review of the chains, 2026-10-19.** The implementer
+reviewed every chain of phase 4's content for credibility and proposed changes;
+the user answered:
+
+- **Approved:** grain farming improved by Tools; the charcoal burner as
+  proposed (forest site, improved by Tools, poor like the woodcutter); the
+  bloomery and the smithy burning a fuel; spinning folded into the weaver;
+  draught animals and sheep implicit until livestock goods exist; salt left out
+  of phase 4.
+- **Windmills as well as watermills:** the mill no longer requires a water site
+  only. "Va bene ma anche mulini a vento."
+- **Fuel instead of charcoal alone:** "introdurrei il concetto di carburante:
+  stoppe, legnetti, carbone, ecc. con alcune ricette che ne richiedono di
+  specifici". A class Fuel, with tow, kindling, charcoal and others; some
+  recipes take any fuel, some require a specific one (the bloomery charcoal, for
+  instance). Charcoal: G2, class Fuel, grade 1 (the user's "ok" to its details,
+  the class now Fuel rather than Material).
+- **Bread = flour + water + fuel.** "Pane = Farina + Acqua + Carburante."
+- **A fuel need, tier 1, following season and temperature, and cold kills:**
+  "Si, dipendente dalla stagione + temperatura (in inverno senza riscaldamento
+  si muore di freddo)".
+
+**For the decider, from the implementer's reading** (not ruled, not the user's
+words):
+1. Fuel fits `R-107`'s classes and variants, but a recipe requiring one variant
+   is demand for a variant inside its class's clearing, which `R-107`'s split
+   does not cover; or charcoal becomes a principal good of class Fuel with its
+   own market, the lesser fuels its variants.
+2. Water as an input: a good, with state and a market, or a property every
+   place has. The implementer would read it as the latter unless drought is
+   wanted; the user has not said.
+3. "Following the season" meets FR-T-05, "seasons carry no mechanical effect".
+   FR-P-08's weekly climate curves already govern mortality and are read per
+   `climateIndex`: a fuel need and cold mortality as climate modifiers would
+   follow season and temperature without the season itself acting. Cold death
+   is a new cause in phase 11, beside hunger and crowding.
+4. The mill's site: wind or water, and whether a windmill differs from a
+   watermill in output or cost.
+
+**The user's answer on water, 2026-10-19.** "Esplicita: se si ha modo si estrae
+sennò si compra." Water is an explicit good: drawn where a place has the means
+(a well, a river, a spring), bought where it has not. Its site, recipe, group,
+class and whether it spoils or travels are not set; the user's as content where
+`R-050` makes them so, the decider's otherwise.
