@@ -50,160 +50,326 @@ A request at moment one carries the draft whole in one fenced block under
 
 ---
 
-# Current request — 2026-10-05 — moment one, the cost measurement plan
+# Current request — 2026-10-20 — moment one, the workflow review plan
 
-Replaces the moment-three request of 2026-10-01, whose four items are all
-answered and recorded there; it is kept in git.
+Replaces the moment-one request of 2026-10-05 for the cost measurement plan,
+whose items are all answered and recorded there; it is kept in git.
 
 **Moment:** one — before a plan starts. The draft below is the plan; under
 `R-048` it is installed as `PLAN.md` on its branch only after the answer, in a
 commit that cites it, and under `R-049` its first point waits for that answer.
 
-**Branch:** the request is written on `design/poverty-seed`, which carries
-`SQ-009` to `SQ-024`. The plan would run on its own branch, `misura-costi`.
+**Branch:** the request is written on `design/workflow-review`, cut from `main`
+at `ee63129`. The plan would run on its own branch, `workflow-review`.
 
-**What changed, in one line:** a draft plan to measure what a settlement update
-costs as goods, rows and market places vary, owed by `SQ-023` before the state
-format is fixed.
+**What changed, in one line:** a draft plan writing into `AGENTS.md`, the plan
+skills and the hooks the directions the user approved in the workflow review of
+2026-10-19 and 20.
 
 ## Decisions taken outside the specification
 
-`D-109`: why the plan is `Kind: process`, why the stand-in lives in its own
-project and stays after the plan, the calibration tolerances, and the sizes per
-settlement type. `D-108` precedes it, on the review this request follows. Neither
-is audited; the watermark stands at `D-107`.
+`D-128`: the choices the draft makes that the review did not, among them the
+committer kept, the new *left open* marker, the `record` role's scope and
+`mutate`'s exclusions. The review's directions themselves are the user's, in
+`.claude/design/2026-10-19-workflow-review.md`. Neither is audited; the
+watermark stands at `D-126`, and `D-127`, the archive of the cost measurement
+plan, also awaits the decider.
 
 ## Open questions about the specification
 
-- **Blocking this plan: where it sits against `R-046`.** `R-046` says that "the
-  two plans that follow" are the process plan of the agent workflow and then
-  phase 4. This plan is a third, and it must come before phase 4, since
-  `SQ-023` blocks phase 4's plan and is owed this measurement. Whether it runs
-  before the process plan, between the two, or as phase 4's first point is a
-  reading of `R-046` for the decider, or for the user under reserve 1 of
-  `R-001` if it is read as governance. The draft assumes a plan of its own.
-- **`SQ-023` and `SQ-024`, blocking the phase 4 plan**, not this one: this plan
-  is what `SQ-023` asks for before its ruling.
-- **`SQ-009` to `SQ-022`, non-blocking**, for the decider; `SQ-020` answered by
-  the user.
+None. The plan is process work; `docs/` describes the simulated world.
+
+## The blind reading of the draft
+
+Review A applied before it exists: a read-only agent, given the first version
+of the draft and the files it names, told nothing of the author's reasoning,
+answered per point which fault the check would miss. Its findings, and what the
+second version, below, did with each:
+
+| Point | Finding | In the draft below |
+|---|---|---|
+| 1 | The script checks that an identifier exists, not that it says what the rule claims; "two paths share no code" was cited to `R-102`, which says no such thing, and stated more widely than `R-103` and `R-104` hold; the rules of `R-104` and `R-105` on measuring alike and on overtaken premises were missing | Rules renumbered `K1`–`K6` with the missing ones; `K2` as `R-103` says it; the code-reviewer reads every citation, with a planted wrong one |
+| 2 | "Outcome lines stripped" was ambiguous and the archive's point 4 states the answer; the reader holds Bash and could read `R-103`; the skill cannot read an archived plan; the `AGENTS.md` rule was unchecked | The fixture is the request as committed before the answer (`64147ba`); the reader is told not to read the register, and a report citing `R-` goes red; `-Path` added; greps for the rule |
+| 3 (was 4) | A baseline taken from the latest commit blesses an edit committed early; stopping at `Core:` misses wrapped lines; the documenter's other two STOP cases (already recorded, point gone) were dropped | Installing commit is the oldest adding `PLAN.md`; text to the next heading less outcome-marker lines; `recorded`, `added`, `gone` reported |
+| 4 (was 3) | `path-guard` denies paths outside the repository for every role, so wired to every session it would block the scratchpad; the case-sensitivity fault could not occur; the live Edit cannot run before a new session and would damage the register if unguarded; the decider's status was undecided | `record` decides two files only and allows every other path, with cases for both; faults are the role's wiring and the outside path; the live Edit closes with reserve, on a clean tree with a restore; the decider is bound, after an audit of its past edits |
+| 5 | `core/Tests/` was admitted, so breaking a test would count as catching a fault; "the record files" was unnamed; renames and the stale sentences in `tester.md` and step 4 were not covered | Exclusions listed, `core/Tests/` among them, with cases; rename case; the stale sentences rewritten in this point |
+| 6 | The point could not record itself, its documenter's role being removed in its own diff; `git-guard` has no roles; `deciderDue` read from a whole section would fire again after the decider ruled, and most of its triggers are prose; `R-116`'s brief append was missing | Split: step changes in 6, the documenter retired in 7; `deciderDue` reads the outcome line only, with fixtures for a later *Ruled:* line and the Italian marker; the *left open* marker makes the prose triggers readable; the append is in step 10 |
+| 7 (now 8) | The grep checked a citation, not the rule's elements; the reviewer's brief (C1, C2) did not aim at the missing exception | The grep checks each element; the reviewer is given the "Does" and asked for omissions |
+| Overall | Retiring the committer leaves `git-guard` wired nowhere: it admits only commit commands, so it cannot guard the orchestrator, which merges and switches branches | The committer is kept: a departure from review P1, asked below |
+
+The second version was not read by a blind reader again.
 
 ## Draft plan
 
 ```markdown
-# Plan — the cost of a settlement update, measured on a stand-in
+# Plan — the workflow review, applied
 
 **Kind:** process
-**Exit condition:** the table that `SQ-023` owes before its ruling — the cost
-of one settlement update per settlement type, and of one simulated day on the
-mix of P-12 as the user answered it in `SQ-024`, dense against sparse state and
-every settlement clearing against market places only — recorded in the
-register and in `SQ-023`, read against P-01, NFR-05 and NFR-07.
-**Phase:** before 4 (SIM-REQ §18; `SQ-023`)   **Branch:** `misura-costi`
+**Exit condition:** the directions the user approved in the workflow review of
+2026-10-19 and 20, recorded in `.claude/design/2026-10-19-workflow-review.md`
+(review items A, B, P1 to P4, G2, C3), written into `AGENTS.md`, the plan
+skills and the hooks, each script's self-test green, and point 4's live check
+run in a new session. Whether they make criteria stronger and points lighter is
+measured by the next plan, not this one (`R-046`).
+**Phase:** none, process work; before phase 4.
+**Branch:** `workflow-review`, cut from `main` after the answer to moment one.
 
-The stand-in is not the simulator. It touches arrays the way the update will,
-in integer arithmetic only, and its numbers mean what it resembles (`SQ-004`).
-It decides the shape of the state, not P-17: that is measured on the real
-update in phase 4 (§19). Nothing in `core/` changes. The sizes it runs on are
-measurement inputs, not simulation constants, and take no P-number (`R-050`).
+The review's labels are written "review A", "review C3" and so on, so as not to
+be read as the rows C1 to C10 and S1 of `AGENTS.md`'s table, written "table C8".
+No point touches a path under `core/`. Points that edit `AGENTS.md`,
+`.claude/agents/`, `.claude/hooks/` or `.claude/skills/` say so, which is the
+permission `AGENTS.md` requires (`R-010`, `D-087`). Points 1 to 6 run under the
+`/plan-next` of today; point 6 rewrites it, and points 7 and 8 run under the
+rewritten one, which is read afresh at each invocation.
 
-Every cell is measured the same way: Release build, one thread pinned to one
-core, a warm-up, then at least 10,000 updates of which the 99th percentile is
-kept (P-01 is a p99); three runs, the median of the three p99 reported. The
-machine, the runtime and the clock's resolution are printed with the results.
+## 1. The criteria checklist (review B)
 
-## 1. The stand-in and its calibration
+- **Does:** adds `.claude/skills/plan-explain/criteria.md`: rules numbered `K1`
+  onward, each a heading of its own, each saying what a point's "Closed by" must
+  prove and citing the ruling that found the gap:
+  - `K1` a computation is checked against an independent reference, on a state
+    where the branch that matters binds (`R-101`, `R-103`);
+  - `K2` a check of equality between two paths that share their code and their
+    geometry cannot fail where they coincide; the check needs a reference that
+    shares neither (`R-103`);
+  - `K3` a reported number is recomputed from an independent source, and counts
+    the quantity the specification defines, not the one the code holds
+    (`R-102`);
+  - `K4` cells that are compared are measured alike, in one run, and a cell the
+    point names is measured or marked missing, never derived (`R-104`);
+  - `K5` a check that sums or compares its own outputs proves their arithmetic,
+    not their labels (`R-105`);
+  - `K6` a `Fails when:` that rests on a premise is read again when a later
+    ruling touches that premise (`R-105`).
+  Edits `.claude/skills/`. Adds `.claude/hooks/criteria-cite.ps1`: every `K`
+  heading must carry at least one identifier, and every identifier must have a
+  heading in `RULINGS.md` or `DECISIONS-OUTSIDE-SPEC.md`. Edits
+  `.claude/hooks/`.
+- **Closed by:** `criteria-cite.ps1 -SelfTest` green, then the script on the real
+  checklist exits 0; and the code-reviewer reads each citation against the
+  ruling it names and finds none that says something else (table C1).
+- **Fails when:** a rule cites `R-999`, or cites nothing, or cites a ruling that
+  exists and says something else; the first two turn the script red on a copy of
+  the checklist, the third is put to the code-reviewer as a planted citation
+  (`K2` citing `R-102`) and must be reported.
+- **Core:** no — the diff touches only `.claude/skills/plan-explain/` and
+  `.claude/hooks/`.
 
-- **Does:** a project `bench/`, outside the solution's test run and outside CI,
-  with a stand-in settlement update of five passes — production, own
-  consumption, market clearing with a ranking by ability to pay, prices,
-  spoilage with a carry per row and good — over dense per-good arrays.
-- **Closed by:** the run at 9 and at 27 rows with 7 goods reports a cost at 9
-  rows between 1.6 and 6.6 µs, half and twice P-63, and a ratio of the 27-row
-  cost to the 9-row cost between 3.8 and 5.8, the measured 4.8 of DEC-054 and
-  P-64 within a fifth.
-- **Fails when:** the clearing ranks rows in a way linear in their number, so
-  the ratio falls to about 3; or the JIT removes the work, so the cost falls
-  below the floor. Both are introduced and seen red.
-- **Core:** no — the diff touches only `bench/` and the solution file.
+## 2. Criteria attacked before they freeze (review A)
 
-## 2. Dense state, scaled
+- **Does:** `/plan-explain -Draft` reads every point of a draft, not the first
+  only, and for each answers which fault the check would miss and which part of
+  the "Does" it leaves unchecked, against `criteria.md`. The reading is
+  dispatched to a read-only agent given the draft, the checklist and the files
+  the draft names, told not to read `RULINGS.md`, the register or
+  `.claude/plans/`, and given nothing of the author's reasoning. The skill
+  accepts `-Path` for a draft held in another file. Edits
+  `.claude/skills/plan-explain/SKILL.md`. In `AGENTS.md`, "Criteria are frozen
+  when written" gains the rule: before moment one the draft is read this way and
+  the answers go into the request, quoted, beside the draft, for the user to
+  amend it or not. Edits `AGENTS.md`. `REVIEW-REQUEST.md`'s "What a request
+  holds" names the answers as part of a moment-one request.
+- **Closed by:** the fixture `.claude/hooks/fixtures/plan-explain/misura-costi.md`
+  is the request as committed in `64147ba`, before the user's answer and before
+  any outcome existed. `/plan-explain -Draft -Path` on it returns one entry per
+  point, five; its entry for point 4 names supply that never runs short as a
+  state where the ranking is not seen; and its report cites no `R-`
+  identifier, which it was told not to read. A grep finds the rule in
+  `AGENTS.md` and the line in `REVIEW-REQUEST.md`.
+- **Fails when:** the skill reads the first point only, as today: one entry,
+  point 4's missing. Or the reader is handed the register: its report cites
+  `R-103`.
+- **Check: shallow** — the reader is an agent, and `K1` is in the checklist it
+  reads, so naming point 4's gap proves the brief and the checklist, not that
+  the reader finds a gap the checklist does not name; what would prove it is the
+  next plan's points closing without *criterion defective*.
+- **Core:** no — the diff touches only `.claude/skills/plan-explain/`,
+  `.claude/hooks/fixtures/`, `AGENTS.md` and `REVIEW-REQUEST.md`.
 
-- **Does:** the stand-in swept at 12 rows over 8, 30, 100 and 300 goods, and at
-  100 goods over 12, 24 and 41 rows, with the bytes of state per settlement
-  computed from the array sizes.
-- **Closed by:** a table with all seven cells, each from the method above, and
-  a checksum per cell of the stand-in's outputs, printed beside its cost; a
-  rerun gives the same checksums.
-- **Fails when:** a cell is sized for its goods but loops over fewer, which
-  costs less and changes the checksum against a reference loop over every good.
-- **Core:** no — the diff touches only `bench/`.
+## 3. `plan-state` reads a point's frozen text and whether the decider is due (review P1, P4)
 
-## 3. Sparse state per settlement type
+- **Does:** `plan-state.ps1` finds the commit that installed `PLAN.md`, the
+  oldest commit in the plan's range that adds it, and reports per point:
+  - `changed`, when the point's text differs from that commit's — the text from
+    its heading to the next heading, without the lines that begin with an
+    outcome marker (`*Outcome:*`, `*Esito:*`, `*Ruled:*`, `*Reserve
+    discharged:*`, `*Riserva sciolta:*`);
+  - `recorded`, when it already carries an outcome line; `added`, when it was not
+    in the installing commit; and, at plan level, `gone`, the points of the
+    installing commit no longer present.
+  These are the documenter's three STOP cases (`/plan-next` step 8). And at plan
+  level `deciderDue`: true when the last closed point's `*Outcome:*` line, and
+  only that line, carries *criterion defective*, *criterio difettoso*, `FAILED`,
+  `FALLITO` or *left open*. *Left open* is a new marker: the outcome line carries
+  it when a finding is left to the human, a `SPEC-QUESTIONS.md` entry is
+  raised, or an escalation is made, so that the trigger is read, not inferred.
+  Edits `.claude/hooks/`.
+- **Closed by:** `plan-state -SelfTest` green with a fixture repository: a plan
+  installed; point 1 closed; point 2's "Closed by" edited in a later commit;
+  point 3 deleted and point 4 added; `changed` names point 2 only, `gone` point
+  3, `added` point 4, `recorded` point 1. And three `deciderDue` fixtures: an
+  outcome line with *criterion defective* (true), a clean outcome line followed
+  by a `*Ruled:* … criterion defective` line (false), a phase 3 outcome with
+  `**criterio difettoso**` (true).
+- **Fails when:** the baseline is the latest commit touching `PLAN.md` rather
+  than the installing one, so an edit committed with an earlier point is
+  blessed: point 2 is not reported. Or the outcome markers are not excluded, so
+  closing a point marks it changed: point 1 is reported.
+- **Core:** no — the diff touches only `.claude/hooks/`.
 
-- **Does:** a second layout holding, per settlement, rows only for the mestieri
-  present and holdings only for the goods present, run on the five types of
-  `SQ-024` at the sizes the user approved: village 15 goods and 6 rows, borgo
-  30 and 10, cittadina 60 and 18, city 150 and 30, metropolis 300 and 41.
-- **Closed by:** per type, the sparse cost against the dense cost of the same
-  type at the catalogue's 300 goods and 41 rows; and on the same world the
-  sparse and the dense layouts give the same checksum.
-- **Fails when:** the sparse walk drops the last local good or the last row, an
-  off-by-one that is faster and changes the checksum.
-- **Core:** no — the diff touches only `bench/`.
+## 4. The register written insert-only by a hook (review P1)
 
-## 4. Market places and goods variants
+- **Does:** a project `.claude/settings.json` wires `path-guard` to every
+  session's `Edit|Write` under a new role, `record`, which decides only
+  `DECISIONS-OUTSIDE-SPEC.md` and `PLAN.md` and allows every other path, inside
+  the repository or not: an Edit of either passes only if its `new_string`
+  begins with its `old_string`; a Write only if the file does not exist. It
+  applies to every session, the decider's included. Before wiring, `git log -p`
+  over the decider's commits since `R-001` shows whether every decider edit of
+  the register was an insertion; if one was not, the point stops and asks.
+  `SPEC-QUESTIONS.md` is left out: the decider closes entries by editing their
+  status line. Writes through a shell are not seen by the hook, a limit stated in
+  `path-guard`'s description. Edits `.claude/hooks/path-guard.ps1` and its
+  self-test.
+- **Closed by:** `path-guard -SelfTest` green with cases for `record`: an
+  insertion passes; a replacement is denied with `record`'s reason, not
+  "unknown role" or "not JSON"; a Write over an existing `PLAN.md` is denied, a
+  Write of a new one passes; an Edit of `README.md` and a Write to a path
+  outside the repository pass. Then the exact command line in
+  `.claude/settings.json`, fed the JSON of an Edit replacing a word of
+  `DECISIONS-OUTSIDE-SPEC.md`, exits 2 with `record`'s reason, and fed an Edit of
+  `README.md`, exits 0. Then, in a new session, a live Edit replacing a word of
+  `DECISIONS-OUTSIDE-SPEC.md` is denied; on a clean tree, and if it is not,
+  `git checkout -- DECISIONS-OUTSIDE-SPEC.md` restores it and the point fails.
+- **Fails when:** the command line in `settings.json` names the role wrongly, so
+  every Edit is denied as "unknown role": the `README.md` case goes red. Or
+  `record` inherits the denial of paths outside the repository: the outside
+  case goes red.
+- **Reserve:** the live Edit needs a session started after `settings.json` exists,
+  which only the human can start: the point closes with reserve on that clause
+  (`R-011`).
+- **Core:** no — the diff touches only `.claude/hooks/` and
+  `.claude/settings.json`.
 
-- **Does:** clearing runs only at market places, 100 of 2,000 by P-12 as
-  answered in `SQ-024`, with each village's demand and surplus routed to its
-  nearest market; and a class with K variants, at K = 1, 4 and 16, clears once
-  with its demand split among the variants.
-- **Closed by:** the cost of one simulated day on the P-12 mix with clearing at
-  market places against clearing everywhere; the cost per variant count; and,
-  with supply ample, every unit a village demands is served at its market.
-- **Fails when:** a market clears its own cohorts and ignores the villages
-  routed to it, which is cheaper and leaves village demand unserved.
-- **Core:** no — the diff touches only `bench/`.
+## 5. `mutate` reaches every file of the point (review P3)
 
-## 5. The table, read against the budget
+- **Does:** `mutate.ps1` admits a patch on any path the point's diff touches —
+  `git diff --name-only HEAD` and the untracked files — except `core/Tests/`,
+  `docs/`, `.claude/`, `AGENTS.md`, every `CLAUDE.md`, `core/BannedSymbols.txt`
+  and the record files `PLAN.md`, `DECISIONS-OUTSIDE-SPEC.md`,
+  `SPEC-QUESTIONS.md`, `REVIEW-REQUEST.md`, `PROMOTIONS.md`, `RULINGS.md` and
+  `DECIDER-BRIEFS.md`; a rename's source counts as a path of the patch, as
+  `R-073` requires today; the tree is recorded and proved restored over the
+  admitted set. `core/Tests/` is excluded because a patch that breaks a test
+  turns the check red without the code being at fault. Edits `.claude/hooks/`.
+  The sentences that say `mutate` reaches only `core/Runtime/` and `harness/` —
+  its own description, `.claude/agents/tester.md`, `/plan-next` step 4 — say
+  what it reaches now (table C8). Edits `.claude/agents/`, `.claude/skills/`.
+- **Closed by:** `mutate -SelfTest` green with new cases: a patch on an
+  untracked `bench/` file in the diff applies, goes red and is restored; a patch
+  on a file outside the diff is refused with exit 2; a patch on `docs/` or
+  `core/Tests/` is refused even when the path is in the diff; a rename from a
+  path outside the set is refused. A grep finds no sentence saying `mutate`
+  reaches only `core/Runtime/` and `harness/`.
+- **Fails when:** the admitted set is read from `git diff` only, which never
+  lists untracked files: the `bench/` case goes red. Or `core/Tests/` is
+  admitted: its case goes red.
+- **Core:** no — the diff touches only `.claude/`.
 
-- **Does:** the results gathered in one table — µs per update per type, ms per
-  simulated day on the P-12 mix, MB of state — for each of the four layouts
-  (dense or sparse, clearing everywhere or at market places), each set against
-  P-01's 10 ms and NFR-07's 50 MB, and written into `SQ-023` for the decider.
-- **Closed by:** the ms per day in the table equals the sum over types of count
-  × cost per update ÷ 7, recomputed from the cells by the runner itself.
-- **Fails when:** shallow — the point gathers numbers already measured; the
-  recomputation catches a table edited by hand.
-- **Core:** no — the diff touches only `bench/`, `SQ-023` and the register.
+## 6. `/plan-next` lighter (review P1, P2, P4, G2)
+
+- **Does:** edits `.claude/skills/plan-next/SKILL.md`:
+  - step 2 dispatches the tester only when the point's check is a test under
+    `core/Tests/`; otherwise the check is written with the point's files at step
+    3, as the skill already says (review P2);
+  - step 8 is the orchestrator's: it reads `changed`, `recorded`, `added` and
+    `gone` from `plan-state` and stops on them as the documenter does today,
+    then writes the register entry and the outcome line by insertion, the outcome
+    line carrying *left open* when step 7 left a finding to the human, a
+    `SPEC-QUESTIONS.md` entry was raised or an escalation made (review P1);
+  - step 9 keeps the committer, whose `git-guard` admits only the commands a
+    commit needs, and lists `git-guard`'s rules in the committer's brief: one git
+    command a call, no `-C`, the trailer's word never outside the trailer, paths
+    with forward slashes (review G2);
+  - step 10 reads `deciderDue`: true, it appends the brief to
+    `DECIDER-BRIEFS.md` and dispatches the decider (`R-116`, `R-118`); false, it
+    reports the count of entries for the audit at the plan's end or the phase
+    gate (review P4). The sentence "this session does not run `/decide`", which
+    `R-116` overtook, goes (table C8).
+  Edits `.claude/skills/`. The documenter is no longer dispatched; it is retired
+  in point 7, after this point has been recorded by it.
+- **Closed by:** a grep finds no dispatch of `documenter` in `.claude/skills/`,
+  finds the condition of step 2, the four fields of step 8, the four rules of
+  step 9 and the `DECIDER-BRIEFS.md` append of step 10, and does not find
+  "does not run `/decide`".
+- **Fails when:** step 8 drops one of the documenter's STOP cases, so a point
+  that already carries an outcome line is recorded twice: the grep for
+  `recorded` goes red.
+- **Check: shallow** — the skill is prose and a grep proves the words, not the
+  procedure; what would prove it is points 7 and 8 of this plan, run under it.
+- **Core:** no — the diff touches only `.claude/skills/`.
+
+## 7. The documenter retired (review P1)
+
+- **Does:** deletes `.claude/agents/documenter.md` and the `documenter` role of
+  `path-guard`, which nothing dispatches after point 6 (table S1). Edits
+  `.claude/agents/`, `.claude/hooks/`. This point is the first recorded by the
+  orchestrator under point 6's step 8.
+- **Closed by:** `path-guard -SelfTest` green without the role; the agent file
+  absent; a grep finds `documenter` nowhere in `.claude/` but the design notes
+  and the archived plans.
+- **Fails when:** the role is removed from `path-guard` but its self-test still
+  calls it, so the self-test fails as "unknown role"; or a skill still names the
+  documenter: the grep goes red.
+- **Core:** no — the diff touches only `.claude/`.
+
+## 8. Design belongs to the decider (review C3)
+
+- **Does:** in `AGENTS.md`, under "The decider answers what this file sends to a
+  human", a rule: a design or content conversation belongs to `/decide`, whose
+  free-text form is the design session (`.claude/skills/decide/SKILL.md`,
+  "Design sessions"); an implementer session asked for one records what the user
+  has already said, verbatim, in the relevant `SPEC-QUESTIONS.md` entry, and
+  sends the user to `/decide`; a question arising inside a point, which blocks
+  it, may be answered on the spot, recorded verbatim the same way and marked for
+  the decider. Edits `AGENTS.md`.
+- **Closed by:** a grep finds in the rule each of: "`/decide`", "verbatim",
+  "`SPEC-QUESTIONS.md`", "inside a point", "marked for the decider"; and the
+  code-reviewer, given the diff and this point's "Does", reports any element of
+  the "Does" the rule leaves out and any citation that does not say what the rule
+  claims (table C1, C2).
+- **Fails when:** the exception for a question inside a point, which the user
+  approved, is left out: the grep for "inside a point" goes red and the reviewer
+  reports it.
+- **Check: shallow** — a rule of conduct; what proves it is the next design
+  conversation going to `/decide`.
+- **Core:** no — the diff touches only `AGENTS.md`.
 ```
 
 ## What was not verified
 
-- **What the stand-in of P-63 and P-64 contained.** It was thrown away
-  (`SQ-004`), and "5 of 12 phases" does not say which five. The five passes of
-  point 1 are a guess at them, and the calibration tolerances are wide for that
-  reason and because the machine differs. A stand-in that calibrates can still
-  differ from the old one in what it costs per good.
-- **The reference machine.** P-01 names no machine. The plan prints the one it
-  runs on; whether that is the machine the budget is read on is not settled.
-- **The sizes per type** are the user's orders of magnitude, approved as given;
-  they are not derived from any content, since the catalogue does not exist.
-- **The cost of routing and of assignment** — a village finding its nearest
-  market per group, and reassigning — is not in point 4, which routes along a
-  fixed assignment. `SQ-024`'s point 5 leaves the rule open, so its cost cannot
-  be measured yet.
-- **No reviewer has read this draft.** Every point declares `Core: no`, so none
-  is owed at close either; the `Fails when:` lines are read by the user here,
-  under `R-047`.
+- **The second version of the draft** was not given to a blind reader; the
+  table above says what changed, not whether the changes hold.
+- **Whether a project `.claude/settings.json` hook reaches subagents** as well as
+  the main session. Point 4 assumes it does, as the frontmatter hooks of the
+  agents do; it was not run.
+- **The decider's past edits of the register** were not checked for insertion;
+  point 4 does it before wiring, and stops if one was not.
+- **The cost of the reading in point 2**, one agent per draft, was not measured.
+- **That the new marker *left open* is the right trigger** for the decider: it
+  was chosen so that a trigger is read, not inferred, and no past outcome line
+  carries it.
 
 ## What I need from you
 
-1. **Answered by the user, 2026-10-07: "approvo il draft così com'è"** —
-   approved as written, the five `Fails when:` lines and the calibration
-   tolerances of point 1 included.
-   ~~**The draft**, approved, amended, or rejected. In particular the five
-   `Fails when:` lines, and the calibration tolerances of point 1.~~
-2. ~~**Where it sits against `R-046`** — or that the decider answers it first.~~
-   **Answered by `R-067`:** the check stays with phase 4's first point; this plan
-   runs under the agents without claiming it.
-3. Then the plan is installed on `misura-costi` and point 1 starts.
+1. **The draft**, approved, amended, or rejected. In particular the eight
+   `Fails when:` lines, and the `Check: shallow` markers on points 2, 6 and 8.
+2. **The committer.** Review P1 retired documenter and committer; the draft
+   retires the documenter only. `git-guard`, the committer's hook, admits only
+   the commands of a commit (`status`, `diff`, `log`, `show`, `add` with paths,
+   `commit -F`), so it cannot be wired to the orchestrator, which also switches,
+   merges and moves files; without the committer it would guard nothing. Keep
+   the committer (the draft), or retire it and leave the commit rules to the
+   skill's text.
+3. **The *left open* marker** in outcome lines, which the decider's dispatch
+   reads (point 3): approve it, or name another trigger.

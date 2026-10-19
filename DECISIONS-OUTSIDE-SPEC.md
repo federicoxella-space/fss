@@ -4411,3 +4411,43 @@ dopo l'archiviazione del plan".
 the simulator's code.
 `plan-state -Path` on the archived file reads `finished`; on the tree, `none`.
 **Not verified:** nothing beyond what the plan's own entries list.
+
+## 2026-10-20 — The workflow review, drafted as a plan at moment one
+
+### D-128 · Moment one of the workflow review plan · What the draft decides beyond the review
+
+The user reviewed the development workflow on 2026-10-19 and 20 and approved
+directions recorded in `.claude/design/2026-10-19-workflow-review.md`: review A
+and B on criteria, P1 to P4 on the weight of a point, G1 and G2 on friction, C3
+on design conversations. G1 was applied at once, outside any plan, as an
+environment setting not committed. The rest the user asked for as one plan: "C3,
+scrivi la bozza del piano". The draft is in `REVIEW-REQUEST.md`; a blind reader
+attacked its first version before it was shown, as review A will require, and
+the request quotes what it found and what changed.
+
+**Decided, beyond what the review approved.**
+- **The committer is kept**, though review P1 retired it with the documenter:
+  `git-guard` admits only the commands of a commit and cannot guard the
+  orchestrator, so without the committer it would guard nothing. Asked of the
+  user in the request.
+- **A new outcome marker, *left open***, written when a finding is left to the
+  human, a `SPEC-QUESTIONS.md` entry is raised or an escalation made, so that
+  review P4's trigger for the decider is read from the outcome line, not
+  inferred from prose. Asked of the user in the request.
+- **The `record` role decides `DECISIONS-OUTSIDE-SPEC.md` and `PLAN.md` only**,
+  for every session, the decider's included; `SPEC-QUESTIONS.md` is left out
+  because the decider closes entries by editing their status line.
+- **`mutate` excludes `core/Tests/`**, besides `docs/`, `.claude/`, `AGENTS.md`,
+  every `CLAUDE.md`, `core/BannedSymbols.txt` and the record files, because a
+  patch that breaks a test would count as a fault caught.
+- **The checklist holds six rules**, `K1` to `K6`, each from `R-101` to `R-105`;
+  the design note named four.
+- **The draft's fixture for review A** is the cost measurement plan's request as
+  committed in `64147ba`, before the user's answer.
+
+**What `docs/` says:** nothing; process work. `R-010`, `R-046`, `R-048`,
+`R-049`, `R-116`, `R-118`.
+**Would overturn it:** the user's answer to the request, which may change any of
+it.
+**Not verified:** the second version of the draft was not read blind again;
+whether a project settings hook reaches subagents.
