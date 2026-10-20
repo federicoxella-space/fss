@@ -5211,3 +5211,42 @@ ids, and the plan writes no `docs/`. `R-048`, `R-049`, `R-121`, `R-122`.
 **Not verified:** version 3 was read by no blind reader; its fault lists were
 not tried against code; the counts of point 2 were taken by the author with
 `grep` and `awk`.
+
+### D-141 · Moment one of the `docs/` vault migration plan · What version 4 of the draft decides beyond `D-139` and `D-140`
+**Ruling:** none yet.
+
+The user approved version 3 and asked for a third blind reading, which found
+the check blind to a note running past its end and to note text left in the
+index, the no-sharing rule unchecked at point 2 and contradicted by its
+`-SelfTest`, and a merge that would carry a live `PLAN.md` to `main`. Shown it,
+the user answered "scrivi la versione 4 nella request". Version 4 is in
+`REVIEW-REQUEST.md`, with the reading quoted and a table of what it did with
+each finding.
+
+**Decided, beyond `R-121`, `R-122`, `D-139` and `D-140`.**
+1. **Check 5 bounds every note and the index**: a note holds no heading of its
+   level or above beyond its first, outside a fence; the index holds exactly
+   the lines the derivation leaves in it; the vault root holds no folder but
+   the six, `.obsidian/` and `.trash/`, its files unjudged.
+2. **Links reach table rows**, which check 3 now names beside prose.
+3. **No front-matter key beyond those `R-121` 5 names**; `id` on entries only.
+4. **The one reference between the scripts** is the check run as a separate
+   process, `pwsh -NoProfile -File`, by the script's `-SelfTest`; the grep runs
+   on both scripts at point 2; copied functions are the code-reviewer's to see.
+5. **The fixture's layout**: `tools/docs-vault/fixtures/originals/` and
+   `fixtures/vault/`, both kept LF; the `eol` report read after a fresh
+   checkout.
+6. **The script refuses two outputs sharing a path, case aside**; no fault
+   plants it, since neither the six nor the fixture yields such a pair.
+7. **`docs/.trash/` stays ignored** though inert under `app.json`'s `{}`;
+   `app.json` is `{}` and an LF.
+8. **The workflow review plan's `PLAN.md` is archived on
+   `design/obsidian-vault` before its merge into `main`**, by the implementer
+   closing that plan; the merge is the user's.
+
+**What `docs/` says:** nothing; `R-121` rules the shape and `R-122` its block
+ids, and the plan writes no `docs/`. `R-048`, `R-049`, `R-121`, `R-122`.
+**Would overturn it:** the user's answer to the request.
+**Not verified:** version 4 was read by no blind reader; its fault lists were
+not tried against code; three clauses of the "Does" rest on the code-reviewer
+alone.
