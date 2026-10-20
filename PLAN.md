@@ -381,6 +381,18 @@ claim `R-046`'s check.
   documenter: the grep goes red.
 - **Core:** no — the diff touches only `.claude/`.
 
+*Outcome:* 2026-10-20. Closed: `path-guard -SelfTest` ran 42 cases, 0 failed;
+the agent file is absent; a grep finds `documenter` nowhere in `.claude/` but
+the design notes and the archived plans. The faults went red: a self-test case
+still calling the role (unknown role, 1 failure); a skill naming the documenter
+(the grep finds it). Tree hash equal. Recorded by the orchestrator under point
+6's step 8, `plan-state` reporting the point unchanged, unrecorded and present.
+Review: code-reviewer, no verifiable defect. *Left open*, for the decider:
+`deciderDue` matches its marker in prose, and read true after point 6 from "no
+… open" wording. `D-136`. Agents (`R-067`): code-reviewer and committer
+dispatched. Not run: the tester, the coder, the revisioners (`Core: no` held),
+the documenter, retired here. This outcome does not claim `R-046`'s check.
+
 ## 8. Design belongs to the decider (review C3)
 
 - **Does:** in `AGENTS.md`, under "The decider answers what this file sends to a

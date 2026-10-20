@@ -10,8 +10,6 @@
       coder       everything inside the repository except the denylist of
                   "What the coder may not write"
       tester      core/Tests/ only
-      documenter  DECISIONS-OUTSIDE-SPEC.md, PLAN.md, SPEC-QUESTIONS.md, and
-                  only by an Edit whose new_string begins with its old_string
       record      every session, from .claude/settings.json (point 4 of the
                   workflow review plan): decides DECISIONS-OUTSIDE-SPEC.md and
                   PLAN.md only and allows every other path, inside the
@@ -37,7 +35,6 @@ $CoderDenied = @(
     'PROMOTIONS.md', 'RULINGS.md', 'core/BannedSymbols.txt',
     '.claude/settings.json', '.claude/settings.local.json'
 )
-$DocumenterFiles = @('DECISIONS-OUTSIDE-SPEC.md', 'PLAN.md', 'SPEC-QUESTIONS.md')
 
 # An entry ending in '/' is a folder and matches itself and everything under it.
 function Test-Listed([string]$Rel, [string[]]$List) {
@@ -96,15 +93,6 @@ function Get-Denial([string]$Role, [string]$Json, [string]$Root) {
         'tester' {
             if (-not (Test-Listed $rel @('core/Tests/'))) { return "path-guard: the tester writes core/Tests/ only, not $rel" }
         }
-        'documenter' {
-            if (-not (Test-Listed $rel $DocumenterFiles)) { return "path-guard: the documenter may not write $rel" }
-            if ($tool -ne 'Edit') { return 'path-guard: the documenter only inserts, by Edit' }
-            $old = [string]$in.tool_input.old_string
-            $new = [string]$in.tool_input.new_string
-            if ($old -eq '' -or -not $new.StartsWith($old, [StringComparison]::Ordinal)) {
-                return 'path-guard: insert-only; new_string must begin with a non-empty old_string'
-            }
-        }
         'record' { return $null }
         default { return "path-guard: unknown role '$Role'" }
     }
@@ -140,14 +128,6 @@ if ($SelfTest) {
         @('tester', (J 'Write' 'F:\repo\core\Tests\AC02.cs'), 'allow'),
         @('tester', (J 'Write' 'F:\repo\core\Runtime\X.cs'), 'deny'),
         @('tester', (J 'Write' 'F:\repo\core\TestsX\A.cs'), 'deny'),
-        @('documenter', (J 'Edit' 'F:\repo\PLAN.md' 'anchor' "anchor`nmore"), 'allow'),
-        @('documenter', (J 'Edit' 'F:\repo\DECISIONS-OUTSIDE-SPEC.md' 'x' 'xy'), 'allow'),
-        @('documenter', (J 'Edit' 'F:\repo\SPEC-QUESTIONS.md' 'x' 'xy'), 'allow'),
-        @('documenter', (J 'Edit' 'F:\repo\PLAN.md' 'anchor' 'changed'), 'deny'),
-        @('documenter', (J 'Edit' 'F:\repo\PLAN.md' '' 'new'), 'deny'),
-        @('documenter', (J 'Write' 'F:\repo\PLAN.md'), 'deny'),
-        @('documenter', (J 'Edit' 'F:\repo\RULINGS.md' 'x' 'xy'), 'deny'),
-        @('documenter', (J 'Edit' 'F:\repo\core\Runtime\X.cs' 'x' 'xy'), 'deny'),
         @('reviewer', (J 'Write' 'F:\repo\core\Runtime\X.cs'), 'deny'),
         @('coder', '{not json', 'deny'),
         @('coder', '{"tool_name":"Read","tool_input":{"file_path":"F:\\repo\\docs\\x"}}', 'allow')

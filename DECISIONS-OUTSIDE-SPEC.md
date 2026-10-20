@@ -4983,3 +4983,54 @@ diff).
 clean points.
 **Not verified:** the procedure itself, which only points 7 and 8 run under the
 new skill.
+
+### D-136 · Point 7 · The documenter retired, and the first point recorded without it
+
+The first point recorded by the orchestrator under the `/plan-next` of point 6:
+`plan-state` read for point 7 `changed`, `recorded` and `added` false and `gone`
+empty, so step 8 did not stop, and this entry and the outcome line were written
+by insertion under the `record` hook of point 4.
+
+**Decided.**
+1. **The role and the agent go together.** `.claude/agents/documenter.md`
+   deleted; in `path-guard.ps1` the `documenter` role, its file list, its two
+   description lines and its eight self-test cases removed (table S1). The
+   insert-only guard it gave `SPEC-QUESTIONS.md` is not carried over: `D-128`
+   already left that file out of `record`, the decider closing entries by
+   editing their status lines.
+2. **A comment that named the documenter now names the procedure.**
+   `plan-state.ps1` called the three STOP cases "the documenter's"; they are
+   `/plan-next` step 8's, which lists them (table C8).
+
+**Results.** `path-guard -SelfTest` 42 cases, 0 failed; the agent file absent;
+`grep -rln documenter .claude/` outside `.claude/design/` and `.claude/plans/`
+finds nothing; `plan-state -SelfTest` 87, 0 failed. Faults, by the
+orchestrator, restored, tree hash equal: a self-test case still calling the
+role, "documenter expected allow, got deny", 1 failure; a skill naming the
+documenter, the grep finds `plan-state/SKILL.md`.
+
+**Findings.** Code-reviewer: no verifiable defect. `PLAN.md` still names the
+documenter in other points' frozen text and closed outcomes, outside the grep's
+`.claude/`: correct, frozen. A restored agent file would pass the self-test but
+not the file test or the grep: covered by the three together. The
+`SPEC-QUESTIONS.md` guard: accepted at moment one, decision 1.
+
+**Left open, for the decider.** `deciderDue` reads true after point 6 because
+its outcome line says "nothing left open": `plan-state` matches the marker in
+prose, the risk the code-reviewer named at point 3. With the orchestrator
+writing outcomes, the phrase is kept out of prose; whether the marker should be
+read only as italics, `*left open*`, is the decider's to say.
+
+**Agents (`R-067`).** Code-reviewer and committer dispatched. Not run: the
+tester, the check being a self-test and greps; the coder, the files being in
+`.claude/`; the revisioners, `Core: no` held; the documenter, retired by this
+point. The decider: `deciderDue` was true before this point, from point 6's
+prose; it is dispatched at step 10 if the reading after this point is true.
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** a role that needs an agent recording on its behalf.
+**Not verified:** that the `record` hook fires for a subagent denial; only a
+subagent insertion has passed through it.
+**Correction, same day:** "the grep finds `plan-state/SKILL.md`" above should
+read `plan-status/SKILL.md`, the skill the fault was put in. Written as an
+insertion: the `record` hook refuses to edit the line itself.

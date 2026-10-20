@@ -203,7 +203,7 @@ function Get-PlanState([string]$Repo, [string]$Path, [bool]$Draft) {
     }
 
     # Against the commit that installed the live plan: a point's frozen text
-    # changed, a point already recorded, added since, or gone. The documenter's
+    # changed, a point already recorded, added since, or gone. /plan-next step 8's
     # three STOP cases, read rather than judged.
     $state.install = $null
     $state.gone = @()
