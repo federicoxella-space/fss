@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-126 — audited by `R-106`. The next audit starts at the
+**Register watermark:** D-143 — audited by `R-123`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -200,6 +200,18 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   generation, no village out of reach; every routed row one entry of its
   market's ranking, read without walking every settlement; type and assignment
   hysteresis both ways and eviction on a fall; P-79 and P-80 proposed.
+- ~~**`R-120`**, before the workflow review plan is archived, as a point added
+  under `D-014` with the user's approval: `plan-state` reads *criterion
+  defective*, *criterio difettoso* and *left open* only in emphasis; a fixture
+  with "nothing left open" in plain prose reads `deciderDue` false.~~ **Done in
+  `858ffe3` and `a11fdf1`**, point 10, checked by `R-123`.
+- **`R-121`**, before `docs/` is migrated: a moment-one draft for a plan that
+  builds the migration script and the correspondence check of `R-121`, never
+  writing `docs/`, its `Fails when:` lines naming at least the five faults the
+  ruling lists; `.gitignore` gains the vault's workspace and cache files.
+  **`R-123`**: the draft is done, version 5 approved by the user (`fc904a8`);
+  the `.gitignore` half lands with that plan's point 2, and the request
+  template's `docs/SIM-REQ.md` §18 citation once the originals are gone.
 
 ## Escalated to the user
 
@@ -6267,3 +6279,376 @@ the rulings it led to. Cite `R-118`.
 **Not verified:** that the user's sentence was meant as permission to edit
 `AGENTS.md` as well as a choice of place; it answers a gap in the rule just
 written there, and is read so.
+
+### R-119 — The register from `D-127` to `D-135` is ratified, save `D-131`'s decision 2; what points 3, 5 and 9 left open is answered without change
+
+**Date:** 2026-10-20   **Origin:** register audit, `D-127` to `D-135`; the
+*left open* and *criterion defective* of points 3, 9 and 5 of the workflow
+review plan
+**Verdict:** ratified
+**docs/:** unchanged
+
+Process work throughout, so ratified or rejected, never promoted (`D-011`). Read
+against `PLAN.md` as installed in `a9ee621` and as it stands, `R-005`, `R-009`,
+`R-010`, `R-048`, `R-073`, `R-074`, `R-116`, `R-118`, the moment-one request and
+its answers, and the scripts as they stand. `plan-state` was run on the live
+plan: install `a9ee621`, points 1 to 7 and 9 closed and unchanged, point 9
+`added`, `gone` empty, `deciderDue` true, the register count `D-127` to `D-136`.
+
+- **`D-127`, the cost plan's archive; `D-128`, the draft's own choices.** Stand.
+  `D-128`'s choices were put to the user at moment one and answered: the draft
+  approved, the committer kept, *left open* approved.
+- **`D-129`, `D-130`, `D-135`.** Stand as recorded. `D-130`'s decision 4 — the
+  reader names rules by `K` number, no identifier — is a fix to the brief and
+  not to the frozen criterion, which is the right side to fix it on: the
+  criterion asked for a blind reader, and a reader echoing the checklist's
+  provenance proves nothing about blindness either way.
+- **`D-131`, decisions 1 and 3 to 5.** Stand. Decision 1 reads "the lines that
+  begin with an outcome marker" as the paragraphs those lines open. The point's
+  "Does" excluded the markers so that closing a point would not mark it changed,
+  and its own second `Fails when:` names that fault; an outcome wraps, so only
+  the paragraph reading serves the point. That is the "Does" read by its
+  purpose, not a criterion defect: the check was met as frozen.
+- **`D-131`, decision 6, left open: the archives counted by their headings.**
+  Stands. The self-test exists to prove that every archived point is closed and
+  resolves to exactly one commit; that is still checked, point by point. The
+  pinned total checked something else, the inventory of `.claude/plans/`, and
+  had to be edited by every archive; it was red at 44 against 31 through two
+  archives before anyone saw it, which is what a pin owned by no step does. A
+  deleted archive is a deletion in git, seen in the diff of the commit that
+  makes it. Nothing owed.
+- **`D-132`.** Stands, and decision 2 is `R-005`'s case 1, rightly declared:
+  under the old reading the wrapped line opens a record that is dropped as the
+  outcome is, so the half "not reported changed" holds whichever reading the
+  code takes. The missing check stands beside it (fixture point 7, red under the
+  fault). The outcome already says *criterion defective*, so no line is owed.
+  **Its two questions.** Both stand as built. A record is a paragraph of its own,
+  with a blank line before it — the shape every record in the repository has and
+  the skill writes. Written without one, (a) a record after a bullet joins the
+  point's text and reads as `changed`, which stops `/plan-next` at step 8, and
+  (b) a `*Ruled:*` line glued to an outcome joins the outcome paragraph, which
+  can only make the decider due when it was not. Both fail toward a stop or an
+  extra dispatch, never toward a missed one.
+- **`D-133`.** Stands. The `**Ruling:**` exemption is the user's choice, option
+  A, and decision 2 holds it to that shape. **Verified here:** the hook fires for
+  a subagent. This session, a decider dispatched as an agent, tried an Edit
+  replacing one word of `D-136`; it was denied with `record`'s reason, and the
+  register is unchanged.
+- **`D-134`, left open: a check that writes files the repository does not
+  ignore now makes `mutate` exit 3.** That is right, and nothing is owed. `mutate`
+  proves that the tree is what it was; a check that leaves files behind has
+  changed it, and a proof that cannot tell its residue from an unrestored fault
+  proves nothing. A check that must write puts its output in a temporary
+  directory or under a path the point adds to `.gitignore`. The tester's text
+  need not forbid it: the exit refuses it, and the first check that meets it
+  will say so. **Its question**, a fault on the source of a rename the point
+  makes: refused, and harmless, since after the point's rename that source no
+  longer exists in the tree to be patched.
+
+**Cost.** `plan-state`'s self-test no longer notices an archive deleted.
+**Owed by the implementer:** nothing.
+**Would overturn it:** an archive lost without its deletion being seen; a
+record written without a blank line that `plan-state` misreads in the direction
+of a missed stop or a missed dispatch; a check that cannot avoid writing an
+unignored file.
+**Not verified:** the self-tests were rerun here and are green (`plan-state`
+87, `path-guard` 42, `mutate` 30, `tree-state` 14, `criteria-cite` 10), but no
+fault was reintroduced; the faults seen red are the entries' word. `RULINGS.md`
+was read in its state, owed
+actions, escalations, `R-001`, `R-005`, `R-009` and the rulings from `R-105` on,
+not whole.
+
+### R-120 — A decider marker counts only as a marker: emphasised, never matched in prose
+
+**Date:** 2026-10-20   **Origin:** `D-136`, left open for the decider; `D-131`,
+decision 2
+**Verdict:** `D-136` ratified, its question answered; `D-131`'s decision 2
+rejected for the three phrase markers, its reading of `FAILED` from the status
+standing
+**docs/:** unchanged
+
+Process work (`D-011`). Point 3's "Does" says the trigger is "read, not
+inferred", and writes the markers as markers: *criterion defective*,
+*criterio difettoso*, *left open*. `plan-state` strips every `*` and `_` from
+the outcome paragraph and matches the bare phrase anywhere, so point 6's
+"nothing left open" made the decider due, as `D-136` reports. A phrase matched
+in prose, negation included, is inference by word search: the risk the
+code-reviewer named at point 3, recorded and left in `D-131`'s decision 2, has
+now happened. The orchestrator keeping the phrase out of prose is a rule held
+by memory, which is what the marker was introduced to replace.
+
+**The ruling.** A decider marker is the phrase as the whole of an emphasis
+span — `*…*` or `**…**`, case ignored, a line break inside it read as a space —
+in the last closed point's outcome paragraph. The bare phrase in prose does not
+count. `FAILED` stays read from the point's status, as decision 2 has it. Every
+outcome that should trigger already carries the emphasised form: points 3, 5
+and 7 (*left open*, *Left open*), point 9 (*criterion defective*), the phase 3
+outcomes and their fixture (`**criterio difettoso**`). The rule would have held
+before any script was written: a marker that `/plan-next` step 8 writes in
+emphasis, as `AGENTS.md`'s table of markers writes *criterion defective*, is a
+token, and a token is matched as one. The other answer, keeping the phrase out
+of prose, errs only toward an extra dispatch, but it leaves the trigger to a
+writer's memory, which is what point 3 set out to end.
+
+**Cost.** One more edit of `plan-state.ps1` in this plan, and a point to carry
+it: a hook changes only under a point that says it edits `.claude/hooks/`
+(`D-087`). An outcome that writes the marker without emphasis no longer calls the
+decider; step 8 writes it in emphasis.
+**Owed by the implementer:** before the workflow review plan is archived, a
+point added under `D-014`, with the user's approval, that makes `plan-state`
+read the three phrase markers only in emphasis; its check a fixture whose last
+outcome reads "nothing left open" in plain prose, `deciderDue` false, beside the
+existing true fixtures; its `Fails when:` the markers matched with emphasis
+stripped, as now. Cite `R-120`.
+**Would overturn it:** an outcome that left something open, written by the
+skill, without the emphasised marker; the user preferring that the plan close
+without the point, which leaves the false positive to the next plan that edits
+`plan-state`.
+**Not verified:** the regular expression itself, which is the implementer's;
+that no archived outcome writes a marker unemphasised that a later reading
+would need.
+
+### R-121 — `docs/` becomes an Obsidian vault in place: one note per section, verified against the originals before they go
+
+**Date:** 2026-10-20   **Origin:** SQ-025; user, in this session
+**Verdict:** resolved — the structure of `docs/` within `R-001`'s delegation;
+the path, the edits to `AGENTS.md` and the skills, and the registers' place the
+user's decisions, reserve 1
+**docs/:** unchanged by this ruling; it fixes the shape the migration produces,
+and the two rulings that apply it change `docs/`
+
+`SQ-025` asked for `docs/` itself to move into an Obsidian vault, not a vault
+derived from it. Two axes are independent: where the specification lives, and
+in how many files. Moving the folder would have rewritten every protection keyed
+to `docs/` — `path-guard`, `git-guard`, `mutate`, three agents, four skills,
+`AGENTS.md` — for nothing Obsidian needs, since a vault is any folder holding
+`.obsidian/`. The user settled the path: **the vault is `docs/`**, created
+inside it, its content split into notes by category, checked to correspond, and
+only then the originals removed. Every guard keyed to the folder holds unchanged.
+
+**The user's answers, verbatim**, to the options put in this session: on the
+path, "Non è possibile creare un voult dentro /doc, migrarne il contenuto
+separandolo in più file organizzati per categoria, verificare che tutto
+corrisponda e, solo dopo, rimuovere i file originali?"; on granularity, "Nota per
+sezione"; on the references, "Sì, solo quei riferimenti"; on the registers, "No,
+solo la specifica".
+
+**The shape, which binds the migration.**
+
+1. **One folder per document**, `docs/SIM-REQ/` and the five others, each with
+   an index note of the document's name (`docs/SIM-REQ/SIM-REQ.md`). The index
+   holds the original preamble — title, `Document`, `Status`, `Revision`,
+   `Scope` or `Companion` lines — then, in document order, every `##` heading
+   that has no note of its own and the text under it, and an ordered link to
+   every note of the document. Reading the index top to bottom reads the
+   document in its order: `SIM-ECON` is a sequence and `SIM-REQ` §18,
+   "Delivery phases", a table read whole, and neither may become a pile.
+2. **One note per `##` section**, holding its heading line verbatim and all its
+   `###` subsections. Named `<number> <title>` where the section is numbered
+   (`18 Delivery phases.md`), `<title>` otherwise, characters Obsidian refuses in
+   a file name dropped.
+3. **Except where the `###` headings are identified entries**: each `### DEC-NNN`
+   of `SIM-DEC` and each `### R<n>` of `SIM-LOOPS` is a note of its own, named by
+   its identifier alone (`DEC-085.md`, `R1.md`), in a folder named for its `##`
+   group. The group's heading and any text before its first entry go in the
+   index. `SIM-OBS`'s `## OBS-n` sections are notes named `OBS-n.md`. A name that
+   is an identifier survives a retitled entry, which a heading link does not
+   (`R-013`).
+4. **Block ids.** A paragraph or list item that opens with a bold identifier —
+   `**FR-T-06**`, `**AC-02 — …**` and the like — ends with ` ^<identifier>`, so
+   that a link reaches one requirement. Table rows get none.
+5. **Properties**, in each note's front matter, and nothing the text does not
+   already say: `document`, `kind` (`index`, `section`, `decision`, `loop`,
+   `observable`), `id` for an identified note, `aliases` with the section's
+   citation form (`SIM-REQ §18`) or the entry's title.
+6. **Links in prose.** An identifier written in the text that names a note or a
+   block id may become a link whose displayed text is the identifier exactly
+   as written; never inside a code span, never at its own defining occurrence.
+   No other word changes.
+7. **`docs/CLAUDE.md` stays** where it is, outside the migration. `.obsidian/`
+   is committed with only the settings the vault needs to render as stated;
+   workspace and cache files are ignored.
+8. **Revision.** The document's `**Revision:**` line lives in its index note and
+   is bumped when any note of the document changes. No per-note revision.
+
+**The correspondence check**, which decides whether the originals may go:
+strip front matter, block ids and link syntax (to the displayed text), drop the
+index's link list, concatenate the notes in index order; the result equals the
+original document line for line, blank lines at note boundaries excepted. It
+must go red on at least: a paragraph lost, a paragraph duplicated, a word
+changed, a note missing from its index, two notes in the wrong order.
+
+**Who does what.** The script and the check are code, built and tested by an
+implementer plan against a directory it is given, never writing `docs/`
+(`path-guard` and `git-guard` would refuse it anyway). Then two decider rulings:
+the first runs the script into `docs/`, runs the check against the originals
+still present, and commits the notes green; the second runs the check again on
+the committed tree, removes the six original files, and updates the references
+below in the same commit, so no reference ever points at a missing file. Nothing
+else edits `docs/` between the two.
+
+**The user's permission, recorded here as `AGENTS.md` asks of a decider
+session**, granted by Federico Xella on 2026-10-20, for the references to the
+six original files and nothing else: `AGENTS.md`, the six rows of the document
+table and the citations under "Ask for a review", "Rules the build cannot
+catch", "Tests carry the number" and "Scope"; `.claude/skills/plan-next/SKILL.md`
+and `.claude/skills/plan-status/SKILL.md`, one citation each;
+`core/Runtime/Systems/CLAUDE.md`, one; `.claude/skills/decide/SKILL.md`, step 6,
+the `Revision` line read as the index note's and a new `DEC-` written as a new
+note in its group, linked from the index in its place. Each reference names the
+new note or index. The permission also named the fixture
+`.claude/hooks/fixtures/plan-explain/misura-costi.md`; it is left as it is: it
+quotes a past request, a record, not a reference anything follows, and a hook
+fixture changes only under a plan point (`D-087`).
+
+**What stays outside.** The registers stay at the repository root, out of the
+vault, as the user chose. Frozen records keep their old paths: the 95
+`docs/SIM-*.md:<line>` citations in `SPEC-QUESTIONS.md` and every past ruling
+and register entry point at files that will no longer exist, resolved through
+git at their commit. No `SIM-OBS` text is added, removed or rewritten; reserve 3
+is not touched.
+
+**Cost.** The specification is read through about two hundred notes and six
+indexes instead of six files; a `file:line` citation, already fragile, stops
+meaning anything after the migration. Every later ruling edits a note and an
+index. The derived-vault draft of `728b47d` is superseded, and its points with
+it.
+**Owed by the implementer:** a new moment-one draft, replacing the one in
+`REVIEW-REQUEST.md`, for a plan that builds the migration script and the
+correspondence check of this ruling, its `Fails when:` lines naming at least the
+five faults above; `.gitignore` gains the vault's workspace and cache files. The
+plan does not write `docs/`. The next request's template line citing
+`docs/SIM-REQ.md` §18 follows the reference above once the originals are gone.
+Cite `R-121`.
+**Would overturn it:** the check unable to prove correspondence for a document
+whose structure the rules above do not cover; the user preferring one note per
+identifier, or the registers in the vault.
+**Not verified:** that Obsidian accepts every identifier as a block id and renders the front
+matter as stated, known from its documentation, not tried; the count of notes,
+estimated from the headings. Checked: every `###` of `SIM-DEC` is a `DEC-`
+entry and every `###` of `SIM-LOOPS` an `R<n>`, by grep. `RULINGS.md` was read in its state, owed actions,
+escalations, `R-001` to `R-024` and `R-116` to `R-120`, not whole.
+
+### R-122 — `R-121` 4's block ids open a paragraph; the brakes of `SIM-LOOPS` get none, and `SIM-LOOPS` keeps its layout
+
+**Date:** 2026-10-20   **Origin:** SQ-026
+**Verdict:** resolved
+**docs/:** unchanged
+
+`SQ-026` asks whether the draft's reading of `R-121` 4 is the ruling's: a block
+id goes on a paragraph or list item whose first characters are `**`, an
+identifier, then `**` or ` —`, a paragraph being a run of non-blank lines; so the
+brakes `**B<n> — …**` of `SIM-LOOPS`, lines inside their loop's paragraph, get
+none, and neither does line 52, `**B1 does not apply here.**`. And whether the
+brakes should be made reachable, which would need blank lines in `SIM-LOOPS`.
+
+**The reading is the ruling's.** `R-121` 4 gives a block id "so that a link
+reaches one requirement". A brake is not a requirement: it is a mechanism named
+inside a loop entry, and the line beneath it names the requirements that
+implement it. The loop is already a note of its own under `R-121` 3, five to
+eight lines long, so a link to `R3` lands on `B3a`'s text with nothing to scroll.
+Line 52 is not `B1`'s definition, which is line 38 inside `R1`; a `^B1` there
+would point a link for `B1` at the sentence saying it does not apply. Checked
+against the whole of `docs/`: every line opening with a bold identifier of the
+form `XX-…` is followed by `**` or ` —` (190 and 70), and none sits inside a
+paragraph or a list; the brakes are the only identifier-led bold lines that do.
+The reading leaves no requirement without its block id.
+
+**`SIM-LOOPS` is not edited.** Blank lines between a loop's text and its brakes
+would be a `docs/` change whose only reason is the tool, made to give block ids
+to things the ruling did not mean to reach. It would also cut each loop into
+pieces read apart, where the document reads a loop, its brakes and their
+citation as one unit (its line 34: "followed by the balancing loop that holds
+it, the requirement that implements the brake, and the parameter that tunes
+it").
+
+It follows from `R-121` 6 that a brake's identifier, naming neither a note nor
+a block id, is never linked: the three mentions outside `SIM-LOOPS`
+(`SIM-DEC` line 622, `B1` and `B3a`; `SIM-STATE` line 44, `B1`) and the
+cross-references between loops stay plain text. Linking them to their loop's
+note would widen `R-121` 6, and is not granted.
+
+**Cost.** A reader following `B3a` from `SIM-DEC` searches for it rather than
+clicking; a brake cannot be embedded or linked alone.
+**Owed by the implementer:** nothing new. The draft's block-id reading and its
+link rule stand; point 1 of the migration plan is no longer blocked by
+`SQ-026`, and still waits on the user's answer under `R-049`.
+**Would overturn it:** a requirement, test or ruling that needs to cite one
+brake by link — a brake promoted to a requirement of its own, or an `AC-` that
+names one — which would argue for blank lines in `SIM-LOOPS` by a ruling.
+**Not verified:** Obsidian's handling of a block id on a multi-line paragraph,
+from its documentation, not tried. `RULINGS.md` read in its state, owed
+actions, escalations, `R-001` and `R-121`, not whole.
+
+### R-123 — The register from `D-137` to `D-143` is ratified; point 10's *criterion defective* is answered without change, and the workflow review plan owes nothing before its archive
+
+**Date:** 2026-10-21   **Origin:** register audit, `D-137` to `D-143`; the
+*criterion defective* of point 10 of the workflow review plan
+**Verdict:** ratified
+**docs/:** unchanged
+
+Process work throughout, so ratified or rejected, never promoted (`D-011`).
+Read against `PLAN.md` as it stands, `R-005`, `R-009`, `R-010`, `R-048`,
+`R-120`, `R-121`, `R-122`, the moment-one request of the `docs/` vault
+migration plan with its draft version 5 and the user's answers, and the scripts
+as they stand. `plan-state` was run on the live plan: install `a9ee621`, ten
+points closed, 9 and 10 `added`, none `changed`, `gone` empty, state
+`finished`, no reserve open, `deciderDue` true, the register count `D-137` to
+`D-143`. `plan-state -SelfTest` 91 cases, 0 failed.
+
+- **`D-137`, point 8.** Stands. The permission to edit `AGENTS.md` is the
+  user's at moment one, for a point that names the file and the rule, as
+  `R-010` requires; `3985300` adds that one paragraph to `AGENTS.md` and nothing
+  else there, checked against its diff. Dropping the clause the "Does" did not
+  hold was right (table C2). The entry carried no `**Ruling:**` line; one is
+  inserted.
+- **`D-138`, the derived-vault draft.** Stands as the record of a draft that
+  `R-121` superseded, and its decisions with it. It binds nothing now; no plan
+  was installed from it.
+- **`D-139` to `D-142`, the readings of `R-121` in the migration draft.** Stand.
+  They were put to the user at moment one with each version, and version 5 was
+  approved as written (`fc904a8`). Read against `R-121` and `R-122`, none
+  widens or narrows the shape. Three readings are confirmed as the ruling's
+  own: an embed line is the "ordered link to every note" of `R-121` 1, since it
+  is a link and makes the index read as the document; links in table rows are
+  within `R-121` 6, whose exclusions are code spans and defining occurrences —
+  "in prose" in its heading means the text, not the text outside tables; and
+  the grammar keeping `B<n>` out is `R-122` reached by a narrower route, since a
+  brake then names nothing and is never linked, which is what `R-122` rules.
+  Linking every eligible mention, where `R-121` 6 says "may", and the exact
+  comparison, where `R-121` allows blank lines at note boundaries, tighten the
+  ruling and were approved by the user. `D-141` 8 and `D-142` 8, the workflow
+  review plan archived on `design/obsidian-vault` before its merge, are
+  `R-048`'s rule that `main` never carries a live `PLAN.md`.
+- **`D-143`, point 10, and its *criterion defective*.** Stands, and the case is
+  `R-005`'s case 1, rightly declared: correct code passes the frozen check,
+  which pairs no span after another `*`, so code misreading every paragraph
+  holding a code span or a bold pair before its marker would pass it too. The
+  missing check, `decider-code-star.md`, stands beside it and is in the
+  self-test. The outcome already says *criterion defective*, so no line is
+  owed. Decision 3, a `*` loose in prose shifting the pairing, fails in the
+  silent direction, a missed dispatch, where both cases `R-119` accepted
+  failed toward a stop or an extra dispatch; it is kept because no outcome live or archived holds one, outcomes
+  write globs and paths in code spans, and a Markdown parser is more than
+  `R-120` asks. Decision 4, `_…_` no longer counted, is `R-120`'s text: it names
+  `*…*` and `**…**`; no plan live or archived writes a marker in underscores.
+  `R-120`'s owed point is done.
+
+**Before the archive and the merge.** The plan is finished, no reserve is open,
+and no owed action names this plan. Nothing in the rulings stands between the
+archive, which `R-048` and `D-141` 8 require before the merge, and the merge the
+user asked for, which carries the `Plan-point:` trailers and must not be
+squashed (`AGENTS.md`, "Commits").
+
+**Cost.** A loose `*` in an outcome's prose before an emphasised marker hides
+it from `plan-state`, and nothing would notice.
+**Owed by the implementer:** nothing new.
+**Would overturn it:** an outcome written by `/plan-next` with a loose `*`
+before its marker, or a marker outside emphasis; a vault built under version 5
+that the correspondence check cannot prove against `R-121`'s shape.
+**Not verified:** the faults of `D-143` seen red are the entry's word, none
+reintroduced here; the drafts' fault lists and counts were not tried, as the
+request says; the absence of a loose `*` was checked by a grep of `PLAN.md` and
+`.claude/plans/` for ` * ` and a digit-star-digit outside code spans, not by a
+parser. `RULINGS.md` was read in its state, owed actions, escalations, `R-001`,
+`R-005` to `R-010` and `R-116` to `R-122`, not whole.

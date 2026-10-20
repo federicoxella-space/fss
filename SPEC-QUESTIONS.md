@@ -994,3 +994,64 @@ sennò si compra." Water is an explicit good: drawn where a place has the means
 (a well, a river, a spring), bought where it has not. Its site, recipe, group,
 class and whether it spoils or travels are not set; the user's as content where
 `R-050` makes them so, the decider's otherwise.
+
+### SQ-025 — the user wants `docs/` moved into an Obsidian vault
+
+**Raised:** 2026-10-20, by the user, in an implementer session.
+**Cites:** `AGENTS.md`, "`docs/` is not yours to edit" and "The decider answers
+what this file sends to a human"; `docs/CLAUDE.md`.
+**Blocks:** **yes, the Obsidian vault plan**, drafted in `REVIEW-REQUEST.md` at
+`728b47d`: it assumed a vault derived from `docs/`, and the user answered that
+`docs/` itself is to move.
+**Status:** open — for the decider, with the user, in `/decide`.
+**Status:** **closed 2026-10-20 by R-121.**
+
+**The user's words, verbatim.** First request: "Crea un vault obsidian e
+spostaci tutta la conoscenza del progetto. Quando hai terminato lancia un agente
+che si occupi di controllare che il contenuto rispetti l'attuale documentazione
+presente e poi uno che si occupi di collegare tra di loro gli argomenti. Sfrutta
+le proprietà di Obsidian per ottimizzare l'accessibilità della documentazione".
+Asked whether to derive a vault or move the files, the user first chose a vault
+derived inside the repository, one note per entry; on reading the draft, the
+user answered: "L'obiettivo è spostare /doc ne vault".
+
+**Facts, without a proposed answer.**
+- `docs/` holds `SIM-REQ`, `SIM-DEC`, `SIM-STATE`, `SIM-ECON`, `SIM-LOOPS`,
+  `SIM-OBS` and `CLAUDE.md`, about 2,500 lines; their identifiers number about
+  260 requirement and acceptance paragraphs, 109 `DEC-`, 5 `OBS-`, 14 loops `R<n>`
+  with their `B<n>` brakes.
+- Outside `docs/`, files citing a `docs/` path: 5 under `.claude/skills/`, 4
+  under `.claude/hooks/`, 3 under `.claude/agents/`, 4 under `.claude/design/`,
+  4 under `.claude/plans/`, 3 under `core/Runtime/`, and `AGENTS.md`,
+  `README.md` and every register. Citations of the form `docs/SIM-*.md:<line>`:
+  97. Files under `core/`, `harness/`, `bench/` naming a `SIM-` document: 19.
+- Splitting a document into notes ends what a `file:line` citation points to;
+  moving a document whole changes its path only.
+- The hooks, skills and agents, and `AGENTS.md`, change only with the human's
+  permission recorded (`AGENTS.md`, "This file changes only with permission";
+  `D-087`); code comments follow table C1 and C8.
+
+### SQ-026 — `R-121` 4's block ids, and the brakes of `SIM-LOOPS`, which open no paragraph
+
+**Raised:** 2026-10-20, drafting the plan `R-121` owes.
+**Cites:** `R-121` 4; `docs/SIM-LOOPS.md:38`, `:43`, `:48-49`, `:52`, `:56-57`.
+**Blocks:** **yes, point 1 of the migration plan** drafted in
+`REVIEW-REQUEST.md`: its check 4 and a fault of its point 2 rest on the answer.
+**Status:** open — for the decider.
+**Status:** **closed 2026-10-20 by R-122.**
+
+`R-121` 4 gives a block id to "a paragraph or list item that opens with a bold
+identifier". In `SIM-LOOPS` the brakes are written as lines with no blank line
+between them and the loop's text: lines 47 to 50, the text of `R3`, then
+`**B3a — …**`, `**B3b — …**` and an italic citation line, are one Markdown
+paragraph. Obsidian attaches a block id only at the end of a block; a ` ^B3a`
+at the end of line 48 would not make a block. Line 52, `**B1 does not apply
+here.**`, does open a paragraph with a bold span beginning with `B1`, inside
+`R3`, while `B1` itself is defined at line 38, inside `R1`.
+
+The draft reads `R-121` 4 as: a paragraph or list item whose first characters
+are `**`, an identifier, then `**` or ` —`; so `B3a` and its kind get no block
+id, being no paragraph's opening, and line 52 gets none, its bold span being
+no identifier. Whether that is the ruling's reading, and whether the brakes
+should be reachable by a link — which would need blank lines in
+`SIM-LOOPS`, a change to `docs/` — is the decider's.

@@ -9,8 +9,8 @@
     ignored, which the first two name without reading. Ignored files, bin/ and
     obj/ among them, are outside it.
 
-    -Path limits all three to the given pathspecs; mutate.ps1 passes
-    core/Runtime and harness. -Repo is the repository, the current directory
+    -Path limits all three to the given pathspecs; mutate.ps1 passes the
+    whole tree less the paths no fault may touch. -Repo is the repository, the current directory
     by default.
 #>
 param([string]$Repo = (Get-Location).Path, [string[]]$Path = @(), [switch]$SelfTest)

@@ -35,8 +35,10 @@ dotnet test core/Tests/Sim.Core.Tests.csproj -c Debug
 ```
 
 Then introduce each fault of "Fails when" as a patch through
-`pwsh -File .claude/hooks/mutate.ps1`, never by editing `core/Runtime/` or
-`harness/` yourself, and where the point's code has a body that can be emptied,
+`pwsh -File .claude/hooks/mutate.ps1`, never by editing the point's files
+yourself. It admits a patch on any file the point's diff touches, untracked
+ones included, except `core/Tests/`, `docs/`, `.claude/`, `AGENTS.md`, a
+`CLAUDE.md`, `core/BannedSymbols.txt` and the record files. And where the point's code has a body that can be emptied,
 the empty implementation too. A fault that leaves the check green is reported,
 not hidden.
 

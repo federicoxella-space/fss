@@ -18,6 +18,52 @@ param([string]$Repo = (Get-Location).Path, [string]$Path, [switch]$Draft, [switc
 
 $Outcome = '^\*(Esito|Outcome):\*'
 $Discharged = '^\*(Riserva sciolta|Reserve discharged):\*'
+# A line that opens a record paragraph under a point; the paragraph, to the
+# next blank line, is not the point's frozen text (point 3 of the workflow
+# review plan).
+$Record = '^\*(Esito|Outcome|Ruled|Riserva sciolta|Reserve discharged):\*'
+# What sends the decider after a point, besides a FAILED status: read in its
+# outcome paragraph only.
+$DeciderMarkers = '(criterion defective|criterio difettoso|left open)'
+
+# A point's frozen text: its section without the record paragraphs that follow
+# it, blank lines at either end dropped, line endings ignored.
+function Get-FrozenText([string[]]$sec) {
+    $kept = @()
+    $inRecord = $false
+    # A marker opens a record only where a paragraph starts: a wrapped line that
+    # happens to begin with one is still the paragraph it belongs to (point 9).
+    $paraStart = $true
+    foreach ($l in $sec) {
+        $blank = $l.Trim() -eq ''
+        if ($paraStart -and $l -match $Record) { $inRecord = $true; $paraStart = $false; continue }
+        $paraStart = $blank
+        if ($inRecord) { if ($blank) { $inRecord = $false }; continue }
+        $kept += $l.TrimEnd("`r")
+    }
+    return (($kept -join "`n").Trim("`n", ' '))
+}
+
+# Sections of a plan's points, by number, in file order.
+function Get-Sections([string[]]$lines) {
+    $heads = @()
+    for ($i = 0; $i -lt $lines.Count; $i++) { if ($lines[$i] -match '^#{1,2} ') { $heads += $i } }
+    $out = [ordered]@{}
+    for ($k = 0; $k -lt $heads.Count; $k++) {
+        if ($lines[$heads[$k]] -notmatch '^## (\d+)\. ') { continue }
+        $end = if ($k + 1 -lt $heads.Count) { $heads[$k + 1] - 1 } else { $lines.Count - 1 }
+        $sec = if ($end -gt $heads[$k]) { @($lines[($heads[$k] + 1)..$end]) } else { @() }
+        $out[[string][int]$Matches[1]] = @{ head = $lines[$heads[$k]]; sec = $sec }
+    }
+    return $out
+}
+
+# The commit that installed the live PLAN.md: the oldest in the plan's range
+# that adds it.
+function Get-Install([string]$Repo, [string]$Range) {
+    $c = @(git -C $Repo log --reverse --diff-filter=A --format=%h $Range -- PLAN.md 2>$null)
+    if ($c.Count) { return $c[0] } else { return $null }
+}
 
 function Get-PlanLines([string]$File, [bool]$Draft) {
     $lines = @(Get-Content -LiteralPath $File -Encoding utf8)
@@ -156,6 +202,67 @@ function Get-PlanState([string]$Repo, [string]$Path, [bool]$Draft) {
         $state.points += $p
     }
 
+    # Against the commit that installed the live plan: a point's frozen text
+    # changed, a point already recorded, added since, or gone. /plan-next step 8's
+    # three STOP cases, read rather than judged.
+    $state.install = $null
+    $state.gone = @()
+    $now = Get-Sections $lines
+    foreach ($p in $state.points) { $p.recorded = $p.status -ne 'open' }
+    if ($state.range -and $rel -eq 'PLAN.md') {
+        $state.install = Get-Install $Repo $state.range
+        if ($state.install) {
+            # git's output is UTF-8; read with the console's code page, an em
+            # dash would differ from the same text read from disk.
+            $enc = [Console]::OutputEncoding
+            [Console]::OutputEncoding = [Text.Encoding]::UTF8
+            try { $old = @(git -C $Repo show "$($state.install):PLAN.md") } finally { [Console]::OutputEncoding = $enc }
+            $then = Get-Sections @($old | ForEach-Object { $_.TrimEnd("`r") })
+            foreach ($p in $state.points) {
+                $key = [string]$p.number
+                $p.added = -not $then.Contains($key)
+                $p.changed = (-not $p.added) -and (
+                    $then[$key].head -ne $now[$key].head.TrimEnd("`r") -or
+                    (Get-FrozenText $then[$key].sec) -ne (Get-FrozenText $now[$key].sec))
+            }
+            $state.gone = @($then.Keys | Where-Object { -not $now.Contains($_) } | ForEach-Object { [int]$_ })
+        }
+    }
+
+    # The decider is due when the last closed point's outcome paragraph, and
+    # nothing after it, carries a marker that leaves something open.
+    $state.deciderDue = $false
+    $lastClosed = @($state.points | Where-Object { $_.status -ne 'open' } | Select-Object -Last 1)
+    if ($lastClosed.Count) {
+        $para = @()
+        $in = $false
+        $paraStart = $true
+        foreach ($l in $now[[string]$lastClosed[0].number].sec) {
+            # The outcome opens where a paragraph starts, and ends at the blank
+            # line that closes it; a wrapped line beginning with a marker is
+            # still inside it (point 9).
+            if (-not $in -and $paraStart -and $l -match $Outcome) { $in = $true }
+            elseif ($in -and $l.Trim() -eq '') { break }
+            $paraStart = $l.Trim() -eq ''
+            if ($in) { $para += $l }
+        }
+        # A marker counts only as the whole of an emphasis span, *…* or **…**,
+        # case ignored; a line break inside the span is read as a space. The
+        # bare phrase in prose, or inside a longer span, does not (R-120).
+        # Code spans go first, so that a `*` inside one pairs with nothing; a
+        # bold pair is taken whole, so that it leaves no `*` to shift the
+        # pairing of the spans after it. A `*` loose in prose still shifts it.
+        $marked = $false
+        $prose = ($para -join ' ') -replace '`[^`]*`', ''
+        foreach ($m in [regex]::Matches($prose, '\*\*(.+?)\*\*|\*([^*]+?)\*')) {
+            $span = ($m.Groups[1].Value + $m.Groups[2].Value) -replace '\s+', ' '
+            if ($span -match "^$DeciderMarkers$") { $marked = $true }
+        }
+        # FAILED is read where Read-Point reads it, as the point's status, not
+        # from prose that may quote the word.
+        $state.deciderDue = ($lastClosed[0].status -eq 'failed') -or $marked
+    }
+
     $open = @($state.points | Where-Object { $_.status -eq 'open' })
     $state.reservesOpen = @($state.points | Where-Object { $_.status -eq 'reserve-open' } | ForEach-Object { $_.number })
     # "After the failure" is by position in the file, not by number: a point added
@@ -229,7 +336,56 @@ if ($SelfTest) {
     Expect 'draft: the request outside the block is not a point' (-not @($s.points | Where-Object { $_.title -like 'Outside*' }).Count)
     Expect 'draft: no commits resolved' ($null -eq $s.range)
 
-    # The five archived plans: 31 points closed, each resolved to exactly one commit.
+    # The decider is due on the last closed point's outcome paragraph only.
+    Expect 'deciderDue: outcome criterion defective' ((Of 'decider-defective.md').deciderDue)
+    Expect 'deciderDue: clean outcome, "failed" in prose, a later Ruled line' (-not (Of 'decider-ruled.md').deciderDue)
+    Expect 'deciderDue: Esito with **criterio difettoso**' ((Of 'decider-italian.md').deciderDue)
+    $s = Of 'request-with-draft.md' $true
+    Expect 'deciderDue: nothing closed' (-not $s.deciderDue -and -not @($s.points | Where-Object { $_.status -ne 'open' }).Count)
+    Expect 'deciderDue: a FAILED point' ((Of 'failed-then-open.md').deciderDue)
+    Expect 'deciderDue: an outcome wrapped onto a line beginning *Ruled:*' ((Of 'decider-wrapped.md').deciderDue)
+    Expect 'deciderDue: a wrapped line of the point beginning *Outcome:* is not the outcome' (-not (Of 'decider-midline.md').deciderDue)
+    # A marker counts only in emphasis, as the whole of its span (R-120).
+    Expect 'deciderDue: "nothing left open" in plain prose' (-not (Of 'decider-prose.md').deciderDue)
+    Expect 'deciderDue: *nothing left open*, the marker inside a longer span' (-not (Of 'decider-inner-span.md').deciderDue)
+    Expect 'deciderDue: *left open* broken across two lines inside its emphasis' ((Of 'decider-broken-span.md').deciderDue)
+    Expect 'deciderDue: a `*` in a code span and a bold pair before the marker' ((Of 'decider-code-star.md').deciderDue)
+
+    # A point's frozen text, against the commit that installed the plan: a
+    # repository where point 1 is closed, point 2's "Closed by" edited in a
+    # later commit, point 3 gone and point 4 added.
+    $repo = Join-Path ([IO.Path]::GetTempPath()) "plan-state-$PID"
+    $null = New-Item -ItemType Directory -Force $repo
+    git -C $repo init -q
+    git -C $repo config user.email t@t
+    git -C $repo config user.name t
+    $p7 = { param($w) "## 7. Point 7`n`n- **Does:** a thing that wraps onto a line`n*Ruled:* beginning with a marker, then $w.`n- **Closed by:** check seven.`n- **Core:** no — fixture.`n" }
+    $pt = { param($n, $closedBy) "## $n. Point $n`n`n- **Does:** thing $n.`n- **Closed by:** $closedBy`n- **Core:** no — fixture.`n" }
+    $installed = "# Plan — fixture`n`n**Kind:** process`n`n" + (& $pt 1 'check one.') + "`n" + (& $pt 2 'check two.') + "`n" + (& $pt 3 'check three.') + "`n" + (& $pt 5 'check five.') + "`n" + (& $pt 6 'check six.') + "`n" + (& $p7 'a word')
+    Set-Content -NoNewline -Encoding utf8 (Join-Path $repo 'PLAN.md') $installed
+    git -C $repo add PLAN.md
+    git -C $repo commit -q -m 'install'
+    $later = "# Plan — fixture`n`n**Kind:** process`n`n" + (& $pt 1 'check one.') +
+        "`n*Outcome:* 2026-10-20. Closed with reserve — a push`nawaits the human.`n`n*Ruled:* 2026-10-21 — criterion defective.`n`n*Reserve discharged:* 2026-10-22 — pushed.`n`n" +
+        (& $pt 2 'check two, edited.') + "`n" + (& $pt 4 'check four.') + "`n" + (& $pt 5 'check five.') +
+        "`n*Esito:* 2026-09-20. Chiuso, il test`ne verde, e il fixture va a capo`n*Ruled:* su una riga che comincia con un marcatore.`n`n" + ((& $pt 6 'check six.') -replace 'Point 6', 'Point six, renamed') + "`n" + (& $p7 'another word')
+    Set-Content -NoNewline -Encoding utf8 (Join-Path $repo 'PLAN.md') $later
+    git -C $repo commit -q -am 'point 1 and an edit'
+    $s = Get-PlanState $repo (Join-Path $repo 'PLAN.md') $false
+    function Pt($n) { @($s.points | Where-Object { $_.number -eq $n })[0] }
+    Expect 'frozen text: installing commit found' ($null -ne $s.install)
+    Expect 'frozen text: point 1 recorded, ruled, discharged, not changed' ((Pt 1).recorded -and -not (Pt 1).changed)
+    Expect 'frozen text: point 5 closed in Italian, not changed' ((Pt 5).recorded -and -not (Pt 5).changed)
+    Expect 'frozen text: point 6 heading edited, changed' ((Pt 6).changed)
+    Expect 'frozen text: point 7 edited after a wrapped line beginning *Ruled:*, changed' ((Pt 7).changed)
+    Expect 'frozen text: point 2 changed' ((Pt 2).changed -and -not (Pt 2).recorded)
+    Expect 'frozen text: point 4 added, not changed' ((Pt 4).added -and -not (Pt 4).changed)
+    Expect 'frozen text: point 3 gone' (@($s.gone) -contains 3 -and @($s.gone).Count -eq 1)
+    Remove-Item -Recurse -Force $repo
+
+    # The archived plans: every point closed, each resolved to exactly one
+    # commit, counted against the point headings themselves.
+    $headings = @(Get-ChildItem (Join-Path $root '.claude/plans') -Filter *.md | ForEach-Object { Select-String -LiteralPath $_.FullName -Pattern '^## \d+\. ' }).Count
     $closed = 0
     foreach ($f in Get-ChildItem (Join-Path $root '.claude/plans') -Filter *.md) {
         $s = Get-PlanState $root $f.FullName $false
@@ -239,7 +395,7 @@ if ($SelfTest) {
             Expect "archive $($f.Name) point $($p.number): one commit, found $(@($p.commits).Count)" (@($p.commits).Count -eq 1)
         }
     }
-    Expect "archives: 31 points closed, found $closed" ($closed -eq 31)
+    Expect "archives: $headings points closed, found $closed" ($closed -eq $headings)
 
     # The entry point: JSON on stdout.
     $out = pwsh -NoProfile -File $PSCommandPath -Repo $root -Path (Join-Path $fx 'failed-then-open.md') | ConvertFrom-Json

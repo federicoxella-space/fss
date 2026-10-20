@@ -4387,6 +4387,7 @@ reads (1) as within the instruction; the decider was not asked.
 ## 2026-10-19 — The cost measurement plan, archived
 
 ### D-127 · Closing the cost measurement plan · The archive and the promotion pass
+**Ruling:** R-119 — ratified.
 
 `plan-state` read `state: finished`, `reservesOpen` empty, the register audited
 to `D-126` (`R-106`). `R-105`'s owed line under point 5 landed in `c24e818`.
@@ -4411,3 +4412,983 @@ dopo l'archiviazione del plan".
 the simulator's code.
 `plan-state -Path` on the archived file reads `finished`; on the tree, `none`.
 **Not verified:** nothing beyond what the plan's own entries list.
+
+## 2026-10-20 — The workflow review, drafted as a plan at moment one
+
+### D-128 · Moment one of the workflow review plan · What the draft decides beyond the review
+**Ruling:** R-119 — ratified; its choices answered by the user at moment one.
+
+The user reviewed the development workflow on 2026-10-19 and 20 and approved
+directions recorded in `.claude/design/2026-10-19-workflow-review.md`: review A
+and B on criteria, P1 to P4 on the weight of a point, G1 and G2 on friction, C3
+on design conversations. G1 was applied at once, outside any plan, as an
+environment setting not committed. The rest the user asked for as one plan: "C3,
+scrivi la bozza del piano". The draft is in `REVIEW-REQUEST.md`; a blind reader
+attacked its first version before it was shown, as review A will require, and
+the request quotes what it found and what changed.
+
+**Decided, beyond what the review approved.**
+- **The committer is kept**, though review P1 retired it with the documenter:
+  `git-guard` admits only the commands of a commit and cannot guard the
+  orchestrator, so without the committer it would guard nothing. Asked of the
+  user in the request.
+- **A new outcome marker, *left open***, written when a finding is left to the
+  human, a `SPEC-QUESTIONS.md` entry is raised or an escalation made, so that
+  review P4's trigger for the decider is read from the outcome line, not
+  inferred from prose. Asked of the user in the request.
+- **The `record` role decides `DECISIONS-OUTSIDE-SPEC.md` and `PLAN.md` only**,
+  for every session, the decider's included; `SPEC-QUESTIONS.md` is left out
+  because the decider closes entries by editing their status line.
+- **`mutate` excludes `core/Tests/`**, besides `docs/`, `.claude/`, `AGENTS.md`,
+  every `CLAUDE.md`, `core/BannedSymbols.txt` and the record files, because a
+  patch that breaks a test would count as a fault caught.
+- **The checklist holds six rules**, `K1` to `K6`, each from `R-101` to `R-105`;
+  the design note named four.
+- **The draft's fixture for review A** is the cost measurement plan's request as
+  committed in `64147ba`, before the user's answer.
+
+**What `docs/` says:** nothing; process work. `R-010`, `R-046`, `R-048`,
+`R-049`, `R-116`, `R-118`.
+**Would overturn it:** the user's answer to the request, which may change any of
+it.
+**Not verified:** the second version of the draft was not read blind again;
+whether a project settings hook reaches subagents.
+
+## 2026-10-20 — The workflow review plan
+
+### D-129 · Point 1 · The criteria checklist: six rules, each tied to its ruling, and a script that checks the ties exist
+**Ruling:** R-119 — ratified.
+
+**Built** (by the orchestrator, not the coder: `.claude/skills/` and
+`.claude/hooks/` are not the coder's, `R-010`, `D-087`; the point names both
+folders, which is the permission): `.claude/skills/plan-explain/criteria.md`,
+rules `K1` to `K6`, each a `###` heading citing `R-101` to `R-105`; and
+`.claude/hooks/criteria-cite.ps1` with `-SelfTest`. `core/`, `docs/` and
+`AGENTS.md` untouched.
+
+**Decided (`docs/` silent: process work).**
+1. **The checklist lives in `.claude/skills/plan-explain/`**, beside the skill
+   that will read it (point 2 wires the reading). *Would overturn it:* a ruling
+   placing it elsewhere.
+2. **The script exits 2 when a file cannot be read**, apart from 1 for a
+   violation. *Would overturn it:* a convention for hook exit codes that
+   differs.
+3. **A rule is a `###` heading and nothing else.** A `K` rule at another level
+   (`## K7`) or a second `### K1` is refused, with self-test cases `level.md` and
+   `twice.md`; prose such as `**K7**` or `- K7` is not caught, the guard covering
+   lines that begin with `K<n>`. *Would overturn it:* a checklist form that
+   needs another shape.
+4. **The six rules' wording, each narrowed to what its ruling says.** `K3`'s last
+   clause ("an independent recount of the wrong quantity is still wrong") was an
+   inference `R-102` does not state and is removed. `K5`'s "or built from the
+   same objects the check uses" is kept: `R-105`'s own "Cost" names that
+   construction as what a rerun would first need. *Would overturn it:* a ruling
+   that a rule misreads its citation.
+
+**Results.** `criteria-cite.ps1 -SelfTest`: 10 cases, 0 failed. The script on
+the real checklist: exit 0, "every rule cites only identifiers that exist".
+
+**Faults (`Fails when`), introduced by the orchestrator** on copies and on the
+script (`mutate.ps1` cannot reach `.claude/`), tree-state hash equal before and
+after: `K1` citing `R-999` in a copy, exit 1 "K1 cites R-999, which has no
+heading"; `K4` stripped of its citation in a copy, exit 1 "K4 cites nothing"; a
+planted wrong citation, `K2` citing `R-102`, in a copy given to the code-reviewer
+as a second candidate version without saying what differed: the reviewer
+reported it ("R-102 is about the bytes column ... says nothing about paths that
+share code or geometry"), while the script gives it exit 0, as the point
+expects; the script's body emptied (`Get-Problems` returning no problems),
+self-test 7 of 10 cases failed.
+
+**Findings and their resolution.**
+- Code-reviewer: every citation of `criteria.md` checked against `R-101` to
+  `R-105`; each says what the rule claims.
+- Verifiable, **applied** (one round): a `K` rule at another heading level was
+  skipped uncounted, and a duplicate `### K1` hid the first; both refused now
+  (decision 3).
+- `K3`'s last clause an inference `R-102` does not state (table C2, C4):
+  **applied**, removed.
+- `K5`'s "or built from the same objects the check uses": **rejected**, kept,
+  for the reason in decision 4.
+- Taste, **rejected**: `**K7**` or `- K7` in prose not caught, since the guard
+  covers lines beginning with `K<n>`; the identifier pattern ignoring malformed
+  ids such as `R-10`.
+- Questions answered: the hooks run under pwsh 7, as every hook here, and
+  `GetFullPath(string, string)` is pwsh 7's; `criteria.md`'s "read by the blind
+  reader" is wired by point 2 of this plan.
+
+**Faults the check misses, recorded beside it:** a citation that exists and says
+something else (by design the code-reviewer's part, the point's third fault);
+a rule's text drifting from its ruling with the citation still right.
+
+**Agents (`R-067`).** Dispatched: tester (step 2, the check as it stood: red,
+exit 64, the script absent), code-reviewer, documenter, committer. Not run: the
+coder (the files are in `.claude/`, the orchestrator's); the revisioners, `Core:
+no` held at step 5 (no path under `core/`, `docs/` or `AGENTS.md` in the diff);
+the tester at step 4, the check being a script self-test that the orchestrator
+ran with the faults.
+
+**What `docs/` says:** nothing; process work. `R-101` to `R-105` are the
+citations the rules rest on.
+**Would overturn it:** a ruling that a rule misreads its citation.
+**Not verified:** that each rule's wording stays equal to its ruling over time;
+that the blind reader applies the checklist (point 2); the script under a shell
+other than pwsh 7.
+
+### D-130 · Point 2 · A draft read whole by a blind reader: the skill learns the old heading, and the check forbids what the checklist itself says
+**Ruling:** R-119 — ratified.
+
+**Built** (by the orchestrator, not the coder: `.claude/` and `AGENTS.md` are not
+the coder's, `R-010`, `D-087`; the point names `.claude/skills/plan-explain/`,
+`AGENTS.md` and `REVIEW-REQUEST.md`, which is the permission):
+`.claude/skills/plan-explain/SKILL.md` gains the section "A draft, read whole"
+(`-Draft` reads every point; with `-Path`, a draft in another file; one
+read-only Plan agent, given only the fenced draft, the checklist, leave to read
+the files the draft names and `AGENTS.md`, told not to read `RULINGS.md`,
+`DECISIONS-OUTSIDE-SPEC.md`, `PROMOTIONS.md` or `.claude/plans/`; the tree
+hashed around the reading; the report relayed whole and quoted into the
+request); the running-plan procedure is unchanged, now headed "Without
+`-Draft`"; the description line is updated. `AGENTS.md`, "Criteria are frozen
+when written", gains the rule that before moment one the draft is read whole by
+`/plan-explain -Draft` and the answers quoted into the request beside the
+draft. `REVIEW-REQUEST.md`, "What a request holds", names the answers. New
+fixture `.claude/hooks/fixtures/plan-explain/misura-costi.md`, equal byte for
+byte to `git show 64147ba:REVIEW-REQUEST.md`. `core/` and `docs/` untouched.
+
+**Decided (`docs/` silent: process work).**
+1. **The fixture is kept byte for byte, so the skill learns the pre-`R-096`
+   heading.** The fixture's block is "## The draft plan", and `plan-state`
+   reports `exists:false` for it; the skill takes that block in that case.
+   *Would overturn it:* a ruling that the fixture may be edited, or that old
+   requests are not read.
+2. **One reader per draft, not one per point.** *Would overturn it:* a draft the
+   reader cannot read whole in one context, which would need one reader per
+   point.
+3. **The reader's brief holds the fenced block only, not the request around
+   it.** *Would overturn it:* evidence that the request's other parts are
+   something a blind reader needs.
+4. **The reader names rules by `K` number and cites no `R-` or `D-`
+   identifier.** The first run of the check failed on this: the report cited
+   `R-103` ("This is the `R-103` case"), which the criterion forbids. The
+   reader had obeyed its brief: `R-103` is in the checklist's `K1` as
+   provenance, and the reader repeated it. Correct behaviour could therefore
+   fail the check by echoing the checklist. It is resolved in the skill, not in
+   the criterion (a criterion is frozen): the brief asks for rules by `K` number
+   and for no identifier (one round). *Would overturn it:* a ruling that the
+   criterion's wording was defective (`R-005`).
+
+**Results.** First run (`/plan-explain -Draft -Path` on the fixture):
+`plan-state` reported `exists:false`, the skill took the "## The draft plan"
+block; five entries, one per point; point 4's names supply ample as the state
+where order is unseen ("With supply ample, everyone is served whatever the order");
+but the report cited `R-103`: red on the identifier, fixed as decision 4. Second
+run: five entries; point 4's: "routed village demand served after, or before,
+all local demand regardless of ability to pay. With supply ample everything is
+served, so the check stays green" and "K1, the exact blind spot it names:
+'served' with supply ample cannot see the order of routed demand"; no `R-` or
+`D-` identifier cited. Greps: "plan-explain -Draft" found in `AGENTS.md` (1) and
+`REVIEW-REQUEST.md` (3). Tree-state hash equal before and after each reading.
+The reader also found, of the fixture, what the cost plan's rulings found: `K1`
+for points 1 and 4; `K2` for point 3; `K3` for point 2's bytes; `K4`, `K5`, `K6`
+for point 5; and that point 5's `Fails when` premise was false at drafting. Both
+runs noted that `bench/` already exists, a fact of the tree, not of the draft.
+
+**Faults (`Fails when`), introduced by the orchestrator as reader briefs,
+read-only agents, tree hash equal:** (a) the skill's old behaviour, the first
+point only: one entry, point 1, point 4's missing: red. (b) a reader handed the
+register, `RULINGS.md`, `DECISIONS-OUTSIDE-SPEC.md` and the archived plan: its
+report cites `R-101` to `R-105` and `D-121` to `D-125` throughout: red. Note on
+(b): its brief also asked it to cite what it read, the strong form of the fault.
+
+**Findings and their resolution.**
+- The blindness test misses a reader that reads the register but cites only `K`
+  numbers: **recorded, not fixed**; the check is `shallow`, as the point
+  declares, and the criterion is not rewritten.
+- The criterion's "cites no `R-` identifier" depends on the brief's ban on
+  citing provenance (decision 4): recorded beside the check.
+- No code-reviewer: the point touches no code (a skill, `AGENTS.md`, a request,
+  a fixture), and its `Closed by` asks for none. No finding exists to reject.
+
+**Agents (`R-067`).** Dispatched: Plan readers (two check runs, two fault runs),
+documenter, committer. Not run: the coder (the files are the orchestrator's);
+the code-reviewer (no code); the revisioners (`Core: no` held: no path under
+`core/` or `docs/` in the diff; `AGENTS.md` is named by the point); the tester:
+not dispatched, the check is a skill run, not a test.
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** a draft the reader cannot read whole in one context.
+**Not verified:** that the reader finds a gap the checklist does not name (the
+point's `shallow` note); a reader that reads the register and cites only `K`
+numbers; the skill under a draft whose block heading is neither of the two
+known.
+
+### D-131 · Point 3 · `plan-state` reads a point's frozen text: record paragraphs, not lines, and the archive count by headings
+**Ruling:** R-119 — ratified, save decision 2; decision 6, left open, stands.
+**Ruling:** R-120 — decision 2 rejected for the phrase markers: read only in emphasis; FAILED from the status stands.
+
+**Built** (by the orchestrator, not the coder: `.claude/hooks/` is not the
+coder's, `R-010`, `D-087`; the point says it edits `.claude/hooks/`):
+`.claude/hooks/plan-state.ps1` gains `Get-Install` (the oldest commit in the
+plan's range that adds `PLAN.md`, read only for the live `PLAN.md`),
+`Get-Sections`, and `Get-FrozenText` (a point's section without its record
+paragraphs). Per point: `recorded`, `added`, `changed` (heading or frozen text
+differs from the installing commit). At plan level: `install`, `gone`,
+`deciderDue`. `git show` is read as UTF-8. New fixtures
+`.claude/hooks/fixtures/plan-state/decider-defective.md`, `decider-ruled.md`,
+`decider-italian.md`. `core/`, `docs/` and `AGENTS.md` untouched.
+
+**Decided (`docs/` silent: process work).**
+1. **A record is a paragraph, not a line.** The point says "the lines that begin
+   with an outcome marker". An outcome wraps over several lines, so dropping only
+   the first line leaves the rest in the frozen text and every closed point reads
+   as changed, which is the point's own second fault. `Get-FrozenText` drops the
+   paragraph a marker (`*Outcome:*`, `*Esito:*`, `*Ruled:*`, `*Reserve
+   discharged:*`, `*Riserva sciolta:*`) opens, to the next blank line; blank
+   ends are dropped and CR ignored. *Would overturn it:* a ruling that an outcome
+   is one line.
+2. **`deciderDue` reads the last closed point's status for FAILED, and its
+   outcome paragraph alone for *criterion defective*, *criterio difettoso* and
+   *left open***, asterisks and underscores ignored. FAILED is read from the
+   status as `Read-Point` reads it, not matched in prose: a clean outcome saying
+   "failed" in passing must not trigger the decider. The three phrase markers
+   are still matched anywhere in the outcome paragraph, the plan saying the line
+   "carries" them. *Would overturn it:* a ruling that the markers have a fixed
+   position.
+3. **`git show` is read as UTF-8**, the archives and plans holding non-ASCII
+   text; the console's default code page garbled it. *Would overturn it:* a
+   plan restricted to ASCII.
+4. **Section keys are strings** (the point number as text), so `changed`,
+   `added` and `gone` compare headings and numbers alike. *Would overturn it:*
+   a need to order points numerically across the comparison.
+5. **The new fields exist only for the live `PLAN.md`;** for any other path
+   they are null. *Would overturn it:* a use of `-Path` on a plan with its own
+   history.
+6. **The self-test's archive count is by headings.** The self-test pinned "31
+   points closed" across the archives and was red before this point (44
+   found). It now counts the archives' `## n.` headings. That is outside the
+   point's text, was needed to turn the self-test green, and is weaker: a
+   deleted archive no longer turns it red. **Left to the decider.** *Would
+   overturn it:* a ruling that the count stays pinned, with the number it
+   should be.
+
+**Results.** `plan-state -SelfTest`: 84 cases, 0 failed, on a fixture
+repository: a plan installed; point 1 closed with reserve, a *Ruled:* line and a
+*Reserve discharged:* line; point 2's "Closed by" edited in a later commit;
+point 3 deleted; point 4 added; point 5 closed with *Esito:*; point 6's heading
+edited. `changed` = 2 and 6, `gone` = 3, `added` = 4, `recorded` = 1 and 5.
+`deciderDue` true for `decider-defective.md`, false for `decider-ruled.md` (a
+clean outcome with "failed" in prose, then a *Ruled:* criterion defective line),
+true for `decider-italian.md` (**criterio difettoso**), false with nothing
+closed (the draft fixture, all open), true for a FAILED-status point. Live:
+install `a9ee621`, points 1 and 2 recorded, none changed, `gone` empty,
+`deciderDue` false.
+
+**Faults (`Fails when`), introduced by the orchestrator** (`mutate.ps1` cannot
+reach `.claude/`), each red and restored, tree-state hash equal before and after:
+the baseline taken as the latest commit touching `PLAN.md`: 4 failures, point 2
+not reported changed (`Fails when`); record paragraphs not excluded: points 1
+and 5 reported changed (`Fails when`); *Ruled:* dropped from the record markers:
+point 1 changed; the heading comparison removed: point 6 not changed. Before the
+review, also `deciderDue` reading past the outcome paragraph: the Ruled fixture
+true. First-round faults were seen red before the review; after the review's
+findings were applied in one round, all were re-run red.
+
+**Findings and their resolution.**
+- Code-reviewer: the check is satisfied as written.
+- Verifiable, **applied** (one round): *Ruled:*, *Reserve discharged:* and
+  *Esito:* never exercised on the changed path (fixture points 1 and 5 added);
+  the heading comparison untested (point 6); the "nothing closed" case vacuous
+  (now the draft fixture, all open); FAILED matched anywhere in prose (now read
+  from the status, a FAILED-status case added, decision 2); a comment said
+  "line" where the code drops paragraphs (reworded, table C2).
+- **Recorded, not changed:** the reading of "lines" as paragraphs (decision 1);
+  the archive count change (decision 6, a question for the decider); "left open"
+  and "criterion defective" still matched anywhere in the outcome paragraph (the
+  plan says the line "carries" the marker, decision 2); a delete and re-add of
+  `PLAN.md` within a range keeps the first install as the baseline, untested.
+  No finding was rejected.
+
+**Agents (`R-067`).** Dispatched: code-reviewer, documenter, committer. Not run:
+the tester (the check is a script self-test, run by the orchestrator); the
+coder (the file is in `.claude/hooks/`, the orchestrator's); the revisioners
+(`Core: no` held: only `.claude/hooks/` in the diff).
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** a ruling that an outcome is one line, or that the archive
+count stays pinned.
+**Not verified:** a delete and re-add of `PLAN.md` within one range; `deciderDue`
+where a marker appears in the outcome paragraph as quoted prose; the script under
+a shell other than pwsh 7.
+
+### D-132 · Point 9 · A record opens at a paragraph, not at any line: the criterion's second half proves less, and two readings are left to the decider
+**Ruling:** R-119 — ratified; criterion defective, case 1, confirmed; both readings stand.
+
+**Origin.** Point 3 closed (`fbed774`) and its outcome wrapped onto a line
+beginning `*Ruled:*`. `plan-state` took that line for a new record and cut the
+outcome paragraph before its *left open*, so `deciderDue` read false. The user
+approved adding the point ("sì, aggiungi il punto 3a e procedi"), added in
+`d842fd1` under `D-014`, numbered 9 so that `plan-state` reads it (`R-074`).
+
+**Built** (by the orchestrator: `.claude/hooks/` is not the coder's, `D-087`; the
+point says it edits `.claude/hooks/`): in `.claude/hooks/plan-state.ps1`,
+`Get-FrozenText` opens a record only where a paragraph starts (the section's
+first line, or a line after a blank one), and the `deciderDue` loop opens the
+outcome only at a paragraph start and ends it at the blank line, no longer at a
+line beginning with a marker. New fixtures `decider-wrapped.md` (outcome wrapped
+onto `*Ruled:*`, *Left open* after it) and `decider-midline.md` (a Does line
+wrapping onto `*Outcome:* ... left open`, the real outcome clean). The fixture
+repository gains point 7 (a Does wrapped onto a line beginning `*Ruled:*`, a
+word after it edited in a later commit), and point 5's Esito wraps onto
+`*Ruled:*`. `core/`, `docs/` and `AGENTS.md` untouched.
+
+**Decided (`docs/` silent: process work).**
+1. **"Paragraph start" is the first line of the section or a line after a blank
+   one.** The outcome paragraph ends only at a blank line. *Would overturn it:*
+   a record written without a blank line before it.
+2. **The criterion's half "the fixture's point not reported changed against an
+   installed copy" is defective** (`R-005`, case 1: correct code passes it, it
+   proves less). Under the old reading a wrapped marker opens the same record, so
+   a point whose outcome wraps is not changed either way; the half cannot fail
+   for the reason it exists. It was not rewritten. The missing check, beside it,
+   was built and run: fixture point 7, an edit after a wrapped marker line
+   reported changed, red under the fault. *Would overturn it:* a ruling that the
+   half does catch the fault.
+
+**Results.** `plan-state -SelfTest`: 87 cases, 0 failed. Live `PLAN.md`:
+`deciderDue` true (point 3's *left open* read), no point changed. Faults, by the
+orchestrator, restored, tree hash equal: a marker at the start of any line opens
+a record (`Fails when`): `decider-wrapped` `deciderDue` false and point 7 not
+reported changed (2 failures), live `deciderDue` false; the paragraph-start guard
+on the outcome dropped (found by the reviewer): `decider-midline` true, 1
+failure.
+
+**Findings and their resolution.**
+- Code-reviewer, the deviation above: recorded as the criterion defect
+  (decision 2).
+- Outcome opening mid-paragraph untested: **applied**, `decider-midline.md`,
+  fault seen red.
+- A section's first line as paragraph start untested: **rejected**, harmless,
+  sections begin with a heading; taste.
+- **Questions, recorded for the decider, not changed.** (a) A record directly
+  after a bullet with no blank line is now part of the point's text; every record
+  in the repository follows a blank line. (b) A `*Ruled:*` line directly after an
+  outcome with no blank line now belongs to the outcome paragraph, so its *left
+  open* would count.
+
+**Agents (`R-067`).** Dispatched: code-reviewer, documenter, committer. Not run:
+the tester (the check is a script self-test, run by the orchestrator); the coder
+(`.claude/hooks/`); the revisioners (`Core: no` held).
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** a record written without a blank line before it; a ruling
+on questions (a) and (b).
+**Not verified:** a record after a bullet with no blank line; a `*Ruled:*` line
+directly after an outcome; the script under a shell other than pwsh 7.
+
+### D-133 · Point 4 · The register written insert-only by a hook: a `**Ruling:**` line may be replaced, by the user's choice
+**Ruling:** R-119 — ratified; the hook seen to fire for a subagent.
+
+**Origin.** Point 4 of the workflow review plan (review P1): every session
+edited the register by hand with nothing but discipline against rewriting it.
+
+**Audit before wiring** (the point requires it, and says that if a decider edit
+was not an insertion the point stops and asks). `git log -p` over the decider's
+commits since `R-001`: 11 of the 59 commits touching the register replaced text,
+each on a `**Ruling:**` line under an entry, either filling "none yet" (`0b245ed`)
+or appending a later ruling (`32f20af`, `4e7687d` and others). The point stopped
+and asked; the user chose option A, "A, procedi": an Edit of a `**Ruling:**` line
+passes even when it is not an insertion; everything else stays insert-only.
+
+**Built** (by the orchestrator: `.claude/hooks/` and `.claude/settings.json` are
+not the coder's, `D-087`; the point says it edits them). `.claude/hooks/path-guard.ps1`
+gains role `record` (`Get-RecordDenial`), judged before the outside-repository
+denial. It decides `DECISIONS-OUTSIDE-SPEC.md` and `PLAN.md` only (file name
+case-insensitive) and allows every other path, inside the repository or not. An
+Edit passes when `new_string` begins with a non-empty `old_string`, or, in the
+register only, when one single-line `**Ruling:**` line is replaced by another
+single-line `**Ruling:**` line. A Write passes only when the file does not exist.
+The description states that writes through a shell are not seen. New
+`.claude/settings.json`: PreToolUse `Edit|Write` runs
+`pwsh -NoProfile -File "$CLAUDE_PROJECT_DIR/.claude/hooks/path-guard.ps1" -Role record`.
+`SPEC-QUESTIONS.md` is left out, as the point says (the decider closes entries by
+editing status lines). `core/`, `docs/` and `AGENTS.md` untouched.
+
+**Decided (`docs/` silent: process work).**
+1. **Role `record` is judged before the outside-repository denial**, so that a
+   path outside the repository is allowed by `record` and not denied by
+   inheritance (the point's second `Fails when`). *Would overturn it:* a ruling
+   that the hook should also guard paths outside the repository.
+2. **The Ruling exemption has the shape of option A and no wider:** one
+   single-line `**Ruling:**` line replaced by one single-line `**Ruling:**` line,
+   in the register only, never in `PLAN.md`. *Would overturn it:* the decider
+   needing to edit register text other than a ruling line.
+3. **The hook sits in a committed project `.claude/settings.json`**, so every
+   clone and every session carries it, the decider's included. *Would overturn
+   it:* a ruling that the guard is per-user.
+
+**Results.** `path-guard -SelfTest`: 50 cases, 0 failed. The `record` cases run on
+a real temporary directory: insertion allowed; replacement denied with `record`'s
+reason; lower-case file name denied; empty `old_string` denied; a single ruling
+line replaced allowed; an `old_string` merely containing `**Ruling:**` denied; an
+`old_string` starting at a ruling line and spanning into the next entry denied; a
+ruling line replaced by non-ruling text denied; a ruling replacement in `PLAN.md`
+denied; Write over an existing `PLAN.md` and an existing register denied; Write of
+a new `PLAN.md` allowed; `README.md`, `SPEC-QUESTIONS.md` and a path outside the
+repository allowed. The exact command line of `settings.json`, piped: register
+replacement exit 2 with `record`'s reason; `README.md` exit 0; outside path exit
+0. Live: an Edit replacing a word of the register, in the orchestrator's session,
+was denied by the hook, already active in that session; the new session the point
+foresaw was not needed. Faults, by the orchestrator, tree hash equal: the role
+misnamed on the command line (`recrod`): `README.md` exit 2, "unknown role
+'recrod'"; `record` inheriting the outside-repository denial: the outside case
+denied, 2 failures; after the review, the wide exemption restored: 3 failures
+(spanning `old_string`, non-ruling `new_string`, `PLAN.md`).
+
+**Findings and their resolution.**
+- Code-reviewer, the check satisfied as written. Verifiable, **applied** (one
+  round): the exemption was wider than option A (any `old_string` beginning
+  `**Ruling:**`, of any length, any `new_string`, `PLAN.md` included), now one
+  ruling line to one ruling line, register only, with three deny cases; no
+  Write-over-existing case for the register, added; a no-op Remove/Set-Content pair
+  and an inflated case count, removed (table S1); a comment citing "the user's
+  answer, option A", a conversation and not a text, reworded to name the audit's
+  stop (table C1).
+- `MultiEdit` and `NotebookEdit` are not matched: **rejected**, the point says
+  `Edit|Write` and the description already limits the guard to Edit and Write.
+
+**Agents (`R-067`).** Dispatched: code-reviewer, documenter, committer. Not run:
+the tester (script self-test and pipe tests, by the orchestrator); the coder
+(`.claude/`); the revisioners (`Core: no` held: only `.claude/hooks/` and
+`.claude/settings.json` in the diff).
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** the decider needing to edit register text other than a
+ruling line.
+**Not verified:** whether the hook fires for subagents (this documenter run's
+Edit of the register is the first subagent Edit under it); shell writes, which
+the hook cannot see; `MultiEdit` and `NotebookEdit`; the script under a shell
+other than pwsh 7.
+
+### D-134 · Point 5 · `mutate` reaches every file of the point: the tree is hashed over everything but the excluded paths, and a check that leaves unignored files now fails
+**Ruling:** R-119 — ratified; exit 3 on residue stands, nothing owed.
+
+**Origin.** Point 5 of the workflow review plan (review P3): `mutate` admitted a
+patch only on `core/Runtime/` and `harness/`, so a fault could not be tried on
+a `bench/` file or any other file of the point.
+
+**Built** (by the orchestrator: `.claude/` is not the coder's, `D-087`; the point
+says it edits `.claude/hooks/`, `.claude/agents/`, `.claude/skills/`).
+`.claude/hooks/mutate.ps1`: the admitted set is `git diff --name-only HEAD` plus
+the untracked files, less the excluded paths (`core/Tests/`, `docs/`, `.claude/`,
+`AGENTS.md`, any `CLAUDE.md`, `core/BannedSymbols.txt`, `PLAN.md`,
+`DECISIONS-OUTSIDE-SPEC.md`, `SPEC-QUESTIONS.md`, `REVIEW-REQUEST.md`,
+`PROMOTIONS.md`, `RULINGS.md`, `DECIDER-BRIEFS.md`). An excluded path is refused
+even when in the diff; a path outside the diff is refused; a rename's or copy's
+source still counts as a path of the patch (`R-073`); the tree is hashed over
+everything but the excluded paths (it was `core/Runtime/` and `harness/`);
+description rewritten. `.claude/hooks/tree-state.ps1`: its description of what
+`mutate` passes. `.claude/agents/tester.md` and `.claude/skills/plan-next/SKILL.md`
+step 4: the sentences saying `mutate` reaches only `core/Runtime/` and `harness/`
+now say what it reaches (table C8). `core/`, `docs/` and `AGENTS.md` untouched.
+
+**Decided (`docs/` silent: process work).**
+1. **The excluded set is the point's list,** `CLAUDE.md` matched anywhere in the
+   tree. *Would overturn it:* a ruling that a nested `CLAUDE.md` is patchable.
+2. **The tree is hashed over everything but the excluded paths,** so residue
+   anywhere is seen, not only under the old two folders. *Would overturn it:* a
+   check that must write unignored files.
+3. **Untracked files are admitted; ignored files never are.** *Would overturn
+   it:* a ruling that an ignored file may carry a fault.
+
+**Results.** `mutate -SelfTest`: 30 cases, 0 failed. New: a fault in an
+untracked `bench/` file of the point applies, goes red, is restored, the file
+checked restored; a committed file outside the diff refused, exit 2; `docs/` and
+`core/Tests/` refused though in the diff; a rename from a committed file outside
+the diff refused; each of the twelve other excluded paths refused though in the
+diff; a check leaving a file in `bench/`, exit 3. `tree-state -SelfTest`: 14
+cases, 0 failed. A grep in `.claude/agents`, `.claude/skills`, `.claude/hooks`
+for a sentence saying `mutate` reaches only `core/Runtime` and `harness`: none.
+Faults, by the orchestrator, tree hash equal, re-run after the review: the
+admitted set read from `git diff` only (`Fails when`): the `bench/` case exit 2
+and the residue case 2, red; `core/Tests/` admitted: its case applied, exit 1,
+red. The review's faults: the hash scope back to `core/Runtime` and `harness`:
+the `bench/` residue case exit 0, red; `AGENTS.md` dropped from the exclusions:
+its case exit 0, red. While building, a self-test check read a one-line file with
+`(Get-Content f)[0]`, its first character, and was fixed with `@()`: a defect of
+the test, not of `mutate`.
+
+**Findings and their resolution.**
+- Code-reviewer, the check satisfied as written. Verifiable, **applied** (one
+  round): only `docs/` and `core/Tests/` had refusal cases, now all twelve others
+  too; the hash scope was not pinned, now the `bench/` residue case.
+- **Left open, for the human or decider, not changed:** a check that writes files
+  the repository does not ignore (`TestResults/`, `*.log`, CI's `hashes-*.txt` and
+  `final-*.txt`, `BenchmarkDotNet.Artifacts/`) now makes `mutate` exit 3, "tree
+  not restored", where it formerly passed unseen outside `core/Runtime/`. No check
+  in the repository does so today; whether the tester's text should forbid it is
+  open.
+- **Question, recorded:** a fault on the source of a rename the point itself makes
+  is refused, because `git diff --name-only` lists the destination only.
+- Long lines in `tester.md` and `SKILL.md`: **rejected**, taste.
+
+**Agents (`R-067`).** Dispatched: code-reviewer, documenter, committer. Not run:
+the tester (script self-tests, run by the orchestrator); the coder (`.claude/`);
+the revisioners (`Core: no` held: only `.claude/` in the diff).
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** a check that must write unignored files.
+**Not verified:** a rename made by the point itself as the target of a fault;
+the script under a shell other than pwsh 7.
+
+### D-135 · Point 6 · `/plan-next` lighter: the tester only for a test, the orchestrator records, the committer's brief carries `git-guard`'s rules, the decider only when due
+**Ruling:** R-119 — ratified.
+
+**Origin.** Point 6 of the workflow review plan (review P1, P2, P4, G2).
+
+**Built** (by the orchestrator: `.claude/skills/` is not the coder's, `D-087`; the
+point says it edits `.claude/skills/`). `.claude/skills/plan-next/SKILL.md`:
+step 2 dispatches the tester only when the check is a test under `core/Tests/`,
+otherwise not, the outcome saying so; step 8 is the orchestrator's: it reads
+`changed`, `recorded`, `added`, `gone` from `plan-state` and stops on them, writes
+the register entry and the outcome line itself by insertion (the record hook
+named), and the outcome line carries *left open* when a finding is left to the
+human, a `SPEC-QUESTIONS.md` entry was raised or an escalation made; step 9 keeps
+the committer, its brief listing `git-guard`'s rules (one git command a call, no
+`git -C`, the trailer's word never outside the trailer, forward slashes); step 10
+reads `deciderDue`: true, the brief appended verbatim to `DECIDER-BRIEFS.md` and
+the decider dispatched (`R-116`, `R-118`); false, the entries wait for the plan's
+end or the phase gate; the sentence "this session does not run `/decide`",
+overtaken by `R-116`, removed (table C8); the decider line now says "due now | at
+the plan's end".
+
+**Decided (`docs/` silent: process work).**
+1. **The committer's brief carries `git-guard`'s rules; `git-guard` is not
+   changed.** *Would overturn it:* the committer still tripping the guard.
+2. **The decider is dispatched only on `deciderDue`.** *Would overturn it:* the
+   next plans' points showing the decider needed between clean points.
+3. ***Left open* is written by the orchestrator,** who holds step 7's findings.
+   *Would overturn it:* the same.
+
+**Results.** The declared check, a set of greps over `.claude/skills/`: no
+dispatch or mention of `documenter`; the condition of step 2 found; the four
+fields of step 8 found; the four rules of step 9 found; the `DECIDER-BRIEFS.md`
+append of step 10 found; "does not run `/decide`" not found: all hold, exit 0.
+Fault (`Fails when`): step 8 dropping a STOP case, `recorded` removed from its
+list: "field recorded missing", exit 1, red; restored, tree hash equal. The
+point's "Closed by" is the grep alone: it names no `-SelfTest` and no `plan-state`
+fixture, so none was owed here. The criterion is `Check: shallow` as declared:
+the greps prove the words, not the procedure; points 7 and 8 run under it.
+The documenter is not retired here: point 7 retires it, after this entry, the
+last it records. The committer was kept by the user's answer at moment one.
+
+**Findings and their resolution.** None: no reviewer ran (no code, a skill;
+`Core: no` held).
+
+**Agents (`R-067`).** Dispatched: documenter, committer. Not run: the tester (no
+test under `core/Tests/`); the coder (`.claude/skills/`); the code-reviewer (no
+code: a skill); the revisioners (`Core: no` held: only `.claude/skills/` in the
+diff).
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** the next plan's points showing the decider needed between
+clean points.
+**Not verified:** the procedure itself, which only points 7 and 8 run under the
+new skill.
+
+### D-136 · Point 7 · The documenter retired, and the first point recorded without it
+**Ruling:** R-120 — ratified; left open answered: the marker is read only in emphasis, a point owed.
+
+The first point recorded by the orchestrator under the `/plan-next` of point 6:
+`plan-state` read for point 7 `changed`, `recorded` and `added` false and `gone`
+empty, so step 8 did not stop, and this entry and the outcome line were written
+by insertion under the `record` hook of point 4.
+
+**Decided.**
+1. **The role and the agent go together.** `.claude/agents/documenter.md`
+   deleted; in `path-guard.ps1` the `documenter` role, its file list, its two
+   description lines and its eight self-test cases removed (table S1). The
+   insert-only guard it gave `SPEC-QUESTIONS.md` is not carried over: `D-128`
+   already left that file out of `record`, the decider closing entries by
+   editing their status lines.
+2. **A comment that named the documenter now names the procedure.**
+   `plan-state.ps1` called the three STOP cases "the documenter's"; they are
+   `/plan-next` step 8's, which lists them (table C8).
+
+**Results.** `path-guard -SelfTest` 42 cases, 0 failed; the agent file absent;
+`grep -rln documenter .claude/` outside `.claude/design/` and `.claude/plans/`
+finds nothing; `plan-state -SelfTest` 87, 0 failed. Faults, by the
+orchestrator, restored, tree hash equal: a self-test case still calling the
+role, "documenter expected allow, got deny", 1 failure; a skill naming the
+documenter, the grep finds `plan-state/SKILL.md`.
+
+**Findings.** Code-reviewer: no verifiable defect. `PLAN.md` still names the
+documenter in other points' frozen text and closed outcomes, outside the grep's
+`.claude/`: correct, frozen. A restored agent file would pass the self-test but
+not the file test or the grep: covered by the three together. The
+`SPEC-QUESTIONS.md` guard: accepted at moment one, decision 1.
+
+**Left open, for the decider.** `deciderDue` reads true after point 6 because
+its outcome line says "nothing left open": `plan-state` matches the marker in
+prose, the risk the code-reviewer named at point 3. With the orchestrator
+writing outcomes, the phrase is kept out of prose; whether the marker should be
+read only as italics, `*left open*`, is the decider's to say.
+
+**Agents (`R-067`).** Code-reviewer and committer dispatched. Not run: the
+tester, the check being a self-test and greps; the coder, the files being in
+`.claude/`; the revisioners, `Core: no` held; the documenter, retired by this
+point. The decider: `deciderDue` was true before this point, from point 6's
+prose; it is dispatched at step 10 if the reading after this point is true.
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** a role that needs an agent recording on its behalf.
+**Not verified:** that the `record` hook fires for a subagent denial; only a
+subagent insertion has passed through it.
+**Correction, same day:** "the grep finds `plan-state/SKILL.md`" above should
+read `plan-status/SKILL.md`, the skill the fault was put in. Written as an
+insertion: the `record` hook refuses to edit the line itself.
+
+### D-137 · Point 8 · Design belongs to the decider, and the permission to write it into `AGENTS.md`
+**Ruling:** R-123 — ratified.
+
+**The permission.** Granted by Federico Xella at moment one of this plan,
+"approvo la bozza" (`e2ce1fd`), for point 8 as drafted: a rule in `AGENTS.md`,
+under "The decider answers what this file sends to a human", saying that a
+design or content conversation belongs to `/decide` and how an implementer
+session records what the user said. The point names the file, as `AGENTS.md`
+requires; the applied diff adds that one paragraph and nothing else.
+
+**Decided.**
+1. **The rule's words follow the point's "Does"**: the design session cited as
+   `/decide`'s free-text form, "Design sessions" in its skill; the user's words
+   recorded verbatim in the relevant `SPEC-QUESTIONS.md` entry; the user sent to
+   `/decide`; a blocking question inside a point answered on the spot, recorded
+   the same way and marked for the decider, "who rules on it".
+2. **A clause the first text added is dropped**: "it does not propose the design
+   itself". It is not in the "Does", narrows it (table C2), and read against the
+   exception could forbid the on-the-spot answer the user approved.
+
+**Results.** The grep finds in the rule each of "`/decide`", "verbatim",
+"`SPEC-QUESTIONS.md`", "inside a point", "marked for the decider". The
+code-reviewer, given the diff and the "Does", reports no element missing and the
+citation of "Design sessions" accurate. Fault (`Fails when:`), by the
+orchestrator, restored: the exception left out of `AGENTS.md`, the grep reports
+"inside a" and "marked for the decider" missing, exit 1; the same text given to
+the code-reviewer as a second candidate, without saying what differed, is
+reported to lack "the whole third element".
+
+**Findings.** The extra clause, decision 2, applied. "Who rules on it" adds the
+decider's role and changes nothing.
+
+**Agents (`R-067`).** Code-reviewer and committer dispatched. Not run: the
+tester, the check being a grep and a reading; the coder, the file being
+`AGENTS.md`; the revisioners, `Core: no` held. The decider ran before this point
+(`R-119`, `R-120`, `9b9bae4`, `b9799de`).
+
+**What `docs/` says:** nothing; process. `R-001`, `R-116`.
+**Would overturn it:** a design conversation that cannot wait for `/decide`.
+**Not verified:** the rule in use; the check is `shallow`, as declared.
+
+## 2026-10-20 — An Obsidian vault, drafted as a plan at moment one
+
+### D-138 · Moment one of the Obsidian vault plan · What the draft decides beyond the user's answers
+**Ruling:** R-123 — ratified.
+
+The user asked for an Obsidian vault holding the project's knowledge, read
+against the documentation by one agent and linked by another, using Obsidian's
+properties. Asked how, the user chose a derived vault, the sources staying where
+they are; inside the repository; one note per entry. Moving `docs/` was not
+offered as the implementer's to do, and fourteen hooks, skills and agents read
+the sources' paths. The draft is in `REVIEW-REQUEST.md`; two blind readers
+attacked versions 1 and 2, and the request quotes both and what version 3 did.
+
+**Decided, beyond what the user answered.**
+1. **The vault is generated and committed**, and nothing regenerates it after
+   the plan or runs its check in CI: it goes stale with the next commit to a
+   source, the plan's own archive first. Reconstruction says so when run.
+2. **The sources** are `docs/`, the five registers, `AGENTS.md`, `README.md`,
+   the root `CLAUDE.md`, `.claude/design/`, `.claude/plans/`, the skills' and
+   agents' Markdown. `PLAN.md` and `REVIEW-REQUEST.md` are left out as holding
+   the current development only; code is not knowledge in this sense.
+3. **Every note's body is its source's text, unchanged but for links**, so that
+   the vault, read back, reproduces every source; nothing in the vault is
+   written in the vault's own words. Topic notes are therefore links only.
+4. **Families with no note** — `P-`, `A-`, `K-`, `Z-`, `PD-` — are not entry
+   notes and are not linked; they stay in their section notes.
+5. **Free-text fields are not properties**: a ruling's verdict, a question's
+   status and what it blocks. They wrap and repeat within an entry, and a
+   property chosen from one of their lines would be a guess. Asked of the user.
+6. **Front matter in JSON form**, a subset of YAML, because `pwsh` holds no
+   YAML parser and the check must read it; and `.base` files for the Bases
+   core plugin, which assumes an Obsidian recent enough to have it.
+7. **The scripts are PowerShell 7**, like the hooks, under `tools/vault/`, a new
+   folder; neither is in `core/`.
+
+**What `docs/` says:** nothing; process work, and `docs/` is unchanged.
+`R-011`, `R-048`, `R-049`.
+**Would overturn it:** the user's answer to the request, which may change any of
+it.
+**Not verified:** version 3 of the draft was read by no blind reader; Obsidian's
+rendering of the front matter and the Bases was not tried.
+
+## 2026-10-20 — The migration of `docs/` into a vault, drafted as a plan at moment one
+
+### D-139 · Moment one of the `docs/` vault migration plan · How the draft reads `R-121` where its text leaves a choice
+**Ruling:** R-123 — ratified.
+
+`R-121` owes a moment-one draft for the script and the correspondence check of
+its migration. The draft is in `REVIEW-REQUEST.md`, read blind once in its
+first version; the request quotes the reading and what the second did.
+
+**Decided, beyond what `R-121` fixes.**
+1. **The index embeds each note on its own line**, at the place the note's text
+   held, so that Obsidian renders the index as the document; "drop the index's
+   link list" is read as replacing each embed by its note's body.
+2. **A group** is a `##` of `SIM-DEC` or `SIM-LOOPS` with at least one `###`,
+   all of them entries; every other `##` is one note.
+3. **Separators** — the blank and `---` lines before the next heading — stay in
+   the index, so that no note ends in one.
+4. **A block id's paragraph opens with `**`, an identifier, then `**` or ` —`**;
+   paragraphs are runs of non-blank lines. The brakes `B<n>` of `SIM-LOOPS` get
+   none, being inside a paragraph, and `**B1 does not apply here.**` gets none.
+   Asked of the decider as `SQ-026`.
+5. **Every eligible mention is linked**, "may" taken as "does", in prose and
+   table rows (`\|`), not in headings, code spans, fences or defining
+   occurrences; document names and `§` citations are not linked; links carry
+   the full path, since section names repeat across documents.
+6. **Aliases**: a section's citation form as the documents write it,
+   `SIM-REQ §18`, `SIM-ECON §Demand`; an entry's title after ` — `.
+7. **Front matter in JSON form**, read by `ConvertFrom-Json`, `pwsh` holding no
+   YAML parser.
+8. **The comparison is exact**, without the blank-line exception `R-121` allows.
+9. **`tools/docs-vault/`**, a new top-level folder for tools a decider runs,
+   under `pwsh` 7; `.obsidian/` reduced to `app.json`, the rest ignored.
+
+**What `docs/` says:** nothing; `R-121` rules the shape and the plan writes no
+`docs/`. `R-048`, `R-049`, `R-121`.
+**Would overturn it:** the user's answer to the request; the decider's on
+`SQ-026`.
+**Not verified:** version 2 of the draft was read by no blind reader; Obsidian's
+rendering of embeds, block ids and escaped table links was not tried.
+
+### D-140 · Moment one of the `docs/` vault migration plan · What version 3 of the draft decides beyond `D-139`
+**Ruling:** R-123 — ratified.
+
+A second blind reading of version 2, run by `/plan-explain -Draft` at the
+user's request, found that neither point could close as written. Shown it, the
+user answered "Scrivi la versione 3 nella request". Version 3 is in
+`REVIEW-REQUEST.md`, with the reading quoted and a table of what it did with
+each finding. `D-139` stands but for what is amended here.
+
+**Decided, beyond `R-121`, `R-122` and `D-139`.**
+1. **Identifiers** are `[A-Z]+(-[A-Z]+)*-[0-9]+[a-z]?` or `R[0-9]+`; a mention
+   is taken whole between characters that are not a letter, a digit or `-`; a
+   note's name is its whole identifier, `DEC-006a` included.
+2. **Links resolve vault-wide**: a mention in one document of an identifier
+   that names a note or block id in another is linked. An identifier living
+   only in table rows names nothing and is never linked, following `R-121` 4.
+3. **Newlines**: every note ends in one LF; an index ends in one if and only if
+   its original does; check 1 compares that too.
+4. **Embed and link paths** run from the vault root without `.md`; the index is
+   `<doc>/<doc>.md`, as `R-121` 1 says; the check reads originals at the root
+   and the vault in the six folders only.
+5. **Aliases**, amending `D-139` 6: a numbered section's form is `R-121` 5's
+   example, `SIM-REQ §18`, which the documents themselves do not write; an
+   unnumbered one's is `SIM-ECON §Demand`, as `SIM-REQ.md:826` writes it; an
+   observable takes its title after ` — `; the index carries no alias.
+6. **The fixture is kept LF** by `.gitattributes` for
+   `tools/docs-vault/fixtures/**`, since `core.autocrlf` is `true` and the
+   script's output is compared with it byte for byte.
+7. **The check and the script share no code**, so that a reading wrong in one
+   is not wrong in both; on the real documents the script is also judged by
+   note and block-id counts taken from the originals by `Select-String`.
+8. **The script lists every path before writing any** and refuses if one
+   exists, tested by runs into directories holding one planted file.
+9. **The branch** is cut after `design/obsidian-vault` is merged into `main`:
+   it alone carries `SQ-025`, `R-121`, `SQ-026` and `R-122`. `D-139`'s wait on
+   `SQ-026` is void, `R-122` having ruled.
+
+**What `docs/` says:** nothing; `R-121` rules the shape and `R-122` its block
+ids, and the plan writes no `docs/`. `R-048`, `R-049`, `R-121`, `R-122`.
+**Would overturn it:** the user's answer to the request.
+**Not verified:** version 3 was read by no blind reader; its fault lists were
+not tried against code; the counts of point 2 were taken by the author with
+`grep` and `awk`.
+
+### D-141 · Moment one of the `docs/` vault migration plan · What version 4 of the draft decides beyond `D-139` and `D-140`
+**Ruling:** R-123 — ratified.
+
+The user approved version 3 and asked for a third blind reading, which found
+the check blind to a note running past its end and to note text left in the
+index, the no-sharing rule unchecked at point 2 and contradicted by its
+`-SelfTest`, and a merge that would carry a live `PLAN.md` to `main`. Shown it,
+the user answered "scrivi la versione 4 nella request". Version 4 is in
+`REVIEW-REQUEST.md`, with the reading quoted and a table of what it did with
+each finding.
+
+**Decided, beyond `R-121`, `R-122`, `D-139` and `D-140`.**
+1. **Check 5 bounds every note and the index**: a note holds no heading of its
+   level or above beyond its first, outside a fence; the index holds exactly
+   the lines the derivation leaves in it; the vault root holds no folder but
+   the six, `.obsidian/` and `.trash/`, its files unjudged.
+2. **Links reach table rows**, which check 3 now names beside prose.
+3. **No front-matter key beyond those `R-121` 5 names**; `id` on entries only.
+4. **The one reference between the scripts** is the check run as a separate
+   process, `pwsh -NoProfile -File`, by the script's `-SelfTest`; the grep runs
+   on both scripts at point 2; copied functions are the code-reviewer's to see.
+5. **The fixture's layout**: `tools/docs-vault/fixtures/originals/` and
+   `fixtures/vault/`, both kept LF; the `eol` report read after a fresh
+   checkout.
+6. **The script refuses two outputs sharing a path, case aside**; no fault
+   plants it, since neither the six nor the fixture yields such a pair.
+7. **`docs/.trash/` stays ignored** though inert under `app.json`'s `{}`;
+   `app.json` is `{}` and an LF.
+8. **The workflow review plan's `PLAN.md` is archived on
+   `design/obsidian-vault` before its merge into `main`**, by the implementer
+   closing that plan; the merge is the user's.
+
+**What `docs/` says:** nothing; `R-121` rules the shape and `R-122` its block
+ids, and the plan writes no `docs/`. `R-048`, `R-049`, `R-121`, `R-122`.
+**Would overturn it:** the user's answer to the request.
+**Not verified:** version 4 was read by no blind reader; its fault lists were
+not tried against code; three clauses of the "Does" rest on the code-reviewer
+alone.
+
+### D-142 · Moment one of the `docs/` vault migration plan · What version 5 of the draft decides beyond `D-139` to `D-141`
+**Ruling:** R-123 — ratified.
+
+The user approved version 4 and asked for a fourth blind reading, which found
+check 3 red on a correct vault, the no-sharing grep red on correct code, CRLF
+output invisible on the real run, and the in-place layout never run. Shown it,
+the user answered "scrivi la versione 5 nella request". Version 5 is in
+`REVIEW-REQUEST.md`, with the reading quoted and a table of what it did with
+each finding.
+
+**Decided, beyond `R-121`, `R-122` and `D-139` to `D-141`.**
+1. **Mentions are sought in a note's body only**: never in front matter,
+   inside `[[…]]` or `![[…]]`, in code, fences or headings; a mention in its
+   own note is linked; a string the grammar takes that names nothing stays
+   plain, and a link displaying one is red.
+2. **The grammar, not `R-122`'s paragraph rule, keeps the brakes out on the
+   six**: `B<n>` is no identifier. The paragraph rule binds only the fixture's
+   identifier-led continuation line. A list item runs to the next item, a
+   blank line or a heading.
+3. **A fault turns its named check red; others may turn red with it.** The
+   clause "and green on the others", which `D-140`'s version added, is
+   dropped: renaming a note or adding an embed cannot leave the other checks
+   green.
+4. **The fixture's coverage is asserted** by pattern before the self-test runs.
+5. **The index is exempt from "ends in one LF"**; check 1 judges its ending.
+   `.obsidian/app.json` is required by check 5.
+6. **Line endings and the in-place layout are run in point 2**: CRLF and LF
+   copies of the originals must give the same LF output; the decider's
+   in-place run is rehearsed in a temporary directory, followed by a run from
+   it into a new directory that must equal the first output; the check finds
+   originals at the top level only.
+7. **The no-sharing grep forbids references to `.ps1` and `.psm1` files**, not
+   reading the fixture; `git check-ignore` also asks the fixture's `app.json`.
+8. **The archive of the workflow review plan and the merge are preconditions
+   of the plan**, named as such, not points.
+
+**What `docs/` says:** nothing; `R-121` rules the shape and `R-122` its block
+ids, and the plan writes no `docs/`. `R-048`, `R-049`, `R-121`, `R-122`.
+**Would overturn it:** the user's answer to the request.
+**Not verified:** version 5 was read by no blind reader; its fault lists were
+not tried against code; five clauses of the "Does" rest on the code-reviewer
+alone.
+
+## 2026-10-21 — Point 10 of the workflow review plan, added under `D-014`
+
+### D-143 · Point 10 · A decider marker counts only as the whole of an emphasis span
+**Ruling:** R-123 — ratified.
+
+`R-120` owes, before the workflow review plan is archived, a point making
+`plan-state` read the three phrase markers only in emphasis. The user, asked
+whether to add it or close the plan without it, chose "Aggiungi il point
+(Recommended)"; point 10 was added in `858ffe3` and carried out by this
+session, the file being in `.claude/hooks/`.
+
+**Decided.**
+1. **Spans are paired left to right on the outcome paragraph joined with
+   spaces**, `\*\*(.+?)\*\*` before `\*([^*]+?)\*`; a span counts when, its
+   whitespace runs collapsed to one space, it equals a marker, case ignored.
+   No trim: a span with a space inside its asterisks is not the whole phrase.
+2. **Code spans are removed before pairing**, so that a `*` inside one pairs
+   with nothing. Applied from the code-reviewer's finding.
+3. **A `*` loose in prose still shifts the pairing** and can hide a marker after
+   it, in the silent direction. Kept as a known limit, said in the comment:
+   outcomes write paths and globs in code spans, and no outcome live or
+   archived holds a loose `*`; pairing by a Markdown parser is more than the
+   ruling asks.
+4. **`_…_` and `***…***` no longer count**: `R-120` names `*…*` and `**…**`
+   only. The old code stripped `_` as well.
+
+**Review.** Code-reviewer: the check as written satisfied. Findings:
+- a stray `*` hides a real marker (`` `*` `` in a code span, or a glob in
+  prose): verifiable; applied for code spans, with fixture
+  `decider-code-star.md`; the prose case kept as decision 3;
+- the `**` alternative redundant for the three markers: rejected, wrong on the
+  facts for a paragraph holding other bold — without it `**two**` leaves a `*`
+  that shifts every later pairing; `decider-code-star.md` turns red without it;
+- the whitespace collapse and the trim unpinned: verifiable; the trim removed,
+  the collapse pinned by `decider-code-star.md`, whose span breaks after a
+  trailing space;
+- compared against every outcome live and archived, three paragraphs change,
+  all from true to false and all bare-phrase prose: point 6 here,
+  `2026-09-19-dodici-lacune.md` ("Left open on purpose"),
+  `2026-10-07-misura-costi.md`; no emphasised marker stops counting.
+
+**Verification.** `plan-state -SelfTest`, 91 cases, 0 failed. `plan-state
+-Path` on the live `PLAN.md` cut before point 7, `deciderDue` false; cut before
+point 8, true. Faults, introduced by this session since `mutate` does not reach
+`.claude/`, each restored, tree hash equal: emphasis stripped as before (prose
+and inner-span fixtures red, cut before 7 true); a marker counted anywhere in a
+span (inner-span red); spans read line by line (broken-span and code-star red);
+code spans kept (code-star red); the `**` alternative dropped (code-star red);
+the whitespace collapse dropped (code-star red).
+
+**Criterion.** Correct code passes the frozen check, which proves less than the
+"Does" asks: no case of the frozen list pairs a span after another `*`, so code
+that misreads every paragraph holding a code span or bold before its marker
+passes. *Criterion defective* (`R-005`, case 1); the missing check,
+`decider-code-star.md`, built and run beside it.
+
+**What `docs/` says:** nothing; process work (`D-011`). `R-120`, `D-014`.
+**Would overturn it:** an outcome written by `/plan-next` with a marker outside
+emphasis, or with a loose `*` before an emphasised marker.
+**Not verified:** a case-sensitive match would be caught by the cut-before-8
+copy alone, not by `-SelfTest`.
+
+## 2026-10-21 — The workflow review plan, archived
+
+### D-144 · Closing the workflow review plan · The archive, the promotion pass and the merge
+**Ruling:** none yet.
+
+`plan-state` read `state: finished`, `reservesOpen` empty, after point 10
+(`a11fdf1`); the decider ratified `D-137` to `D-143` in `R-123` (`e50274e`) and
+named nothing owed before the archive. The user, on 2026-10-21: "approvo.
+archivia il PLAN e mergia il branch".
+
+**Decided.**
+- **The exit condition is met.** The directions of the review are in
+  `AGENTS.md`, the plan skills and the hooks; the six scripts' self-tests ran
+  green today (`criteria-cite` 10, `git-guard` 44, `mutate` 30, `path-guard`
+  42, `plan-state` 91, `tree-state` 14 cases, 0 failed). Point 4's live check
+  ran in the session that was already active, which its outcome says; in a new
+  session it ran on 2026-10-21, when `path-guard -Role record` refused this
+  session's Edits replacing text of `D-139`, four times, with its reason.
+- **The archive's name** is `2026-10-20-workflow-review.md`: the date the plan
+  was installed (`a9ee621`) and its branch, as `D-127` named the last one.
+- **The pass runs over `D-128` to `D-143`**, the last pass having ended at
+  `D-126` and `D-127` being that archive's. No candidates: process work and
+  moment-one drafts, `D-011`.
+- **`REVIEW-REQUEST.md` is not touched**: its current request is the moment
+  one of the `docs/` vault migration plan, answered in it.
+- **The merge** of `design/obsidian-vault` into `main` follows this commit,
+  `--no-ff`, as the user asked; it carries `workflow-review`, from which the
+  branch descends. No push.
+
+**What `docs/` says:** nothing; process work. `R-048`, `R-120`, `R-123`,
+`D-011`.
+**Would overturn it:** the decider finding an entry in the range that
+constrains the simulator's code.
+**Not verified:** the live check of point 4 in a new session was the refusal
+met in passing, not a test run for the purpose.
