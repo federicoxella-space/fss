@@ -4859,3 +4859,73 @@ ruling line.
 Edit of the register is the first subagent Edit under it); shell writes, which
 the hook cannot see; `MultiEdit` and `NotebookEdit`; the script under a shell
 other than pwsh 7.
+
+### D-134 · Point 5 · `mutate` reaches every file of the point: the tree is hashed over everything but the excluded paths, and a check that leaves unignored files now fails
+
+**Origin.** Point 5 of the workflow review plan (review P3): `mutate` admitted a
+patch only on `core/Runtime/` and `harness/`, so a fault could not be tried on
+a `bench/` file or any other file of the point.
+
+**Built** (by the orchestrator: `.claude/` is not the coder's, `D-087`; the point
+says it edits `.claude/hooks/`, `.claude/agents/`, `.claude/skills/`).
+`.claude/hooks/mutate.ps1`: the admitted set is `git diff --name-only HEAD` plus
+the untracked files, less the excluded paths (`core/Tests/`, `docs/`, `.claude/`,
+`AGENTS.md`, any `CLAUDE.md`, `core/BannedSymbols.txt`, `PLAN.md`,
+`DECISIONS-OUTSIDE-SPEC.md`, `SPEC-QUESTIONS.md`, `REVIEW-REQUEST.md`,
+`PROMOTIONS.md`, `RULINGS.md`, `DECIDER-BRIEFS.md`). An excluded path is refused
+even when in the diff; a path outside the diff is refused; a rename's or copy's
+source still counts as a path of the patch (`R-073`); the tree is hashed over
+everything but the excluded paths (it was `core/Runtime/` and `harness/`);
+description rewritten. `.claude/hooks/tree-state.ps1`: its description of what
+`mutate` passes. `.claude/agents/tester.md` and `.claude/skills/plan-next/SKILL.md`
+step 4: the sentences saying `mutate` reaches only `core/Runtime/` and `harness/`
+now say what it reaches (table C8). `core/`, `docs/` and `AGENTS.md` untouched.
+
+**Decided (`docs/` silent: process work).**
+1. **The excluded set is the point's list,** `CLAUDE.md` matched anywhere in the
+   tree. *Would overturn it:* a ruling that a nested `CLAUDE.md` is patchable.
+2. **The tree is hashed over everything but the excluded paths,** so residue
+   anywhere is seen, not only under the old two folders. *Would overturn it:* a
+   check that must write unignored files.
+3. **Untracked files are admitted; ignored files never are.** *Would overturn
+   it:* a ruling that an ignored file may carry a fault.
+
+**Results.** `mutate -SelfTest`: 30 cases, 0 failed. New: a fault in an
+untracked `bench/` file of the point applies, goes red, is restored, the file
+checked restored; a committed file outside the diff refused, exit 2; `docs/` and
+`core/Tests/` refused though in the diff; a rename from a committed file outside
+the diff refused; each of the twelve other excluded paths refused though in the
+diff; a check leaving a file in `bench/`, exit 3. `tree-state -SelfTest`: 14
+cases, 0 failed. A grep in `.claude/agents`, `.claude/skills`, `.claude/hooks`
+for a sentence saying `mutate` reaches only `core/Runtime` and `harness`: none.
+Faults, by the orchestrator, tree hash equal, re-run after the review: the
+admitted set read from `git diff` only (`Fails when`): the `bench/` case exit 2
+and the residue case 2, red; `core/Tests/` admitted: its case applied, exit 1,
+red. The review's faults: the hash scope back to `core/Runtime` and `harness`:
+the `bench/` residue case exit 0, red; `AGENTS.md` dropped from the exclusions:
+its case exit 0, red. While building, a self-test check read a one-line file with
+`(Get-Content f)[0]`, its first character, and was fixed with `@()`: a defect of
+the test, not of `mutate`.
+
+**Findings and their resolution.**
+- Code-reviewer, the check satisfied as written. Verifiable, **applied** (one
+  round): only `docs/` and `core/Tests/` had refusal cases, now all twelve others
+  too; the hash scope was not pinned, now the `bench/` residue case.
+- **Left open, for the human or decider, not changed:** a check that writes files
+  the repository does not ignore (`TestResults/`, `*.log`, CI's `hashes-*.txt` and
+  `final-*.txt`, `BenchmarkDotNet.Artifacts/`) now makes `mutate` exit 3, "tree
+  not restored", where it formerly passed unseen outside `core/Runtime/`. No check
+  in the repository does so today; whether the tester's text should forbid it is
+  open.
+- **Question, recorded:** a fault on the source of a rename the point itself makes
+  is refused, because `git diff --name-only` lists the destination only.
+- Long lines in `tester.md` and `SKILL.md`: **rejected**, taste.
+
+**Agents (`R-067`).** Dispatched: code-reviewer, documenter, committer. Not run:
+the tester (script self-tests, run by the orchestrator); the coder (`.claude/`);
+the revisioners (`Core: no` held: only `.claude/` in the diff).
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** a check that must write unignored files.
+**Not verified:** a rename made by the point itself as the target of a fault;
+the script under a shell other than pwsh 7.

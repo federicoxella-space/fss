@@ -299,6 +299,27 @@ claim `R-046`'s check.
   admitted: its case goes red.
 - **Core:** no — the diff touches only `.claude/`.
 
+*Outcome:* 2026-10-20. Closed. `mutate -SelfTest` ran 30 cases, 0 failed (new: a
+fault in an untracked `bench/` file applies, goes red, is restored; a committed
+file outside the diff refused, exit 2; `docs/` and `core/Tests/` refused though in
+the diff; a rename from a file outside the diff refused; the twelve other excluded
+paths refused; a check leaving a file in `bench/`, exit 3); `tree-state -SelfTest`
+14, 0 failed; a grep finds no sentence saying `mutate` reaches only
+`core/Runtime/` and `harness/`. Faults, tree hash equal: the admitted set read
+from `git diff` only, the `bench/` case exit 2, red; `core/Tests/` admitted, its
+case applied, red; after the review, the hash scope back to `core/Runtime` and
+`harness`, and `AGENTS.md` dropped from the exclusions, each red. Review:
+code-reviewer, the check satisfied as written; the verifiable findings applied in
+one round (refusal cases for the twelve other excluded paths, the hash scope
+pinned); *left open* for the human or decider: a check that writes unignored files
+(`TestResults/`, `*.log`, CI's `hashes-*.txt`) now makes `mutate` exit 3, and
+whether the tester's text should forbid it; question, recorded: a fault on the
+source of a rename the point itself makes is refused; long lines, rejected as
+taste. `D-134`. Agents (`R-067`): code-reviewer, documenter and committer
+dispatched. Not run: the tester, the check being a script self-test run by the
+orchestrator; the coder, the files being in `.claude/`; the revisioners, `Core: no`
+held. This outcome does not claim `R-046`'s check.
+
 ## 6. `/plan-next` lighter (review P1, P2, P4, G2)
 
 - **Does:** edits `.claude/skills/plan-next/SKILL.md`:

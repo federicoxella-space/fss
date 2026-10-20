@@ -146,8 +146,10 @@ body that can be emptied, the empty implementation too. The outcome line says
 each fault was seen. A plan written before `R-020` has no `Fails when:` line, and
 the point is not faulted for the absence.
 
-A fault `mutate` cannot reach — a path outside `core/Runtime/` and `harness/` —
-is introduced by this session: the check run, the fault undone, and
+`mutate` admits a patch on any file the point's diff touches, untracked ones
+included, except `core/Tests/`, `docs/`, `.claude/`, `AGENTS.md`, a
+`CLAUDE.md`, `core/BannedSymbols.txt` and the record files. A fault it cannot
+reach — a point whose files are all among those — is introduced by this session: the check run, the fault undone, and
 `tree-state.ps1` over the whole tree equal before and after. The outcome line
 says who introduced it.
 
