@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-135 — audited by `R-119`. The next audit starts at the
+**Register watermark:** D-136 — audited by `R-120`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -200,6 +200,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   generation, no village out of reach; every routed row one entry of its
   market's ranking, read without walking every settlement; type and assignment
   hysteresis both ways and eviction on a fall; P-79 and P-80 proposed.
+- **`R-120`**, before the workflow review plan is archived, as a point added
+  under `D-014` with the user's approval: `plan-state` reads *criterion
+  defective*, *criterio difettoso* and *left open* only in emphasis; a fixture
+  with "nothing left open" in plain prose reads `deciderDue` false.
 
 ## Escalated to the user
 
@@ -6345,3 +6349,53 @@ fault was reintroduced; the faults seen red are the entries' word. `RULINGS.md`
 was read in its state, owed
 actions, escalations, `R-001`, `R-005`, `R-009` and the rulings from `R-105` on,
 not whole.
+
+### R-120 — A decider marker counts only as a marker: emphasised, never matched in prose
+
+**Date:** 2026-10-20   **Origin:** `D-136`, left open for the decider; `D-131`,
+decision 2
+**Verdict:** `D-136` ratified, its question answered; `D-131`'s decision 2
+rejected for the three phrase markers, its reading of `FAILED` from the status
+standing
+**docs/:** unchanged
+
+Process work (`D-011`). Point 3's "Does" says the trigger is "read, not
+inferred", and writes the markers as markers: *criterion defective*,
+*criterio difettoso*, *left open*. `plan-state` strips every `*` and `_` from
+the outcome paragraph and matches the bare phrase anywhere, so point 6's
+"nothing left open" made the decider due, as `D-136` reports. A phrase matched
+in prose, negation included, is inference by word search: the risk the
+code-reviewer named at point 3, recorded and left in `D-131`'s decision 2, has
+now happened. The orchestrator keeping the phrase out of prose is a rule held
+by memory, which is what the marker was introduced to replace.
+
+**The ruling.** A decider marker is the phrase as the whole of an emphasis
+span — `*…*` or `**…**`, case ignored, a line break inside it read as a space —
+in the last closed point's outcome paragraph. The bare phrase in prose does not
+count. `FAILED` stays read from the point's status, as decision 2 has it. Every
+outcome that should trigger already carries the emphasised form: points 3, 5
+and 7 (*left open*, *Left open*), point 9 (*criterion defective*), the phase 3
+outcomes and their fixture (`**criterio difettoso**`). The rule would have held
+before any script was written: a marker that `/plan-next` step 8 writes in
+emphasis, as `AGENTS.md`'s table of markers writes *criterion defective*, is a
+token, and a token is matched as one. The other answer, keeping the phrase out
+of prose, errs only toward an extra dispatch, but it leaves the trigger to a
+writer's memory, which is what point 3 set out to end.
+
+**Cost.** One more edit of `plan-state.ps1` in this plan, and a point to carry
+it: a hook changes only under a point that says it edits `.claude/hooks/`
+(`D-087`). An outcome that writes the marker without emphasis no longer calls the
+decider; step 8 writes it in emphasis.
+**Owed by the implementer:** before the workflow review plan is archived, a
+point added under `D-014`, with the user's approval, that makes `plan-state`
+read the three phrase markers only in emphasis; its check a fixture whose last
+outcome reads "nothing left open" in plain prose, `deciderDue` false, beside the
+existing true fixtures; its `Fails when:` the markers matched with emphasis
+stripped, as now. Cite `R-120`.
+**Would overturn it:** an outcome that left something open, written by the
+skill, without the emphasised marker; the user preferring that the plan close
+without the point, which leaves the false positive to the next plan that edits
+`plan-state`.
+**Not verified:** the regular expression itself, which is the implementer's;
+that no archived outcome writes a marker unemphasised that a later reading
+would need.

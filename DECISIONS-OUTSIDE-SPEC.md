@@ -4623,6 +4623,7 @@ known.
 
 ### D-131 · Point 3 · `plan-state` reads a point's frozen text: record paragraphs, not lines, and the archive count by headings
 **Ruling:** R-119 — ratified, save decision 2; decision 6, left open, stands.
+**Ruling:** R-120 — decision 2 rejected for the phrase markers: read only in emphasis; FAILED from the status stands.
 
 **Built** (by the orchestrator, not the coder: `.claude/hooks/` is not the
 coder's, `R-010`, `D-087`; the point says it edits `.claude/hooks/`):
@@ -4994,6 +4995,7 @@ clean points.
 new skill.
 
 ### D-136 · Point 7 · The documenter retired, and the first point recorded without it
+**Ruling:** R-120 — ratified; left open answered: the marker is read only in emphasis, a point owed.
 
 The first point recorded by the orchestrator under the `/plan-next` of point 6:
 `plan-state` read for point 7 `changed`, `recorded` and `added` false and `gone`
