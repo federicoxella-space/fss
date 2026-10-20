@@ -5047,6 +5047,7 @@ read `plan-status/SKILL.md`, the skill the fault was put in. Written as an
 insertion: the `record` hook refuses to edit the line itself.
 
 ### D-137 · Point 8 · Design belongs to the decider, and the permission to write it into `AGENTS.md`
+**Ruling:** R-123 — ratified.
 
 **The permission.** Granted by Federico Xella at moment one of this plan,
 "approvo la bozza" (`e2ce1fd`), for point 8 as drafted: a rule in `AGENTS.md`,
@@ -5089,7 +5090,7 @@ tester, the check being a grep and a reading; the coder, the file being
 ## 2026-10-20 — An Obsidian vault, drafted as a plan at moment one
 
 ### D-138 · Moment one of the Obsidian vault plan · What the draft decides beyond the user's answers
-**Ruling:** none yet.
+**Ruling:** R-123 — ratified.
 
 The user asked for an Obsidian vault holding the project's knowledge, read
 against the documentation by one agent and linked by another, using Obsidian's
@@ -5131,7 +5132,7 @@ rendering of the front matter and the Bases was not tried.
 ## 2026-10-20 — The migration of `docs/` into a vault, drafted as a plan at moment one
 
 ### D-139 · Moment one of the `docs/` vault migration plan · How the draft reads `R-121` where its text leaves a choice
-**Ruling:** none yet.
+**Ruling:** R-123 — ratified.
 
 `R-121` owes a moment-one draft for the script and the correspondence check of
 its migration. The draft is in `REVIEW-REQUEST.md`, read blind once in its
@@ -5169,7 +5170,7 @@ first version; the request quotes the reading and what the second did.
 rendering of embeds, block ids and escaped table links was not tried.
 
 ### D-140 · Moment one of the `docs/` vault migration plan · What version 3 of the draft decides beyond `D-139`
-**Ruling:** none yet.
+**Ruling:** R-123 — ratified.
 
 A second blind reading of version 2, run by `/plan-explain -Draft` at the
 user's request, found that neither point could close as written. Shown it, the
@@ -5213,7 +5214,7 @@ not tried against code; the counts of point 2 were taken by the author with
 `grep` and `awk`.
 
 ### D-141 · Moment one of the `docs/` vault migration plan · What version 4 of the draft decides beyond `D-139` and `D-140`
-**Ruling:** none yet.
+**Ruling:** R-123 — ratified.
 
 The user approved version 3 and asked for a third blind reading, which found
 the check blind to a note running past its end and to note text left in the
@@ -5252,7 +5253,7 @@ not tried against code; three clauses of the "Does" rest on the code-reviewer
 alone.
 
 ### D-142 · Moment one of the `docs/` vault migration plan · What version 5 of the draft decides beyond `D-139` to `D-141`
-**Ruling:** none yet.
+**Ruling:** R-123 — ratified.
 
 The user approved version 4 and asked for a fourth blind reading, which found
 check 3 red on a correct vault, the no-sharing grep red on correct code, CRLF
@@ -5297,7 +5298,7 @@ alone.
 ## 2026-10-21 — Point 10 of the workflow review plan, added under `D-014`
 
 ### D-143 · Point 10 · A decider marker counts only as the whole of an emphasis span
-**Ruling:** none yet.
+**Ruling:** R-123 — ratified.
 
 `R-120` owes, before the workflow review plan is archived, a point making
 `plan-state` read the three phrase markers only in emphasis. The user, asked
