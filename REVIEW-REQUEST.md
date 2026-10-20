@@ -60,10 +60,12 @@ Replaces the moment-one request of 2026-10-20 for the derived Obsidian vault
 owes; under `R-048` it is installed as `PLAN.md` on its branch only after the
 answer, and under `R-049` its first point waits for that answer.
 
-**Branch:** written on `design/obsidian-vault`, which carries `SQ-025` and
-`R-121` on top of `workflow-review`. The plan would run on `docs-vault`, cut
-from `main` once `workflow-review` is merged; this branch would then be merged
-with it or its commits taken over.
+**Branch:** written on `design/obsidian-vault`, which carries `SQ-025`,
+`R-121`, `SQ-026` and `R-122` on top of `workflow-review`, and alone carries
+them: `git branch --contains` lists no other branch for `3d97fe0` or
+`7a37563`. The plan would run on `docs-vault`, cut from `main` once
+`design/obsidian-vault`, and with it `workflow-review`, is merged into `main`
+(version 3; versions 1 and 2 named `workflow-review` alone).
 
 **What changed, in one line:** a draft plan building, outside `docs/`, the
 script that splits the six documents into the vault `R-121` shapes and the
@@ -72,7 +74,8 @@ check that proves the split corresponds to the originals.
 ## Decisions taken outside the specification
 
 `D-139`: the readings of `R-121` the draft makes where the ruling's text leaves
-a choice, listed in the draft's "The shape, as both scripts read `R-121`". Not
+a choice, listed in the draft's "The shape, as both scripts read `R-121`".
+`D-140`: what version 3 decides beyond it, after the second reading. Neither
 audited.
 
 ## Open questions about the specification
@@ -89,8 +92,9 @@ as an exception to `/plan-explain -Draft`'s brief, the text of `R-121`: the
 ruling is the plan's requirement, and a reader barred from it could not judge
 the draft against it. It was told not to read the rest of `RULINGS.md`, the
 register, `PROMOTIONS.md` or the archived plans. The tree hash was equal before
-and after. The draft below is version 2, read once more after the user's answer:
-see "The second reading, of version 2" below.
+and after. Version 2 was read once more after the user's answer: see "The
+second reading, of version 2" below. The draft below is version 3, written in
+answer to that reading and read by no one.
 
 ### What version 2 did with the findings
 
@@ -190,12 +194,51 @@ names, and the instruction not to read `RULINGS.md`, `DECISIONS-OUTSIDE-SPEC.md`
 took the draft's account of the ruling. The tree hash was equal before and after
 (`7e4b6eb8…`).
 
-### What the draft did with the findings
+### What version 3 did with the findings
 
-Nothing yet. Version 2 stands as approved; the reading reports, among others,
-that point 2's byte-for-byte comparison fails on a fresh checkout and that the
-branch precondition names the wrong branch. Whether the draft is amended is the
-user's answer, below.
+The user, shown the reading, asked for version 3 (item 5 below). The author
+re-checked the reading's facts about the repository before acting on them:
+`core.autocrlf` is `true` and there is no `.gitattributes`; `3d97fe0` and
+`7a37563` are on `design/obsidian-vault` alone and `workflow-review` is not in
+`main`; `### DEC-006a`, `006b`, `007a`, `034a` exist; `FR-P-03a` is mentioned at
+`SIM-OBS.md:76` and `FR-P-03b` at `SIM-REQ.md:111`; `SIM-DEC`, `SIM-REQ` and
+`SIM-STATE` end without a newline; the six hold 178 notes by heading count and
+260 identifier-led lines, all in `SIM-REQ`, all unique, none inside a paragraph.
+Some findings rest on the reader not having `R-121`'s text, which this reading,
+unlike the first, was not given; the table says so where it applies.
+
+| Finding | In version 3 |
+|---|---|
+| Byte-for-byte comparison fails on a fresh checkout (`autocrlf`, no `.gitattributes`) | Point 1 adds `tools/docs-vault/fixtures/** text eol=lf`, checked by `git ls-files --eol`; CRLF output planted in point 2 |
+| Where the index lives is unsaid; `docs/SIM-DEC.md` would collide | `R-121` 1 places it at `<doc>/<doc>.md`; the draft now says so, and that the check reads originals at the root and the vault in the folders |
+| Check 3 does not compare a link's anchor with its text | Check 3 requires `#^ID` equal to the displayed text, and the anchor whenever the text is a block id; missing and wrong anchors planted in point 1, missing in point 2 |
+| Fixture lacks two groups and `R1`/`R10` | Fixture lists two groups in `SIM-DEC`, `R1` and `R10` in `SIM-LOOPS`, and names each fixture document |
+| Branch precondition names `workflow-review` | Names `design/obsidian-vault`, which carries `workflow-review` and the four entries |
+| `SQ-026` gate stale | Gate removed; `R-122` cited as ruling the block ids |
+| Unlinked mention has no fault in point 1 | Planted: a prose mention left plain |
+| Identifier lookup per document or vault-wide unsaid | Vault-wide, said; a cross-document mention in the fixture; planted in both points (`SIM-OBS.md:76` on the real run) |
+| Wrong `aliases` or `document` values pass | Check 6 compares values; both planted |
+| Stray file at the vault root unchecked | Said: the check inspects the six folders only, since the in-place run leaves the originals and `CLAUDE.md` at the root; check 5 rejects any extra file inside a folder |
+| Character-drop rule, `SIM-` filter, `OBS-n`, heading followed by text, group without intro unexercised | All in the fixture, which now holds a `:` heading, a `CLAUDE.md`, an `OBS-1` section, a `SIM-LOOPS` heading followed by text, a group with no intro; a `:` replaced by `-` planted |
+| Fault "`Open` without path" needs sections named `Open` | Fixture names a section `Open` in two documents |
+| K2: check and script may share code; on the six, check 5 is the only reference | Sharing forbidden, checked by `Select-String`; on the six, note and block-id counts taken by `Select-String` from the originals, independently of both scripts |
+| K6: point 1's own continuation-line fault rests on `SQ-026` too | Moot: `R-122` has ruled |
+| Aliases: the documents do not write `SIM-REQ §18` | The form is `R-121` 5's own example, now cited as such; the unnumbered form cites `SIM-REQ.md:826` |
+| Refusal tested only when every file exists | The script lists every path before writing; two runs into a directory holding one planted file must leave it alone; checking path by path planted |
+| "Tree hash" of a temporary directory undefined | A listing of path, size, SHA-256 and `LastWriteTimeUtc` |
+| `docs/.obsidian/` instead of `docs/.obsidian/*` passes | `git check-ignore` on three paths; the wrong pattern planted |
+| Extra final newline passes; its representation unsaid | Newline rule stated; check 1 compares the final LF; an added final newline planted in both points |
+| `FR-P-03a` "on `SIM-REQ`" mislocated | Word-boundary fault moved to `FR-P-03b` at `SIM-REQ.md:111` |
+| "Each `B3a` line": there is one | "The brake lines `**B<n> — …**`" |
+| `DEC-006a` named by `DEC-\d+` | Names take the whole identifier; `DEC-002a` in the fixture; `DEC-[0-9]+` naming planted in point 2 |
+| "No link made at all" is a convenient fault | Dropped in point 2: the anchor and per-document faults are the likely failures of linking |
+| `app.json` not said to be in the hand-made vault | Said |
+| Identifier grammar unsaid | Stated: `[A-Z]+(-[A-Z]+)*-[0-9]+[a-z]?` or `R[0-9]+`, taken whole |
+| Table-only identifiers never linked, unsaid | Said, from `R-121` 4's "Table rows get none" |
+| `OBS-n` aliases and the index's properties unsaid | `OBS-n` take their title after ` — `; the index holds `document` and `kind` only |
+| Group rule depends on document names; the fixture's must match | Fixture documents named `SIM-DEC` and `SIM-LOOPS` |
+| `.md` in embed and link paths unsaid | Without `.md`, said |
+| Character-drop rule unused | Kept: `R-121` 2 requires it; the fixture exercises it |
 
 ### The reading, of version 2, quoted
 
@@ -324,70 +367,100 @@ user's answer, below.
 **Kind:** process
 **Exit condition:** `tools/docs-vault/check-docs-vault.ps1` and
 `tools/docs-vault/split-docs.ps1` exist, each with a green `-SelfTest`; the
-script's output on the fixture equals, file by file, the vault written by hand
-for it; the script, run on the six documents of `docs/` into a temporary
-directory, passes every check against the six originals; every fault named
-below, planted alone, turns the check named red. `.gitignore` holds the vault's
-unversioned files. Nothing under `docs/` is written: running the script into
-`docs/` and removing the originals are the two decider rulings `R-121` assigns.
-**Phase:** none, process work; before phase 4. `R-121` rules the shape; `docs/`
-itself does not change in this plan.
+script's output on the fixture equals, file for file and byte for byte, the
+vault written by hand for it; the script, run on the six documents of `docs/`
+into a temporary directory, passes every check against the six originals and
+yields the note and block-id counts taken from the originals by a separate
+count; every fault named below, planted alone, turns the check named red.
+`.gitignore` holds the vault's unversioned files and `.gitattributes` keeps the
+fixture LF. Nothing under `docs/` is written: running the script into `docs/`
+and removing the originals are the two decider rulings `R-121` assigns.
+**Phase:** none, process work; before phase 4. `R-121` rules the shape and
+`R-122` its block ids; `docs/` itself does not change in this plan.
 **Branch:** `docs-vault`, cut from `main` after the answer to moment one and
-after `workflow-review` is merged, which carries `R-121`, `SQ-025` and the rules
-this plan runs under. Point 1 starts only once `SQ-026` is answered, since
-check 4 and a fault of point 2 rest on it.
+after `design/obsidian-vault` is merged into `main`. That branch descends from
+`workflow-review`, which carries the rules this plan runs under, and alone
+carries `SQ-025`, `R-121`, `SQ-026` and `R-122`; merging `workflow-review`
+alone would bring none of the four.
 
 Both scripts run under `pwsh` 7, read files as UTF-8 with CRLF normalised to
-LF, and write UTF-8 without BOM, LF. The documents are those `.md` files of
-`-Originals` or `-Source` whose name starts `SIM-`: on `docs/`, the six of
-`R-121`, `docs/CLAUDE.md` not among them (`R-121` 7). `tools/` is a new folder:
-these are repository tools a decider runs, not agent configuration, so they do
-not belong in `.claude/hooks/`. The check is written first, from `R-121`'s text,
-against a vault written by hand; the script is then judged by the check and by
-that vault, a reference it shares nothing with.
+LF, and write UTF-8 without BOM, LF. The documents are the `.md` files directly
+in `-Originals` or `-Source`, not in a subfolder, whose name starts `SIM-`: on
+`docs/`, the six of `R-121`, `docs/CLAUDE.md` not among them (`R-121` 7).
+`tools/` is a new folder: these are repository tools a decider runs, not agent
+configuration, so they do not belong in `.claude/hooks/`. The check is written
+first, from `R-121`'s text, against a vault written by hand; the script is then
+judged by the check, by that vault, and on the real documents by counts taken
+from the originals' heading and lead lines. **The two scripts share no code**:
+neither dot-sources, imports or copies a function from the other or from a
+common file, so that a reading wrong in one is not wrong in both.
 
 **The shape, as both scripts read `R-121`**, where its text leaves a choice:
+- **Files.** Each document's vault is the folder `<doc>/` of the vault root,
+  holding its index `<doc>/<doc>.md` (`R-121` 1) and its notes. The originals
+  sit at the root, so the in-place run of the ruling writes over none of them,
+  and the check reads originals at the root and the vault in the folders,
+  `-Originals docs -Vault docs` included. Nothing at the vault root but
+  `.obsidian/app.json` is the vault's; the check inspects only the six folders.
 - **The index is the document with each note's text replaced by one embed
-  line**, `![[<doc>/<path>]]`, the path from the vault root, without `#`, at the
-  place the text held. Obsidian renders the index as the document in its order,
-  and the embed lines are the "ordered link to every note". "Drop the index's
-  link list, concatenate the notes in index order" is read as: replace each
-  embed line by its note's body. Only an index embeds; a note embeds nothing.
+  line**, `![[<doc>/<path>]]`, the path from the vault root without `.md` and
+  without `#`, at the place the text held. Obsidian renders the index as the
+  document in its order, and the embed lines are the "ordered link to every
+  note". "Drop the index's link list, concatenate the notes in index order" is
+  read as: replace each embed line by its note's body. Only an index embeds; a
+  note embeds nothing.
 - **A `##` section is a note** (`R-121` 2), **except** in `SIM-DEC` and
   `SIM-LOOPS` a `##` section holding at least one `###` heading, all of them
   `### DEC-` or `### R<n>`: that is a group, a folder named as a section is
-  named, its heading and the text before its first entry in the index, one note
-  per entry named by its identifier (`R-121` 3). `SIM-OBS`'s `## OBS-n` are
-  notes named `OBS-n`. The preamble stays in the index (`R-121` 1).
+  named, its heading and the text before its first entry, if any, in the index,
+  one note per entry named by its whole identifier, `DEC-006a` included
+  (`R-121` 3). `SIM-OBS`'s `## OBS-n` are notes named `OBS-n`. The preamble
+  stays in the index (`R-121` 1). A `###` anywhere else stays in its section's
+  note.
 - **A note ends before the run of blank lines and `---` lines that precedes the
   next heading of its level or above**; that run stays in the index, between
   embeds, so that no note ends in a separator and a new `DEC-` note added to a
   group under `decide` step 6 needs none.
+- **Newlines.** Every note ends in exactly one LF. The index ends in an LF if
+  and only if its original does: `SIM-DEC`, `SIM-REQ` and `SIM-STATE` end
+  without one today. Reconstruction splits each file on LF after dropping one
+  final LF, and compares the line lists and whether both texts end in an LF.
 - **Names.** A numbered section is `<n> <title>`, `18 Delivery phases`; an
   unnumbered one `<title>`; from either, `.` after the number and the characters
-  `* " \ / < > : | ? # ^ [ ]` dropped.
-- **Block ids** go on a paragraph or list item that opens with `**` followed by
-  an identifier and then `**` or ` —` (`**FR-T-06** —`, `**AC-02 — …**`), at the
-  end of its last line, ` ^<identifier>`. A paragraph is a run of non-blank
-  lines. A bold span that merely begins with an identifier
-  (`**B1 does not apply here.**`) is not one; the brakes of `SIM-LOOPS`,
-  `**B3a — …**`, are lines inside their loop's paragraph, not its opening, and
-  Obsidian attaches a block id only at a block's end, so they get none.
-  `SQ-026` asks the decider whether that reading is the ruling's.
-- **Links.** Every word-bounded mention (no letter, digit or `-` either side) of
-  an identifier that names a note or a block id becomes `[[<doc>/<path>|ID]]` or
-  `[[<doc>/<path>#^ID|ID]]`, its displayed text the identifier as written; in a
+  `* " \ / < > : | ? # ^ [ ]` dropped, not replaced. No heading of the six holds
+  one of them today; the fixture does.
+- **Identifiers** are strings of the form `[A-Z]+(-[A-Z]+)*-[0-9]+[a-z]?`
+  (`FR-P-03a`, `AC-02`, `DEC-006a`, `OBS-3`) or `R[0-9]+`. **A mention** is an
+  occurrence with no letter, digit or `-` either side, taken whole: `FR-P-03a`
+  is one mention, never `FR-P-03` followed by `a`.
+- **Block ids** (`R-121` 4, as `R-122` rules it) go on a paragraph or list item
+  that opens with `**` followed by an identifier and then `**` or ` —`
+  (`**FR-T-06** —`, `**AC-02 — …**`), at the end of its last line,
+  ` ^<identifier>`. A paragraph is a run of non-blank lines. A bold span that
+  merely begins with an identifier (`**B1 does not apply here.**`) is not one;
+  the brakes of `SIM-LOOPS`, `**B3a — …**`, are lines inside their loop's
+  paragraph and get none. Table rows get none (`R-121` 4), so an identifier
+  that lives only in a table, `A-01` or `P-12`, names nothing and is never
+  linked.
+- **Links.** Every mention, in any note of any document, index included, of an
+  identifier that names a note or a block id anywhere in the vault becomes
+  `[[<doc>/<path>|ID]]` for a note or `[[<doc>/<path>#^ID|ID]]` for a block id,
+  the path without `.md`, its displayed text the identifier as written; in a
   table row the `|` is written `\|`. Never in a code span, a fenced block or a
-  heading, never at a defining occurrence (the bold lead of a block id, the
-  heading of an entry note). Document names and `§` citations are not linked:
-  `R-121` 6 names identifiers. The ruling's "may" is taken as "does", so that a
-  script that links nothing is a fault the check can see.
-- **Properties**, one key per line, every value a JSON scalar or array of
-  strings, a subset of YAML that `ConvertFrom-Json` reads: `document`; `kind`,
-  `index`, `section`, `decision`, `loop` or `observable`; `id` on an entry note;
-  `aliases`, for a section its citation form as the documents write it,
-  `"SIM-REQ §18"` numbered and `"SIM-ECON §Demand"` not, for an entry its title
-  after the ` — `.
+  heading, never at a defining occurrence (the bold lead of a block id). A
+  brake's identifier names nothing and is not linked (`R-122`). Document names
+  and `§` citations are not linked: `R-121` 6 names identifiers. The ruling's
+  "may" is taken as "does", so that a script that links nothing is a fault the
+  check can see.
+- **Properties**, between a first and a second `---` line, one key per line,
+  every value a JSON scalar or array of strings, a subset of YAML that
+  `ConvertFrom-Json` reads: `document`; `kind`, `index`, `section`, `decision`,
+  `loop` or `observable`; `id` on a decision, loop or observable note;
+  `aliases` on every note but the index — for a section `"<doc> §<n>"` when
+  numbered, the form `R-121` 5 gives (`"SIM-REQ §18"`), `"<doc> §<title>"`
+  otherwise, the form `SIM-REQ.md:826` uses (`"SIM-ECON §Demand"`); for a
+  decision, loop or observable its heading's title after the ` — `. The index
+  holds `document` and `kind` only.
 - **The comparison is exact**, line for line: blank lines stay where the
   original held them, so the exception `R-121` allows at note boundaries is not
   used, and a check that passes exactly passes the ruling's.
@@ -399,99 +472,164 @@ that vault, a reference it shares nothing with.
   number and the document by name, green or red, and exits non-zero if any is
   red:
   1. **Correspondence.** The index's body, each embed line replaced by its
-     note's body, the leading front-matter block alone removed, every ` ^ID` at
-     a line's end removed, every `[[…|X]]` and `[[…\|X]]` turned into `X`:
-     equal to the original, line for line.
+     note's body, the leading front-matter block alone removed from each, every
+     ` ^ID` at a line's end removed, every `[[…|X]]` and `[[…\|X]]` turned into
+     `X`: equal to the original, line for line, and ending in an LF if and only
+     if the original does.
   2. **Embeds.** Embeds occur in index notes only, one per line, with a full
      path and no `#`; each resolves from the vault root; every note under the
-     document's folder is embedded exactly once.
-  3. **Links.** Every link resolves from the vault root to a note whose `id`, or
-     a block id in it, equals the displayed text; no link is preceded or
-     followed by a letter, digit or `-`, or sits in a heading, a fence, a code
-     span or a defining occurrence; a table row's link uses `\|`; and every
-     word-bounded mention in prose of an identifier that names a note or block
-     id is a link.
+     document's folder but the index is embedded exactly once.
+  3. **Links.** Every link resolves from the vault root: one without `#` to a
+     note whose `id` equals the displayed text; one with `#^ID` to a note that
+     holds the block id `ID`, `ID` equal to the displayed text. A displayed
+     text that is a block id in the vault is linked with its anchor. No link
+     is preceded or followed by a letter, digit or `-`, or sits in a heading, a
+     fence, a code span or a defining occurrence; a table row's link uses `\|`;
+     and every mention in prose of an identifier that names a note or block id
+     anywhere in the vault is a link.
   4. **Block ids.** Every paragraph or list item of the original opening in the
      form above, paragraphs read as runs of non-blank lines, carries
      ` ^<its identifier>` at its end in the vault, and no other line does.
   5. **Shape.** From the original, by the rules above, the check derives the
      notes the document must have: their paths, the heading each opens with,
-     `kind`, `id` and `aliases`. The vault's notes equal that list exactly, path
-     for path; each opens, after its front matter, with that heading; no note
-     ends in a blank or `---` line.
+     `kind`, `id` and `aliases`. The files under the document's folder equal
+     that list and the index exactly, path for path; each note opens, after its
+     front matter, with that heading; every note ends in exactly one LF and in
+     no blank or `---` line.
   6. **Properties.** Every note's front matter parses, line by line, with
      `ConvertFrom-Json`, and holds `document`, equal to its folder's document,
-     and the `kind`, `id` and `aliases` check 5 derived.
-  `-SelfTest` runs on `tools/docs-vault/fixtures/`: an original holding a
-  preamble, a numbered and an unnumbered section, a `###` subsection inside a
-  section, a group of two entries with text before the first, `---`
-  separators, a table row and a fence and a code span each holding an
-  identifier that names a note, a heading holding a non-defining identifier, a
-  bold-led paragraph, a bold-led list item, a bold identifier at the start of a
-  continuation line, a bold span that is not a lead, two sections of one name
-  in two documents, and a document with no final newline; a vault for it
-  written by hand, green on every check; and one copy of that vault per fault
-  below, each red on the check it names.
-- **Closed by:** `-SelfTest` green, each fault copy red on its named check; the
+     and the `kind`, `id` and `aliases` check 5 derived, values compared.
+  `-SelfTest` runs on `tools/docs-vault/fixtures/`: originals named
+  `SIM-REQ.md`, `SIM-DEC.md`, `SIM-LOOPS.md` and `SIM-OBS.md`, with a
+  `CLAUDE.md` beside them that is no document, holding between them: a
+  preamble ending in `---`; numbered and unnumbered sections; a heading holding
+  a character dropped from names (`:`); a `###` subsection inside a section; in
+  `SIM-DEC` two groups, the first with no text before its first entry, the
+  second with some, and entries `DEC-002` and `DEC-002a`; in `SIM-LOOPS` a
+  group with entries `R1` and `R10`, a heading followed by text with no blank
+  line, a brake line `**B1 — …**` inside a loop's paragraph and a bold span
+  `**B1 does not apply here.**`; in `SIM-OBS` an `## OBS-1 — …` section and a
+  mention of a block id of `SIM-REQ`; a section named `Open` in two documents;
+  `---` separators; a table row, a fence and a code span each holding an
+  identifier that names a note or block id; a heading holding a non-defining
+  identifier; a bold-led paragraph, a bold-led list item, a bold identifier at
+  the start of a continuation line; prose mentions of `R10`, `DEC-002a` and
+  `FR-…` identifiers that have block ids; one document with no final newline.
+  A vault for it written by hand, with `.obsidian/app.json` holding `{}`, green
+  on every check; and, made by `-SelfTest` in a temporary directory from that
+  vault, one copy per fault below, each red on the check it names and green on
+  the others. `.gitattributes` gains `tools/docs-vault/fixtures/** text eol=lf`.
+- **Closed by:** `-SelfTest` green, each fault copy red on its named check;
+  `git ls-files --eol tools/docs-vault/fixtures` reports `attr/text eol=lf` for
+  every file; neither script under `tools/docs-vault/` holds a dot-source, an
+  `Import-Module` or a call to another file there, by `Select-String`; the
   code-reviewer reads the check against `R-121`'s shape and "correspondence
-  check" and against this point's "Does".
+  check", `R-122`, and this point's "Does".
 - **Fails when:** in a copy of the hand-made vault, each alone: a paragraph
   deleted (check 1 red); a paragraph duplicated (1); a word changed (1); a
   note's embed removed from the index (1, 2); two embeds swapped (1) — these
-  five are `R-121`'s; a group's heading moved from the index into its first
-  entry's note (5); a section split in two notes (5); a note named
-  `18. Delivery phases` (5); an entry note filed in the wrong group's folder
-  (5); a link at a defining occurrence (3); `R10` written `[[…|R1]]0` (3); an
-  embed to `#Occupations`, part of a note (2); an embed named `Open` without
-  its path (2); a block id put on a continuation line (4); `kind` of a `DEC-`
-  note set to `section` (6); a value written unquoted (6).
-- **Core:** no — the diff touches only `tools/docs-vault/` and the record.
+  five are `R-121`'s; the index of the document with no final newline given
+  one (1); a group's heading moved from the index into its first entry's note
+  (5); a section split in two notes (5); a numbered note named with its `.`
+  kept (5); the `:` of a heading replaced by `-` in its note's name (5); an
+  entry note filed in the other group's folder (5); `DEC-002a`'s note named by
+  its whole heading (5); a note ending in `---` (5); a note without its final
+  LF (5); a link at a defining occurrence (3); `R10` written `[[…|R1]]0` (3);
+  `DEC-002a` written `[[…|DEC-002]]a` (3); a block-id link without its
+  `#^ID` (3); a block-id link whose anchor names another block (3); one prose
+  mention left plain (3); the `SIM-OBS` mention of a `SIM-REQ` block id left
+  plain (3); a link inside a code span (3); inside a fence (3); inside a
+  heading (3); a table row's link with a bare `|` (3); an embed to
+  `#Occupations`-style part of a note (2); an embed `![[Open]]` without its
+  path (2); an embed in a section note (2); a block id put on a continuation
+  line (4); on the brake line (4); on `**B1 does not apply here.**` (4); a
+  block id carrying another identifier (4); the list item's block id removed
+  (4); `kind` of a `DEC-` note set to `section` (6); a value written unquoted
+  (6); `document` naming another document (6); a numbered section's alias
+  written with the `.` kept, `"SIM-REQ §<n>."` (6).
+- **Core:** no — the diff touches only `tools/docs-vault/`, `.gitattributes`
+  and the record.
 
 ## 2. The migration script
 
 - **Does:** adds `tools/docs-vault/split-docs.ps1 -Source <dir> -Out <dir>`,
   which reads the documents of `-Source` and writes their vault under `-Out`
   in the shape above, and `-Out/.obsidian/app.json` holding `{}`, so that
-  Obsidian opens `-Out` as a vault. It refuses, writing nothing, if any file it
-  would write exists, so that a run into `docs/` overwrites neither an original
-  nor a note; it never deletes. `.gitignore`, which ends without a newline,
-  gains one and then `docs/.obsidian/*`, `!docs/.obsidian/app.json` and
-  `docs/.trash/`.
-- **Closed by:** the script on the fixture of point 1 into a temporary
-  directory produces exactly the hand-made vault, file for file and byte for
-  byte, and the check on it is green; the script with `-Source docs -Out
-  <temp>`, then `check-docs-vault.ps1 -Originals docs -Vault <temp>`, reports
-  every check green for the six documents; the same run a second time exits
-  non-zero and leaves `<temp>`'s tree hash unchanged; `git status` shows
-  nothing under `docs/` changed; the code-reviewer reads the script against
-  this point's "Does". Each fault below, planted alone in the script and run
-  on the real documents into another temporary directory, turns red the check
-  named; a fault that cannot show on the real documents is run on the fixture.
+  Obsidian opens `-Out` as a vault. Before writing anything it lists every file
+  it would write, and refuses, writing nothing, if any of them exists, so that
+  a run into `docs/` overwrites neither an original nor a note; it never
+  deletes. `-SelfTest` runs it on the fixture of point 1 into a temporary
+  directory and compares the result with the hand-made vault, byte for byte.
+  `.gitignore`, which ends without a newline, gains one and then
+  `docs/.obsidian/*`, `!docs/.obsidian/app.json` and `docs/.trash/`.
+- **Closed by:**
+  - `-SelfTest` green: the script's fixture output equals the hand-made vault
+    file for file and byte for byte, and the check on it is green;
+  - the script with `-Source docs -Out <temp>`, then `check-docs-vault.ps1
+    -Originals docs -Vault <temp>`, reports every check green for the six
+    documents;
+  - in `<temp>`, the count of notes per document and of block ids equals the
+    count taken from the originals by `Select-String` alone, independently of
+    both scripts: `##` heading lines, less the groups, plus `### DEC-` and
+    `### R` lines; and lines opening `**<identifier>` then `**` or ` —`. On the
+    documents as of `5febba3` these are `SIM-REQ` 20, `SIM-ECON` 7,
+    `SIM-STATE` 14, `SIM-OBS` 8, `SIM-LOOPS` 19 (5 sections, 14 loops),
+    `SIM-DEC` 110 (1 section, 109 decisions), and 260 block ids, all in
+    `SIM-REQ`; if the documents change before the run, the counts taken at
+    the run stand;
+  - the same run a second time exits non-zero, and a listing of every file
+    under `<temp>` with its size, SHA-256 and `LastWriteTimeUtc` is equal
+    before and after; two more runs, each into a new directory holding one file
+    the script would write — `.obsidian/app.json`, then
+    `SIM-REQ/18 Delivery phases.md` — exit non-zero and leave the directory
+    holding that file alone, unchanged;
+  - `git check-ignore` reports `docs/.obsidian/workspace.json` and
+    `docs/.trash/x.md` ignored and `docs/.obsidian/app.json` not;
+  - `git status` shows nothing under `docs/` changed;
+  - the code-reviewer reads the script against this point's "Does".
+
+  Each fault below, planted alone in the script and run on the real documents
+  into another temporary directory, turns red the check named; a fault that
+  cannot show on the real documents is run on the fixture.
 - **Fails when:** a group's heading written into its first entry's note
-  (check 5 red on `SIM-DEC`); the `**B1 does not apply here.**` paragraph given
-  a block id (check 4 red on `SIM-LOOPS`); each `**B3a — …**` line given one
-  (check 4 red on `SIM-LOOPS`); mentions linked without word boundaries,
-  `FR-P-03a` as `[[…|FR-P-03]]a` (check 3 red on `SIM-REQ`); the `**FR-…**`
-  lead linked (check 3 red); no link made at all (check 3 red); the trailing
-  `---` left in the last note of a section (check 5 red); the last line of a
-  document lost, `SIM-DEC`, `SIM-REQ` and `SIM-STATE` ending with no final
-  newline (check 1 red); a link written inside a code span (check 3 red, on the
-  fixture: no identifier sits in a code span of the six).
+  (check 5 red on `SIM-DEC`); entries named by `DEC-[0-9]+`, `DEC-006a` filed
+  as `DEC-006` (5 on `SIM-DEC`); the `**B1 does not apply here.**` paragraph
+  given a block id (4 on `SIM-LOOPS`); the brake lines `**B<n> — …**` given one
+  (4 on `SIM-LOOPS`); mentions linked without word boundaries, `FR-P-03b` at
+  `SIM-REQ.md:111` as `[[…|FR-P-03]]b` (3 on `SIM-REQ`); the `**FR-…**` lead
+  linked (3 on `SIM-REQ`); block-id links written without `#^ID` (3 on
+  `SIM-REQ`); identifiers looked up within their own document only, so that
+  `FR-P-03a` at `SIM-OBS.md:76` stays plain (3 on `SIM-OBS`); the trailing
+  `---` left in the last note of a section (5); a final newline added to the
+  indexes of `SIM-DEC`, `SIM-REQ` and `SIM-STATE` (1 on each); the last line of
+  a document lost (1); a link written inside a code span (3, on the fixture:
+  no identifier sits in a code span of the six); files written CRLF
+  (`-SelfTest` red); each path checked just before it is written rather than
+  all before the first (the collision runs red); `.gitignore` given
+  `docs/.obsidian/` instead of `docs/.obsidian/*` (`git check-ignore` red on
+  `app.json`).
 - **Core:** no — the diff touches only `tools/docs-vault/`, `.gitignore` and the
   record.
 ```
 
 ## What was not verified
 
-- **Version 2 of the draft** was read by a second blind reader, quoted above;
-  its findings were not acted on, and the facts it reports about the repository
-  were not re-verified by the author.
+- **Version 3 of the draft** was read by no blind reader; the table says what
+  changed, not whether it holds. Version 2's reader was not given `R-121`'s
+  text, so its findings judged the draft against the draft's own account of
+  the ruling.
+- **The counts in point 2** — 178 notes, 260 block ids — were taken by the
+  author with `grep` and `awk` on the documents as of `5febba3`; the criterion
+  makes the counts taken at the run the reference, not these numbers.
+- **The fault lists** of version 3 — thirty-seven in point 1, fifteen in
+  point 2 — were not tried against any code: whether each can be planted alone
+  in a vault or a script as described is the author's reading.
 - **Obsidian.** That a full-path embed renders a note inline, that ` ^ID`
   makes a block at a paragraph's end, that `[[…\|X]]` works in a table row,
   and that `{}` in `app.json` suffices, are known from Obsidian's
   documentation, not tried.
-- **The count of notes**, about two hundred, is `R-121`'s estimate, not built.
-- **Whether `workflow-review` is ready to merge** was not checked.
+- **Whether `design/obsidian-vault` and `workflow-review` are ready to merge**
+  was not checked.
 
 ## What I need from you
 
@@ -515,3 +653,12 @@ before `PLAN.md` is installed, and the user sees what it finds.
    light of the reading quoted above; and whether the branch precondition,
    which names `workflow-review` where `R-121` sits on `design/obsidian-vault`,
    stands.
+
+**The user's answer, 2026-10-20**, in an implementer session, to item 5, after
+the reading was explained and version 3 recommended: "Scrivi la versione 3
+nella request". Version 3 is the draft above; the branch precondition names
+`design/obsidian-vault`.
+
+6. **Version 3**, approved, amended, or rejected; in particular the faults of
+   both points and the counts of point 2.
+7. **A third blind reading** of version 3 before it is installed, or not.

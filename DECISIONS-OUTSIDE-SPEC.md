@@ -5167,3 +5167,47 @@ first version; the request quotes the reading and what the second did.
 `SQ-026`.
 **Not verified:** version 2 of the draft was read by no blind reader; Obsidian's
 rendering of embeds, block ids and escaped table links was not tried.
+
+### D-140 · Moment one of the `docs/` vault migration plan · What version 3 of the draft decides beyond `D-139`
+**Ruling:** none yet.
+
+A second blind reading of version 2, run by `/plan-explain -Draft` at the
+user's request, found that neither point could close as written. Shown it, the
+user answered "Scrivi la versione 3 nella request". Version 3 is in
+`REVIEW-REQUEST.md`, with the reading quoted and a table of what it did with
+each finding. `D-139` stands but for what is amended here.
+
+**Decided, beyond `R-121`, `R-122` and `D-139`.**
+1. **Identifiers** are `[A-Z]+(-[A-Z]+)*-[0-9]+[a-z]?` or `R[0-9]+`; a mention
+   is taken whole between characters that are not a letter, a digit or `-`; a
+   note's name is its whole identifier, `DEC-006a` included.
+2. **Links resolve vault-wide**: a mention in one document of an identifier
+   that names a note or block id in another is linked. An identifier living
+   only in table rows names nothing and is never linked, following `R-121` 4.
+3. **Newlines**: every note ends in one LF; an index ends in one if and only if
+   its original does; check 1 compares that too.
+4. **Embed and link paths** run from the vault root without `.md`; the index is
+   `<doc>/<doc>.md`, as `R-121` 1 says; the check reads originals at the root
+   and the vault in the six folders only.
+5. **Aliases**, amending `D-139` 6: a numbered section's form is `R-121` 5's
+   example, `SIM-REQ §18`, which the documents themselves do not write; an
+   unnumbered one's is `SIM-ECON §Demand`, as `SIM-REQ.md:826` writes it; an
+   observable takes its title after ` — `; the index carries no alias.
+6. **The fixture is kept LF** by `.gitattributes` for
+   `tools/docs-vault/fixtures/**`, since `core.autocrlf` is `true` and the
+   script's output is compared with it byte for byte.
+7. **The check and the script share no code**, so that a reading wrong in one
+   is not wrong in both; on the real documents the script is also judged by
+   note and block-id counts taken from the originals by `Select-String`.
+8. **The script lists every path before writing any** and refuses if one
+   exists, tested by runs into directories holding one planted file.
+9. **The branch** is cut after `design/obsidian-vault` is merged into `main`:
+   it alone carries `SQ-025`, `R-121`, `SQ-026` and `R-122`. `D-139`'s wait on
+   `SQ-026` is void, `R-122` having ruled.
+
+**What `docs/` says:** nothing; `R-121` rules the shape and `R-122` its block
+ids, and the plan writes no `docs/`. `R-048`, `R-049`, `R-121`, `R-122`.
+**Would overturn it:** the user's answer to the request.
+**Not verified:** version 3 was read by no blind reader; its fault lists were
+not tried against code; the counts of point 2 were taken by the author with
+`grep` and `awk`.
