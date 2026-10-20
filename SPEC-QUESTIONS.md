@@ -1038,6 +1038,7 @@ user answered: "L'obiettivo è spostare /doc ne vault".
 **Blocks:** **yes, point 1 of the migration plan** drafted in
 `REVIEW-REQUEST.md`: its check 4 and a fault of its point 2 rest on the answer.
 **Status:** open — for the decider.
+**Status:** **closed 2026-10-20 by R-122.**
 
 `R-121` 4 gives a block id to "a paragraph or list item that opens with a bold
 identifier". In `SIM-LOOPS` the brakes are written as lines with no blank line

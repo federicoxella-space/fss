@@ -80,6 +80,7 @@ audited.
 - `SQ-026`, **blocking point 1**: whether `R-121` 4's block ids reach the brakes
   of `SIM-LOOPS`, which are lines inside a paragraph, and the paragraph
   `**B1 does not apply here.**`. The draft takes the narrow reading.
+  **Answered by `R-122`:** the narrow reading is the ruling's; `SIM-LOOPS` unchanged.
 
 ## The blind reading of the draft
 
@@ -361,5 +362,5 @@ that vault, a reference it shares nothing with.
    link; the draft links every eligible mention, so that a script linking
    nothing is a visible fault. Keep it, or ask for fewer links.
 3. **A second blind reading** of version 2, or not.
-4. **`SQ-026`** goes to the decider before point 1; then `workflow-review` is
+4. ~~**`SQ-026`** goes to the decider before point 1;~~ answered by `R-122`; then `workflow-review` is
    merged by you, the plan installed on `docs-vault`, and point 1 starts.

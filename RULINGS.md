@@ -6524,3 +6524,54 @@ matter as stated, known from its documentation, not tried; the count of notes,
 estimated from the headings. Checked: every `###` of `SIM-DEC` is a `DEC-`
 entry and every `###` of `SIM-LOOPS` an `R<n>`, by grep. `RULINGS.md` was read in its state, owed actions,
 escalations, `R-001` to `R-024` and `R-116` to `R-120`, not whole.
+
+### R-122 — `R-121` 4's block ids open a paragraph; the brakes of `SIM-LOOPS` get none, and `SIM-LOOPS` keeps its layout
+
+**Date:** 2026-10-20   **Origin:** SQ-026
+**Verdict:** resolved
+**docs/:** unchanged
+
+`SQ-026` asks whether the draft's reading of `R-121` 4 is the ruling's: a block
+id goes on a paragraph or list item whose first characters are `**`, an
+identifier, then `**` or ` —`, a paragraph being a run of non-blank lines; so the
+brakes `**B<n> — …**` of `SIM-LOOPS`, lines inside their loop's paragraph, get
+none, and neither does line 52, `**B1 does not apply here.**`. And whether the
+brakes should be made reachable, which would need blank lines in `SIM-LOOPS`.
+
+**The reading is the ruling's.** `R-121` 4 gives a block id "so that a link
+reaches one requirement". A brake is not a requirement: it is a mechanism named
+inside a loop entry, and the line beneath it names the requirements that
+implement it. The loop is already a note of its own under `R-121` 3, five to
+eight lines long, so a link to `R3` lands on `B3a`'s text with nothing to scroll.
+Line 52 is not `B1`'s definition, which is line 38 inside `R1`; a `^B1` there
+would point a link for `B1` at the sentence saying it does not apply. Checked
+against the whole of `docs/`: every line opening with a bold identifier of the
+form `XX-…` is followed by `**` or ` —` (190 and 70), and none sits inside a
+paragraph or a list; the brakes are the only identifier-led bold lines that do.
+The reading leaves no requirement without its block id.
+
+**`SIM-LOOPS` is not edited.** Blank lines between a loop's text and its brakes
+would be a `docs/` change whose only reason is the tool, made to give block ids
+to things the ruling did not mean to reach. It would also cut each loop into
+pieces read apart, where the document reads a loop, its brakes and their
+citation as one unit (its line 34: "followed by the balancing loop that holds
+it, the requirement that implements the brake, and the parameter that tunes
+it").
+
+It follows from `R-121` 6 that a brake's identifier, naming neither a note nor
+a block id, is never linked: the three mentions outside `SIM-LOOPS`
+(`SIM-DEC` line 622, `B1` and `B3a`; `SIM-STATE` line 44, `B1`) and the
+cross-references between loops stay plain text. Linking them to their loop's
+note would widen `R-121` 6, and is not granted.
+
+**Cost.** A reader following `B3a` from `SIM-DEC` searches for it rather than
+clicking; a brake cannot be embedded or linked alone.
+**Owed by the implementer:** nothing new. The draft's block-id reading and its
+link rule stand; point 1 of the migration plan is no longer blocked by
+`SQ-026`, and still waits on the user's answer under `R-049`.
+**Would overturn it:** a requirement, test or ruling that needs to cite one
+brake by link — a brake promoted to a requirement of its own, or an `AC-` that
+names one — which would argue for blank lines in `SIM-LOOPS` by a ruling.
+**Not verified:** Obsidian's handling of a block id on a multi-line paragraph,
+from its documentation, not tried. `RULINGS.md` read in its state, owed
+actions, escalations, `R-001` and `R-121`, not whole.
