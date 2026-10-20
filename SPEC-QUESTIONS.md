@@ -1030,3 +1030,27 @@ user answered: "L'obiettivo è spostare /doc ne vault".
 - The hooks, skills and agents, and `AGENTS.md`, change only with the human's
   permission recorded (`AGENTS.md`, "This file changes only with permission";
   `D-087`); code comments follow table C1 and C8.
+
+### SQ-026 — `R-121` 4's block ids, and the brakes of `SIM-LOOPS`, which open no paragraph
+
+**Raised:** 2026-10-20, drafting the plan `R-121` owes.
+**Cites:** `R-121` 4; `docs/SIM-LOOPS.md:38`, `:43`, `:48-49`, `:52`, `:56-57`.
+**Blocks:** **yes, point 1 of the migration plan** drafted in
+`REVIEW-REQUEST.md`: its check 4 and a fault of its point 2 rest on the answer.
+**Status:** open — for the decider.
+
+`R-121` 4 gives a block id to "a paragraph or list item that opens with a bold
+identifier". In `SIM-LOOPS` the brakes are written as lines with no blank line
+between them and the loop's text: lines 47 to 50, the text of `R3`, then
+`**B3a — …**`, `**B3b — …**` and an italic citation line, are one Markdown
+paragraph. Obsidian attaches a block id only at the end of a block; a ` ^B3a`
+at the end of line 48 would not make a block. Line 52, `**B1 does not apply
+here.**`, does open a paragraph with a bold span beginning with `B1`, inside
+`R3`, while `B1` itself is defined at line 38, inside `R1`.
+
+The draft reads `R-121` 4 as: a paragraph or list item whose first characters
+are `**`, an identifier, then `**` or ` —`; so `B3a` and its kind get no block
+id, being no paragraph's opening, and line 52 gets none, its bold span being
+no identifier. Whether that is the ruling's reading, and whether the brakes
+should be reachable by a link — which would need blank lines in
+`SIM-LOOPS`, a change to `docs/` — is the decider's.

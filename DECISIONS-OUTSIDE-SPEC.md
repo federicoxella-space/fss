@@ -5127,3 +5127,43 @@ attacked versions 1 and 2, and the request quotes both and what version 3 did.
 it.
 **Not verified:** version 3 of the draft was read by no blind reader; Obsidian's
 rendering of the front matter and the Bases was not tried.
+
+## 2026-10-20 — The migration of `docs/` into a vault, drafted as a plan at moment one
+
+### D-139 · Moment one of the `docs/` vault migration plan · How the draft reads `R-121` where its text leaves a choice
+**Ruling:** none yet.
+
+`R-121` owes a moment-one draft for the script and the correspondence check of
+its migration. The draft is in `REVIEW-REQUEST.md`, read blind once in its
+first version; the request quotes the reading and what the second did.
+
+**Decided, beyond what `R-121` fixes.**
+1. **The index embeds each note on its own line**, at the place the note's text
+   held, so that Obsidian renders the index as the document; "drop the index's
+   link list" is read as replacing each embed by its note's body.
+2. **A group** is a `##` of `SIM-DEC` or `SIM-LOOPS` with at least one `###`,
+   all of them entries; every other `##` is one note.
+3. **Separators** — the blank and `---` lines before the next heading — stay in
+   the index, so that no note ends in one.
+4. **A block id's paragraph opens with `**`, an identifier, then `**` or ` —`**;
+   paragraphs are runs of non-blank lines. The brakes `B<n>` of `SIM-LOOPS` get
+   none, being inside a paragraph, and `**B1 does not apply here.**` gets none.
+   Asked of the decider as `SQ-026`.
+5. **Every eligible mention is linked**, "may" taken as "does", in prose and
+   table rows (`\|`), not in headings, code spans, fences or defining
+   occurrences; document names and `§` citations are not linked; links carry
+   the full path, since section names repeat across documents.
+6. **Aliases**: a section's citation form as the documents write it,
+   `SIM-REQ §18`, `SIM-ECON §Demand`; an entry's title after ` — `.
+7. **Front matter in JSON form**, read by `ConvertFrom-Json`, `pwsh` holding no
+   YAML parser.
+8. **The comparison is exact**, without the blank-line exception `R-121` allows.
+9. **`tools/docs-vault/`**, a new top-level folder for tools a decider runs,
+   under `pwsh` 7; `.obsidian/` reduced to `app.json`, the rest ignored.
+
+**What `docs/` says:** nothing; `R-121` rules the shape and the plan writes no
+`docs/`. `R-048`, `R-049`, `R-121`.
+**Would overturn it:** the user's answer to the request; the decider's on
+`SQ-026`.
+**Not verified:** version 2 of the draft was read by no blind reader; Obsidian's
+rendering of embeds, block ids and escaped table links was not tried.
