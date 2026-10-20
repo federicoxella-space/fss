@@ -4776,3 +4776,86 @@ the tester (the check is a script self-test, run by the orchestrator); the coder
 on questions (a) and (b).
 **Not verified:** a record after a bullet with no blank line; a `*Ruled:*` line
 directly after an outcome; the script under a shell other than pwsh 7.
+
+### D-133 · Point 4 · The register written insert-only by a hook: a `**Ruling:**` line may be replaced, by the user's choice
+
+**Origin.** Point 4 of the workflow review plan (review P1): every session
+edited the register by hand with nothing but discipline against rewriting it.
+
+**Audit before wiring** (the point requires it, and says that if a decider edit
+was not an insertion the point stops and asks). `git log -p` over the decider's
+commits since `R-001`: 11 of the 59 commits touching the register replaced text,
+each on a `**Ruling:**` line under an entry, either filling "none yet" (`0b245ed`)
+or appending a later ruling (`32f20af`, `4e7687d` and others). The point stopped
+and asked; the user chose option A, "A, procedi": an Edit of a `**Ruling:**` line
+passes even when it is not an insertion; everything else stays insert-only.
+
+**Built** (by the orchestrator: `.claude/hooks/` and `.claude/settings.json` are
+not the coder's, `D-087`; the point says it edits them). `.claude/hooks/path-guard.ps1`
+gains role `record` (`Get-RecordDenial`), judged before the outside-repository
+denial. It decides `DECISIONS-OUTSIDE-SPEC.md` and `PLAN.md` only (file name
+case-insensitive) and allows every other path, inside the repository or not. An
+Edit passes when `new_string` begins with a non-empty `old_string`, or, in the
+register only, when one single-line `**Ruling:**` line is replaced by another
+single-line `**Ruling:**` line. A Write passes only when the file does not exist.
+The description states that writes through a shell are not seen. New
+`.claude/settings.json`: PreToolUse `Edit|Write` runs
+`pwsh -NoProfile -File "$CLAUDE_PROJECT_DIR/.claude/hooks/path-guard.ps1" -Role record`.
+`SPEC-QUESTIONS.md` is left out, as the point says (the decider closes entries by
+editing status lines). `core/`, `docs/` and `AGENTS.md` untouched.
+
+**Decided (`docs/` silent: process work).**
+1. **Role `record` is judged before the outside-repository denial**, so that a
+   path outside the repository is allowed by `record` and not denied by
+   inheritance (the point's second `Fails when`). *Would overturn it:* a ruling
+   that the hook should also guard paths outside the repository.
+2. **The Ruling exemption has the shape of option A and no wider:** one
+   single-line `**Ruling:**` line replaced by one single-line `**Ruling:**` line,
+   in the register only, never in `PLAN.md`. *Would overturn it:* the decider
+   needing to edit register text other than a ruling line.
+3. **The hook sits in a committed project `.claude/settings.json`**, so every
+   clone and every session carries it, the decider's included. *Would overturn
+   it:* a ruling that the guard is per-user.
+
+**Results.** `path-guard -SelfTest`: 50 cases, 0 failed. The `record` cases run on
+a real temporary directory: insertion allowed; replacement denied with `record`'s
+reason; lower-case file name denied; empty `old_string` denied; a single ruling
+line replaced allowed; an `old_string` merely containing `**Ruling:**` denied; an
+`old_string` starting at a ruling line and spanning into the next entry denied; a
+ruling line replaced by non-ruling text denied; a ruling replacement in `PLAN.md`
+denied; Write over an existing `PLAN.md` and an existing register denied; Write of
+a new `PLAN.md` allowed; `README.md`, `SPEC-QUESTIONS.md` and a path outside the
+repository allowed. The exact command line of `settings.json`, piped: register
+replacement exit 2 with `record`'s reason; `README.md` exit 0; outside path exit
+0. Live: an Edit replacing a word of the register, in the orchestrator's session,
+was denied by the hook, already active in that session; the new session the point
+foresaw was not needed. Faults, by the orchestrator, tree hash equal: the role
+misnamed on the command line (`recrod`): `README.md` exit 2, "unknown role
+'recrod'"; `record` inheriting the outside-repository denial: the outside case
+denied, 2 failures; after the review, the wide exemption restored: 3 failures
+(spanning `old_string`, non-ruling `new_string`, `PLAN.md`).
+
+**Findings and their resolution.**
+- Code-reviewer, the check satisfied as written. Verifiable, **applied** (one
+  round): the exemption was wider than option A (any `old_string` beginning
+  `**Ruling:**`, of any length, any `new_string`, `PLAN.md` included), now one
+  ruling line to one ruling line, register only, with three deny cases; no
+  Write-over-existing case for the register, added; a no-op Remove/Set-Content pair
+  and an inflated case count, removed (table S1); a comment citing "the user's
+  answer, option A", a conversation and not a text, reworded to name the audit's
+  stop (table C1).
+- `MultiEdit` and `NotebookEdit` are not matched: **rejected**, the point says
+  `Edit|Write` and the description already limits the guard to Edit and Write.
+
+**Agents (`R-067`).** Dispatched: code-reviewer, documenter, committer. Not run:
+the tester (script self-test and pipe tests, by the orchestrator); the coder
+(`.claude/`); the revisioners (`Core: no` held: only `.claude/hooks/` and
+`.claude/settings.json` in the diff).
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** the decider needing to edit register text other than a
+ruling line.
+**Not verified:** whether the hook fires for subagents (this documenter run's
+Edit of the register is the first subagent Edit under it); shell writes, which
+the hook cannot see; `MultiEdit` and `NotebookEdit`; the script under a shell
+other than pwsh 7.

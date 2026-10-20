@@ -12,8 +12,19 @@
       tester      core/Tests/ only
       documenter  DECISIONS-OUTSIDE-SPEC.md, PLAN.md, SPEC-QUESTIONS.md, and
                   only by an Edit whose new_string begins with its old_string
+      record      every session, from .claude/settings.json (point 4 of the
+                  workflow review plan): decides DECISIONS-OUTSIDE-SPEC.md and
+                  PLAN.md only and allows every other path, inside the
+                  repository or not. An Edit of either passes when its
+                  new_string begins with a non-empty old_string; in the
+                  register, also when it replaces one "**Ruling:**" line with
+                  another, the line the decider updates under an entry (the
+                  user's choice when point 4's audit found the decider doing
+                  so); a Write only when the file does not exist.
 
-    A path outside the repository is denied to every role.
+    A path outside the repository is denied to every role but record. Writes
+    made through a shell are not seen by this hook: it guards the Edit and
+    Write tools only.
 #>
 param(
     [string]$Role,
@@ -38,6 +49,30 @@ function Test-Listed([string]$Rel, [string[]]$List) {
     return $false
 }
 
+$RecordFiles = @('DECISIONS-OUTSIDE-SPEC.md', 'PLAN.md')
+
+# The record role: the register and the plan are written by insertion, in every
+# session; every other path is another role's business, or none.
+function Get-RecordDenial([string]$Tool, $In, [string]$Full, [string]$RootFull) {
+    if (-not $Full.StartsWith($RootFull, [StringComparison]::OrdinalIgnoreCase)) { return $null }
+    $rel = $Full.Substring($RootFull.Length).Replace('\', '/')
+    if (-not (Test-Listed $rel $RecordFiles)) { return $null }
+    if ($Tool -eq 'Write') {
+        if (Test-Path -LiteralPath $Full) { return "path-guard: $rel exists; the record is written by insertion, not by Write" }
+        return $null
+    }
+    $old = [string]$In.tool_input.old_string
+    $new = [string]$In.tool_input.new_string
+    # The exemption is one ruling line of the register, replaced by one ruling
+    # line: nothing before it, nothing after it, not PLAN.md.
+    $oneRuling = { param($s) $s.StartsWith('**Ruling:**', [StringComparison]::Ordinal) -and $s -notmatch "[`r`n]" }
+    if ($rel -ieq 'DECISIONS-OUTSIDE-SPEC.md' -and (& $oneRuling $old) -and (& $oneRuling $new)) { return $null }
+    if ($old -eq '' -or -not $new.StartsWith($old, [StringComparison]::Ordinal)) {
+        return "path-guard: $rel is written by insertion; new_string must begin with a non-empty old_string"
+    }
+    return $null
+}
+
 # Returns $null to allow, or the reason for denying.
 function Get-Denial([string]$Role, [string]$Json, [string]$Root) {
     try { $in = $Json | ConvertFrom-Json } catch { return 'path-guard: input is not JSON' }
@@ -48,6 +83,7 @@ function Get-Denial([string]$Role, [string]$Json, [string]$Root) {
 
     $rootFull = [IO.Path]::GetFullPath($Root).TrimEnd('\', '/') + [IO.Path]::DirectorySeparatorChar
     $full = [IO.Path]::GetFullPath($path, $rootFull)
+    if ($Role -eq 'record') { return (Get-RecordDenial $tool $in $full $rootFull) }
     if (-not $full.StartsWith($rootFull, [StringComparison]::OrdinalIgnoreCase)) {
         return "path-guard: $path is outside the repository"
     }
@@ -69,6 +105,7 @@ function Get-Denial([string]$Role, [string]$Json, [string]$Root) {
                 return 'path-guard: insert-only; new_string must begin with a non-empty old_string'
             }
         }
+        'record' { return $null }
         default { return "path-guard: unknown role '$Role'" }
     }
     return $null
@@ -120,6 +157,41 @@ if ($SelfTest) {
         $got = if (Get-Denial $c[0] $c[1] $root) { 'deny' } else { 'allow' }
         if ($got -ne $c[2]) { $failed++; Write-Host "FAIL $($c[0]) expected $($c[2]), got ${got}: $($c[1])" }
     }
+    # The record role, on a real directory: Write is judged by whether the file
+    # exists, and a denial carries record's reason, not another.
+    $r = Join-Path ([IO.Path]::GetTempPath()) "path-guard-record-$PID"
+    $null = New-Item -ItemType Directory -Force $r
+    Set-Content (Join-Path $r 'DECISIONS-OUTSIDE-SPEC.md') 'x'
+    Set-Content (Join-Path $r 'PLAN.md') 'x'
+    $recordCases = @(
+        @((J 'Edit' (Join-Path $r 'DECISIONS-OUTSIDE-SPEC.md') 'anchor' "anchor`nmore"), 'allow'),
+        @((J 'Edit' (Join-Path $r 'DECISIONS-OUTSIDE-SPEC.md') 'a word' 'another word'), 'deny'),
+        @((J 'Edit' (Join-Path $r 'decisions-outside-spec.md') 'a word' 'another word'), 'deny'),
+        @((J 'Edit' (Join-Path $r 'PLAN.md') '' 'new'), 'deny'),
+        @((J 'Edit' (Join-Path $r 'DECISIONS-OUTSIDE-SPEC.md') '**Ruling:** none yet.' '**Ruling:** R-200 — ratified.'), 'allow'),
+        @((J 'Edit' (Join-Path $r 'DECISIONS-OUTSIDE-SPEC.md') 'text **Ruling:** none' 'text changed'), 'deny'),
+        @((J 'Edit' (Join-Path $r 'DECISIONS-OUTSIDE-SPEC.md') "**Ruling:** none yet.`n`n### D-200 · next entry" '**Ruling:** R-200 — ratified.'), 'deny'),
+        @((J 'Edit' (Join-Path $r 'DECISIONS-OUTSIDE-SPEC.md') '**Ruling:** none yet.' 'anything else'), 'deny'),
+        @((J 'Edit' (Join-Path $r 'PLAN.md') '**Ruling:** none yet.' '**Ruling:** R-200 — ratified.'), 'deny'),
+        @((J 'Write' (Join-Path $r 'PLAN.md')), 'deny'),
+        @((J 'Write' (Join-Path $r 'DECISIONS-OUTSIDE-SPEC.md')), 'deny'),
+        @((J 'Write' (Join-Path $r 'sub\PLAN.md')), 'allow'),
+        @((J 'Edit' (Join-Path $r 'README.md') 'a' 'b'), 'allow'),
+        @((J 'Edit' (Join-Path $r 'SPEC-QUESTIONS.md') 'a' 'b'), 'allow'),
+        @((J 'Write' 'C:\elsewhere\scratch\msg.txt'), 'allow')
+    )
+    foreach ($c in $recordCases) {
+        $reason = Get-Denial 'record' $c[0] $r
+        $got = if ($reason) { 'deny' } else { 'allow' }
+        if ($got -ne $c[1]) { $failed++; Write-Host "FAIL record expected $($c[1]), got ${got}: $($c[0])" }
+        if ($reason -and $reason -notmatch 'insertion') { $failed++; Write-Host "FAIL record denied for another reason: $reason" }
+    }
+    $fresh = Join-Path $r 'new-plan'
+    $null = New-Item -ItemType Directory -Force $fresh
+    if (Get-Denial 'record' (J 'Write' (Join-Path $fresh 'PLAN.md')) $fresh) { $failed++; Write-Host 'FAIL record: a Write of a PLAN.md that does not exist was denied' }
+    Remove-Item -Recurse -Force $r
+    $cases += $recordCases
+    $cases += , 'fresh'
     # The entry point itself: stdin, -Role, exit code.
     $p = Join-Path ([IO.Path]::GetTempPath()) "path-guard-$PID"
     $null = New-Item -ItemType Directory -Force $p

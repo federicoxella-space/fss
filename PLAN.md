@@ -252,6 +252,28 @@ claim `R-046`'s check.
 - **Core:** no — the diff touches only `.claude/hooks/` and
   `.claude/settings.json`.
 
+*Outcome:* 2026-10-20. Closed. Audit before wiring: 11 of the decider's 59
+commits touching the register replaced text, each on a `**Ruling:**` line (`0b245ed`
+filling "none yet"; `32f20af`, `4e7687d` and others appending a later ruling); the
+point stopped and asked, and the user chose option A, "A, procedi": an Edit of a
+`**Ruling:**` line passes even when it is not an insertion, everything else stays
+insert-only. `path-guard -SelfTest` ran 50 cases, 0 failed. The exact command line
+of `settings.json`, piped: register replacement exit 2 with `record`'s reason,
+`README.md` exit 0, outside path exit 0. Live: an Edit replacing a word of the
+register was denied by the hook in the orchestrator's session, already active, so
+the reserve the point foresaw was not needed. Faults, tree hash equal: the role
+misnamed on the command line, `README.md` exit 2 "unknown role"; `record`
+inheriting the outside-repository denial, 2 failures; after the review, the wide
+exemption restored, 3 failures. Review: code-reviewer, the check satisfied as
+written; the verifiable findings applied in one round (the exemption wider than
+option A, a missing register Write-over-existing case, a no-op pair and an
+inflated count, a comment's citation); `MultiEdit` and `NotebookEdit` not matched,
+rejected, the point says `Edit|Write`. `D-133`. Agents (`R-067`): code-reviewer,
+documenter and committer dispatched. Not run: the tester, the check being a
+script self-test and pipe tests run by the orchestrator; the coder, the files
+being in `.claude/`; the revisioners, `Core: no` held. This outcome does not
+claim `R-046`'s check.
+
 ## 5. `mutate` reaches every file of the point (review P3)
 
 - **Does:** `mutate.ps1` admits a patch on any path the point's diff touches —
