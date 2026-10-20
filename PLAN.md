@@ -353,6 +353,20 @@ held. This outcome does not claim `R-046`'s check.
   procedure; what would prove it is points 7 and 8 of this plan, run under it.
 - **Core:** no — the diff touches only `.claude/skills/`.
 
+*Outcome:* 2026-10-20. Closed. The declared check, a set of greps over
+`.claude/skills/`: no dispatch or mention of `documenter`; the condition of step 2,
+the four fields of step 8, the four rules of step 9 and the `DECIDER-BRIEFS.md`
+append of step 10 found; "does not run `/decide`" not found: all hold, exit 0.
+Fault, tree hash equal: step 8 dropping a STOP case, `recorded` removed from its
+list, "field recorded missing", exit 1, red; restored. The criterion is `Check:
+shallow`, as declared: the greps prove the words, not the procedure; points 7 and 8
+run under it. The "Closed by" is the grep alone, so no `-SelfTest` was owed. No
+reviewer ran: a skill, `Core: no` held; nothing left open. `D-135`. Agents
+(`R-067`): documenter and committer dispatched. Not run: the tester, the check not
+being a test under `core/Tests/`; the coder, the file being in `.claude/skills/`;
+the code-reviewer, no code; the revisioners, `Core: no` held. This outcome does not
+claim `R-046`'s check.
+
 ## 7. The documenter retired (review P1)
 
 - **Does:** deletes `.claude/agents/documenter.md` and the `documenter` role of

@@ -4929,3 +4929,57 @@ the revisioners (`Core: no` held: only `.claude/` in the diff).
 **Would overturn it:** a check that must write unignored files.
 **Not verified:** a rename made by the point itself as the target of a fault;
 the script under a shell other than pwsh 7.
+
+### D-135 · Point 6 · `/plan-next` lighter: the tester only for a test, the orchestrator records, the committer's brief carries `git-guard`'s rules, the decider only when due
+
+**Origin.** Point 6 of the workflow review plan (review P1, P2, P4, G2).
+
+**Built** (by the orchestrator: `.claude/skills/` is not the coder's, `D-087`; the
+point says it edits `.claude/skills/`). `.claude/skills/plan-next/SKILL.md`:
+step 2 dispatches the tester only when the check is a test under `core/Tests/`,
+otherwise not, the outcome saying so; step 8 is the orchestrator's: it reads
+`changed`, `recorded`, `added`, `gone` from `plan-state` and stops on them, writes
+the register entry and the outcome line itself by insertion (the record hook
+named), and the outcome line carries *left open* when a finding is left to the
+human, a `SPEC-QUESTIONS.md` entry was raised or an escalation made; step 9 keeps
+the committer, its brief listing `git-guard`'s rules (one git command a call, no
+`git -C`, the trailer's word never outside the trailer, forward slashes); step 10
+reads `deciderDue`: true, the brief appended verbatim to `DECIDER-BRIEFS.md` and
+the decider dispatched (`R-116`, `R-118`); false, the entries wait for the plan's
+end or the phase gate; the sentence "this session does not run `/decide`",
+overtaken by `R-116`, removed (table C8); the decider line now says "due now | at
+the plan's end".
+
+**Decided (`docs/` silent: process work).**
+1. **The committer's brief carries `git-guard`'s rules; `git-guard` is not
+   changed.** *Would overturn it:* the committer still tripping the guard.
+2. **The decider is dispatched only on `deciderDue`.** *Would overturn it:* the
+   next plans' points showing the decider needed between clean points.
+3. ***Left open* is written by the orchestrator,** who holds step 7's findings.
+   *Would overturn it:* the same.
+
+**Results.** The declared check, a set of greps over `.claude/skills/`: no
+dispatch or mention of `documenter`; the condition of step 2 found; the four
+fields of step 8 found; the four rules of step 9 found; the `DECIDER-BRIEFS.md`
+append of step 10 found; "does not run `/decide`" not found: all hold, exit 0.
+Fault (`Fails when`): step 8 dropping a STOP case, `recorded` removed from its
+list: "field recorded missing", exit 1, red; restored, tree hash equal. The
+point's "Closed by" is the grep alone: it names no `-SelfTest` and no `plan-state`
+fixture, so none was owed here. The criterion is `Check: shallow` as declared:
+the greps prove the words, not the procedure; points 7 and 8 run under it.
+The documenter is not retired here: point 7 retires it, after this entry, the
+last it records. The committer was kept by the user's answer at moment one.
+
+**Findings and their resolution.** None: no reviewer ran (no code, a skill;
+`Core: no` held).
+
+**Agents (`R-067`).** Dispatched: documenter, committer. Not run: the tester (no
+test under `core/Tests/`); the coder (`.claude/skills/`); the code-reviewer (no
+code: a skill); the revisioners (`Core: no` held: only `.claude/skills/` in the
+diff).
+
+**What `docs/` says:** nothing; process.
+**Would overturn it:** the next plan's points showing the decider needed between
+clean points.
+**Not verified:** the procedure itself, which only points 7 and 8 run under the
+new skill.

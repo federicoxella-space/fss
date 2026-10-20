@@ -94,15 +94,17 @@ rule: read it as it is.
 
 ### 2. Tests first — `tester`
 
-Dispatch `tester` with the point verbatim and nothing else: no plan of the
+**Only when the point's check is a test under `core/Tests/`.** Dispatch
+`tester` with the point verbatim and nothing else: no plan of the
 implementation, no reasoning of yours. It writes the tests the "Closed by"
 names, under `core/Tests/`, and reports each one's state. A test already green
 before any code exists is reported, and you decide which it is: the behaviour
 already exists, or the test cannot fail.
 
-A check that is not a test under `core/Tests/` — a script's self-test, a grep —
-is not the tester's to write. It runs it as it stands and reports its state; the
-check is written with the point's other files at step 3.
+A check that is not a test under `core/Tests/` — a script's self-test, a grep,
+a skill's run — is not the tester's to write, and the tester is not dispatched
+at this step: the check is written with the point's other files at step 3, and
+the outcome line says the tester did not run here and why.
 
 ### 3. Implement — `coder`
 
@@ -230,20 +232,24 @@ If the two differ, an agent changed the tree: say so first, show `git status
 Reviewers do not run a second time. If a fresh look is needed, brief a fresh
 blind revisioner.
 
-### 8. The record — `documenter`
+### 8. The record — orchestrator
 
-Dispatch `documenter` with the point's text as read at step 1, the coder's
-decisions, your resolution of every finding — the rejected ones with their
-reason — and the tester's results. It re-reads `PLAN.md` from disk, writes the
-register entry and the outcome line by inserting only, and returns the `D-NNN`
-and the line, or STOP.
-
-**STOP** means the point's own text changed, it already carries an outcome line,
-or it is gone. The work is finished and unrecorded: report that, and let the
-human choose — re-verify against the new text, or discard. Other points
+First run `plan-state` and read, for this point, `changed`, `recorded` and
+`added`, and at plan level `gone`. **STOP** when the point's own text changed
+since the commit that installed the plan, when it already carries an outcome
+line, or when it is gone: the work is finished and unrecorded; report that, and
+let the human choose — re-verify against the new text, or discard. Other points
 changing, or a point added after this one, is said in the report.
 
-The outcome line, and so your brief, carries the date, what the check produced,
+Then write, yourself, the register entry in `DECISIONS-OUTSIDE-SPEC.md` — the
+next `D-NNN` — and the outcome line under the point in `PLAN.md`, both by
+insertion: an Edit whose new text begins with the text it anchors on. A hook
+(`path-guard`, role `record`, wired in `.claude/settings.json`) refuses any
+other edit of either file, in every session. The entry carries the coder's
+decisions, your resolution of every finding — the rejected ones with their
+reason — and the verification's results.
+
+The outcome line carries the date, what the check produced,
 each fault seen red, the `D-NNN`, and which agents ran and which did not, with
 the reason. A criterion that turned out wrong is recorded, never rewritten; the
 line between the two cases is whether correct code can pass the check as
@@ -257,6 +263,12 @@ written (`R-005`):
   implementer" in `RULINGS.md`, never in `PLAN.md`.
 - **Correct code cannot pass it**, or passing it would build the wrong thing:
   the point fails, *criterion wrong*, as below.
+
+**The outcome line carries *left open*** when step 7 left a finding to the
+human, a `SPEC-QUESTIONS.md` entry was raised, or an escalation was made, with
+what is left and to whom. It is the trigger `plan-state` reads for the decider
+(`deciderDue`, step 10), together with *criterion defective* and `FAILED`: a
+trigger written into the line, not inferred from its prose.
 
 **A clause that only a human can discharge closes the point with a reserve**
 (`R-011`): a push, so that CI runs; a pull request; a confirmation from outside
@@ -279,7 +291,11 @@ does not write the word at all, not even to say it closes nothing: that is what
 keeps `/plan-status` a lookup instead of a guess.
 
 Dispatch `committer` with the paths the point touched, by name, the message file,
-and the point number. Code, register and plan go in one commit, so no part of
+and the point number, and with `git-guard`'s rules in the brief, which its hook
+enforces and which have refused committers before: one git command a call,
+never joined, piped or redirected; no `git -C`; the trailer's word never
+anywhere in the message but in the trailer; the message file's path written
+with forward slashes. Code, register and plan go in one commit, so no part of
 the record is left behind. **Never `git add -A`**: the tree may hold an edit
 that is not yours, and `-A` attributes it to this point. If a file you must
 stage also carries someone else's change, stop and ask.
@@ -314,15 +330,21 @@ What was done, what the check produced, what each agent returned — the finding
 rejected included — and the next point, from `plan-state` run again. Then stop:
 this skill does not chain.
 
+**Then read `deciderDue`** from that run. True — the point just closed left
+its criterion defective, `FAILED`, or something *left open* — the decider runs
+before the next point: append its brief, facts only and never a proposed
+answer, verbatim to `DECIDER-BRIEFS.md`, then dispatch it as an agent that
+reads `R-001` and `.claude/skills/decide/SKILL.md` itself (`R-116`, `R-118`).
+This session writes no ruling and edits no `docs/` on its behalf. False, the
+register entries wait for the audit at the plan's end or at the phase gate.
+
 **End with one line for the decider**, from the `decider` field of that run:
 
 ```
-Decider: N register entries not yet reviewed (D-xxx to D-yyy) — run /decide
+Decider: N register entries not yet reviewed (D-xxx to D-yyy) — due now | at the plan's end
 ```
 
-With none outstanding the line still appears, saying zero. It is a reminder to
-the human and nothing more: this session does not run `/decide` and does not
-play the decider (`AGENTS.md`).
+With none outstanding the line still appears, saying zero.
 
 ## What this skill does not do
 
