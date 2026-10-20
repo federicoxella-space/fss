@@ -89,7 +89,8 @@ as an exception to `/plan-explain -Draft`'s brief, the text of `R-121`: the
 ruling is the plan's requirement, and a reader barred from it could not judge
 the draft against it. It was told not to read the rest of `RULINGS.md`, the
 register, `PROMOTIONS.md` or the archived plans. The tree hash was equal before
-and after. The draft below is version 2, read by no one.
+and after. The draft below is version 2, read once more after the user's answer:
+see "The second reading, of version 2" below.
 
 ### What version 2 did with the findings
 
@@ -177,6 +178,143 @@ and after. The draft below is version 2, read by no one.
 > groups; document names and `§` citations never linked; `app.json` as `{}`
 > sufficient, the ignore list stopping at `workspace*.json` and `.trash/`; the
 > wait on `workflow-review`; proceeding before `SQ-026`.
+
+## The second reading, of version 2
+
+Run on 2026-10-20 by `/plan-explain -Draft` in an implementer session, as the
+user's answer to item 3 asked. One read-only `Plan` agent was given the fenced
+draft alone, `criteria.md` and `AGENTS.md`, leave to read the files the draft
+names, and the instruction not to read `RULINGS.md`, `DECISIONS-OUTSIDE-SPEC.md`,
+`PROMOTIONS.md`, `REVIEW-REQUEST.md`, `SPEC-QUESTIONS.md`, `DECIDER-BRIEFS.md` or
+`.claude/plans/`. Unlike the first reading, it was not given `R-121`'s text: it
+took the draft's account of the ruling. The tree hash was equal before and after
+(`7e4b6eb8…`).
+
+### What the draft did with the findings
+
+Nothing yet. Version 2 stands as approved; the reading reports, among others,
+that point 2's byte-for-byte comparison fails on a fresh checkout and that the
+branch precondition names the wrong branch. Whether the draft is amended is the
+user's answer, below.
+
+### The reading, of version 2, quoted
+
+> I read the whole draft against the checklist. Neither point can close as written, and the draft rests on several facts about the repository that are wrong. The main ones:
+>
+> - **Line endings break point 2's byte-for-byte comparison.** `core.autocrlf` is `true` and there is no `.gitattributes`, so a fresh checkout turns the committed hand-made vault into CRLF files. The script writes LF, so correct code fails the comparison.
+> - **The two scripts can contradict each other on `docs/`.** The draft never says where each document's index file goes. If it is `docs/SIM-DEC.md`, the original's name, the script refuses to run into `docs/`. Its second-run test cannot see that.
+> - **Check 3 does not compare a link's `#^` anchor with its displayed text.** A link that points at the right note but has a missing or wrong anchor passes.
+> - **Point 1's fixture lacks what two of its own faults need.** It has one group but needs two, and it has no `R1`/`R10` pair.
+> - **The branch precondition names the wrong branch.** The commits that carry `R-121` and `SQ-025` are only on `design/obsidian-vault`, not on `workflow-review`.
+>
+> #### Point 1 — the correspondence check
+>
+> **1. Faults the check would miss with "Closed by" green**
+> - **Wrong or missing anchor.** Check 3 only asks that a link reach "a note whose `id`, or a block id in it, equals the displayed text". Two links pass:
+>   - `[[SIM-REQ/4 Time|FR-T-06]]`, which has no `#^FR-T-06`.
+>   - `[[SIM-REQ/4 Time#^FR-T-07|FR-T-06]]`, whose anchor names a different block.
+>
+>   No fault copy has a bad anchor, so a check that never reads anchors passes `-SelfTest`.
+> - **Unlinked mentions.** The rule that every word-bounded mention must be a link has no fault copy in point 1. A check that never tests it passes `-SelfTest`.
+> - **Cross-document mentions.** The draft never says whether "an identifier that names a note or a block id" is looked up across the whole vault or within one document. The fixture lists no mention of an identifier from another document. A check that builds its identifier set per document passes `-SelfTest`, yet on the real files it would accept `SIM-OBS` leaving `FR-P-03a` unlinked (SIM-OBS.md:76).
+> - **Wrong property values.** No fault copy has a wrong `aliases` or `document`. A check 6 that only tests that these keys are present passes.
+> - **Stray files.** A file at the vault root, outside any document's folder, is checked by nothing.
+>
+> **2. Parts of the "Does" nothing checks**
+> - Table-row escaping (`\|`), fences and code spans: no fault copy in this point.
+> - The rule that drops `* " \ / < > : | ? # ^ [ ]` from names. It never applies: no heading in the six has any of these characters, and the fixture lists no heading that has one.
+> - The filter on `SIM-` names: the fixture lists no other `.md` file to exclude.
+> - `SIM-OBS`'s `OBS-n` naming.
+> - A heading followed directly by text, with no blank line. This happens at SIM-LOOPS.md:36–37 and on every loop through :125.
+> - A group with no text before its first entry. This is how every `SIM-DEC` group looks (SIM-DEC.md:20–22).
+>
+> **3. Are the `Fails when:` faults the likely ones?**
+> - The five the ruling requires are reasonable.
+> - The rest are chosen to make each check fire on the shape it was built around. Several of them cannot be built from the fixture as listed:
+>   - "Entry note filed in the wrong group's folder" needs two groups. The fixture lists "a group of two entries", which is one group.
+>   - "`R10` written `[[…|R1]]0`" needs `R1` and `R10` in the fixture's original. They are not listed.
+>   - "Embed named `Open` without its path" needs the two same-named sections to be called `Open`. The draft does not say they are.
+> - The likely faults it leaves out are: a wrong or missing anchor, a mention left unlinked, a block id carrying the wrong identifier, and a wrong `document`.
+>
+> **4. Checklist rules**
+> - **K1 applies, not met.** The self-test never fails if the fixture lacks a feature it is supposed to exercise. The branches listed in item 2 never come into play. The prefix pair needed for check 3's word boundary is not in the fixture.
+> - **K2 applies, partly met.** The hand-made vault is an independent reference, but only for the fixture. On the six real documents, check 5 is the only reference, and it is a second implementation of the same reading by the same author. The draft does not forbid the check and the script from sharing a helper module, such as a heading or name parser. If they did, the comparison on `docs/` could not fail where they agree.
+> - **K5 applies weakly, met.** The fault copies read the labels by check number, and point 2 reads the six document names.
+> - **K6 applies, partly met.** Start is held until `SQ-026` is answered. But the draft says the question touches only "check 4 and a fault of point 2". This point's own fault ("a block id put on a continuation line") and the fixture's "bold identifier at the start of a continuation line" rest on the same reading. The current branch's log already has a commit whose subject reports `SQ-026` answered, so the gate may be stale.
+> - **K3 and K4 do not apply.**
+>
+> **5. Can it be done as written?**
+> - **Not as listed.** The fixture is missing what the faults above need.
+> - **Aliases.** The draft says the citation form is "as the documents write it", for example `"SIM-REQ §18"`. The documents do not write that. They write:
+>   - "SIM-REQ section 16", "section 20" and "section 17" (SIM-DEC.md:252, :394, :454, :464)
+>   - "section 20 of SIM-REQ" (SIM-STATE.md:212)
+>   - a bare "§16" (SIM-REQ.md:683), "§13" (:833) and "§Cohort" (SIM-STATE.md:226)
+>
+>   The only `SIM-X §` form is "SIM-ECON §Demand", once, inside a table row (SIM-REQ.md:826). The `"SIM-REQ §18"` form is the repository's convention, not the documents'.
+> - **Claims that check out:**
+>   - Every `###` in `SIM-DEC` is a `DEC-` entry: 109 of them, under 13 sections from :20 to :910. :10 has none.
+>   - `SIM-LOOPS`'s only group is `## Loops` (:32), holding `### R1`–`R14`, with `R13` (:54) between `R3` and `R4`.
+>   - `## OBS-1`–`OBS-5` are at SIM-OBS.md:20, 46, 68, 82, 96.
+>   - `## Open` is in three documents: SIM-LOOPS.md:176, SIM-OBS.md:120, SIM-STATE.md:219.
+>   - `### Occupations` is at SIM-REQ.md:217.
+>   - No wikilink and no line-end ` ^id` exists in the originals.
+>
+> #### Point 2 — the migration script
+>
+> **1. Faults that leave "Closed by" green**
+> - **Refusal only half tested.** "Run a second time, exits non-zero, tree hash unchanged" only tests the case where every target file already exists. A script that checks each path just before writing it, and aborts at the first collision, passes: on the second run the first file collides and nothing is written. On a target where only some paths exist, it writes part of the vault and then stops. `docs/` is exactly that case, because the originals are present.
+> - **Wrong `.gitignore` pattern.** Writing `docs/.obsidian/` instead of `docs/.obsidian/*` stops git from re-including `app.json`, whatever the `!` line says. Nothing runs `git check-ignore`.
+> - **Cross-document links.** If the script and the check both build identifiers per document, no cross-document link is made. The fixture has no such case, so the hand-vault comparison cannot see it.
+> - **An extra final newline.** A script that adds one to `SIM-DEC`, `SIM-REQ` and `SIM-STATE` passes check 1 if "line for line" is implemented by splitting into lines, which drops the difference. The draft does not say how a missing final newline is represented, either in the last note or in the reconstruction.
+>
+> **2. Parts of the "Does" nothing checks**
+> - `.gitignore`.
+> - "Never deletes".
+> - `-Out/.obsidian/app.json` holding `{}`. It is checked only if the hand-made vault contains it, and point 1 does not say it does.
+> - The partial-collision refusal.
+> - BOM and LF output, checked only through the fixture comparison. That comparison is unreliable here (see item 5).
+>
+> **3. Are the `Fails when:` faults the likely ones?**
+> - **Likely:** the group heading, the `B1 does not apply` paragraph, the `B3a` line, linking a lead, and a trailing `---`.
+> - **"No link made at all" is a convenient fault**; it is too gross to miss.
+> - **"Last line lost" is the less likely of the two final-newline faults.** In pwsh, adding a final newline that should not be there is the more probable bug, and it is not named.
+> - **`FR-P-03a` "on `SIM-REQ`" is mislocated.** `FR-P-03a` appears in `SIM-REQ` only as its own bold lead (SIM-REQ.md:157), which is a defining occurrence and is never linked. Its prose mention is SIM-OBS.md:76. Check 3 would still go red on `SIM-REQ`, through `(FR-P-03b)` at SIM-REQ.md:111.
+> - "Each `**B3a — …**` line": there is one `B3a` line (SIM-LOOPS.md:48). The other brake lines at :49, :56–57 and :64 onward are where "each" applies.
+> - **Missing likely faults:** the partial collision, a bad anchor, and `DEC-006a`/`006b`/`007a`/`034a` (SIM-DEC.md:98, 106, 122, 452) being named by `DEC-\d+` and colliding with `DEC-006`/`DEC-007`/`DEC-034`.
+>
+> **4. Checklist rules**
+> - **K1 applies, partly met.** Planting faults on the real documents makes the branches matter. The refusal branch never matters for the partial case, and the cross-document linking branch has no reference.
+> - **K2: same finding as point 1.** On the six, the script is judged only by a check that implements the same reading, and shared code is not ruled out.
+> - **K6 applies.** The `B1` and `B3a` faults both rest on the `SQ-026` reading.
+>
+> **5. Can it be done as written?**
+> - **"Byte for byte" against the committed hand-made vault fails on any fresh checkout.** `core.autocrlf` is `true`, there is no `.gitattributes`, and `git ls-files --eol` shows `i/lf w/crlf` for the `docs/` files. The fixture will be CRLF in the working tree while the script writes LF. It passes only in a tree where the fixture was written and never re-checked-out.
+> - **"Tree hash" of `<temp>` is undefined.** `.claude/hooks/tree-state.ps1` hashes `git status` and `git diff` output, so it needs a repository and fails on a temporary directory. A content hash also cannot tell "wrote nothing" from "rewrote the same bytes".
+> - **Verified as stated:**
+>   - `.gitignore` ends with `publish/` and no newline (.gitignore:24).
+>   - `SIM-DEC`, `SIM-REQ` and `SIM-STATE` end with no final newline (last byte `.`). `SIM-ECON`, `SIM-LOOPS` and `SIM-OBS` end with one.
+>   - No identifier sits in a code span or a fence of the six (the fences are at SIM-DEC.md:210, :222, SIM-ECON.md:86, SIM-LOOPS.md:149, SIM-REQ.md:86).
+>   - Identifiers sit in table rows in `SIM-ECON`, `SIM-LOOPS`, `SIM-REQ` and `SIM-STATE`, so `\|` will be exercised.
+>   - `pwsh` is 7.6.7.
+>
+> #### Whole draft
+>
+> **What a later point relies on that an earlier one does not deliver**
+> - **`app.json`.** Point 2's file-for-file comparison needs point 1's hand-made vault to contain `.obsidian/app.json`. Point 1 never says so, and its check would then have to tolerate a non-note file.
+> - **Line endings.** Point 2's byte-for-byte comparison needs point 1's fixture to stay LF in git. Point 1 adds no `.gitattributes`.
+> - **Branch precondition.** The draft says `workflow-review` "carries `R-121`, `SQ-025`". The commits carrying them (`3d97fe0`, `7a37563`) are only on `design/obsidian-vault`, which descends from `workflow-review`. `git branch --contains` lists no other branch, and `workflow-review` is not yet in `main`. Merging `workflow-review` would not bring them to `main`.
+>
+> **Decisions the draft makes without saying so**
+> 1. **Where each index file lives.** If it is `docs/SIM-DEC.md`, it collides with the original. The no-overwrite rule then blocks the in-place run, and `-Originals docs -Vault docs` would read the index as an original.
+> 2. **Newline handling.** Whether note files end in a newline, how a document with no final newline is rebuilt, and whether "line for line" compares the final newline.
+> 3. **What an "identifier" is.** No grammar is given. `**Rationale.**`, `**Document:**` and `**Phase 4 in full.**` are excluded only by their punctuation.
+> 4. **Scope of the identifier set for links.** Vault-wide or per document.
+> 5. **Table identifiers are never linked.** `A-01`… (SIM-STATE.md:180 onward) and `P-nn` live only in table rows, so they get no block id and are never linked. The draft reads the ruling as linking identifiers, but this exclusion is not stated.
+> 6. **`OBS-n` notes.** Whether their `aliases` take a section's citation form or an entry's title. The index's own properties are not given.
+> 7. **Groups depend on document names.** The group rule applies only in `SIM-DEC` and `SIM-LOOPS`, so the fixture's group document must carry one of those names. The draft does not say so.
+> 8. **Shared code.** Whether the check and the script may share a module.
+> 9. **Extensions.** Whether `.md` appears in embed and link paths.
+> 10. **Unused rule.** The character-drop rule is adopted although no real heading needs it and no fixture item exercises it.
 
 ## Draft plan
 
@@ -345,8 +483,9 @@ that vault, a reference it shares nothing with.
 
 ## What was not verified
 
-- **Version 2 of the draft** was read by no blind reader; the table says what
-  changed, not whether it holds. A second reading costs one agent.
+- **Version 2 of the draft** was read by a second blind reader, quoted above;
+  its findings were not acted on, and the facts it reports about the repository
+  were not re-verified by the author.
 - **Obsidian.** That a full-path embed renders a note inline, that ` ^ID`
   makes a block at a paragraph's end, that `[[…\|X]]` works in a table row,
   and that `{}` in `app.json` suffices, are known from Obsidian's
@@ -371,3 +510,8 @@ its compulsory links included; to item 3, asked whether a second blind reading
 of version 2 comes before the plan is installed, "Sì, prima la lettura". So
 version 2 is read through `/plan-explain -Draft` by an implementer session
 before `PLAN.md` is installed, and the user sees what it finds.
+
+5. **The second reading.** Version 2 installed as approved, or amended in the
+   light of the reading quoted above; and whether the branch precondition,
+   which names `workflow-review` where `R-121` sits on `design/obsidian-vault`,
+   stands.
