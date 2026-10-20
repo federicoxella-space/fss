@@ -51,330 +51,433 @@ answers of `/plan-explain -Draft`, quoted, with what the draft did with each.
 
 ---
 
-# Current request — 2026-10-20 — moment one, the workflow review plan
+# Current request — 2026-10-20 — moment one, the Obsidian vault plan
 
-Replaces the moment-one request of 2026-10-05 for the cost measurement plan,
+Replaces the moment-one request of 2026-10-20 for the workflow review plan,
 whose items are all answered and recorded there; it is kept in git.
 
 **Moment:** one — before a plan starts. The draft below is the plan; under
 `R-048` it is installed as `PLAN.md` on its branch only after the answer, in a
 commit that cites it, and under `R-049` its first point waits for that answer.
 
-**Branch:** the request is written on `design/workflow-review`, cut from `main`
-at `ee63129`. The plan would run on its own branch, `workflow-review`.
+**Branch:** the request is written on `design/obsidian-vault`, cut from
+`workflow-review` at `3985300`, so that it reads the register and the rules as
+they now stand. The plan would run on its own branch, `obsidian-vault`, cut
+from `main` once `workflow-review` is merged; merging it is not this request's
+business.
 
-**What changed, in one line:** a draft plan writing into `AGENTS.md`, the plan
-skills and the hooks the directions the user approved in the workflow review of
-2026-10-19 and 20.
+**What changed, in one line:** a draft plan for an Obsidian vault in `vault/`,
+generated from `docs/`, the registers and the process files, read against them
+by one agent and grouped into topics by another.
+
+The user asked, 2026-10-20: *"Crea un vault obsidian e spostaci tutta la
+conoscenza del progetto. Quando hai terminato lancia un agente che si occupi di
+controllare che il contenuto rispetti l'attuale documentazione presente e poi
+uno che si occupi di collegare tra di loro gli argomenti. Sfrutta le proprietà
+di Obsidian per ottimizzare l'accessibilità della documentazione"*. Asked how,
+the user chose: a derived vault, the sources staying where they are and staying
+the authority, since moving `docs/` is not the implementer's to do and fourteen
+hooks, skills and agents read those paths; inside the repository; one note per
+entry.
 
 ## Decisions taken outside the specification
 
-`D-128`: the choices the draft makes that the review did not, among them the
-committer kept, the new *left open* marker, the `record` role's scope and
-`mutate`'s exclusions. The review's directions themselves are the user's, in
-`.claude/design/2026-10-19-workflow-review.md`. Neither is audited; the
-watermark stands at `D-126`, and `D-127`, the archive of the cost measurement
-plan, also awaits the decider.
+`D-138`: the choices the draft makes that the user's answers did not. Not
+audited; the watermark is the decider's.
 
 ## Open questions about the specification
 
-None. The plan is process work; `docs/` describes the simulated world.
+None. The plan is process work; `docs/` describes the simulated world and
+nothing in it changes.
 
 ## The blind reading of the draft
 
-Review A applied before it exists: a read-only agent, given the first version
-of the draft and the files it names, told nothing of the author's reasoning,
-answered per point which fault the check would miss. Its findings, and what the
-second version, below, did with each:
+Two readings, each by a read-only `Plan` agent given the draft alone,
+`criteria.md` and leave to read the files the draft names, told not to read the
+register or the archived plans; the tree hash was equal before and after each.
+The first read version 1, the second version 2; the draft below is version 3,
+which no reader has seen.
 
-| Point | Finding | In the draft below |
+### What the drafts did with the findings
+
+| Reading | Finding | In version 3 |
 |---|---|---|
-| 1 | The script checks that an identifier exists, not that it says what the rule claims; "two paths share no code" was cited to `R-102`, which says no such thing, and stated more widely than `R-103` and `R-104` hold; the rules of `R-104` and `R-105` on measuring alike and on overtaken premises were missing | Rules renumbered `K1`–`K6` with the missing ones; `K2` as `R-103` says it; the code-reviewer reads every citation, with a planted wrong one |
-| 2 | "Outcome lines stripped" was ambiguous and the archive's point 4 states the answer; the reader holds Bash and could read `R-103`; the skill cannot read an archived plan; the `AGENTS.md` rule was unchecked | The fixture is the request as committed before the answer (`64147ba`); the reader is told not to read the register, and a report citing `R-` goes red; `-Path` added; greps for the rule |
-| 3 (was 4) | A baseline taken from the latest commit blesses an edit committed early; stopping at `Core:` misses wrapped lines; the documenter's other two STOP cases (already recorded, point gone) were dropped | Installing commit is the oldest adding `PLAN.md`; text to the next heading less outcome-marker lines; `recorded`, `added`, `gone` reported |
-| 4 (was 3) | `path-guard` denies paths outside the repository for every role, so wired to every session it would block the scratchpad; the case-sensitivity fault could not occur; the live Edit cannot run before a new session and would damage the register if unguarded; the decider's status was undecided | `record` decides two files only and allows every other path, with cases for both; faults are the role's wiring and the outside path; the live Edit closes with reserve, on a clean tree with a restore; the decider is bound, after an audit of its past edits |
-| 5 | `core/Tests/` was admitted, so breaking a test would count as catching a fault; "the record files" was unnamed; renames and the stale sentences in `tester.md` and step 4 were not covered | Exclusions listed, `core/Tests/` among them, with cases; rename case; the stale sentences rewritten in this point |
-| 6 | The point could not record itself, its documenter's role being removed in its own diff; `git-guard` has no roles; `deciderDue` read from a whole section would fire again after the decider ruled, and most of its triggers are prose; `R-116`'s brief append was missing | Split: step changes in 6, the documenter retired in 7; `deciderDue` reads the outcome line only, with fixtures for a later *Ruled:* line and the Italian marker; the *left open* marker makes the prose triggers readable; the append is in step 10 |
-| 7 (now 8) | The grep checked a citation, not the rule's elements; the reviewer's brief (C1, C2) did not aim at the missing exception | The grep checks each element; the reviewer is given the "Does" and asked for omissions |
-| Overall | Retiring the committer leaves `git-guard` wired nowhere: it admits only commit commands, so it cannot guard the orchestrator, which merges and switches branches | The committer is kept: a departure from review P1, asked below |
+| 1 | Cuts one line late, names shifted by one: reconstruction stays green | Check 3, the head of each entry note is its own opener line; planted |
+| 1 | `R10` as `[[R1]]0`, no linking at all, links in fences: invertible, so green | Word boundaries in the rule; check 4 counts every mention and finds no link in a fence; planted |
+| 1 | Pipe in a table row breaks the column | `[[ID\|ID]]` in table rows; fixture |
+| 1 | Property values unchecked; field lines are free text, wrapped, repeated | Free-text fields (verdict, status, blocks) are no longer properties; the ones kept are recomputed by check 5 from the source |
+| 1 | Prose paragraphs opening with a bold identifier open bogus slices | Bold openers only in `SIM-REQ` and `SIM-LOOPS`, and only before a dash; fixture `**B1 does not apply here.**` |
+| 1 | Committed blobs are LF, the tree CRLF | Sources read with CRLF normalised; vault pinned LF by `.gitattributes` |
+| 1 | Illegal characters in section names | Stripped, listed; fixture |
+| 1 | Families with no type: `K-`, `Z-`, `PD-`, `P-`, `A-` | Not entry notes; their headings make section notes, and they are not linked (`D-138` 4) |
+| 1 | Plants for checks 2 and 3 also turn check 1 red | Checks reported by number; each plant names the check it turns red |
+| 1 | `mutate` hashes `vault/`; a planted generator fault rewrites it | Faults built with `-Out` into a temporary directory |
+| 1 | Point 2's sample unseeded and too small to meet the plants | Seeded `-Sample`; the plants go into notes of the sample |
+| 1 | Point 2 writes the register though its `Core:` says otherwise; several commits | The record named in the header; one commit |
+| 1 | Topic titles, groupings and prose unchecked | Topic notes are front matter only; check 7 requires an empty body |
+| 1 | `Home.md` rewritten by the generator loses topic links | The generator links every note it finds in `Topics/` |
+| 1 | Check 4 contradicts index and topic notes | Index and topic notes exempted by type |
+| 1 | Rebuild deletes the user's `.obsidian/` | `.obsidian/` spared; only `types.json` written |
+| 1 | "Opens in Obsidian" checked by nothing | The exit condition closes with reserve on the user opening it (`R-011`) |
+| 1 | Committed vault goes stale; nothing regenerates it | Said in the header (`D-138` 1) |
+| 2 | Duplicate stems: `CLAUDE.md` twice, `SKILL.md` four times, one design and plan name | Section notes named by repository path; fixture |
+| 2 | Cutting at `##` inside fences | Cutting outside fences; fixture |
+| 2 | `**B1 does not apply here.**` opens a second `B1` | An opener needs the dash; check 2 rejects duplicate `id`s |
+| 2 | Checks 3 and 4 contradict each other on the opener's own identifier | A note never links its own identifier; check 3 compares after un-linking |
+| 2 | Check 5 contradicts the linking rule and covers non-field properties | Check 5 recomputes named properties from the source |
+| 2 | Front matter unparsed; pwsh has no YAML parser | Every value a JSON scalar or array, read by `ConvertFrom-Json`; fixture with `: ` and a backtick |
+| 2 | Only first mention linked, identifiers inside longer code spans | Check 4 counts mentions; longer code spans excluded |
+| 2 | `type`, `line`, `cites` unchecked | Check 2 checks `type` by family, check 5 `line`, check 4 `cites` |
+| 2 | `-Sample` built by no point | In point 1 |
+| 2 | Point 2's brief named the planted fields | New plants (a paragraph moved, an alias reworded), seen by no check, and the brief names neither |
+| 2 | Code-reviewer only if the generator changed | Code-reviewer on the diff of `tools/vault/` in every point |
+| 2 | Topic agent could write outside `Topics/` | `git status` after it, in "Closed by" |
+| 2 | Unquoted `members` invisible to Obsidian | JSON array; planted |
+| 2 | "By member count" needs a formula | Dropped |
+| 2 | `-Out .` would wipe the root | Refused unless it holds `Home.md` or does not exist |
+| 2 | Five sources lack a final newline | Written as read; fixture; planted |
+| 2 | Archiving `PLAN.md` adds a source | Said: the archive leaves the vault stale |
+| 2 | Both scripts from one table miss the same unknown shapes | Said in the "Does"; point 2 is the reader for it |
+| 2 | Bases need a recent Obsidian | Not resolved: `D-138` 6, and the reserve |
 
-The second version was not read by a blind reader again.
+### The first reading, of version 1, quoted
+
+> **Point 1.** Faults missed: check 1 does not care where a slice is cut — every
+> cut one line late, or identifiers assigned one slice off, keeps bytes and
+> count; linking without word boundaries (`R10` → `[[R1]]0`, `DEC-006a` →
+> `[[DEC-006]]a`), no linking at all, links inside fences, `[[X|X]]` in a table
+> cell breaking the column — all invertible, so checks 1 and 3 stay green; any
+> wrong property value is invisible, check 1 strips front matter and check 4
+> tests presence only; malformed `types.json` or `.base` read by no check;
+> prose paragraphs opening with a bold identifier (`RULINGS.md` 2647, 2782,
+> 4724, 5492, 5574; `DECISIONS-OUTSIDE-SPEC.md` 657, 1864, 1873, 2273, 3723,
+> 3920) open bogus slices counted alike by generator and check; `NFR-` missing
+> from both. Unchecked: sources never written, `Topics/` and `workspace*.json`
+> spared, most properties, `cites`, slice boundaries and naming, the link
+> conversion, index notes, Bases, `types.json`, `.gitignore`, "opens in
+> Obsidian". The `Fails when:` is convenient: under the draft's own rule there
+> is no text between the last entry and the next `##` in §3; the plants for
+> checks 2 and 3 also turn check 1 red, so those checks could be no-ops; a
+> planted generator fault rewrites `vault/`, which `mutate` hashes. K2 not met:
+> the inverse is the generator's transform reversed, and the count pattern
+> comes from the same sentence. K1 not met: no state named for prefix pairs,
+> fences, table cells, `###` subsections without identifier, `**B…**` lines,
+> identifiers opening prose. K5 applies to index notes and Bases. Not doable as
+> written: committed blobs LF, tree CRLF, `DECIDER-BRIEFS.md` mixed; section
+> names with `:`, `<>`, `/`, backticks; `**Date:** … **Origin:** …` on one
+> line, `**Verdict:**` bare in 60 of 120, nested bold in `**Status:**`, 33
+> Status lines for 24 questions, `**Raised:**` not a date, the promotion line in
+> a code span, wrapped field lines; design documents hold `K-`, `Z-`, `PD-`
+> headings and `SIM-LOOPS` `B*` loops with no type; `SIM-STATE` and `SIM-ECON`
+> have no section notes for `defines`; check 4 contradicts the index notes; the
+> Obsidian list type is `multitext`.
+>
+> **Point 2.** A sample of ten per type misses most entries; unseeded; findings
+> "recorded" close the point; the brief is not quoted; nothing maps findings to
+> commits; `check-vault` green says nothing of properties or slicing. The plants
+> fall in the sample about one time in twelve; "another valid value" assumes a
+> verdict list that does not exist; the planted link must be in front matter.
+> K1 not met; K3 weakly. Conflicts: writes the register though `Core:` says
+> otherwise; several commits; code-reviewer omitted; the register is a source,
+> so each entry stales the vault.
+>
+> **Point 3.** Wrong titles, wrong topics, wrong headings, prose of its own all
+> green; `Home.md` rewritten by the next build drops the topic links. K5 not
+> met; K3: the list of notes in no topic must come from the check. Topic notes
+> lack `source` and `order` and turn check 4 red; `Home.md` is generator-owned;
+> the agent is not named and `Explore` is read-only; no code-reviewer, no
+> fixtures; "check 3 now covering `Topics/`" changes nothing.
+>
+> **Whole draft.** Point 3 needs `Home.md` to survive a rebuild and check 4 to
+> accept notes without `source`; point 2 needs a verdict list point 1 never
+> extracts; "opens in Obsidian" is delivered by no check. The header's "no file
+> outside" contradicts the record every point writes, and the register being a
+> source makes the ordering matter. Unstated: a committed vault going stale;
+> sources left out (`criteria.md`, `reviewers.md`, root `CLAUDE.md`); families
+> with no note (`P-`, `A-`, `B*`); code spans losing monospace; each rebuild
+> deleting `.obsidian/`; Bases needing a recent Obsidian; encoding and line
+> endings; `pwsh` 7 against 5.1; the topic list partly fixed by the draft.
+
+### The second reading, of version 2, quoted
+
+> Not doable as written: point 1's check is red on the current tree whatever
+> the generator does — duplicate stems overwrite notes, checks 3 and 4
+> contradict each other, check 5 contradicts the linking rule, one source holds
+> a duplicate opener; point 2 depends on a `-Sample` no point builds, and its
+> brief names the two planted fields.
+>
+> **Point 1.** Missed: invalid YAML (46 of 120 verdicts hold identifiers, one
+> starts with a backtick, 7 hold `: `; bold leads start with `*`), no YAML
+> parser in pwsh 7.6.7, no check parses front matter; `[[ID|ID]]` unescaped in
+> a table row passes checks 1 and 4; only the first mention linked passes a set
+> comparison; an identifier inside a longer code span linked; `type`, `line`,
+> `aliases`, `defines`, `cites` against the body unchecked; sources never
+> written, `Topics/` and `.obsidian/` surviving, folders, `Home.md`, Bases
+> sorting, the types inside `types.json` unchecked; `promoted_as`, `closed`,
+> `task` not comparable by check 5. Plants are shaped to one check each; the
+> likely faults are YAML quoting, name collisions, cuts inside fences, field
+> lines repeated or wrapped, a final newline added to `SIM-DEC`, `SIM-REQ`,
+> `SIM-STATE`, `AGENTS.md`, `CLAUDE.md`. K2 partly met: one author, one opener
+> table — `### Not a candidate — …`, `### Later in the first pass…` absorbed into
+> the preceding `C-`; un-linking is linking reversed. K1 partly met: no state
+> for a field value holding an identifier, a wrapped field line, a repeated
+> mention, a `##` in a fence. Not doable: stems collide (`CLAUDE` twice, `SKILL`
+> four times, `2026-09-17-plan-e-skill` in design and plans); cutting ignores
+> fences (`DECIDER-BRIEFS.md:11`, `.claude/design/2026-09-17-plan-e-skill.md:104,111`);
+> `docs/SIM-LOOPS.md:52` `**B1 does not apply here.**` opens a second `B1`; 16
+> of 120 Verdict and 21 of 24 Blocks lines wrap; five register entries carry
+> two `**Ruling:**` lines, one none, one cites a ruling in passing; SQ-024 open
+> with Status lines saying "closed"; check 3 against check 4 on the opener's
+> own identifier; check 5's "verbatim" against linked bodies and against
+> properties on no field line; check 6's "common set" undefined. Line endings
+> fine once normalised.
+>
+> **Point 2.** A fix may regress what no check reads; "recorded" is never
+> judged; `-Sample` not in point 1; code-reviewer only if the generator
+> changed. `promoted_as` in 4 of 137 entries, rarely sampled. The brief says
+> "`closed`, `task` and `promoted_as` above all" and the plants are `closed` and
+> `task`: "without the agent told" is empty; `closed` ill-defined for SQ-024.
+> K6 now: "neither is caught by check 5" contradicts check 5's text. K2: one
+> author fixes generator and check in one commit.
+>
+> **Point 3.** Degenerate topics pass; unquoted `[[X]]` in `members` is a
+> nested list to YAML, no links in Obsidian; writes outside `Topics/` limited by
+> the brief only, `path-guard` allowing them; `Topics.base` by member count
+> needs a formula, outside check 6; check 7 parses YAML by hand. K3 met.
+>
+> **Whole draft.** Point 2 needs `-Sample` and a narrowed check 5; point 3 needs
+> `Topics/` kept, `Home.md` linking it, `members` multitext, none checked;
+> archiving `PLAN.md` adds a source and turns check 1 red; CI runs nothing
+> under `tools/`. Unstated: YAML quoting and parsing; duplicate stems and index
+> note names; cutting and fences; self-links; several field lines or none,
+> wrapped ones; `closed` false or omitted; `NFR-` typed `requirement`; the
+> common set; what `.gitignore` gets; a guard on `-Out`; whether the
+> code-reviewer reads hundreds of generated files; the Obsidian version.
 
 ## Draft plan
 
 ```markdown
-# Plan — the workflow review, applied
+# Plan — an Obsidian vault derived from the project's written knowledge
 
 **Kind:** process
-**Exit condition:** the directions the user approved in the workflow review of
-2026-10-19 and 20, recorded in `.claude/design/2026-10-19-workflow-review.md`
-(review items A, B, P1 to P4, G2, C3), written into `AGENTS.md`, the plan
-skills and the hooks, each script's self-test green, and point 4's live check
-run in a new session. Whether they make criteria stronger and points lighter is
-measured by the next plan, not this one (`R-046`).
-**Phase:** none, process work; before phase 4.
-**Branch:** `workflow-review`, cut from `main` after the answer to moment one.
+**Exit condition:** `vault/` at the repository root holds one note per entry and
+per section of every source listed in point 1, with properties; at the last
+point's commit `check-vault.ps1` reports every check green; a read-only agent has
+read a sample of the vault against the sources and each finding is fixed or
+recorded; a second agent has grouped the entries into topic notes; and the user
+has opened `vault/` in Obsidian and seen the properties, the links and the
+Bases render, which closes the plan *with reserve* until done (`R-011`).
+**Phase:** none, process work; before phase 4. `docs/` does not cover the
+vault: nothing in it asks for one, and nothing in it changes.
+**Branch:** `obsidian-vault`, cut from `main` after the answer to moment one and
+after `workflow-review` is merged.
 
-The review's labels are written "review A", "review C3" and so on, so as not to
-be read as the rows C1 to C10 and S1 of `AGENTS.md`'s table, written "table C8".
-No point touches a path under `core/`. Points that edit `AGENTS.md`,
-`.claude/agents/`, `.claude/hooks/` or `.claude/skills/` say so, which is the
-permission `AGENTS.md` requires (`R-010`, `D-087`). Points 1 to 6 run under the
-`/plan-next` of today; point 6 rewrites it, and points 7 and 8 run under the
-rewritten one, which is read afresh at each invocation.
+The vault is derived and committed. `docs/` and the registers stay where they
+are and stay the only authority; a note that disagrees with its source is a
+defect in the note. The plan writes `tools/vault/`, `vault/`, `.gitignore`,
+`.gitattributes`, and the record every point owes (the register and `PLAN.md`'s
+outcome lines); nothing else. The register is itself a source: each point's
+commit regenerates the vault after its register entry is written, and the
+check runs on that state. Nothing regenerates the vault after the plan, and
+nothing runs the check in CI: a later commit to a source, the plan's own
+archive into `.claude/plans/` first among them, leaves the vault stale until
+someone runs `build-vault.ps1`, and check 1 says so when run.
 
-## 1. The criteria checklist (review B)
+Both scripts run under `pwsh` 7, read sources as UTF-8 with CRLF normalised to
+LF, and write UTF-8 without BOM, LF, adding no final newline a source lacks.
+`.gitattributes` gains `vault/** text eol=lf`; `.gitignore` gains
+`vault/.obsidian/*` and `!vault/.obsidian/types.json`. Every front-matter value
+is written as a JSON scalar or array of strings (`id: "R-001"`,
+`cites: ["[[DEC-002]]"]`), a subset of YAML that the check reads with
+`ConvertFrom-Json`, one key per line.
 
-- **Does:** adds `.claude/skills/plan-explain/criteria.md`: rules numbered `K1`
-  onward, each a heading of its own, each saying what a point's "Closed by" must
-  prove and citing the ruling that found the gap:
-  - `K1` a computation is checked against an independent reference, on a state
-    where the branch that matters binds (`R-101`, `R-103`);
-  - `K2` a check of equality between two paths that share their code and their
-    geometry cannot fail where they coincide; the check needs a reference that
-    shares neither (`R-103`);
-  - `K3` a reported number is recomputed from an independent source, and counts
-    the quantity the specification defines, not the one the code holds
-    (`R-102`);
-  - `K4` cells that are compared are measured alike, in one run, and a cell the
-    point names is measured or marked missing, never derived (`R-104`);
-  - `K5` a check that sums or compares its own outputs proves their arithmetic,
-    not their labels (`R-105`);
-  - `K6` a `Fails when:` that rests on a premise is read again when a later
-    ruling touches that premise (`R-105`).
-  Edits `.claude/skills/`. Adds `.claude/hooks/criteria-cite.ps1`: every `K`
-  heading must carry at least one identifier, and every identifier must have a
-  heading in `RULINGS.md` or `DECISIONS-OUTSIDE-SPEC.md`. Edits
-  `.claude/hooks/`.
-- **Closed by:** `criteria-cite.ps1 -SelfTest` green, then the script on the real
-  checklist exits 0; and the code-reviewer reads each citation against the
-  ruling it names and finds none that says something else (table C1).
-- **Fails when:** a rule cites `R-999`, or cites nothing, or cites a ruling that
-  exists and says something else; the first two turn the script red on a copy of
-  the checklist, the third is put to the code-reviewer as a planted citation
-  (`K2` citing `R-102`) and must be reported.
-- **Core:** no — the diff touches only `.claude/skills/plan-explain/` and
-  `.claude/hooks/`.
+## 1. The generator and its check
 
-## 2. Criteria attacked before they freeze (review A)
+- **Does:** adds `tools/vault/build-vault.ps1 [-Out <dir>]`, default `vault/`.
+  It refuses an `-Out` that exists and holds no `Home.md`. It reads, and never
+  writes: `docs/*.md`, `RULINGS.md`, `DECISIONS-OUTSIDE-SPEC.md`,
+  `SPEC-QUESTIONS.md`, `PROMOTIONS.md`, `DECIDER-BRIEFS.md`, `AGENTS.md`,
+  `README.md`, `CLAUDE.md`, `.claude/design/*.md`, `.claude/plans/*.md`,
+  `.claude/skills/**/*.md`, `.claude/agents/*.md`. `PLAN.md` and
+  `REVIEW-REQUEST.md` are not sources: they hold the current development only.
+  It deletes and rewrites everything under the output directory except `Topics/`
+  and `.obsidian/`; under `.obsidian/` it writes `types.json` only.
+  - **Cutting.** Outside fenced blocks, every source is cut at each `##` and
+    `###` heading, and the text before the first is a slice of its own; in
+    `SIM-REQ.md` also at a line opening `**FR-`, `**NFR-` or `**AC-` followed by
+    an identifier and ` —` or `** —`, and in `SIM-LOOPS.md` at a line opening
+    `**B<n>[a-z] —` the same way. Nothing else opens a slice: not a `####`
+    heading, a table row, a bold identifier followed by anything but a dash, a
+    heading inside a fence. A slice whose heading or lead opens with an
+    identifier of a family below is an entry note named by it; any other is a
+    section note.
 
-- **Does:** `/plan-explain -Draft` reads every point of a draft, not the first
-  only, and for each answers which fault the check would miss and which part of
-  the "Does" it leaves unchecked, against `criteria.md`. The reading is
-  dispatched to a read-only agent given the draft, the checklist and the files
-  the draft names, told not to read `RULINGS.md`, the register or
-  `.claude/plans/`, and given nothing of the author's reasoning. The skill
-  accepts `-Path` for a draft held in another file. Edits
-  `.claude/skills/plan-explain/SKILL.md`. In `AGENTS.md`, "Criteria are frozen
-  when written" gains the rule: before moment one the draft is read this way and
-  the answers go into the request, quoted, beside the draft, for the user to
-  amend it or not. Edits `AGENTS.md`. `REVIEW-REQUEST.md`'s "What a request
-  holds" names the answers as part of a moment-one request.
-- **Closed by:** the fixture `.claude/hooks/fixtures/plan-explain/misura-costi.md`
-  is the request as committed in `64147ba`, before the user's answer and before
-  any outcome existed. `/plan-explain -Draft -Path` on it returns one entry per
-  point, five; its entry for point 4 names supply that never runs short as a
-  state where the ranking is not seen; and its report cites no `R-`
-  identifier, which it was told not to read. A grep finds the rule in
-  `AGENTS.md` and the line in `REVIEW-REQUEST.md`.
-- **Fails when:** the skill reads the first point only, as today: one entry,
-  point 4's missing. Or the reader is handed the register: its report cites
-  `R-103`.
-- **Check: shallow** — the reader is an agent, and `K1` is in the checklist it
-  reads, so naming point 4's gap proves the brief and the checklist, not that
-  the reader finds a gap the checklist does not name; what would prove it is the
-  next plan's points closing without *criterion defective*.
-- **Core:** no — the diff touches only `.claude/skills/plan-explain/`,
-  `.claude/hooks/fixtures/`, `AGENTS.md` and `REVIEW-REQUEST.md`.
+    | Family | `type` | Source |
+    |---|---|---|
+    | `FR-`, `NFR-` | `requirement` | `SIM-REQ.md` |
+    | `AC-` | `acceptance` | `SIM-REQ.md` |
+    | `DEC-` | `decision` | `SIM-DEC.md` |
+    | `OBS-` | `observable` | `SIM-OBS.md` |
+    | `R<n>`, `B<n>` | `loop` | `SIM-LOOPS.md` |
+    | `R-` | `ruling` | `RULINGS.md` |
+    | `D-` | `register-entry` | `DECISIONS-OUTSIDE-SPEC.md` |
+    | `SQ-` | `spec-question` | `SPEC-QUESTIONS.md` |
+    | `C-` (after `~~`, if struck) | `promotion` | `PROMOTIONS.md` |
 
-## 3. `plan-state` reads a point's frozen text and whether the decider is due (review P1, P4)
+    A section note is named `<path> § <n> <heading>`: `<path>` the source's
+    repository path without `.md`, `/` turned into `.` and a leading `.`
+    dropped (`claude.skills.plan-next.SKILL`), `<n>` its order, the heading
+    stripped of `` ` ``, `~`, `*` and of `\ / : * ? " < > | # ^ [ ]`; the
+    preamble is `<path> § 0`. Entry notes sit in a folder per type, section
+    notes under `vault/Sections/<path>/`.
+  - **Properties.** On every note: `type` (`section` for a section note),
+    `source` (repository path), `line` (its first line in the source), `order`,
+    `aliases` (its first heading or bold lead as written), `cites` (a link to
+    each identifier its body links). On an entry note: `id`. On a ruling: `date`,
+    the first ISO date on its `**Date:**` line. On a register entry: `task`, the
+    `##` heading above it; `rulings`, a link to every `R-` on any of its
+    `**Ruling:**` lines, which can include a ruling cited in passing;
+    `promoted_as`, the `DEC-` on its `**Promoted … as …**` line. On a spec
+    question: `raised`, the first ISO date on its `**Raised:**` line. A value
+    whose source line is absent is omitted. Free-text fields — a ruling's
+    verdict, a question's status or what it blocks — are not properties: they
+    wrap, repeat and change within an entry, and stay in the body.
+  - **Links.** In a body, outside fenced blocks and outside code spans longer
+    than one identifier, every mention of an identifier that has a note, other
+    than the note's own, standing between word boundaries (no letter, digit or
+    `-` either side), becomes a link: bare, `[[ID]]`; as a code span `` `ID` ``,
+    `[[ID|ID]]`; inside a table row, `[[ID\|ID]]`. Nothing else changes.
+  - **Index notes**, `type: index`: `vault/Home.md`, linking each source's index
+    note, each Base and each note found in `Topics/`; for each source,
+    `<path> · index`, listing its notes in `order`. `vault/Bases/`:
+    `Rulings.base` (by `date`), `Register.base` (by `task`, `rulings`),
+    `Questions.base` (by `raised`), `Entries.base` (by `type`, `source`).
+    `.obsidian/types.json`: `date`, `raised` as `date`; `cites`, `rulings`,
+    `aliases`, `members` as `multitext`; `order`, `line` as `number`.
+  - `-Sample <seed>` on the check, below, lists ten notes per type by a draw from
+    the seed, all of them when fewer.
+  Adds `tools/vault/check-vault.ps1 [-Vault <dir>] [-Sample <seed>]`, sharing no
+  code and no pattern with the generator: each pattern below is written in the
+  check, from this text. Both are written from one table, so a source shape the
+  table does not know is missed by both; point 2 is the reader for that. It
+  reports each check by number, green or red, and exits non-zero if any is red.
+  1. **Reconstruction.** For each source, its non-index notes sorted by `order`,
+     front matter removed, `[[X\|X]]` and `[[X|X]]` turned back into `` `X` ``
+     and `[[X]]` into `X`, concatenated: equal to the source read as above.
+  2. **Census.** The identifiers opening a slice in each source, found by the
+     check's own patterns outside fences, equal as sets to the `id`s of that
+     source's entry notes; no two notes share an `id` or a file name; every
+     note's `type` is the one its family's row gives.
+  3. **Heads.** An entry note's body, links turned back as in check 1, opens with
+     the line that opens its `id`'s slice in the source, and holds no second
+     such line.
+  4. **Links.** Every link, in bodies and in properties, resolves to a note; none
+     sits inside a fence; in every body outside fences, every word-bounded
+     mention of an identifier that has a note, other than the note's own, is a
+     link, counted mention by mention; and `cites` is exactly the set of the
+     body's link targets.
+  5. **Properties.** Every front-matter line parses with `ConvertFrom-Json`;
+     every note has `type`, and every non-index note `source`, `line`, `order`;
+     `line` is the source line where check 3 finds its slice opening; `date`,
+     `raised`, `task`, `rulings` and `promoted_as` equal what the check reads
+     from the source by the rules above.
+  6. **Config.** `types.json` parses; every property a `.base` file names is one
+     the generator writes, listed in the check.
+  Both scripts take `-SelfTest` on fixtures under `tools/vault/fixtures/`: each
+  opener; prefix pairs (`R1`/`R10`, `DEC-006`/`DEC-006a`); an identifier in a
+  fence, and a `##` in a fence; a code span in a table row; a bold identifier
+  followed by no dash (`**B1 does not apply here.**`); an identifier mentioned
+  twice; two `**Ruling:**` lines; a heading with `:` and `<>`; two sources with
+  the same file name in different folders; a source with no final newline; a
+  field value holding `: ` and a backtick.
+- **Closed by:** both `-SelfTest`s green; `build-vault.ps1` on the tree, then
+  `check-vault.ps1` reports checks 1 to 6 green; the code-reviewer reads
+  `tools/vault/` against this "Does", and a sample of `vault/` of its choosing.
+  Each fault below, planted alone in the generator and built with `-Out` into a
+  temporary directory, turns red the check named, reported by number.
+- **Fails when:** every cut falls one line late (check 3 red); `R10` linked as
+  `[[R1]]0` (check 4 red); only the first mention of an identifier linked
+  (check 4 red); a `##` inside a fence cut (check 1 or 3 red, the fence split);
+  two sources named `SKILL.md` written to one note name (check 2 red); a
+  value written unquoted (check 5 red); a final newline added (check 1 red).
+- **Core:** no — the diff touches only `tools/vault/`, `vault/`, `.gitignore`,
+  `.gitattributes` and the record.
 
-- **Does:** `plan-state.ps1` finds the commit that installed `PLAN.md`, the
-  oldest commit in the plan's range that adds it, and reports per point:
-  - `changed`, when the point's text differs from that commit's — the text from
-    its heading to the next heading, without the lines that begin with an
-    outcome marker (`*Outcome:*`, `*Esito:*`, `*Ruled:*`, `*Reserve
-    discharged:*`, `*Riserva sciolta:*`);
-  - `recorded`, when it already carries an outcome line; `added`, when it was not
-    in the installing commit; and, at plan level, `gone`, the points of the
-    installing commit no longer present.
-  These are the documenter's three STOP cases (`/plan-next` step 8). And at plan
-  level `deciderDue`: true when the last closed point's `*Outcome:*` line, and
-  only that line, carries *criterion defective*, *criterio difettoso*, `FAILED`,
-  `FALLITO` or *left open*. *Left open* is a new marker: the outcome line carries
-  it when a finding is left to the human, a `SPEC-QUESTIONS.md` entry is
-  raised, or an escalation is made, so that the trigger is read, not inferred.
-  Edits `.claude/hooks/`.
-- **Closed by:** `plan-state -SelfTest` green with a fixture repository: a plan
-  installed; point 1 closed; point 2's "Closed by" edited in a later commit;
-  point 3 deleted and point 4 added; `changed` names point 2 only, `gone` point
-  3, `added` point 4, `recorded` point 1. And three `deciderDue` fixtures: an
-  outcome line with *criterion defective* (true), a clean outcome line followed
-  by a `*Ruled:* … criterion defective` line (false), a phase 3 outcome with
-  `**criterio difettoso**` (true).
-- **Fails when:** the baseline is the latest commit touching `PLAN.md` rather
-  than the installing one, so an edit committed with an earlier point is
-  blessed: point 2 is not reported. Or the outcome markers are not excluded, so
-  closing a point marks it changed: point 1 is reported.
-- **Core:** no — the diff touches only `.claude/hooks/`.
+## 2. The vault read against the sources
 
-## 4. The register written insert-only by a hook (review P1)
+- **Does:** `check-vault.ps1 -Sample 2026` gives the list. Before dispatch, in
+  two notes of that list, two faults no check of point 1 sees: a paragraph of
+  one entry note's body moved to the head of the next entry's body, and one
+  section note's `aliases` reworded. Then one read-only `Explore` agent, whose
+  brief is quoted in the outcome and says nothing of the generator, the checks
+  or the plants, reads each listed note against its source: is the text the
+  whole entry and nothing of another; does each property say what the source
+  says; does each link mean the entry the source means; does the source hold an
+  entry or section the vault has cut wrong or missed. Each finding is fixed in
+  `build-vault.ps1` or recorded in the register with the reason; the vault is
+  regenerated, which undoes the plants.
+- **Closed by:** the report quoted whole; both plants reported; a list mapping
+  each other finding to its fix in this point's one commit or to its register
+  entry; `check-vault.ps1` green after; the code-reviewer on the diff of
+  `tools/vault/`.
+- **Fails when:** the agent does not report one of the plants: the point stops.
+- **Check: shallow** for the findings beyond the plants, a reading of a sample;
+  what would prove the rest is the same reading of every note.
+- **Core:** no — the diff touches only `tools/vault/`, `vault/` and the record.
 
-- **Does:** a project `.claude/settings.json` wires `path-guard` to every
-  session's `Edit|Write` under a new role, `record`, which decides only
-  `DECISIONS-OUTSIDE-SPEC.md` and `PLAN.md` and allows every other path, inside
-  the repository or not: an Edit of either passes only if its `new_string`
-  begins with its `old_string`; a Write only if the file does not exist. It
-  applies to every session, the decider's included. Before wiring, `git log -p`
-  over the decider's commits since `R-001` shows whether every decider edit of
-  the register was an insertion; if one was not, the point stops and asks.
-  `SPEC-QUESTIONS.md` is left out: the decider closes entries by editing their
-  status line. Writes through a shell are not seen by the hook, a limit stated in
-  `path-guard`'s description. Edits `.claude/hooks/path-guard.ps1` and its
-  self-test.
-- **Closed by:** `path-guard -SelfTest` green with cases for `record`: an
-  insertion passes; a replacement is denied with `record`'s reason, not
-  "unknown role" or "not JSON"; a Write over an existing `PLAN.md` is denied, a
-  Write of a new one passes; an Edit of `README.md` and a Write to a path
-  outside the repository pass. Then the exact command line in
-  `.claude/settings.json`, fed the JSON of an Edit replacing a word of
-  `DECISIONS-OUTSIDE-SPEC.md`, exits 2 with `record`'s reason, and fed an Edit of
-  `README.md`, exits 0. Then, in a new session, a live Edit replacing a word of
-  `DECISIONS-OUTSIDE-SPEC.md` is denied; on a clean tree, and if it is not,
-  `git checkout -- DECISIONS-OUTSIDE-SPEC.md` restores it and the point fails.
-- **Fails when:** the command line in `settings.json` names the role wrongly, so
-  every Edit is denied as "unknown role": the `README.md` case goes red. Or
-  `record` inherits the denial of paths outside the repository: the outside
-  case goes red.
-- **Reserve:** the live Edit needs a session started after `settings.json` exists,
-  which only the human can start: the point closes with reserve on that clause
-  (`R-011`).
-- **Core:** no — the diff touches only `.claude/hooks/` and
-  `.claude/settings.json`.
+## 3. Topics grouping the entries
 
-## 5. `mutate` reaches every file of the point (review P3)
-
-- **Does:** `mutate.ps1` admits a patch on any path the point's diff touches —
-  `git diff --name-only HEAD` and the untracked files — except `core/Tests/`,
-  `docs/`, `.claude/`, `AGENTS.md`, every `CLAUDE.md`, `core/BannedSymbols.txt`
-  and the record files `PLAN.md`, `DECISIONS-OUTSIDE-SPEC.md`,
-  `SPEC-QUESTIONS.md`, `REVIEW-REQUEST.md`, `PROMOTIONS.md`, `RULINGS.md` and
-  `DECIDER-BRIEFS.md`; a rename's source counts as a path of the patch, as
-  `R-073` requires today; the tree is recorded and proved restored over the
-  admitted set. `core/Tests/` is excluded because a patch that breaks a test
-  turns the check red without the code being at fault. Edits `.claude/hooks/`.
-  The sentences that say `mutate` reaches only `core/Runtime/` and `harness/` —
-  its own description, `.claude/agents/tester.md`, `/plan-next` step 4 — say
-  what it reaches now (table C8). Edits `.claude/agents/`, `.claude/skills/`.
-- **Closed by:** `mutate -SelfTest` green with new cases: a patch on an
-  untracked `bench/` file in the diff applies, goes red and is restored; a patch
-  on a file outside the diff is refused with exit 2; a patch on `docs/` or
-  `core/Tests/` is refused even when the path is in the diff; a rename from a
-  path outside the set is refused. A grep finds no sentence saying `mutate`
-  reaches only `core/Runtime/` and `harness/`.
-- **Fails when:** the admitted set is read from `git diff` only, which never
-  lists untracked files: the `bench/` case goes red. Or `core/Tests/` is
-  admitted: its case goes red.
-- **Core:** no — the diff touches only `.claude/`.
-
-## 6. `/plan-next` lighter (review P1, P2, P4, G2)
-
-- **Does:** edits `.claude/skills/plan-next/SKILL.md`:
-  - step 2 dispatches the tester only when the point's check is a test under
-    `core/Tests/`; otherwise the check is written with the point's files at step
-    3, as the skill already says (review P2);
-  - step 8 is the orchestrator's: it reads `changed`, `recorded`, `added` and
-    `gone` from `plan-state` and stops on them as the documenter does today,
-    then writes the register entry and the outcome line by insertion, the outcome
-    line carrying *left open* when step 7 left a finding to the human, a
-    `SPEC-QUESTIONS.md` entry was raised or an escalation made (review P1);
-  - step 9 keeps the committer, whose `git-guard` admits only the commands a
-    commit needs, and lists `git-guard`'s rules in the committer's brief: one git
-    command a call, no `-C`, the trailer's word never outside the trailer, paths
-    with forward slashes (review G2);
-  - step 10 reads `deciderDue`: true, it appends the brief to
-    `DECIDER-BRIEFS.md` and dispatches the decider (`R-116`, `R-118`); false, it
-    reports the count of entries for the audit at the plan's end or the phase
-    gate (review P4). The sentence "this session does not run `/decide`", which
-    `R-116` overtook, goes (table C8).
-  Edits `.claude/skills/`. The documenter is no longer dispatched; it is retired
-  in point 7, after this point has been recorded by it.
-- **Closed by:** a grep finds no dispatch of `documenter` in `.claude/skills/`,
-  finds the condition of step 2, the four fields of step 8, the four rules of
-  step 9 and the `DECIDER-BRIEFS.md` append of step 10, and does not find
-  "does not run `/decide`".
-- **Fails when:** step 8 drops one of the documenter's STOP cases, so a point
-  that already carries an outcome line is recorded twice: the grep for
-  `recorded` goes red.
-- **Check: shallow** — the skill is prose and a grep proves the words, not the
-  procedure; what would prove it is points 7 and 8 of this plan, run under it.
-- **Core:** no — the diff touches only `.claude/skills/`.
-
-## 7. The documenter retired (review P1)
-
-- **Does:** deletes `.claude/agents/documenter.md` and the `documenter` role of
-  `path-guard`, which nothing dispatches after point 6 (table S1). Edits
-  `.claude/agents/`, `.claude/hooks/`. This point is the first recorded by the
-  orchestrator under point 6's step 8.
-- **Closed by:** `path-guard -SelfTest` green without the role; the agent file
-  absent; a grep finds `documenter` nowhere in `.claude/` but the design notes
-  and the archived plans.
-- **Fails when:** the role is removed from `path-guard` but its self-test still
-  calls it, so the self-test fails as "unknown role"; or a skill still names the
-  documenter: the grep goes red.
-- **Core:** no — the diff touches only `.claude/`.
-
-## 8. Design belongs to the decider (review C3)
-
-- **Does:** in `AGENTS.md`, under "The decider answers what this file sends to a
-  human", a rule: a design or content conversation belongs to `/decide`, whose
-  free-text form is the design session (`.claude/skills/decide/SKILL.md`,
-  "Design sessions"); an implementer session asked for one records what the user
-  has already said, verbatim, in the relevant `SPEC-QUESTIONS.md` entry, and
-  sends the user to `/decide`; a question arising inside a point, which blocks
-  it, may be answered on the spot, recorded verbatim the same way and marked for
-  the decider. Edits `AGENTS.md`.
-- **Closed by:** a grep finds in the rule each of: "`/decide`", "verbatim",
-  "`SPEC-QUESTIONS.md`", "inside a point", "marked for the decider"; and the
-  code-reviewer, given the diff and this point's "Does", reports any element of
-  the "Does" the rule leaves out and any citation that does not say what the rule
-  claims (table C1, C2).
-- **Fails when:** the exception for a question inside a point, which the user
-  approved, is left out: the grep for "inside a point" goes red and the reviewer
-  reports it.
-- **Check: shallow** — a rule of conduct; what proves it is the next design
-  conversation going to `/decide`.
-- **Core:** no — the diff touches only `AGENTS.md`.
+- **Does:** dispatches one `general-purpose` agent, whose brief limits its
+  writes to `vault/Topics/`, to read the vault and write one note per topic it
+  finds across the documents. A topic note is front matter only, in the JSON
+  form above: `type: "topic"` and `members`, an array of links to entry notes.
+  Its body is empty, so the vault holds no prose of its own; the members show as
+  links in the note's properties, and each member's backlinks name its topics.
+  `build-vault.ps1` is rerun, so that `Home.md` links every topic, and writes
+  `Bases/Topics.base` listing them. `check-vault.ps1` gains check 7: every file
+  under `Topics/` parses, has `type: "topic"`, a `members` array of at least two
+  links to entry notes, and an empty body; `Home.md` links every topic; and it
+  lists the entry notes of type `requirement`, `acceptance`, `decision` and
+  `ruling` that belong to no topic.
+- **Closed by:** `git status` after the agent shows changes under
+  `vault/Topics/` only; checks 1 to 7 green; the list of notes in no topic,
+  produced by check 7, quoted in the outcome; `-SelfTest` gains a fixture per
+  clause of check 7; the code-reviewer on the diff of `tools/vault/`.
+- **Fails when:** a topic with a paragraph in its body, or with `members`
+  written as a YAML list of bare links (check 7 red); a topic linking `R-999`
+  (check 4 red); a topic missing from `Home.md` because the build ran before
+  it was written (check 7 red).
+- **Check: shallow** for whether a member belongs to its topic, a judgement no
+  script reads; what proves it is the user browsing the topics.
+- **Core:** no — the diff touches only `vault/`, `tools/vault/` and the record.
 ```
 
 ## What was not verified
 
-- **The second version of the draft** was not given to a blind reader; the
-  table above says what changed, not whether the changes hold.
-- **Whether a project `.claude/settings.json` hook reaches subagents** as well as
-  the main session. Point 4 assumes it does, as the frontmatter hooks of the
-  agents do; it was not run.
-- **The decider's past edits of the register** were not checked for insertion;
-  point 4 does it before wiring, and stops if one was not.
-- **The cost of the reading in point 2**, one agent per draft, was not measured.
-- **That the new marker *left open* is the right trigger** for the decider: it
-  was chosen so that a trigger is read, not inferred, and no past outcome line
-  carries it.
+- **Version 3 of the draft** was given to no blind reader. The table says what
+  changed, not whether the changes hold; a third reading costs one agent and
+  you may ask for it.
+- **Obsidian itself.** No Obsidian is run in this session: that the JSON-form
+  front matter, `types.json` and the `.base` files render as the draft expects
+  is known from Obsidian's documentation, not tried. The exit condition's
+  reserve is where it is checked.
+- **The number of notes**, about seven hundred, is estimated from heading
+  counts, not built.
+- **Whether `workflow-review` is ready to merge**, which the branch line
+  assumes, was not checked against its exit condition.
 
 ## What I need from you
 
-1. **Answered by the user, 2026-10-20: "approvo la bozza"** — approved as
-   written. ~~**The draft**, approved, amended, or rejected. In particular the eight
-   `Fails when:` lines, and the `Check: shallow` markers on points 2, 6 and 8.~~
-2. **Answered by the user, 2026-10-20: "teniamo il committer"** — kept, as the
-   draft has it. ~~**The committer.** Review P1 retired documenter and committer; the draft
-   retires the documenter only. `git-guard`, the committer's hook, admits only
-   the commands of a commit (`status`, `diff`, `log`, `show`, `add` with paths,
-   `commit -F`), so it cannot be wired to the orchestrator, which also switches,
-   merges and moves files; without the committer it would guard nothing. Keep
-   the committer (the draft), or retire it and leave the commit rules to the
-   skill's text.~~
-3. **Answered by the user, 2026-10-20: "ok left open"** — approved.
-   ~~**The *left open* marker** in outcome lines, which the decider's dispatch
-   reads (point 3): approve it, or name another trigger.~~
-4. Then the plan is installed on `workflow-review` and point 1 starts.
+1. **The draft**, approved, amended, or rejected. In particular the seven
+   `Fails when:` lines of point 1, the two plants of point 2, and the
+   `Check: shallow` markers on points 2 and 3.
+2. **Free-text properties.** Version 3 drops a ruling's verdict and a
+   question's status from the properties, since they wrap and repeat; the
+   Bases then filter rulings by date and questions by date raised only. Keep
+   them dropped, or ask for them with a rule for which line counts.
+3. **Topic notes without prose.** A topic is a list of links and nothing else,
+   so that the vault says nothing `docs/` does not. Keep it, or allow a
+   description, which then needs a reader of its own.
+4. **A third blind reading** of version 3 before installing, or not.
+5. Then `workflow-review` is merged by you, the plan is installed on
+   `obsidian-vault`, and point 1 starts.

@@ -5085,3 +5085,45 @@ tester, the check being a grep and a reading; the coder, the file being
 **What `docs/` says:** nothing; process. `R-001`, `R-116`.
 **Would overturn it:** a design conversation that cannot wait for `/decide`.
 **Not verified:** the rule in use; the check is `shallow`, as declared.
+
+## 2026-10-20 — An Obsidian vault, drafted as a plan at moment one
+
+### D-138 · Moment one of the Obsidian vault plan · What the draft decides beyond the user's answers
+**Ruling:** none yet.
+
+The user asked for an Obsidian vault holding the project's knowledge, read
+against the documentation by one agent and linked by another, using Obsidian's
+properties. Asked how, the user chose a derived vault, the sources staying where
+they are; inside the repository; one note per entry. Moving `docs/` was not
+offered as the implementer's to do, and fourteen hooks, skills and agents read
+the sources' paths. The draft is in `REVIEW-REQUEST.md`; two blind readers
+attacked versions 1 and 2, and the request quotes both and what version 3 did.
+
+**Decided, beyond what the user answered.**
+1. **The vault is generated and committed**, and nothing regenerates it after
+   the plan or runs its check in CI: it goes stale with the next commit to a
+   source, the plan's own archive first. Reconstruction says so when run.
+2. **The sources** are `docs/`, the five registers, `AGENTS.md`, `README.md`,
+   the root `CLAUDE.md`, `.claude/design/`, `.claude/plans/`, the skills' and
+   agents' Markdown. `PLAN.md` and `REVIEW-REQUEST.md` are left out as holding
+   the current development only; code is not knowledge in this sense.
+3. **Every note's body is its source's text, unchanged but for links**, so that
+   the vault, read back, reproduces every source; nothing in the vault is
+   written in the vault's own words. Topic notes are therefore links only.
+4. **Families with no note** — `P-`, `A-`, `K-`, `Z-`, `PD-` — are not entry
+   notes and are not linked; they stay in their section notes.
+5. **Free-text fields are not properties**: a ruling's verdict, a question's
+   status and what it blocks. They wrap and repeat within an entry, and a
+   property chosen from one of their lines would be a guess. Asked of the user.
+6. **Front matter in JSON form**, a subset of YAML, because `pwsh` holds no
+   YAML parser and the check must read it; and `.base` files for the Bases
+   core plugin, which assumes an Obsidian recent enough to have it.
+7. **The scripts are PowerShell 7**, like the hooks, under `tools/vault/`, a new
+   folder; neither is in `core/`.
+
+**What `docs/` says:** nothing; process work, and `docs/` is unchanged.
+`R-011`, `R-048`, `R-049`.
+**Would overturn it:** the user's answer to the request, which may change any of
+it.
+**Not verified:** version 3 of the draft was read by no blind reader; Obsidian's
+rendering of the front matter and the Bases was not tried.
