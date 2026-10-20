@@ -5356,3 +5356,39 @@ passes. *Criterion defective* (`R-005`, case 1); the missing check,
 emphasis, or with a loose `*` before an emphasised marker.
 **Not verified:** a case-sensitive match would be caught by the cut-before-8
 copy alone, not by `-SelfTest`.
+
+## 2026-10-21 — The workflow review plan, archived
+
+### D-144 · Closing the workflow review plan · The archive, the promotion pass and the merge
+**Ruling:** none yet.
+
+`plan-state` read `state: finished`, `reservesOpen` empty, after point 10
+(`a11fdf1`); the decider ratified `D-137` to `D-143` in `R-123` (`e50274e`) and
+named nothing owed before the archive. The user, on 2026-10-21: "approvo.
+archivia il PLAN e mergia il branch".
+
+**Decided.**
+- **The exit condition is met.** The directions of the review are in
+  `AGENTS.md`, the plan skills and the hooks; the six scripts' self-tests ran
+  green today (`criteria-cite` 10, `git-guard` 44, `mutate` 30, `path-guard`
+  42, `plan-state` 91, `tree-state` 14 cases, 0 failed). Point 4's live check
+  ran in the session that was already active, which its outcome says; in a new
+  session it ran on 2026-10-21, when `path-guard -Role record` refused this
+  session's Edits replacing text of `D-139`, four times, with its reason.
+- **The archive's name** is `2026-10-20-workflow-review.md`: the date the plan
+  was installed (`a9ee621`) and its branch, as `D-127` named the last one.
+- **The pass runs over `D-128` to `D-143`**, the last pass having ended at
+  `D-126` and `D-127` being that archive's. No candidates: process work and
+  moment-one drafts, `D-011`.
+- **`REVIEW-REQUEST.md` is not touched**: its current request is the moment
+  one of the `docs/` vault migration plan, answered in it.
+- **The merge** of `design/obsidian-vault` into `main` follows this commit,
+  `--no-ff`, as the user asked; it carries `workflow-review`, from which the
+  branch descends. No push.
+
+**What `docs/` says:** nothing; process work. `R-048`, `R-120`, `R-123`,
+`D-011`.
+**Would overturn it:** the decider finding an entry in the range that
+constrains the simulator's code.
+**Not verified:** the live check of point 4 in a new session was the refusal
+met in passing, not a test run for the purpose.

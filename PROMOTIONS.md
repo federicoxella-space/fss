@@ -36,6 +36,17 @@ here would collide with whatever else is in flight.
 
 ---
 
+## Pass of 2026-10-21 — nothing
+
+Run over `D-128` to `D-143` on archiving the workflow review plan. No
+candidates. `D-128` to `D-137` and `D-143` close the points of a `Kind:
+process` plan, and process entries are ratified or rejected, never promoted
+(`D-011`). `D-138` to `D-142` record moment-one drafts of process plans, the
+derived vault superseded by `R-121` and the `docs/` vault migration not yet
+installed; they constrain no simulator code. `D-144` records this archive.
+
+---
+
 ## Pass of 2026-10-19 — nothing
 
 Run over `D-121` to `D-126` on archiving the cost measurement plan. No
