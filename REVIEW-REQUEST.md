@@ -468,9 +468,12 @@ is written as a JSON scalar or array of strings (`id: "R-001"`,
 
 ## What I need from you
 
-1. **The draft**, approved, amended, or rejected. In particular the seven
+1. **Answered by the user, 2026-10-20: "L'obiettivo è spostare /doc ne vault"**
+   — the derived vault is not the goal; `docs/` itself is to move. Raised as
+   `SQ-025`, blocking, for the decider; the draft below waits on its ruling.
+   ~~**The draft**, approved, amended, or rejected. In particular the seven
    `Fails when:` lines of point 1, the two plants of point 2, and the
-   `Check: shallow` markers on points 2 and 3.
+   `Check: shallow` markers on points 2 and 3.~~
 2. **Free-text properties.** Version 3 drops a ruling's verdict and a
    question's status from the properties, since they wrap and repeat; the
    Bases then filter rulings by date and questions by date raised only. Keep

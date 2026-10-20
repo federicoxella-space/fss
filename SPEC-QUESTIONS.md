@@ -994,3 +994,38 @@ sennò si compra." Water is an explicit good: drawn where a place has the means
 (a well, a river, a spring), bought where it has not. Its site, recipe, group,
 class and whether it spoils or travels are not set; the user's as content where
 `R-050` makes them so, the decider's otherwise.
+
+### SQ-025 — the user wants `docs/` moved into an Obsidian vault
+
+**Raised:** 2026-10-20, by the user, in an implementer session.
+**Cites:** `AGENTS.md`, "`docs/` is not yours to edit" and "The decider answers
+what this file sends to a human"; `docs/CLAUDE.md`.
+**Blocks:** **yes, the Obsidian vault plan**, drafted in `REVIEW-REQUEST.md` at
+`728b47d`: it assumed a vault derived from `docs/`, and the user answered that
+`docs/` itself is to move.
+**Status:** open — for the decider, with the user, in `/decide`.
+
+**The user's words, verbatim.** First request: "Crea un vault obsidian e
+spostaci tutta la conoscenza del progetto. Quando hai terminato lancia un agente
+che si occupi di controllare che il contenuto rispetti l'attuale documentazione
+presente e poi uno che si occupi di collegare tra di loro gli argomenti. Sfrutta
+le proprietà di Obsidian per ottimizzare l'accessibilità della documentazione".
+Asked whether to derive a vault or move the files, the user first chose a vault
+derived inside the repository, one note per entry; on reading the draft, the
+user answered: "L'obiettivo è spostare /doc ne vault".
+
+**Facts, without a proposed answer.**
+- `docs/` holds `SIM-REQ`, `SIM-DEC`, `SIM-STATE`, `SIM-ECON`, `SIM-LOOPS`,
+  `SIM-OBS` and `CLAUDE.md`, about 2,500 lines; their identifiers number about
+  260 requirement and acceptance paragraphs, 109 `DEC-`, 5 `OBS-`, 14 loops `R<n>`
+  with their `B<n>` brakes.
+- Outside `docs/`, files citing a `docs/` path: 5 under `.claude/skills/`, 4
+  under `.claude/hooks/`, 3 under `.claude/agents/`, 4 under `.claude/design/`,
+  4 under `.claude/plans/`, 3 under `core/Runtime/`, and `AGENTS.md`,
+  `README.md` and every register. Citations of the form `docs/SIM-*.md:<line>`:
+  97. Files under `core/`, `harness/`, `bench/` naming a `SIM-` document: 19.
+- Splitting a document into notes ends what a `file:line` citation points to;
+  moving a document whole changes its path only.
+- The hooks, skills and agents, and `AGENTS.md`, change only with the human's
+  permission recorded (`AGENTS.md`, "This file changes only with permission";
+  `D-087`); code comments follow table C1 and C8.
