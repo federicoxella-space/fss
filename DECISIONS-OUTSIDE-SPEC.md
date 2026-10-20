@@ -4387,6 +4387,7 @@ reads (1) as within the instruction; the decider was not asked.
 ## 2026-10-19 — The cost measurement plan, archived
 
 ### D-127 · Closing the cost measurement plan · The archive and the promotion pass
+**Ruling:** R-119 — ratified.
 
 `plan-state` read `state: finished`, `reservesOpen` empty, the register audited
 to `D-126` (`R-106`). `R-105`'s owed line under point 5 landed in `c24e818`.
@@ -4415,6 +4416,7 @@ the simulator's code.
 ## 2026-10-20 — The workflow review, drafted as a plan at moment one
 
 ### D-128 · Moment one of the workflow review plan · What the draft decides beyond the review
+**Ruling:** R-119 — ratified; its choices answered by the user at moment one.
 
 The user reviewed the development workflow on 2026-10-19 and 20 and approved
 directions recorded in `.claude/design/2026-10-19-workflow-review.md`: review A
@@ -4455,6 +4457,7 @@ whether a project settings hook reaches subagents.
 ## 2026-10-20 — The workflow review plan
 
 ### D-129 · Point 1 · The criteria checklist: six rules, each tied to its ruling, and a script that checks the ties exist
+**Ruling:** R-119 — ratified.
 
 **Built** (by the orchestrator, not the coder: `.claude/skills/` and
 `.claude/hooks/` are not the coder's, `R-010`, `D-087`; the point names both
@@ -4532,6 +4535,7 @@ that the blind reader applies the checklist (point 2); the script under a shell
 other than pwsh 7.
 
 ### D-130 · Point 2 · A draft read whole by a blind reader: the skill learns the old heading, and the check forbids what the checklist itself says
+**Ruling:** R-119 — ratified.
 
 **Built** (by the orchestrator, not the coder: `.claude/` and `AGENTS.md` are not
 the coder's, `R-010`, `D-087`; the point names `.claude/skills/plan-explain/`,
@@ -4618,6 +4622,7 @@ numbers; the skill under a draft whose block heading is neither of the two
 known.
 
 ### D-131 · Point 3 · `plan-state` reads a point's frozen text: record paragraphs, not lines, and the archive count by headings
+**Ruling:** R-119 — ratified, save decision 2; decision 6, left open, stands.
 
 **Built** (by the orchestrator, not the coder: `.claude/hooks/` is not the
 coder's, `R-010`, `D-087`; the point says it edits `.claude/hooks/`):
@@ -4714,6 +4719,7 @@ where a marker appears in the outcome paragraph as quoted prose; the script unde
 a shell other than pwsh 7.
 
 ### D-132 · Point 9 · A record opens at a paragraph, not at any line: the criterion's second half proves less, and two readings are left to the decider
+**Ruling:** R-119 — ratified; criterion defective, case 1, confirmed; both readings stand.
 
 **Origin.** Point 3 closed (`fbed774`) and its outcome wrapped onto a line
 beginning `*Ruled:*`. `plan-state` took that line for a new record and cut the
@@ -4778,6 +4784,7 @@ on questions (a) and (b).
 directly after an outcome; the script under a shell other than pwsh 7.
 
 ### D-133 · Point 4 · The register written insert-only by a hook: a `**Ruling:**` line may be replaced, by the user's choice
+**Ruling:** R-119 — ratified; the hook seen to fire for a subagent.
 
 **Origin.** Point 4 of the workflow review plan (review P1): every session
 edited the register by hand with nothing but discipline against rewriting it.
@@ -4861,6 +4868,7 @@ the hook cannot see; `MultiEdit` and `NotebookEdit`; the script under a shell
 other than pwsh 7.
 
 ### D-134 · Point 5 · `mutate` reaches every file of the point: the tree is hashed over everything but the excluded paths, and a check that leaves unignored files now fails
+**Ruling:** R-119 — ratified; exit 3 on residue stands, nothing owed.
 
 **Origin.** Point 5 of the workflow review plan (review P3): `mutate` admitted a
 patch only on `core/Runtime/` and `harness/`, so a fault could not be tried on
@@ -4931,6 +4939,7 @@ the revisioners (`Core: no` held: only `.claude/` in the diff).
 the script under a shell other than pwsh 7.
 
 ### D-135 · Point 6 · `/plan-next` lighter: the tester only for a test, the orchestrator records, the committer's brief carries `git-guard`'s rules, the decider only when due
+**Ruling:** R-119 — ratified.
 
 **Origin.** Point 6 of the workflow review plan (review P1, P2, P4, G2).
 

@@ -16,7 +16,7 @@ reversed only by a later one that names it.
 
 ## State
 
-**Register watermark:** D-126 — audited by `R-106`. The next audit starts at the
+**Register watermark:** D-135 — audited by `R-119`. The next audit starts at the
 first `D-NNN` after it.
 
 The watermark is the last `D-NNN` audited, or `none`. `/plan-next` reads this
@@ -6267,3 +6267,81 @@ the rulings it led to. Cite `R-118`.
 **Not verified:** that the user's sentence was meant as permission to edit
 `AGENTS.md` as well as a choice of place; it answers a gap in the rule just
 written there, and is read so.
+
+### R-119 — The register from `D-127` to `D-135` is ratified, save `D-131`'s decision 2; what points 3, 5 and 9 left open is answered without change
+
+**Date:** 2026-10-20   **Origin:** register audit, `D-127` to `D-135`; the
+*left open* and *criterion defective* of points 3, 9 and 5 of the workflow
+review plan
+**Verdict:** ratified
+**docs/:** unchanged
+
+Process work throughout, so ratified or rejected, never promoted (`D-011`). Read
+against `PLAN.md` as installed in `a9ee621` and as it stands, `R-005`, `R-009`,
+`R-010`, `R-048`, `R-073`, `R-074`, `R-116`, `R-118`, the moment-one request and
+its answers, and the scripts as they stand. `plan-state` was run on the live
+plan: install `a9ee621`, points 1 to 7 and 9 closed and unchanged, point 9
+`added`, `gone` empty, `deciderDue` true, the register count `D-127` to `D-136`.
+
+- **`D-127`, the cost plan's archive; `D-128`, the draft's own choices.** Stand.
+  `D-128`'s choices were put to the user at moment one and answered: the draft
+  approved, the committer kept, *left open* approved.
+- **`D-129`, `D-130`, `D-135`.** Stand as recorded. `D-130`'s decision 4 — the
+  reader names rules by `K` number, no identifier — is a fix to the brief and
+  not to the frozen criterion, which is the right side to fix it on: the
+  criterion asked for a blind reader, and a reader echoing the checklist's
+  provenance proves nothing about blindness either way.
+- **`D-131`, decisions 1 and 3 to 5.** Stand. Decision 1 reads "the lines that
+  begin with an outcome marker" as the paragraphs those lines open. The point's
+  "Does" excluded the markers so that closing a point would not mark it changed,
+  and its own second `Fails when:` names that fault; an outcome wraps, so only
+  the paragraph reading serves the point. That is the "Does" read by its
+  purpose, not a criterion defect: the check was met as frozen.
+- **`D-131`, decision 6, left open: the archives counted by their headings.**
+  Stands. The self-test exists to prove that every archived point is closed and
+  resolves to exactly one commit; that is still checked, point by point. The
+  pinned total checked something else, the inventory of `.claude/plans/`, and
+  had to be edited by every archive; it was red at 44 against 31 through two
+  archives before anyone saw it, which is what a pin owned by no step does. A
+  deleted archive is a deletion in git, seen in the diff of the commit that
+  makes it. Nothing owed.
+- **`D-132`.** Stands, and decision 2 is `R-005`'s case 1, rightly declared:
+  under the old reading the wrapped line opens a record that is dropped as the
+  outcome is, so the half "not reported changed" holds whichever reading the
+  code takes. The missing check stands beside it (fixture point 7, red under the
+  fault). The outcome already says *criterion defective*, so no line is owed.
+  **Its two questions.** Both stand as built. A record is a paragraph of its own,
+  with a blank line before it — the shape every record in the repository has and
+  the skill writes. Written without one, (a) a record after a bullet joins the
+  point's text and reads as `changed`, which stops `/plan-next` at step 8, and
+  (b) a `*Ruled:*` line glued to an outcome joins the outcome paragraph, which
+  can only make the decider due when it was not. Both fail toward a stop or an
+  extra dispatch, never toward a missed one.
+- **`D-133`.** Stands. The `**Ruling:**` exemption is the user's choice, option
+  A, and decision 2 holds it to that shape. **Verified here:** the hook fires for
+  a subagent. This session, a decider dispatched as an agent, tried an Edit
+  replacing one word of `D-136`; it was denied with `record`'s reason, and the
+  register is unchanged.
+- **`D-134`, left open: a check that writes files the repository does not
+  ignore now makes `mutate` exit 3.** That is right, and nothing is owed. `mutate`
+  proves that the tree is what it was; a check that leaves files behind has
+  changed it, and a proof that cannot tell its residue from an unrestored fault
+  proves nothing. A check that must write puts its output in a temporary
+  directory or under a path the point adds to `.gitignore`. The tester's text
+  need not forbid it: the exit refuses it, and the first check that meets it
+  will say so. **Its question**, a fault on the source of a rename the point
+  makes: refused, and harmless, since after the point's rename that source no
+  longer exists in the tree to be patched.
+
+**Cost.** `plan-state`'s self-test no longer notices an archive deleted.
+**Owed by the implementer:** nothing.
+**Would overturn it:** an archive lost without its deletion being seen; a
+record written without a blank line that `plan-state` misreads in the direction
+of a missed stop or a missed dispatch; a check that cannot avoid writing an
+unignored file.
+**Not verified:** the self-tests were rerun here and are green (`plan-state`
+87, `path-guard` 42, `mutate` 30, `tree-state` 14, `criteria-cite` 10), but no
+fault was reintroduced; the faults seen red are the entries' word. `RULINGS.md`
+was read in its state, owed
+actions, escalations, `R-001`, `R-005`, `R-009` and the rulings from `R-105` on,
+not whole.
