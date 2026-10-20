@@ -364,3 +364,10 @@ that vault, a reference it shares nothing with.
 3. **A second blind reading** of version 2, or not.
 4. ~~**`SQ-026`** goes to the decider before point 1;~~ answered by `R-122`; then `workflow-review` is
    merged by you, the plan installed on `docs-vault`, and point 1 starts.
+
+**The user's answer, 2026-10-20**, given in a decider session and recorded there
+verbatim: to items 1 and 2, "Approvo la bozza" — the draft approved as written,
+its compulsory links included; to item 3, asked whether a second blind reading
+of version 2 comes before the plan is installed, "Sì, prima la lettura". So
+version 2 is read through `/plan-explain -Draft` by an implementer session
+before `PLAN.md` is installed, and the user sees what it finds.
