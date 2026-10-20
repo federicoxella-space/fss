@@ -471,6 +471,9 @@ is written as a JSON scalar or array of strings (`id: "R-001"`,
 1. **Answered by the user, 2026-10-20: "L'obiettivo è spostare /doc ne vault"**
    — the derived vault is not the goal; `docs/` itself is to move. Raised as
    `SQ-025`, blocking, for the decider; the draft below waits on its ruling.
+   **Answered by `R-121`:** the vault is `docs/` itself, one note per section,
+   checked against the originals before they go; the draft below is
+   superseded, and a new one is owed.
    ~~**The draft**, approved, amended, or rejected. In particular the seven
    `Fails when:` lines of point 1, the two plants of point 2, and the
    `Check: shallow` markers on points 2 and 3.~~

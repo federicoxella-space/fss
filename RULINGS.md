@@ -204,6 +204,10 @@ Actions a ruling requires of the code or of the plan. The implementer cites the
   under `D-014` with the user's approval: `plan-state` reads *criterion
   defective*, *criterio difettoso* and *left open* only in emphasis; a fixture
   with "nothing left open" in plain prose reads `deciderDue` false.
+- **`R-121`**, before `docs/` is migrated: a moment-one draft for a plan that
+  builds the migration script and the correspondence check of `R-121`, never
+  writing `docs/`, its `Fails when:` lines naming at least the five faults the
+  ruling lists; `.gitignore` gains the vault's workspace and cache files.
 
 ## Escalated to the user
 
@@ -6399,3 +6403,124 @@ without the point, which leaves the false positive to the next plan that edits
 **Not verified:** the regular expression itself, which is the implementer's;
 that no archived outcome writes a marker unemphasised that a later reading
 would need.
+
+### R-121 — `docs/` becomes an Obsidian vault in place: one note per section, verified against the originals before they go
+
+**Date:** 2026-10-20   **Origin:** SQ-025; user, in this session
+**Verdict:** resolved — the structure of `docs/` within `R-001`'s delegation;
+the path, the edits to `AGENTS.md` and the skills, and the registers' place the
+user's decisions, reserve 1
+**docs/:** unchanged by this ruling; it fixes the shape the migration produces,
+and the two rulings that apply it change `docs/`
+
+`SQ-025` asked for `docs/` itself to move into an Obsidian vault, not a vault
+derived from it. Two axes are independent: where the specification lives, and
+in how many files. Moving the folder would have rewritten every protection keyed
+to `docs/` — `path-guard`, `git-guard`, `mutate`, three agents, four skills,
+`AGENTS.md` — for nothing Obsidian needs, since a vault is any folder holding
+`.obsidian/`. The user settled the path: **the vault is `docs/`**, created
+inside it, its content split into notes by category, checked to correspond, and
+only then the originals removed. Every guard keyed to the folder holds unchanged.
+
+**The user's answers, verbatim**, to the options put in this session: on the
+path, "Non è possibile creare un voult dentro /doc, migrarne il contenuto
+separandolo in più file organizzati per categoria, verificare che tutto
+corrisponda e, solo dopo, rimuovere i file originali?"; on granularity, "Nota per
+sezione"; on the references, "Sì, solo quei riferimenti"; on the registers, "No,
+solo la specifica".
+
+**The shape, which binds the migration.**
+
+1. **One folder per document**, `docs/SIM-REQ/` and the five others, each with
+   an index note of the document's name (`docs/SIM-REQ/SIM-REQ.md`). The index
+   holds the original preamble — title, `Document`, `Status`, `Revision`,
+   `Scope` or `Companion` lines — then, in document order, every `##` heading
+   that has no note of its own and the text under it, and an ordered link to
+   every note of the document. Reading the index top to bottom reads the
+   document in its order: `SIM-ECON` is a sequence and `SIM-REQ` §18,
+   "Delivery phases", a table read whole, and neither may become a pile.
+2. **One note per `##` section**, holding its heading line verbatim and all its
+   `###` subsections. Named `<number> <title>` where the section is numbered
+   (`18 Delivery phases.md`), `<title>` otherwise, characters Obsidian refuses in
+   a file name dropped.
+3. **Except where the `###` headings are identified entries**: each `### DEC-NNN`
+   of `SIM-DEC` and each `### R<n>` of `SIM-LOOPS` is a note of its own, named by
+   its identifier alone (`DEC-085.md`, `R1.md`), in a folder named for its `##`
+   group. The group's heading and any text before its first entry go in the
+   index. `SIM-OBS`'s `## OBS-n` sections are notes named `OBS-n.md`. A name that
+   is an identifier survives a retitled entry, which a heading link does not
+   (`R-013`).
+4. **Block ids.** A paragraph or list item that opens with a bold identifier —
+   `**FR-T-06**`, `**AC-02 — …**` and the like — ends with ` ^<identifier>`, so
+   that a link reaches one requirement. Table rows get none.
+5. **Properties**, in each note's front matter, and nothing the text does not
+   already say: `document`, `kind` (`index`, `section`, `decision`, `loop`,
+   `observable`), `id` for an identified note, `aliases` with the section's
+   citation form (`SIM-REQ §18`) or the entry's title.
+6. **Links in prose.** An identifier written in the text that names a note or a
+   block id may become a link whose displayed text is the identifier exactly
+   as written; never inside a code span, never at its own defining occurrence.
+   No other word changes.
+7. **`docs/CLAUDE.md` stays** where it is, outside the migration. `.obsidian/`
+   is committed with only the settings the vault needs to render as stated;
+   workspace and cache files are ignored.
+8. **Revision.** The document's `**Revision:**` line lives in its index note and
+   is bumped when any note of the document changes. No per-note revision.
+
+**The correspondence check**, which decides whether the originals may go:
+strip front matter, block ids and link syntax (to the displayed text), drop the
+index's link list, concatenate the notes in index order; the result equals the
+original document line for line, blank lines at note boundaries excepted. It
+must go red on at least: a paragraph lost, a paragraph duplicated, a word
+changed, a note missing from its index, two notes in the wrong order.
+
+**Who does what.** The script and the check are code, built and tested by an
+implementer plan against a directory it is given, never writing `docs/`
+(`path-guard` and `git-guard` would refuse it anyway). Then two decider rulings:
+the first runs the script into `docs/`, runs the check against the originals
+still present, and commits the notes green; the second runs the check again on
+the committed tree, removes the six original files, and updates the references
+below in the same commit, so no reference ever points at a missing file. Nothing
+else edits `docs/` between the two.
+
+**The user's permission, recorded here as `AGENTS.md` asks of a decider
+session**, granted by Federico Xella on 2026-10-20, for the references to the
+six original files and nothing else: `AGENTS.md`, the six rows of the document
+table and the citations under "Ask for a review", "Rules the build cannot
+catch", "Tests carry the number" and "Scope"; `.claude/skills/plan-next/SKILL.md`
+and `.claude/skills/plan-status/SKILL.md`, one citation each;
+`core/Runtime/Systems/CLAUDE.md`, one; `.claude/skills/decide/SKILL.md`, step 6,
+the `Revision` line read as the index note's and a new `DEC-` written as a new
+note in its group, linked from the index in its place. Each reference names the
+new note or index. The permission also named the fixture
+`.claude/hooks/fixtures/plan-explain/misura-costi.md`; it is left as it is: it
+quotes a past request, a record, not a reference anything follows, and a hook
+fixture changes only under a plan point (`D-087`).
+
+**What stays outside.** The registers stay at the repository root, out of the
+vault, as the user chose. Frozen records keep their old paths: the 95
+`docs/SIM-*.md:<line>` citations in `SPEC-QUESTIONS.md` and every past ruling
+and register entry point at files that will no longer exist, resolved through
+git at their commit. No `SIM-OBS` text is added, removed or rewritten; reserve 3
+is not touched.
+
+**Cost.** The specification is read through about two hundred notes and six
+indexes instead of six files; a `file:line` citation, already fragile, stops
+meaning anything after the migration. Every later ruling edits a note and an
+index. The derived-vault draft of `728b47d` is superseded, and its points with
+it.
+**Owed by the implementer:** a new moment-one draft, replacing the one in
+`REVIEW-REQUEST.md`, for a plan that builds the migration script and the
+correspondence check of this ruling, its `Fails when:` lines naming at least the
+five faults above; `.gitignore` gains the vault's workspace and cache files. The
+plan does not write `docs/`. The next request's template line citing
+`docs/SIM-REQ.md` §18 follows the reference above once the originals are gone.
+Cite `R-121`.
+**Would overturn it:** the check unable to prove correspondence for a document
+whose structure the rules above do not cover; the user preferring one note per
+identifier, or the registers in the vault.
+**Not verified:** that Obsidian accepts every identifier as a block id and renders the front
+matter as stated, known from its documentation, not tried; the count of notes,
+estimated from the headings. Checked: every `###` of `SIM-DEC` is a `DEC-`
+entry and every `###` of `SIM-LOOPS` an `R<n>`, by grep. `RULINGS.md` was read in its state, owed actions,
+escalations, `R-001` to `R-024` and `R-116` to `R-120`, not whole.

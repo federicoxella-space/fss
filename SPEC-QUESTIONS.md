@@ -1004,6 +1004,7 @@ what this file sends to a human"; `docs/CLAUDE.md`.
 `728b47d`: it assumed a vault derived from `docs/`, and the user answered that
 `docs/` itself is to move.
 **Status:** open — for the decider, with the user, in `/decide`.
+**Status:** **closed 2026-10-20 by R-121.**
 
 **The user's words, verbatim.** First request: "Crea un vault obsidian e
 spostaci tutta la conoscenza del progetto. Quando hai terminato lancia un agente
