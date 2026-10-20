@@ -458,3 +458,24 @@ phrase markers anywhere, so point 6's "nothing left open" made the decider due
   anywhere inside an emphasis span: the `*nothing left open*` fixture turns
   true; and a span read line by line: the broken-span fixture turns false.
 - **Core:** no — the diff touches only `.claude/hooks/`.
+
+*Outcome:* 2026-10-21. Closed, *criterion defective* (`R-005`, case 1):
+`plan-state -SelfTest` ran 91 cases, 0 failed; the prose and inner-span
+fixtures false, the broken-span fixture true, the earlier fixtures unchanged;
+the live `PLAN.md` cut before point 7 reads `deciderDue` false, cut before
+point 8 true. The frozen check proves less than the "Does": no case pairs a
+span after another asterisk, so a misreading of every paragraph holding a code
+span or bold before its marker passes it. The missing check, beside it, built
+and run: `decider-code-star.md`, a `*` in a code span and a bold pair before a
+marker broken after a trailing space, true. Faults, introduced by this session,
+restored, tree hash equal: emphasis stripped (`Fails when`; prose and
+inner-span red, cut before 7 true); a marker anywhere in a span (inner-span
+red); spans read line by line (broken-span red); code spans kept, the `**`
+alternative dropped, the whitespace collapse dropped (code-star red each).
+Review: code-reviewer; the stray `*` in a code span, applied; a loose `*` in
+prose, kept as a known limit; the `**` alternative called redundant, rejected
+with the fact; the trim, removed. `D-143`. Agents (`R-067`): code-reviewer and
+committer dispatched. Not run: the tester, the check being a script self-test
+run by the orchestrator; the coder, the file being in `.claude/hooks/`; the
+revisioners, `Core: no` held, no path under `core/` in the diff. This outcome
+does not claim `R-046`'s check.

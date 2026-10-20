@@ -5293,3 +5293,65 @@ ids, and the plan writes no `docs/`. `R-048`, `R-049`, `R-121`, `R-122`.
 **Not verified:** version 5 was read by no blind reader; its fault lists were
 not tried against code; five clauses of the "Does" rest on the code-reviewer
 alone.
+
+## 2026-10-21 — Point 10 of the workflow review plan, added under `D-014`
+
+### D-143 · Point 10 · A decider marker counts only as the whole of an emphasis span
+**Ruling:** none yet.
+
+`R-120` owes, before the workflow review plan is archived, a point making
+`plan-state` read the three phrase markers only in emphasis. The user, asked
+whether to add it or close the plan without it, chose "Aggiungi il point
+(Recommended)"; point 10 was added in `858ffe3` and carried out by this
+session, the file being in `.claude/hooks/`.
+
+**Decided.**
+1. **Spans are paired left to right on the outcome paragraph joined with
+   spaces**, `\*\*(.+?)\*\*` before `\*([^*]+?)\*`; a span counts when, its
+   whitespace runs collapsed to one space, it equals a marker, case ignored.
+   No trim: a span with a space inside its asterisks is not the whole phrase.
+2. **Code spans are removed before pairing**, so that a `*` inside one pairs
+   with nothing. Applied from the code-reviewer's finding.
+3. **A `*` loose in prose still shifts the pairing** and can hide a marker after
+   it, in the silent direction. Kept as a known limit, said in the comment:
+   outcomes write paths and globs in code spans, and no outcome live or
+   archived holds a loose `*`; pairing by a Markdown parser is more than the
+   ruling asks.
+4. **`_…_` and `***…***` no longer count**: `R-120` names `*…*` and `**…**`
+   only. The old code stripped `_` as well.
+
+**Review.** Code-reviewer: the check as written satisfied. Findings:
+- a stray `*` hides a real marker (`` `*` `` in a code span, or a glob in
+  prose): verifiable; applied for code spans, with fixture
+  `decider-code-star.md`; the prose case kept as decision 3;
+- the `**` alternative redundant for the three markers: rejected, wrong on the
+  facts for a paragraph holding other bold — without it `**two**` leaves a `*`
+  that shifts every later pairing; `decider-code-star.md` turns red without it;
+- the whitespace collapse and the trim unpinned: verifiable; the trim removed,
+  the collapse pinned by `decider-code-star.md`, whose span breaks after a
+  trailing space;
+- compared against every outcome live and archived, three paragraphs change,
+  all from true to false and all bare-phrase prose: point 6 here,
+  `2026-09-19-dodici-lacune.md` ("Left open on purpose"),
+  `2026-10-07-misura-costi.md`; no emphasised marker stops counting.
+
+**Verification.** `plan-state -SelfTest`, 91 cases, 0 failed. `plan-state
+-Path` on the live `PLAN.md` cut before point 7, `deciderDue` false; cut before
+point 8, true. Faults, introduced by this session since `mutate` does not reach
+`.claude/`, each restored, tree hash equal: emphasis stripped as before (prose
+and inner-span fixtures red, cut before 7 true); a marker counted anywhere in a
+span (inner-span red); spans read line by line (broken-span and code-star red);
+code spans kept (code-star red); the `**` alternative dropped (code-star red);
+the whitespace collapse dropped (code-star red).
+
+**Criterion.** Correct code passes the frozen check, which proves less than the
+"Does" asks: no case of the frozen list pairs a span after another `*`, so code
+that misreads every paragraph holding a code span or bold before its marker
+passes. *Criterion defective* (`R-005`, case 1); the missing check,
+`decider-code-star.md`, built and run beside it.
+
+**What `docs/` says:** nothing; process work (`D-011`). `R-120`, `D-014`.
+**Would overturn it:** an outcome written by `/plan-next` with a marker outside
+emphasis, or with a loose `*` before an emphasised marker.
+**Not verified:** a case-sensitive match would be caught by the cut-before-8
+copy alone, not by `-SelfTest`.

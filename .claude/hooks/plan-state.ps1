@@ -246,10 +246,21 @@ function Get-PlanState([string]$Repo, [string]$Path, [bool]$Draft) {
             $paraStart = $l.Trim() -eq ''
             if ($in) { $para += $l }
         }
-        $text = ($para -join ' ') -replace '[*_]', ''
+        # A marker counts only as the whole of an emphasis span, *…* or **…**,
+        # case ignored; a line break inside the span is read as a space. The
+        # bare phrase in prose, or inside a longer span, does not (R-120).
+        # Code spans go first, so that a `*` inside one pairs with nothing; a
+        # bold pair is taken whole, so that it leaves no `*` to shift the
+        # pairing of the spans after it. A `*` loose in prose still shifts it.
+        $marked = $false
+        $prose = ($para -join ' ') -replace '`[^`]*`', ''
+        foreach ($m in [regex]::Matches($prose, '\*\*(.+?)\*\*|\*([^*]+?)\*')) {
+            $span = ($m.Groups[1].Value + $m.Groups[2].Value) -replace '\s+', ' '
+            if ($span -match "^$DeciderMarkers$") { $marked = $true }
+        }
         # FAILED is read where Read-Point reads it, as the point's status, not
         # from prose that may quote the word.
-        $state.deciderDue = ($lastClosed[0].status -eq 'failed') -or ($text -match $DeciderMarkers)
+        $state.deciderDue = ($lastClosed[0].status -eq 'failed') -or $marked
     }
 
     $open = @($state.points | Where-Object { $_.status -eq 'open' })
@@ -334,6 +345,11 @@ if ($SelfTest) {
     Expect 'deciderDue: a FAILED point' ((Of 'failed-then-open.md').deciderDue)
     Expect 'deciderDue: an outcome wrapped onto a line beginning *Ruled:*' ((Of 'decider-wrapped.md').deciderDue)
     Expect 'deciderDue: a wrapped line of the point beginning *Outcome:* is not the outcome' (-not (Of 'decider-midline.md').deciderDue)
+    # A marker counts only in emphasis, as the whole of its span (R-120).
+    Expect 'deciderDue: "nothing left open" in plain prose' (-not (Of 'decider-prose.md').deciderDue)
+    Expect 'deciderDue: *nothing left open*, the marker inside a longer span' (-not (Of 'decider-inner-span.md').deciderDue)
+    Expect 'deciderDue: *left open* broken across two lines inside its emphasis' ((Of 'decider-broken-span.md').deciderDue)
+    Expect 'deciderDue: a `*` in a code span and a bold pair before the marker' ((Of 'decider-code-star.md').deciderDue)
 
     # A point's frozen text, against the commit that installed the plan: a
     # repository where point 1 is closed, point 2's "Closed by" edited in a
