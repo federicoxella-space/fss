@@ -1088,3 +1088,12 @@ request". Version 5 is the draft above.
     scope of check 3, the line-ending and in-place runs of point 2, and the
     dropped clause "green on the others".
 11. **A fifth blind reading** of version 5 before it is installed, or not.
+
+**The user's answer, 2026-10-21**, in an implementer session, to items 10 and
+11: "approvo. archivia il PLAN e mergia il branch". Version 5 is approved as
+written, with no fifth reading, and the user asked for the plan's
+preconditions: the workflow review plan archived and `design/obsidian-vault`
+merged into `main`. The archive waited on `R-120`, which owes a point before
+it; asked whether to add the point or close the plan without it, the user
+chose "Aggiungi il point (Recommended)". Point 10 of the workflow review plan
+carries it; the archive and the merge follow it.
