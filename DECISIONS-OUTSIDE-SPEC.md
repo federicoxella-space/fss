@@ -5045,3 +5045,43 @@ subagent insertion has passed through it.
 **Correction, same day:** "the grep finds `plan-state/SKILL.md`" above should
 read `plan-status/SKILL.md`, the skill the fault was put in. Written as an
 insertion: the `record` hook refuses to edit the line itself.
+
+### D-137 · Point 8 · Design belongs to the decider, and the permission to write it into `AGENTS.md`
+
+**The permission.** Granted by Federico Xella at moment one of this plan,
+"approvo la bozza" (`e2ce1fd`), for point 8 as drafted: a rule in `AGENTS.md`,
+under "The decider answers what this file sends to a human", saying that a
+design or content conversation belongs to `/decide` and how an implementer
+session records what the user said. The point names the file, as `AGENTS.md`
+requires; the applied diff adds that one paragraph and nothing else.
+
+**Decided.**
+1. **The rule's words follow the point's "Does"**: the design session cited as
+   `/decide`'s free-text form, "Design sessions" in its skill; the user's words
+   recorded verbatim in the relevant `SPEC-QUESTIONS.md` entry; the user sent to
+   `/decide`; a blocking question inside a point answered on the spot, recorded
+   the same way and marked for the decider, "who rules on it".
+2. **A clause the first text added is dropped**: "it does not propose the design
+   itself". It is not in the "Does", narrows it (table C2), and read against the
+   exception could forbid the on-the-spot answer the user approved.
+
+**Results.** The grep finds in the rule each of "`/decide`", "verbatim",
+"`SPEC-QUESTIONS.md`", "inside a point", "marked for the decider". The
+code-reviewer, given the diff and the "Does", reports no element missing and the
+citation of "Design sessions" accurate. Fault (`Fails when:`), by the
+orchestrator, restored: the exception left out of `AGENTS.md`, the grep reports
+"inside a" and "marked for the decider" missing, exit 1; the same text given to
+the code-reviewer as a second candidate, without saying what differed, is
+reported to lack "the whole third element".
+
+**Findings.** The extra clause, decision 2, applied. "Who rules on it" adds the
+decider's role and changes nothing.
+
+**Agents (`R-067`).** Code-reviewer and committer dispatched. Not run: the
+tester, the check being a grep and a reading; the coder, the file being
+`AGENTS.md`; the revisioners, `Core: no` held. The decider ran before this point
+(`R-119`, `R-120`, `9b9bae4`, `b9799de`).
+
+**What `docs/` says:** nothing; process. `R-001`, `R-116`.
+**Would overturn it:** a design conversation that cannot wait for `/decide`.
+**Not verified:** the rule in use; the check is `shallow`, as declared.

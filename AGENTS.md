@@ -58,6 +58,14 @@ ruling and edit no `docs/` on its behalf. Its brief holds facts only, never a
 proposed answer, and is appended verbatim to `DECIDER-BRIEFS.md`, beside the
 register, before the agent runs.
 
+A design or content conversation belongs to `/decide`, whose free-text form is
+the design session (`.claude/skills/decide/SKILL.md`, "Design sessions"). An
+implementer session asked for one records what the user has already said,
+verbatim, in the relevant `SPEC-QUESTIONS.md` entry, and sends the user to
+`/decide`. A question arising inside a
+point, which blocks it, may be answered on the spot: the user's answer is
+recorded verbatim the same way and marked for the decider, who rules on it.
+
 ## This file changes only with permission, and the permission is recorded
 
 An agent edits `AGENTS.md` only with a human's permission for that change.

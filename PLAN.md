@@ -414,3 +414,15 @@ the documenter, retired here. This outcome does not claim `R-046`'s check.
 - **Check: shallow** — a rule of conduct; what proves it is the next design
   conversation going to `/decide`.
 - **Core:** no — the diff touches only `AGENTS.md`.
+
+*Outcome:* 2026-10-20. Closed: a grep finds in the rule "`/decide`",
+"verbatim", "`SPEC-QUESTIONS.md`", "inside a point" and "marked for the
+decider"; the code-reviewer, given the diff and the "Does", reports no element
+missing and the citation of "Design sessions" accurate. The fault went red: the
+exception left out, the grep reports two elements missing and the code-reviewer,
+given that text blind, reports the third element absent. A clause the "Does"
+does not hold, "it does not propose the design itself", was dropped (table
+C2). The check is `shallow`, as declared. The permission to edit `AGENTS.md` is
+recorded in `D-137`. Agents (`R-067`): code-reviewer and committer dispatched.
+Not run: the tester, the coder, the revisioners (`Core: no` held). This outcome
+does not claim `R-046`'s check.
