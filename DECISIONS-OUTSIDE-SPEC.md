@@ -5250,3 +5250,46 @@ ids, and the plan writes no `docs/`. `R-048`, `R-049`, `R-121`, `R-122`.
 **Not verified:** version 4 was read by no blind reader; its fault lists were
 not tried against code; three clauses of the "Does" rest on the code-reviewer
 alone.
+
+### D-142 · Moment one of the `docs/` vault migration plan · What version 5 of the draft decides beyond `D-139` to `D-141`
+**Ruling:** none yet.
+
+The user approved version 4 and asked for a fourth blind reading, which found
+check 3 red on a correct vault, the no-sharing grep red on correct code, CRLF
+output invisible on the real run, and the in-place layout never run. Shown it,
+the user answered "scrivi la versione 5 nella request". Version 5 is in
+`REVIEW-REQUEST.md`, with the reading quoted and a table of what it did with
+each finding.
+
+**Decided, beyond `R-121`, `R-122` and `D-139` to `D-141`.**
+1. **Mentions are sought in a note's body only**: never in front matter,
+   inside `[[…]]` or `![[…]]`, in code, fences or headings; a mention in its
+   own note is linked; a string the grammar takes that names nothing stays
+   plain, and a link displaying one is red.
+2. **The grammar, not `R-122`'s paragraph rule, keeps the brakes out on the
+   six**: `B<n>` is no identifier. The paragraph rule binds only the fixture's
+   identifier-led continuation line. A list item runs to the next item, a
+   blank line or a heading.
+3. **A fault turns its named check red; others may turn red with it.** The
+   clause "and green on the others", which `D-140`'s version added, is
+   dropped: renaming a note or adding an embed cannot leave the other checks
+   green.
+4. **The fixture's coverage is asserted** by pattern before the self-test runs.
+5. **The index is exempt from "ends in one LF"**; check 1 judges its ending.
+   `.obsidian/app.json` is required by check 5.
+6. **Line endings and the in-place layout are run in point 2**: CRLF and LF
+   copies of the originals must give the same LF output; the decider's
+   in-place run is rehearsed in a temporary directory, followed by a run from
+   it into a new directory that must equal the first output; the check finds
+   originals at the top level only.
+7. **The no-sharing grep forbids references to `.ps1` and `.psm1` files**, not
+   reading the fixture; `git check-ignore` also asks the fixture's `app.json`.
+8. **The archive of the workflow review plan and the merge are preconditions
+   of the plan**, named as such, not points.
+
+**What `docs/` says:** nothing; `R-121` rules the shape and `R-122` its block
+ids, and the plan writes no `docs/`. `R-048`, `R-049`, `R-121`, `R-122`.
+**Would overturn it:** the user's answer to the request.
+**Not verified:** version 5 was read by no blind reader; its fault lists were
+not tried against code; five clauses of the "Does" rest on the code-reviewer
+alone.

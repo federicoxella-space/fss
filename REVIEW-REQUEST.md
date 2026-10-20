@@ -76,7 +76,8 @@ check that proves the split corresponds to the originals.
 `D-139`: the readings of `R-121` the draft makes where the ruling's text leaves
 a choice, listed in the draft's "The shape, as both scripts read `R-121`".
 `D-140`: what version 3 decides beyond it, after the second reading. `D-141`:
-what version 4 decides, after the third. None audited.
+what version 4 decides, after the third. `D-142`: what version 5 decides,
+after the fourth. None audited.
 
 ## Open questions about the specification
 
@@ -94,8 +95,10 @@ the draft against it. It was told not to read the rest of `RULINGS.md`, the
 register, `PROMOTIONS.md` or the archived plans. The tree hash was equal before
 and after. Version 2 was read once more after the user's answer: see "The
 second reading, of version 2" below. Version 3, written in answer to it, was
-read a third time: see "The third reading, of version 3". The draft below is
-version 4, written in answer to that reading and read by no one.
+read a third time: see "The third reading, of version 3". Version 4, written
+in answer to it, was read a fourth time: see "The fourth reading, of version
+4". The draft below is version 5, written in answer to that reading and read
+by no one.
 
 ### What version 2 did with the findings
 
@@ -501,6 +504,173 @@ checked that `design/obsidian-vault` holds `PLAN.md`, `plan-state` reporting it
 > - **`app.json` ends with no newline or one.** It is left to the hand-made vault.
 > - **Index counting.** Whether "notes per document" counts the index is left unstated.
 
+## The fourth reading, of version 4
+
+Run on 2026-10-21 by `/plan-explain -Draft` in an implementer session, after
+the user approved version 4 and asked for a fourth reading (item 9 below). The
+brief was the third reading's, with leave to try `git` behaviour in a scratch
+repository outside this one. The tree hash was equal before and after
+(`7e4b6eb8…`).
+
+### What version 5 did with the findings
+
+The user, shown the reading, asked for version 5 (item 10 below). The author
+checked that `:` stands in the headings at `SIM-DEC.md:70`, `:90` and `:436`,
+all `### DEC-` entries, and that `A-01` is mentioned in prose at
+`SIM-STATE.md:201` and defined only in the table row at `:181`. Version 4's
+clause "each red on the check it names **and green on the others**", added by
+the author in version 3, made several faults impossible to plant as written;
+version 5 drops it.
+
+| Finding | In version 5 |
+|---|---|
+| Check 3 red on a correct vault: `id:` values, embed paths and link targets are mentions | Mentions are sought in a note's body only, never in front matter or inside `[[…]]` / `![[…]]`; check 3 cites the shape's definition |
+| The `Select-String` clause forbids reading the fixture | The clause forbids references to `.ps1` and `.psm1` files; reading the fixture's Markdown and JSON is allowed |
+| CRLF passed through on the real run passes every check | The script runs on a CRLF copy and an LF copy of the originals; the outputs must be equal byte for byte and LF; CRLF pass-through planted |
+| The in-place layout is never run | Point 2 runs it in a temporary directory: script and check with source, output and vault all `<T>`, then a second script run from `<T>` into a new `<U>` equal to the first output; the check finds originals only at the top level |
+| A recursive `-Source` scan cannot show | It shows on the in-place second run; planted |
+| An unanchored `.obsidian/` would untrack the fixture's `app.json` | `git check-ignore` also asks the fixture's `app.json`; planted |
+| "Every note ends in one LF", index included, is red on three correct indexes | "Every note but the index"; the index's ending stays check 1's |
+| `app.json` never required | Check 5 requires it, `{}` and an LF; its removal planted |
+| A link to an identifier naming nothing is not planted | Check 3 forbids it; the fixture has a table-only identifier mentioned in prose; planted in point 1, and in point 2 as every grammar match linked (`A-01`, `SIM-STATE.md:201`) |
+| Fixture coverage never asserted | `-SelfTest` first asserts, by pattern on the originals, each listed feature |
+| A note check 5 did not derive: check 6 undefined | Red on check 5, not read by check 6 |
+| Where a list item ends is undefined | Defined: to the next item, a blank line or a heading |
+| Many faults cannot turn their check red with the others green | "Green on the others" dropped in both points: another check may turn red with the named one |
+| The `DEC-[0-9]+` fault is caught by the duplicate-path guard, not check 5 | Its expected result is the refusal, which also gives the duplicate-path guard a fault |
+| The brake faults test the grammar, not `R-122`'s rule | Said: on the six the grammar keeps brakes out, and `R-122`'s rule binds only the fixture's continuation line; point 2's brake fault restated as the grammar widened; the `B1 does not apply` fault of point 2 dropped, being no lead under any grammar |
+| "The check dot-sourced" is the convenient breach | Kept; a copied function stays the code-reviewer's, said in "What was not verified" |
+| `git ls-files --eol` lists staged files only | "After the fixture is staged", and `w/lf` required beside the attribute |
+| The archive precondition is delivered by no point and missing from the exit condition | Named a precondition of the plan, not a point: the plan is not installed until the archive and the merge hold |
+| "No heading of the six holds" a dropped character is false | Corrected: `:` in three `SIM-DEC` entry headings, named by identifier, so no file name changes |
+| Self-links unsaid | Said: a mention in its own note is linked |
+| "The six" in the fixture | The check and the script work on the documents found; unchanged in wording, which says "the documents" of the directory |
+| Case-insensitive collision never exercised; "lists every file" unchecked; Obsidian never opened | Unchanged; in "What was not verified" |
+| K2: one reading shared by the check, the vault and the script | Unchanged: check 1 against the originals and the code-reviewer stand outside it, as the reader says |
+
+### The reading, of version 4, quoted
+
+> # Blind reading of the docs/ vault migration draft
+>
+> Most of the draft's facts about the repository check out. The serious problems:
+>
+> - **CRLF on the real run.** Point 2 cannot catch a script that skips CRLF normalisation. The fixture is LF, and the check reads the vault with CRLF normalised.
+> - **Check 3 is red on a correct vault as written.** It would also flag the identifiers inside `id:` values and inside embed and link targets.
+> - **The `Select-String` criterion is red on correct code as written.** Both self-tests must name the fixture, which is "another file under `tools/docs-vault/`".
+> - **The in-place layout is never run.** Nothing runs the check with `-Originals docs -Vault docs`, the layout the decider will use.
+>
+> #### Point 1: the correspondence check
+>
+> **1. Faults the check would miss**
+> - **Plain mention in front matter or an embed path.** Taken literally, check 3 says every mention outside code, fences, headings and defining occurrences must be a link. A correct vault holds mentions in `id: "DEC-006"`, in `![[SIM-DEC/Time/DEC-006]]` and in `#^AC-02|` (by the boundary rule each is a mention). Nothing in the draft excludes front matter, embeds or link targets. So either check 3 is red on the correct vault, or the implementer writes an exclusion of their own that no fault pins. A check that skips the whole front matter would also miss an identifier wrongly placed there.
+> - **The index's final newline.** The draft says "index included" when it lists notes. Read that way, check 5's "every note ends in exactly one LF" is red on the correct indexes of SIM-DEC, SIM-REQ and SIM-STATE. Read the other way, nothing in check 5 looks at the index's ending.
+> - **The check's in-place mode.** Suppose the check finds originals recursively, or judges files at the root. It stays green on the fixture, and the in-place call is never run. At the decider's in-place run it would then read `SIM-REQ/SIM-REQ.md` as an original.
+> - **Missing `.obsidian/app.json`.** Check 5 only forbids extra folders. It never requires `app.json`.
+> - **A link to an identifier that names nothing** (`[[…|P-12]]`). Check 3's resolution rule would catch it, but no fault plants it. That gap matters because the shape names this exact trap.
+>
+> **2. Parts of the "Does" nothing checks**
+> - "Writes nothing" and the form of the report are left to the code-reviewer alone.
+> - Fixture coverage is never asserted. The self-test does not confirm that the fixture contains the features listed (list-item lead, `:` heading, both kinds of group). Only the faults imply them.
+> - Running `-Originals docs -Vault docs` in place.
+> - What check 6 does with a note that check 5 did not derive.
+> - Where a list item ends. The draft never defines it, and it decides where a list item's block id goes.
+>
+> **3. Are the faults likely or convenient?** Mostly likely, and they cover the five faults `R-121` names. Several, though, cannot turn their named check red with the others green unless the implementer makes choices the draft does not state:
+> - **"An embed in a section note (2)"**: check 1 expands the index's embeds only, so an added embed line makes check 1 red too.
+> - **"`![[Open]]` without its path (2)" and "an embed to `#Occupations` (2)"**: check 1 has to resolve these embeds, and the draft does not say how. It is likely red too.
+> - **"A link inside a heading (3)"**: if that heading opens a note, check 5's comparison of the opening heading turns red too.
+> - **"A note ending in `---` (5)"**: if the line is appended, check 1 turns red. It has to be moved out of the index instead.
+> - **"A section split in two notes (5)"**: check 6 is undefined for the extra note.
+> - **Faults that rename a note** (`.` kept, `:` replaced by `-`, wrong group folder): every embed and every `#^` link has to be rewritten too, or checks 1, 2 and 3 go red.
+> - **"Paragraph deleted" or "duplicated" (1), "block id carrying another identifier" (4), "list item's block id removed" (4)**: these turn checks 3, 4 or 5 red as well, unless the paragraph chosen holds no block id, is never linked, and is not the last one in its note.
+> - **Brake line and "B1 does not apply" (4)**: neither `B1` nor `B3a` fits the identifier grammar. Whether check 1 strips ` ^B1` decides whether check 1 goes red as well.
+>
+> **4. Checklist rules**
+> - **K1:** met for most branches. The fixture binds both kinds of group, an entry ending at a `##` heading, `R1`/`R10`, `DEC-002`/`DEC-002a` and a document with no final newline. The continuation-line case of `R-122` binds only in the fixture (all 260 real leads open their paragraphs). That is acceptable, but nothing fails if the fixture lacks the case.
+> - **K2:** partly met.
+>   - What the draft forbids: shared code.
+>   - What it does not address: the shared reading. The check's check 5 derivation, the hand-made vault and the script all come from one reading of the draft's shape. Only check 1 against the originals and the code-reviewer stand outside that reading.
+> - **K5:** met for the fixture, because the self-test has to read which check is red for each fault.
+> - **K3, K4:** do not apply.
+> - **K6:** see the whole-draft section.
+>
+> **5. Can it be done as written?**
+> - **`.gitattributes`:** verified in a scratch repository with `core.autocrlf=true` (this repository's setting). `tools/docs-vault/fixtures/** text eol=lf` gives `attr/text eol=lf` and `w/lf` on `.obsidian/app.json`. A file with no final newline keeps none after removal and checkout.
+> - **`git ls-files --eol`:** lists only staged files, so the fixture must be staged before this step.
+> - **`Select-String` closing clause:** "No reference to another file under `tools/docs-vault/`" conflicts with the self-test, which "runs on `tools/docs-vault/fixtures/`". Read literally, it is red on correct code.
+> - **Claims verified:**
+>   - `:` exists in headings, so the "no heading of the six" claim is false (see the whole-draft section).
+>   - `### Occupations` exists at SIM-REQ.md:217.
+>   - No identifier sits in a code span or a fence of the six.
+>   - No identifier-like bold lead starts a list item. No `**ID` lead line continues a paragraph or runs into a list or table.
+>
+> #### Point 2: the migration script
+>
+> **1. Faults the check would miss**
+> - **CRLF passed through on the real documents.** The script splits without normalising CRLF. On the fixture (LF) its output is byte-identical, so the self-test is green. The working-tree docs are CRLF here (`git ls-files --eol docs` gives `w/crlf`; `docs/SIM-OBS.md` line 1 ends `\r\n`), so the real output carries CRLF. The check reads the vault "with CRLF normalised to LF", so checks 1 to 6 and the counts all stay green. The listed fault ("files written CRLF") covers only a deliberate CRLF writer, caught on the fixture.
+> - **Recursive `-Source` scan.** Neither the fixture nor `docs/` has a subfolder today, so the fault cannot show. It bites on a second in-place run, when `docs/SIM-REQ/SIM-REQ.md` exists.
+> - **Case-insensitive collision.** Never exercised: no two names differ only by case.
+> - **A stray file written at the root of `-Out`.** "Files at the root are not judged", so the real run cannot see it. Only the fixture's both-ways byte comparison would.
+> - **An unanchored `.obsidian/` in `.gitignore`.** It would untrack `tools/docs-vault/fixtures/vault/.obsidian/app.json`. The local self-test stays green and a fresh clone goes red. `git check-ignore` probes only paths under `docs/`, and the `ls-files` re-check belongs to point 1, before `.gitignore` changes.
+>
+> **2. Parts of the "Does" nothing checks**
+> - That the script "lists every file it would write".
+> - "Case aside".
+> - "Never deletes", beyond the second run and the two collision runs.
+> - "So that Obsidian opens `-Out` as a vault": no step opens Obsidian. Whether `\|` in tables, folder-path embeds and block ids on bold paragraphs render as the draft claims is never tested.
+> - Writing `app.json` on the real run: only the fixture comparison covers it.
+>
+> **3. Are the faults likely or convenient?** Mostly likely: a trailing newline added, links without word boundaries, a lookup within one document only, table rows skipped, checking each path only just before writing it.
+> - **`DEC-[0-9]+` naming:** `DEC-006`, `DEC-006a` and `DEC-006b` all sit in "Time" (SIM-DEC.md:90, 98, 106). With the collision guard intact the script refuses and writes nothing. Check 5 goes red only because the vault is empty: the guard catches this fault, not check 5.
+> - **Brakes and `**B1 does not apply here.**`:** to plant either, the grammar has to be widened, and for B1 the lead rule too, since `**B1 does` has neither `**` nor ` —` after the identifier. These faults test the grammar, not `R-122`'s paragraph rule.
+> - **"The check dot-sourced by the script":** the convenient case. The likely breach of the no-sharing rule is a function copied between the files, or a shared helper called with `&`. The draft leaves the first to the reviewer, and its `Select-String` patterns may not catch the second.
+> - **Missing:** the CRLF pass-through and the recursive scan above, and linking table-only identifiers (`P-12`, `A-01`).
+>
+> **4. Checklist rules**
+> - **K3:** met. The counts come from an independent `Select-String` pass and match the specification's units (notes per `R-121`, block ids per `R-122`). One caveat: "followed, before the next `##`, by a `### DEC-` line" needs logic, not `Select-String` alone.
+> - **K1:** met on the real documents for groups, entry ends and cross-document links. Not met for line endings: no run combines CRLF input with an LF check.
+> - **K2:** met for code by the process boundary. The shared reading caveat from point 1 applies.
+> - **K6:** see the whole-draft section.
+>
+> **5. Can it be done as written?** The facts the draft gives all check out:
+>
+> | Claim | Where verified |
+> |---|---|
+> | Note counts at `5febba3`: REQ 20, ECON 7, STATE 14, OBS 8, LOOPS 19 (5+14), DEC 110 (1+109) | heading counts; docs unchanged since `5febba3` and equal to `main` |
+> | 260 block ids, all in SIM-REQ | no `**ID` lead in the other five documents |
+> | SIM-DEC, SIM-REQ and SIM-STATE end without a newline; the other three with one | last bytes of each file |
+> | No trailing blank lines, and no `---` directly under text | whole-file scan |
+> | `FR-P-03b` at SIM-REQ.md:111; `FR-P-03` is a lead at :147 | — |
+> | `FR-P-03a` at SIM-OBS.md:76 is a lead at SIM-REQ.md:157 | — |
+> | `FR-C-03` in the table row at SIM-REQ.md:826, with "SIM-ECON §Demand" | `## Demand` exists in SIM-ECON |
+> | Collision path `SIM-REQ/18 Delivery phases.md` | from `## 18. Delivery phases` |
+> | `.gitignore` ends without a newline (`publish/`); `.gitattributes` does not exist | — |
+> | `git check-ignore -q` gives 0, 0, 1 for `workspace.json`, `.trash/x.md`, `app.json` with `docs/.obsidian/*`, and 0 for `app.json` with `docs/.obsidian/` | scratch repo, git 2.55, paths not existing |
+> | The per-path fault is caught | whatever the write order, the two collision runs cannot both refuse before writing |
+>
+> The identifier grammar fits every lead (prefixes AC, FR-A…FR-X, NFR) and every note id (`DEC-006a`, `DEC-006b`, `DEC-007a`, `DEC-034a`, `R1`–`R14`, `OBS-1`–`OBS-5`). It also matches strings that name nothing, which is harmless: `UTF-8`-style strings and `R-D-03` at the end of SIM-STATE.
+>
+> #### The whole draft
+>
+> **What a later point relies on that an earlier one does not deliver**
+> - **The archive prerequisite.** Branch cut-off relies on `PLAN.md` being archived on `design/obsidian-vault` before the merge. Neither point delivers that, and the exit condition does not include it. The branch facts themselves check out:
+>   - `PLAN.md` exists there, identical to the one on `workflow-review`, and absent on `main`.
+>   - Each of its nine points carries an Outcome line, so the plan is finished.
+>   - `design/obsidian-vault` descends from `workflow-review` and from `main`.
+>   - `SQ-025`, `R-121`, `SQ-026` and `R-122` exist only on `design/obsidian-vault`.
+> - **The hand-made vault.** Point 2's self-test and real run rely on point 1's hand-made vault and on check 3/5 semantics that point 1 never pins down (front-matter and embed exclusion, the index's final newline). Point 2 inherits whatever point 1 chose.
+> - **The in-place mode.** `-Originals docs -Vault docs` is relied on for `R-121`'s later rulings and delivered by neither point.
+>
+> **Decisions the draft makes without saying so**
+> - **The grammar does `R-122`'s work.** `B1` and `B3a` are not identifiers, so the paragraph rule never binds on the real documents.
+> - **Scope of the mention scan.** Front matter, embed paths and link targets are left out of check 3's mention scan, without saying so.
+> - **Self-links.** A mention inside its own note is linked (for example `DEC-006a` inside `DEC-006a`).
+> - **Aliases.** Decision titles become aliases; three of them contain `:`, so JSON quoting is needed and is used.
+> - **The `:` claim.** "No heading of the six holds one of [the dropped characters] today" is false: `:` appears at SIM-DEC.md:70, 90 and 436. Those are entry headings named by their identifier, so file names are unaffected.
+> - **"The six" in the fixture.** In the fixture, "the six" means the four documents found.
+>
+> **K6.** Version 4 still lists brake faults written for `R-122`. Under the stated grammar their premise does not hold (a brake is not an identifier), so they no longer test what `R-122` changed.
+
 ## Draft plan
 
 ```markdown
@@ -527,7 +697,9 @@ alone would bring none of the four. `design/obsidian-vault` also holds the
 workflow review plan's `PLAN.md`, finished and not archived: it is archived to
 `.claude/plans/` on that branch before the merge, by the implementer closing
 that plan, so that `main` never carries a live `PLAN.md` (`R-048`). The merge
-is the user's.
+is the user's. The archive and the merge are preconditions of this plan, not
+points of it: no point delivers them, and the plan is not installed until both
+hold.
 
 Both scripts run under `pwsh` 7, read files as UTF-8 with CRLF normalised to
 LF, and write UTF-8 without BOM, LF. The documents are the `.md` files directly
@@ -575,25 +747,37 @@ the vault written by hand in `vault/`, both under the `.gitattributes` rule.
   next heading of its level or above**; that run stays in the index, between
   embeds, so that no note ends in a separator and a new `DEC-` note added to a
   group under `decide` step 6 needs none.
-- **Newlines.** Every note ends in exactly one LF. The index ends in an LF if
-  and only if its original does: `SIM-DEC`, `SIM-REQ` and `SIM-STATE` end
+- **Newlines.** Every note but the index ends in exactly one LF. The index
+  ends in an LF if and only if its original does: `SIM-DEC`, `SIM-REQ` and `SIM-STATE` end
   without one today. Reconstruction splits each file on LF after dropping one
   final LF, and compares the line lists and whether both texts end in an LF.
 - **Names.** A numbered section is `<n> <title>`, `18 Delivery phases`; an
   unnumbered one `<title>`; from either, `.` after the number and the characters
-  `* " \ / < > : | ? # ^ [ ]` dropped, not replaced. No heading of the six holds
-  one of them today; the fixture does.
+  `* " \ / < > : | ? # ^ [ ]` dropped, not replaced. Of the six, only entry
+  headings hold one (`:` at `SIM-DEC.md:70`, `:90`, `:436`), and an entry is
+  named by its identifier, so no file name of the six loses a character; the
+  fixture holds one in a section heading.
 - **Identifiers** are strings of the form `[A-Z]+(-[A-Z]+)*-[0-9]+[a-z]?`
   (`FR-P-03a`, `AC-02`, `DEC-006a`, `OBS-3`) or `R[0-9]+`. **A mention** is an
   occurrence with no letter, digit or `-` either side, taken whole: `FR-P-03a`
-  is one mention, never `FR-P-03` followed by `a`.
+  is one mention, never `FR-P-03` followed by `a`. Mentions are looked for in a
+  note's body only: never in its front matter, inside `[[…]]` or `![[…]]`, in
+  a code span, a fence or a heading. A mention inside its own note is linked
+  like any other. The brakes `B<n>` of `SIM-LOOPS` fall outside the grammar, so
+  they are neither identifiers nor mentions; strings the grammar takes that
+  name nothing, such as `A-01` at `SIM-STATE.md:201`, are mentions and stay
+  plain.
 - **Block ids** (`R-121` 4, as `R-122` rules it) go on a paragraph or list item
   that opens with `**` followed by an identifier and then `**` or ` —`
   (`**FR-T-06** —`, `**AC-02 — …**`), at the end of its last line,
-  ` ^<identifier>`. A paragraph is a run of non-blank lines. A bold span that
-  merely begins with an identifier (`**B1 does not apply here.**`) is not one;
-  the brakes of `SIM-LOOPS`, `**B3a — …**`, are lines inside their loop's
-  paragraph and get none. Table rows get none (`R-121` 4), so an identifier
+  ` ^<identifier>`. A paragraph is a run of non-blank lines; a list item runs
+  from its `- ` or `<n>. ` line to the line before the next item, a blank line
+  or a heading. A bold span that merely begins with an identifier is not one.
+  On the six, the grammar alone already keeps the brakes of `SIM-LOOPS`,
+  `**B3a — …**`, and `**B1 does not apply here.**` out, `B<n>` not being an
+  identifier; `R-122`'s paragraph rule binds only where an identifier-led bold
+  line continues a paragraph, which no line of the six does and the fixture
+  does. Table rows get none (`R-121` 4), so an identifier
   that lives only in a table, `A-01` or `P-12`, names nothing and is never
   linked.
 - **Links.** Every mention, in any note of any document, index included, of an
@@ -641,8 +825,9 @@ the vault written by hand in `vault/`, both under the `.gitattributes` rule.
      text that is a block id in the vault is linked with its anchor. No link
      is preceded or followed by a letter, digit or `-`, or sits in a heading, a
      fence, a code span or a defining occurrence; a table row's link uses `\|`;
-     and every mention, in prose or in a table row, of an identifier that
-     names a note or block id anywhere in the vault is a link.
+     every mention, as the shape defines it, in prose or in a table row, of an
+     identifier that names a note or block id anywhere in the vault is a link;
+     and no link displays an identifier that names nothing.
   4. **Block ids.** Every paragraph or list item of the original opening in the
      form above, paragraphs read as runs of non-blank lines, carries
      ` ^<its identifier>` at its end in the vault, and no other line does.
@@ -653,13 +838,17 @@ the vault written by hand in `vault/`, both under the `.gitattributes` rule.
      path; each note opens, after its front matter, with that heading, and holds
      no other heading of its level or above outside a fence; the index's lines,
      front matter and embeds aside, are exactly the lines the derivation leaves
-     in it, in order; every note ends in exactly one LF and in no blank or `---`
-     line; and the vault root holds no folder but the six, `.obsidian/` and
-     `.trash/`.
+     in it, in order; every note but the index ends in exactly one LF and in no
+     blank or `---` line; the vault root holds no folder but the six,
+     `.obsidian/` and `.trash/`; and `.obsidian/app.json` exists, holding `{}`
+     and an LF.
   6. **Properties.** Every note's front matter parses, line by line, with
      `ConvertFrom-Json`, and holds `document`, equal to its folder's document,
      and the `kind`, `id` and `aliases` check 5 derived, values compared, and
-     no other key.
+     no other key. A note check 5 did not derive is red on check 5 and not
+     read by this one.
+  The check finds originals directly in `-Originals`, never in a subfolder, so
+  that in place it does not take an index for an original.
   `-SelfTest` runs on `tools/docs-vault/fixtures/`: in `originals/`, documents
   named
   `SIM-REQ.md`, `SIM-DEC.md`, `SIM-LOOPS.md` and `SIM-OBS.md`, with a
@@ -677,18 +866,21 @@ the vault written by hand in `vault/`, both under the `.gitattributes` rule.
   identifier that names a note or block id; a heading holding a non-defining
   identifier; a bold-led paragraph, a bold-led list item, a bold identifier at
   the start of a continuation line; prose mentions of `R10`, `DEC-002a` and
-  `FR-…` identifiers that have block ids; one document with no final newline.
-  In `vault/`, a vault for it written by hand, with `.obsidian/app.json`
-  holding `{}` and an LF, green on every check; and, made by `-SelfTest` in a
-  temporary directory from that vault, one copy per fault below, each red on
-  the check it names and green on the others. `.gitattributes`, which does not
+  `FR-…` identifiers that have block ids; a prose mention of an identifier
+  that lives only in a table row; one document with no final newline.
+  `-SelfTest` first asserts, by pattern on the originals, that each feature in
+  this list is present, and is red if one is missing. In `vault/`, a vault for
+  it written by hand, with `.obsidian/app.json` holding `{}` and an LF, green
+  on every check; and, made by `-SelfTest` in a temporary directory from that
+  vault, one copy per fault below, each red on the check it names; another
+  check may turn red with it. `.gitattributes`, which does not
   exist today, is created holding `tools/docs-vault/fixtures/** text eol=lf`.
 - **Closed by:** `-SelfTest` green, each fault copy red on its named check;
-  `git ls-files --eol tools/docs-vault/fixtures` reports `attr/text eol=lf` for
-  every file, after the fixture is removed from the working tree and checked
-  out again; `check-docs-vault.ps1` holds no dot-source, `Import-Module`,
-  `using module` or reference to another file under `tools/docs-vault/`, by
-  `Select-String`; the code-reviewer reads the check against `R-121`'s shape
+  `git ls-files --eol tools/docs-vault/fixtures` reports `attr/text eol=lf` and
+  `w/lf` for every file, after the fixture is staged, removed from the working
+  tree and checked out again; `check-docs-vault.ps1` holds no dot-source,
+  `Import-Module`, `using module` or reference to a `.ps1` or `.psm1` file, by
+  `Select-String` (reading the fixture's Markdown and JSON is allowed); the code-reviewer reads the check against `R-121`'s shape
   and "correspondence check", `R-122`, and this point's "Does", including
   "writes nothing" and the report's form.
 - **Fails when:** in a copy of the hand-made vault, each alone: a paragraph
@@ -713,7 +905,8 @@ the vault written by hand in `vault/`, both under the `.gitattributes` rule.
   path (2); an embed in a section note (2); a block id put on a continuation
   line (4); on the brake line (4); on `**B1 does not apply here.**` (4); a
   block id carrying another identifier (4); the list item's block id removed
-  (4); `kind` of a `DEC-` note set to `section` (6); a value written unquoted
+  (4); a link displaying the table-only identifier, which names nothing (3);
+  `.obsidian/app.json` removed (5); `kind` of a `DEC-` note set to `section` (6); a value written unquoted
   (6); `document` naming another document (6); a numbered section's alias
   written with the `.` kept, `"SIM-REQ §<n>."` (6); `aliases` added to an
   index (6); `id` added to a section note (6).
@@ -740,10 +933,13 @@ the vault written by hand in `vault/`, both under the `.gitattributes` rule.
   - `-SelfTest` green: the script's fixture output equals the hand-made vault
     file for file both ways and byte for byte, and the check on it is green;
   - `split-docs.ps1` holds no dot-source, `Import-Module`, `using module` or
-    reference to another file under `tools/docs-vault/` but the one
-    `pwsh -NoProfile -File` call of the check in `-SelfTest`, and
-    `check-docs-vault.ps1` still holds none, by `Select-String`; that no
-    function is copied between them is the code-reviewer's to read;
+    reference to a `.ps1` or `.psm1` file but the one `pwsh -NoProfile -File`
+    call of the check in `-SelfTest`, and `check-docs-vault.ps1` still holds
+    none, by `Select-String`; reading the fixture is allowed; that no function
+    is copied between them is the code-reviewer's to read;
+  - line endings: the script run on a temporary copy of the six originals
+    converted to CRLF, and on one converted to LF, writes two outputs equal
+    byte for byte, every file LF;
   - the script with `-Source docs -Out <temp>`, then `check-docs-vault.ps1
     -Originals docs -Vault <temp>`, reports every check green for the six
     documents;
@@ -764,20 +960,35 @@ the vault written by hand in `vault/`, both under the `.gitattributes` rule.
     the script would write — `.obsidian/app.json`, then
     `SIM-REQ/18 Delivery phases.md` — exit non-zero and leave the directory
     holding that file alone, unchanged;
+  - in place, as the decider will run it: the six originals and `CLAUDE.md`
+    copied into a temporary directory `<T>`, the script run with `-Source <T>
+    -Out <T>`, then the check with `-Originals <T> -Vault <T>`, every check
+    green; then the script with `-Source <T> -Out <U>`, `<U>` new, writes an
+    output equal byte for byte to the first run's, the indexes and notes now
+    in `<T>`'s subfolders found as no document;
   - `git check-ignore -q`, read by exit code and without `-v`, reports
-    `docs/.obsidian/workspace.json` and `docs/.trash/x.md` ignored and
-    `docs/.obsidian/app.json` not;
+    `docs/.obsidian/workspace.json` and `docs/.trash/x.md` ignored, and
+    `docs/.obsidian/app.json` and
+    `tools/docs-vault/fixtures/vault/.obsidian/app.json` not;
   - `git status` shows nothing under `docs/` changed;
   - the code-reviewer reads the script against this point's "Does".
 
   Each fault below, planted alone in the script and run on the real documents
-  into another temporary directory, turns red the check named; a fault that
-  cannot show on the real documents is run on the fixture.
+  into another temporary directory, turns red the check named, another check
+  perhaps with it; a fault that cannot show on the real documents is run on
+  the fixture.
 - **Fails when:** a group's heading written into its first entry's note
-  (check 5 red on `SIM-DEC`); entries named by `DEC-[0-9]+`, `DEC-006a` filed
-  as `DEC-006` (5 on `SIM-DEC`); the `**B1 does not apply here.**` paragraph
-  given a block id (4 on `SIM-LOOPS`); the brake lines `**B<n> — …**` given one
-  (4 on `SIM-LOOPS`); mentions linked without word boundaries, `FR-P-03b` at
+  (check 5 red on `SIM-DEC`); entries named by `DEC-[0-9]+`, so that
+  `DEC-006`, `DEC-006a` and `DEC-006b` share a path (the duplicate-path
+  refusal: non-zero exit, nothing written); the grammar widened to take
+  `B<n>` for an identifier, giving the brake lines `**B<n> — …**` block ids
+  (4 on `SIM-LOOPS`) — a fault of the grammar, which on the six is what keeps
+  the brakes out; every string the grammar takes linked, whether it names
+  anything or not (3 on `SIM-STATE`, `A-01` at `SIM-STATE.md:201`); CRLF
+  passed through from the originals (the line-ending comparison red);
+  documents found in subfolders too (the in-place second run red);
+  `.obsidian/` written unanchored in `.gitignore` (`git check-ignore` red on
+  the fixture's `app.json`); mentions linked without word boundaries, `FR-P-03b` at
   `SIM-REQ.md:111` as `[[…|FR-P-03]]b` (3 on `SIM-REQ`); the `**FR-…**` lead
   linked (3 on `SIM-REQ`); block-id links written without `#^ID` (3 on
   `SIM-REQ`); identifiers looked up within their own document only, so that
@@ -801,22 +1012,24 @@ the vault written by hand in `vault/`, both under the `.gitattributes` rule.
 
 ## What was not verified
 
-- **Version 4 of the draft** was read by no blind reader; the table says what
-  changed, not whether it holds. Neither the second nor the third reader was
-  given `R-121`'s text, so their findings judged the draft against the draft's
-  own account of the ruling.
+- **Version 5 of the draft** was read by no blind reader; the table says what
+  changed, not whether it holds. None of the second, third and fourth readers
+  was given `R-121`'s text, so their findings judged the draft against the
+  draft's own account of the ruling.
 - **The counts in point 2** — 178 notes, 260 block ids — were taken by the
   author with `grep` and `awk` on the documents as of `5febba3`, and recomputed
   by the third reader; the criterion makes the counts taken at the run the
   reference, not these numbers.
-- **The fault lists** of version 4 — forty-three in point 1, twenty in
+- **The fault lists** of version 5 — forty-five in point 1, twenty-three in
   point 2 — were not tried against any code: whether each can be planted alone
-  in a vault or a script as described is the author's reading.
-- **Three clauses of the "Does" rest on the code-reviewer alone**: that no
-  function is copied between the scripts, that the check writes nothing, and
-  that the script refuses two outputs sharing a path. The last has no fault:
-  no document of the six, nor the fixture, yields two notes of one path, which
-  the third reader confirmed for the six, case aside.
+  in a vault or a script as described is the author's reading. Version 5 no
+  longer requires a fault to leave the other checks green.
+- **Clauses of the "Does" resting on the code-reviewer alone**: that no
+  function is copied between the scripts, that the check writes nothing, the
+  report's form, that the script lists every file before writing, and that its
+  duplicate-path refusal ignores case. The duplicate-path refusal itself now
+  has a fault (`DEC-[0-9]+` naming); its case-blindness has none, no two names
+  of the six or of the fixture differing only by case.
 - **Obsidian.** That a full-path embed renders a note inline, that ` ^ID`
   makes a block at a paragraph's end, that `[[…\|X]]` works in a table row,
   and that `{}` in `app.json` suffices, are known from Obsidian's
@@ -865,3 +1078,13 @@ request". Version 4 is the draft above.
    clauses of checks 5 and 6, the faults added to both points, and the
    archiving of the workflow review plan's `PLAN.md` before the merge.
 9. **A fourth blind reading** of version 4 before it is installed, or not.
+
+**The user's answer, 2026-10-21**, in an implementer session, to items 8 and 9:
+"approvo, fai una quarta lettura". The fourth reading is quoted above. Shown
+it, with version 5 recommended, the user answered: "scrivi la versione 5 nella
+request". Version 5 is the draft above.
+
+10. **Version 5**, approved, amended, or rejected; in particular the mention
+    scope of check 3, the line-ending and in-place runs of point 2, and the
+    dropped clause "green on the others".
+11. **A fifth blind reading** of version 5 before it is installed, or not.
