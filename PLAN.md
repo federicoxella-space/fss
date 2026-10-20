@@ -426,3 +426,35 @@ C2). The check is `shallow`, as declared. The permission to edit `AGENTS.md` is
 recorded in `D-137`. Agents (`R-067`): code-reviewer and committer dispatched.
 Not run: the tester, the coder, the revisioners (`Core: no` held). This outcome
 does not claim `R-046`'s check.
+
+## 10. A decider marker counts only in emphasis (added after point 8)
+
+Added on 2026-10-21 with the user's approval, under `D-014`, as `R-120` owes
+before this plan is archived: asked whether to add the point or close the plan
+without it, the user chose "Aggiungi il point (Recommended)". `plan-state`
+strips every `*` and `_` from the outcome paragraph and matches the three
+phrase markers anywhere, so point 6's "nothing left open" made the decider due
+(`D-136`).
+
+- **Does:** in `plan-state.ps1`, *criterion defective*, *criterio difettoso*
+  and *left open* count only as the whole of an emphasis span — `*…*` or
+  `**…**`, case ignored, a line break inside it read as a space — in the last
+  closed point's outcome paragraph; the bare phrase in prose does not count,
+  nor a span that holds the phrase among other words. `FAILED` stays read from
+  the point's status. Fixture plans: one whose last outcome reads "nothing left
+  open" in plain prose; one whose last outcome reads `*nothing left open*`; one
+  whose `*left open*` breaks across two lines inside its emphasis. Edits
+  `.claude/hooks/`.
+- **Closed by:** `plan-state -SelfTest` green: the prose fixture and the
+  `*nothing left open*` fixture `deciderDue` false; the broken-span fixture
+  true; `decider-defective`, `decider-italian`, `decider-wrapped` and
+  `failed-then-open` still true; `decider-ruled` and `decider-midline` still
+  false. And `plan-state -Path` on two copies of the live `PLAN.md`, one cut
+  before point 7's heading, `deciderDue` false (point 6's "nothing left open",
+  prose), and one cut before point 8's heading, `deciderDue` true (point 7's
+  *Left open*).
+- **Fails when:** the markers matched with emphasis stripped, as now: the prose
+  fixture and the copy cut before point 7 turn true. Also: a marker counted
+  anywhere inside an emphasis span: the `*nothing left open*` fixture turns
+  true; and a span read line by line: the broken-span fixture turns false.
+- **Core:** no — the diff touches only `.claude/hooks/`.
